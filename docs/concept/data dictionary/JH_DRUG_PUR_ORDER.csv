@@ -1,0 +1,26 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_PUR_ORDER,表全名,JHPDL:JH_DRUG_PUR_ORDER,,,,,,
+,表说明,订单主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGM,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGM0001,String字符串（变长）,,DRUG_PUR_ORD_SN,采购订单唯一号,采购订单编号，系统生成二级编码，如“DU0.000.000.001”,20,是,是
+,\x00\x02,MGM0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MGM0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,MGM0005,String字符串（变长）,,PUR_ORD_NO,采购订单号,业务订单号,200,是,是
+,\x00\x0E,MGM0014,String字符串（变长）,,SC_RECORDER,生成订单的员工编码,,200,,
+,\x00\x0F,MGM0015,String字符串（变长）,,ST_RECORDER,生成订单的员工名称,,200,,
+,\x00\x10,MGM0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BILL_APPLY_TIME,生成订单时间,,31,,
+,\x00\x0C,MGM0012,String字符串（变长）,,SC_OPER,审核订单的员工编码,,200,,
+,\x00\x0D,MGM0013,String字符串（变长）,,ST_OPER,审核订单的员工名称,,200,,
+,\x00\x11,MGM0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BILL_CHECK_TIME,订单审核时间,,31,,
+,\x00\x09,MGM0009,Date日期型（yyyy-mm-dd）（10个字节）,,ORDER_DATE,订单日期,,31,,
+,\x00\x06,MGM0006,String字符串（变长）,,DRUG_IN_NO,入库单号,弱关联,200,是,是
+,\x00\x0B,MGM0011,Date日期型（yyyy-mm-dd）（10个字节）,,TRANSACTION_DATE,交易日期,,31,,
+,\x00\x07,MGM0007,String字符串（变长）,,SC_SUPPLIER,供应商编码,,200,是,是
+,\x00\x08,MGM0008,String字符串（变长）,,ST_SUPPLIER,供应商名称,,200,,
+,\x00\x0A,MGM0010,Double双精度浮点型（8个字节）,,HAND_CHARGE,装卸费,该笔订单商讨的装卸费用金额,38,,
+,\x00\x04,MGM0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x12,MGM0018,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

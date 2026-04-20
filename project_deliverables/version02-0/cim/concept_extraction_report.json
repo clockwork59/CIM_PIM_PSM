@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "report_id": "CER-CIM-20250117-FULL",
+    "generated_by": "Gemini-CLI (本体工程索引与协调者)",
+    "scan_timestamp": "2025-01-17T16:00:00Z",
+    "source_path": "/Volumes/M4-SSD/.../docs/agents",
+    "total_agents_scanned": 8,
+    "extraction_method": "Knowledge Base Deep Scan"
+  },
+
+  "source_document_registry": {
+    "Agent-01": {
+      "doc_id": "DOC-A01",
+      "title": "系统拓扑建模师 (System Topology Architect)",
+      "files": [
+        "Agent01_Output.meta",
+        "Agent01_Output.system_catalog",
+        "Agent01_Output.topology_definitions",
+        "Agent01_Output.system_dependencies"
+      ],
+      "output_format": "YAML",
+      "status": "Phase 1 进行中"
+    },
+    "Agent-02": {
+      "doc_id": "DOC-A02",
+      "title": "空间本体建模师 (Space Ontology Architect)",
+      "files": [
+        "Agent02_Output.space_hierarchy_model.yaml",
+        "Agent02_Output.space_classification.yaml",
+        "Agent02_Output.medical_special_spaces.yaml"
+      ],
+      "output_format": "YAML",
+      "properties_defined": "350+"
+    },
+    "Agent-03": {
+      "doc_id": "DOC-A03",
+      "title": "设备本体建模师 (Equipment Ontology Architect)",
+      "files": [
+        "Agent03_Output.meta",
+        "Agent03_Output.equipment_classification",
+        "Agent03_Output.node_equipment_mapping",
+        "Agent03_Output.equipment_type_models",
+        "Agent03_Output.project_summary.md"
+      ],
+      "output_format": "YAML",
+      "version": "v2.2"
+    },
+    "Agent-04": {
+      "doc_id": "DOC-A04",
+      "title": "流动模型建模师 (Flow Model Architect)",
+      "files": [
+        "Agent04_v2.3_FlowModel.ttl",
+        "Agent04_v2.3_Engineering.yaml"
+      ],
+      "output_format": "Turtle RDF + YAML",
+      "version": "v2.3"
+    },
+    "Agent-05": {
+      "doc_id": "DOC-A05",
+      "title": "系统-空间耦合建模师 (System-Space Coupling Architect)",
+      "files": [
+        "Agent05_Output.equipment_location_model",
+        "Agent05_Output.routing_space_model",
+        "Agent05_Output.service_space_model",
+        "Agent05_Output.space_requirement_mapping"
+      ],
+      "output_format": "RDF + JSON",
+      "version": "V2.1-RELEASE"
+    },
+    "Agent-06": {
+      "doc_id": "DOC-A06",
+      "title": "控制系统建模师 (Control System Architect)",
+      "files": [
+        "Agent06_Output.meta",
+        "Agent06_Output.sensor_models",
+        "Agent06_Output.actuator_models",
+        "Agent06_Output.controller_models",
+        "Agent06_Output.control_loop_models"
+      ],
+      "output_format": "YAML",
+      "scope": "247传感器, 156执行器, 87控制回路"
+    },
+    "Agent-07": {
+      "doc_id": "DOC-A07",
+      "title": "计量体系建模师 (Metering System Architect)",
+      "files": [
+        "Agent07_Output.meta",
+        "Agent07_Output.metering_hierarchy",
+        "Agent07_Output.energy_media_models",
+        "Agent07_Output.allocation_rules",
+        "Agent07_Output.metering_point_layout",
+        "Agent07_Output.associations"
+      ],
+      "output_format": "YAML",
+      "scope": "4级计量, 7能量类型, 189计量点"
+    },
+    "Agent-08": {
+      "doc_id": "DOC-A08",
+      "title": "运维管理建模师 (O&M Management Architect)",
+      "files": [
+        "Agent08_Output.alarm_models",
+        "Agent08_Output.work_order_models",
+        "Agent08_Output.maintenance_strategies",
+        "Agent08_Output.asset_lifecycle_models",
+        "Agent08_Output.operation_organization_models"
+      ],
+      "output_format": "YAML",
+      "version": "v3.0"
+    }
+  },
+
+  "extracted_entities": {
+    "topology_domain": {
+      "source_agent": "Agent-01",
+      "source_section": "理论基础：拓扑网络元模型",
+      "entities": [
+        {
+          "uri": "cim:Source_Node",
+          "label_cn": "源节点",
+          "definition": "系统的能量/介质输入端，流动的起点",
+          "attributes": ["node_id", "node_name", "medium_type", "is_external", "capacity"],
+          "source_trace": "Agent-01.Node_Types.Source_Node"
+        },
+        {
+          "uri": "cim:Sink_Node",
+          "label_cn": "末端节点",
+          "definition": "系统的能量/介质消耗端，流动的终点",
+          "attributes": ["node_id", "node_name", "consumption_type", "served_function"],
+          "source_trace": "Agent-01.Node_Types.Sink_Node"
+        },
+        {
+          "uri": "cim:Distribution_Node",
+          "label_cn": "分配节点",
+          "definition": "进行分配、汇集、调节的中间节点",
+          "subtypes": ["Junction", "Splitter", "Regulator", "Transformer"],
+          "source_trace": "Agent-01.Node_Types.Distribution_Node"
+        },
+        {
+          "uri": "cim:Trunk",
+          "label_cn": "干管/主线",
+          "definition": "主要传输通道，承载大流量",
+          "examples": ["高压母线", "冷冻水主管", "送风主管"],
+          "source_trace": "Agent-01.Edge_Types.Trunk"
+        }
+      ],
+      "system_catalog": {
+        "total_major_systems": 8,
+        "total_subsystems": 26,
+        "categories": [
+          {"id": "HVAC", "name": "暖通空调系统", "subsystem_count": 8},
+          {"id": "PLUMBING", "name": "给排水系统", "subsystem_count": 4},
+          {"id": "ELECTRICAL", "name": "电气系统", "subsystem_count": 5}
+        ],
+        "source_trace": "Agent-01.system_catalog"
+      }
+    }
+  }
+}
+

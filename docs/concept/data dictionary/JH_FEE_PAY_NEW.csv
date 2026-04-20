@@ -1,0 +1,39 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FEE_PAY_NEW,表全名,JHPDL:JH_FEE_PAY_NEW,,,,,,
+,表说明,费用结算记录新,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PFI,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PFI0001,String字符串（变长）,,FEE_PAY_SN,费用结算编号,费用结算编号，系统生成三级编码，如“AB0.000.000.001”,20,是,是
+,\x00\x02,PFI0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,PFI0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,PFI0004,String字符串（变长）,,POSTRANS_NO,结算交易号,,200,,
+,\x00\x05,PFI0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,FEE_PAY_TIME,结算时间,,19,,
+,\x00\x06,PFI0006,Double双精度浮点型（8个字节）,,TOTAL_PAY,结算金额,如果是退费，使用负数,38,,
+,\x00\x07,PFI0007,String字符串（变长）,,LINK_BILL,账单号,费用账单上的编号（纸质的）,100,,
+,\x00\x08,PFI0008,Double双精度浮点型（8个字节）,,BILL_COST,账单总金额,关联费用账单上的总金额,38,,
+,\x00\x09,PFI0009,String字符串（变长）,,INVOICE_CODE,发票编号,开具的发票编号,100,,
+,\x00\x0A,PFI0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,INVOICE_TIME,开发票时间,,19,,
+,\x00\x0B,PFI0011,String字符串（变长）,,FEE_PAY_REMARK,结算备注,,2000,,
+,\x00\x0E,PFI0014,简化字典（Integer整型，4个字节）,242,SD_PAY_TYPE,结算方式简码,结算方式：现金、微信、网银、支付宝、银行卡、社保、商业保险、其它,20,,
+,\x00\x0F,PFI0015,String字符串（变长）,,ST_PAY_TYPE,结算方式描述,,500,,
+,\x00\x10,PFI0016,简化字典（Integer整型，4个字节）,383,SD_COST_TYPE,账单类型简码,与就诊类型一致，表示是什么类型的费用，如门诊、住院,20,,
+,\x00\x11,PFI0017,String字符串（变长）,,ST_COST_TYPE,账单类型描述,,500,,
+,\x00\x12,PFI0018,简化字典（Integer整型，4个字节）,379,SD_REFUND,是否退费,,20,,
+,\x00\x13,PFI0019,简化字典（Integer整型，4个字节）,379,SD_INVOICE,是否开发票,,20,,
+,\x00\x14,PFI0020,String字符串（变长）,,SC_OPERATOR,操作人员编码,,200,,
+,\x00\x15,PFI0021,String字符串（变长）,,ST_OPERATOR,操作人员名称,,200,,
+,\x00\x16,PFI0022,String字符串（变长）,,SC_PAY_TYPE,结算方式编码,源业务系统的结算方式编码,200,,
+,\x00\x17,PFI0023,String字符串（变长）,,SC_COST_TYPE,账单类型编码,源业务系统的就诊类型编码,200,,
+,\x00\x18,PFI0024,String字符串（变长）,,ORG_POSTRANS_NO,源结算交易号,退费时，对应的源结算交易号,200,是,是
+,\x00\x0C,PFI0012,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,是,是
+,\x00\x0D,PFI0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x19,PFI0025,Double双精度浮点型（8个字节）,,FEE_TOTAL,结算总金额,,,,
+,\x00\x1A,PFI0026,Double双精度浮点型（8个字节）,,PAY_SELF,本次自费金额,,,,
+,\x00\x1B,PFI0027,Double双精度浮点型（8个字节）,,FEE_SOC_INS,账单医保额,,,,
+,\x00\x1C,PFI0028,Double双精度浮点型（8个字节）,,FEE_BUS_INS,账单商保额,,,,
+,\x00\x1D,PFI0029,String字符串（变长）,,SC_BUN,现金来源编码,现金支付来源。出院费、退款、优惠、非字符金额、支票,200,,
+,\x00\x1E,PFI0030,String字符串（变长）,,ST_BUN,现金来源名称,现金支付来源。出院费、退款、优惠、非字符金额、支票,200,,
+,\x00\x1F,PFI0031,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

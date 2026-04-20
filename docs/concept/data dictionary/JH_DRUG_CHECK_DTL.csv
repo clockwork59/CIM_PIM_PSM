@@ -1,0 +1,42 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_CHECK_DTL,表全名,JHPDL:JH_DRUG_CHECK_DTL,,,,,,
+,表说明,药库盘点明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MCD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MCD0001,String字符串（变长）,,DRUG_CHK_DTL_SN,药库盘点明细唯一号,内部三级编码DH0.000.000.001,20,是,是
+,\x00\x02,MCD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MCD0003,String字符串（变长）,,DRUG_CHECK_SN,盘点记录单编号,来源JH_DRUG_CHECK的MCM0001,20,是,是
+,\x00\x05,MCD0005,String字符串（变长）,,DRUG_BATCH_SN,批次号SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x04,MCD0004,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x0E,MCD0014,Double双精度浮点型（8个字节）,,CHK_PUR_AVE_PRICE,进货单价,盘点量对应进货单价,38,,
+,\x00\x06,MCD0006,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x0F,MCD0015,Double双精度浮点型（8个字节）,,CHK_SEL_AVE_PRICE,零售单价,盘点量对应零售单价,38,,
+,\x00\x0A,MCD0010,String字符串（变长）,,SC_INVENTORY_ITM,库存项编码,药品编码DRUG_CODE,200,,
+,\x00\x0B,MCD0011,String字符串（变长）,,ST_INVENTORY_ITM,库存项名称,药品名称,200,,
+,\x00\x10,MCD0016,Double双精度浮点型（8个字节）,,CHK_PRE_TOT_QTY,当前库存数量,该库房盘点前库存量，对应盘点单位,38,,
+,\x00\x15,MCD0021,Double双精度浮点型（8个字节）,,CHK_AFT_TOT_QTY,当前实际库存量,盘点后，实际可用库存量,38,,
+,\x00\x18,MCD0024,Double双精度浮点型（8个字节）,,CURR_PUR_AMOUNT,当前实际库存进价总金额,,38,,
+,\x00\x19,MCD0025,Double双精度浮点型（8个字节）,,CURR_SEL_AMOUNT,当前实际库存售价总金额,,38,,
+,\x00\x07,MCD0007,String字符串（变长）,,BATCH_NO,批次号,业务实际批次号,200,是,是
+,\x00\x1B,MCD0027,String字符串（变长）,,DRUG_CHK_NO,盘点单号,主单号,200,是,是
+,\x00\x1C,MCD0028,String字符串（变长）,,DRUG_CHK_SUB_NO,盘点明细子序号,,200,,
+,\x00\x0C,MCD0012,String字符串（变长）,,SC_DRUG_CHK_UNIT,盘点单位编码,药品单位,200,,
+,\x00\x0D,MCD0013,String字符串（变长）,,ST_DRUG_CHK_UNIT,盘点单位描述,,500,,
+,\x00\x11,MCD0017,Double双精度浮点型（8个字节）,,CHK_DEFI_QTY,盘亏数量,,38,,
+,\x00\x12,MCD0018,Double双精度浮点型（8个字节）,,CHK_PLUS_QTY,盘盈数量,,38,,
+,\x00\x13,MCD0019,Double双精度浮点型（8个字节）,,CHK_DEFI_AMOUNT,盘亏总金额,,38,,
+,\x00\x14,MCD0020,Double双精度浮点型（8个字节）,,CHK_PLUS_AMOUNT,盘盈总金额,,38,,
+,\x00\x16,MCD0022,String字符串（变长）,,SC_CHK_RESULT,盘点结果编码,盘盈、盘亏,200,,
+,\x00\x17,MCD0023,String字符串（变长）,,ST_CHK_RESULT,盘点结果描述,盘盈、盘亏,500,,
+,\x00\x1F,MCD0031,String字符串（变长）,,SC_CHK_STATUS,盘点状态编码,,200,,
+,\x00\x20,MCD0032,String字符串（变长）,,ST_CHK_STATUS,盘点状态描述,,500,,
+,\x00\x1D,MCD0029,String字符串（变长）,,SC_CHK_USER,盘点人编码,,200,,
+,\x00\x1E,MCD0030,String字符串（变长）,,ST_CHK_USER,盘点人姓名,,200,,
+,\x00\x1A,MCD0026,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CHK_START_TIME,盘点时间,,31,是,是
+,\x00\x09,MCD0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x21,MCD0033,String字符串（变长）,,REMARKS,备注,,4000,,
+,\x00\x08,MCD0008,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x22,MCD0034,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

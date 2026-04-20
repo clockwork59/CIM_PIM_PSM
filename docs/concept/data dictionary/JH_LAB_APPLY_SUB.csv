@@ -1,0 +1,26 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_LAB_APPLY_SUB,表全名,JHPDL:JH_LAB_APPLY_SUB,,,,,,
+,表说明,检验申请单附表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,SUB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,SUB0001,String字符串（变长）,,LAB_APPLY_SUB_SN,检验申请单附表编号,检验申请单附表编号，系统生成编号SB0.000.000.001,20,是,是
+,\x00\x02,SUB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,SUB0003,String字符串（变长）,,LAB_APPLY_SN,检验申请单编号,检验申请单编号，来源JH_LAB_APPLY的LAP0001,20,是,是
+,\x00\x04,SUB0004,简化字典（Integer整型，4个字节）,379,SD_SPECIMEN_TYPE,类型不符合要求标识,,20,,
+,\x00\x05,SUB0005,简化字典（Integer整型，4个字节）,379,SD_SPECIMEN_PACK,采集容器不符合要求标识,,20,,
+,\x00\x06,SUB0006,简化字典（Integer整型，4个字节）,379,SD_SPECIMEN_VOLUME,采集量不符合要求标识,,20,,
+,\x00\x07,SUB0007,简化字典（Integer整型，4个字节）,379,SD_SPECIMEN_BLOOD,是否血培养标本,,20,,
+,\x00\x08,SUB0008,简化字典（Integer整型，4个字节）,379,SD_CONTAMINATE_BLOOD,是否污染的血培养标本,,20,,
+,\x00\x09,SUB0009,简化字典（Integer整型，4个字节）,379,SD_SPECIMEN_XYKN,是否需要需抗凝标识,,20,,
+,\x00\x0A,SUB0010,简化字典（Integer整型，4个字节）,379,SD_SPECIMEN_BBNJ,标本凝集标识,,20,,
+,\x00\x0B,SUB0011,简化字典（Integer整型，4个字节）,379,SD_QUALITY,室内质控标识,,20,,
+,\x00\x0C,SUB0012,简化字典（Integer整型，4个字节）,379,SD_QUALITY_VARY,室内质控项目变异系数有要求标识,,20,,
+,\x00\x0D,SUB0013,简化字典（Integer整型，4个字节）,379,SD_QUALITY_VARY_HIGH,室内质控项目变异系数高于要求表示,,20,,
+,\x00\x0E,SUB0014,简化字典（Integer整型，4个字节）,379,SD_TURNAR_TIME_BEFORE,检验前周转时间(MIN),,20,,
+,\x00\x0F,SUB0015,简化字典（Integer整型，4个字节）,379,SD_TURNAR_TIME_IN,实验室内周转时间(MIN),,20,,
+,\x00\x10,SUB0016,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,,,,
+,\x00\x11,SUB0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,,,
+,\x00\x12,SUB0018,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

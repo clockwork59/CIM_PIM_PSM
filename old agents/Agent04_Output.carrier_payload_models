@@ -1,0 +1,468 @@
+# 载体-荷载耦合模型 - 能源管理核心
+
+carrier_payload_models:
+  meta:
+    modeling_principle: "基于热力学和传热学建立物质流(载体)与能量流(荷载)的定量耦合关系"
+    system_scope: "设计、分析、控制基于荷载的冷/热/电能需求计算"
+    engineering_basis: "应用传热基本定律和能量转换原理"
+    applications: ["冷量计算", "热负荷计算", "电能传输", "能效分析", "控制系统设计"]
+   key_equation_names:
+      "1. Q = ṁ·c_p·ΔT","2. Q = ṁ·Δh",
+      "3. Q = √3·U·I·cosφ","4. Q = ṁ·γ",
+      "5. m = ρ·V"]
+
+  # 水的载冷/载热耦合
+  water_carrier_coupling:
+    fundamental_transport: "以水为介质载传送热量或冷量"
+
+    # 冷冻水载冷量计算 - HVAC系统核心
+    chilled_water_cooling:
+      description: "冷冻水循环传递冷量，克服建筑负荷和内热"
+      reference_conditions:
+        supply_temperature: "7°C (夏季)"
+        return_temperature: "12°C (夏季)"
+        temperature_difference: "ΔT = 5°C (标准设计值)"
+        specific_heat_capacity: "c_p = 4.186 kJ/(kg·K)"
+        water_density_design: "ρ = 998 kg/m³ (7°C)"
+
+      # 冷量耦合方程(核心)
+      cooling_capacity_equation:
+        formula: "Q_cooling [kW] = ṁ_water [kg/s] × c_p [kJ/(kg·K)] × ΔT [K]"
+        practical_form: "Q_cooling [kW] = ρ_water × V̇_water [L/s] × 4.186 [kJ/(kg·K)] × 5 [K] × (1/1000)"
+        simplified_design: "Q_cooling [kW] ≈ V̇_water [L/s] × 20.9 [kJ/L]"
+
+      # 设计流量计算
+      design_flow_rate:
+        based_on_load: "V̇_water [L/s] = Q_cooling [kW] / 20.9 [kJ/L]"
+        based_on_area: "V̇_water [L/(h·m²)] = Cooling_Density [W/m²] × 0.018 [h·L/J]"
+        pipe_velocity_limits: "1.0-3.0 m/s，经济流速1.8m/s"
+
+      # 不同温差的性能变化
+      variable_differential_temperature:
+        theoretical_performance:
+          - delta_t: "3K"
+            flow_ratio: "1.67"
+            pipe_size_ratio: "1.29"
+            pump_power_ratio: "4.6"
+          - delta_t: "4K"
+            flow_ratio: "1.25"
+            pipe_size_ratio: "1.12"
+            pump_power_ratio: "2.2"
+          - delta_t: "5K"
+            flow_ratio: "1.00"
+            pipe_size_ratio: "1.00"
+            pump_power_ratio: "1.00"
+          - delta_t: "6K"
+            flow_ratio: "0.83"
+            pipe_size_ratio: "0.91"
+            pump_power_ratio: "0.55"
+          - delta_t: "7K"
+            flow_ratio: "0.71"
+            pipe_size_ratio: "0.84"
+            pump_power_ratio: "0.34"
+
+      # 运行状态分析
+      operating_conditions:
+        partial_load_performance:
+          equation: "Q_part_load = α × Q_design (0 < α < 1)"
+          flow_reduction_strategy:
+            strategy1: "恒定流量+温度调节"
+            strategy2: "变流量+恒定温差"
+            strategy3: "变流量+温度协调调节"
+          efficiency_analysis: "VSD泵节电(0-50%负荷节电30-70%)"
+
+        seasonal_variation:
+          winter_mode: "部分负荷运行，水温可能15-20°C"
+          tempering_mode: "过渡季温度补偿，4-6°C供给"
+
+    # 热水供热耦合
+    hot_water_heating:
+      description: "热水循环传递热量，满足冬季供热需求"
+      reference_conditions:
+        supply_temperature: "60°C"
+        return_temperature: "45°C"
+        temperature_difference: "ΔT = 15°C"
+        thermophysical_properties: "同循环冷凝水，参数相应调整"
+
+      heat_carrier_equation:
+        formula: "Q_heating [kW] = ṁ_water [kg/s] × c_p [kJ/(kg·K)] × ΔT [K]"
+        simplified_design: "Q_heating [kW] ≈ V̇_water [L/s] × 62.8 [kJ/L] (15K温差)"
+        annual_variation: "Q_shanghai = 55-128 W/m²·h(450-950 heating degree days)"
+
+      radiator_systems:
+        hot_water_type: "高温水(80/60°C)或中温水(60/45°C)"
+        radiator_characteristics: "Q = K_radiator·(T_avg_water - T_room)^1.3"
+        temperature_limit: "室内表面温度≤90°C，防烫要求"
+
+      radiant_floor_systems:
+        thermal_mass_effect: "换气惯量大，响应慢但舒适"
+        supply_temperature: "35-45°C，比散热器系统低20-25°C"
+        energy_efficiency: "低温供热COP提升15-30%"
+
+    # 冷却水系统（制冷机散热）
+    cooling_tower_water:
+      description: "冷却水循环排散制冷冷凝热"
+      thermodynamic_cycle: "制冷机排出的冷凝热由冷却水带走"
+      temperature_conditions:
+        supply_temp: "32°C (从冷却塔底温水)"
+        return_temp: "37°C (进冷却塔热散)"
+        temperature_diff: "ΔT = 5°C (制冷机冷凝设计温差)"
+
+      heat_rejection_equation:
+        formula: "Q_heat_rejection [kW] = ṁ_cooling_water × c_p × 5"
+        relationship_to_cooling: "Q_heat_rejection = Q_cooling × (1 + 1/COP)"
+
+      cooling_tower_balance:
+        evaporative_cooling: "Q_evaporation = ṁ_humid_air(h_sat - h_ambient)"
+        make_up_water: "损失水率约1.5-2.0% 循环流量"
+        water_quality_control: "防止结垢、腐蚀、微生物滋生"
+
+    # 蒸汽系统耦合
+    steam_carrier_coupling:
+      description: "饱和蒸汽携带潜热进行传热，冷凝水回收"
+      phase_change_energy:
+        latent_heat_transport: "Q = m_steam × γ (汽化潜热25-220°C: 2257-1820 kJ/kg)"
+        quality_factor: "蒸汽品质x = 0.95-0.99，干度要求"
+
+      steam_enhanced_coupling:
+        steam_saturated_properties:
+          - temperature: "120°C"
+            latent_heat: "2202 kJ/kg"
+            density_saturated: "1.13 kg/m³"
+
+          - temperature: "160°C"
+            latent_heat: "2087 kJ/kg"
+            density_saturated: "3.17 kg/m³"
+
+        combined_transport: "Q_total = ṁ_steam·h_steam + ṁ_condensate·h_condensate"
+        indirect_heating: "Q_transfer = UA_steam·ΔT_lm through heat exchanger"
+
+    # 空气载热/冷耦合
+    air_carrier_coupling:
+      description: "空气流动传送显热和潜热"
+
+      # 空气显性耦合
+      air_sensible_heat:
+        heat_exchange_equation: "Q_s[Q] = ṁ_air × c_p_air × (T₁ - T₂)"
+        simplified_at_20C: "Q_s [kW] ≈ V̇_air [m³/s] × 1.2 [kg/m³] × 1.006 [kJ/(kg·K)] × ΔT"
+        further_simplified: "Q_s [kW] ≈ V̇_air [m³/s] × 1.2 × ΔT"
+
+        ventilation_calculations:
+          room_sensible_heat: "Q_room = SHR × Q_total_load"
+          temperature_difference: "ΔT_design = (T_supply - T_room_target)"
+          supply_flow: "V̇_supply = Q_room / (ρ_air × c_p_air × ΔT_design)"
+
+      # 空气潜热耦合
+      air_latent_heat:
+        moisture_transport: "Q_latent = ṁ_water_vapor × h_fg (汽化潜热2501 kJ/kg)"
+        mass_transfer_form: "Q_latent = ṁ_air × (w₁ - w₂) × h_fg"
+        practical_calculation: "Q_latent [kW] ≈ V̇_air [m³/s] × 1.2 × (w₁ - w₂) × 2501 / 1000"
+
+        psychrometric_relationships:
+          humidity_ratio_change: "δw = (d₁ - d₂) [kg_water/kg_dryair]"
+          enthalpy_difference_method: "q = (h₁ - h₂)	wtith h = c_p·T + d·h_fg"
+
+      # 空调处理过程
+      conditioning_processes:
+        heating_only: "显热提升，含湿量不变时点: w₁ = w₂"
+        cooling_dehumidification: "同时显冷和除湿：h₃ = h₁ - Q_cooling"
+        humidification: "加蒸汽/水雾：slope = (w₂ - w₁)/(h₂ - h₁) = 2501× constant"
+
+    # 三相交流电能耦合
+    electrical_power_coupling:
+      description: "电力载送能量，满足机电设备动力需求"
+      carriers_intensive_property: "电能作为能量载体，不直接依赖于质量"
+
+      basic_three_phase_power:
+        active_power: "P [kW] = √3 × U_line [kV] × I_line [A] × cosφ"
+        apparent_power: "S [kVA] = √3 × U_line [kV] × I_line [A]"
+        reactive_power: "Q [kvar] = √3 × U_line [kV] × I_line [A] × sinφ"
+
+        single_phase_equivalent: "P_single = U_phase × I_phase × cosφ"
+        system_reference: "400V (380V nominal), 50Hz 三相四线制"
+
+      electrical_losses_coupling:
+        transmission_efficiency: "η_transmission = P_delivered / P_generated"
+        loss_equation: "P_loss = 3 × I² × R_conductor × L_cable"
+        temperature_dependency: "R(T) = R_20°C × [1 + α(T - 20)]"
+        skin_effect: "交流电阻随频率增加的有效电阻增加"
+
+      energy_conversion_devices:
+        motor_drives:
+          mechanical_power: "P_shaft = P_elec × η_motor × η_gear × η_profile"
+          motor_efficiency_cruves: "高效率区间：75-100%负载"
+          variable_speed_benefits: "流量调节(CV): 节电范围20-50%"
+
+        electric_heating:
+          efficiency_conversion: "η_electric = P_thermal/P_electric ≈ 0.98-0.99"
+          heat_rating_forms: "P[MWh] = Q[MWh] / 0.98"
+
+        lighting_systems:
+          conversion_efficiency:
+            - lamp: "LED"
+              lumens_per_watt: "100-120 lm/W"
+              electrical_to_light: "25-30%"
+            - lamp: "T5荧光灯"
+              lumens_per_watt: "85-95 lm/W"
+              electrical_to_light: "15-20%"
+
+    # 医疗气体的载氧耦合
+    medical_gas_coupling:
+      oxygen_transport_capacity:
+        description: "医用氧气输送能力，满足病房紧急需求"
+        gas_supply_rate: "Q_oxygen[Nm³/h] = Consumption_rate × Simultaneity_factor"
+        simultaneous_usage_factors:
+          - location: "普通病房"
+            simultaneity: "0.2"
+          - location: "ICU"
+            simultaneity: "0.5"
+          - location: "手术室"
+            simultaneity: "0.8"
+
+      air_medical_comsumption:
+        anesthesia_air: "手术麻醉混合气体，N2O/air/O2 按比例"
+        ventilator_air: "呼吸机驱动气，0.35-0.5MPa压力"
+        flow_device_power: "驱动医疗设备所需流体动力"
+
+    # 天然气载热耦合
+    natural_gas_coupling:
+      description: "天然气作为燃料供给，提供热能"
+      combustion_heat_value:
+        heating_value: "H_g = 36 MJ/m³ ≈ 10 kWh/m³"
+        lower_heating_value_reference: "忽略水蒸气凝结热，取其燃烧低热值"
+
+      boiler_gas_consumption:
+        heat_input_to_boiler: "Q_fire = V_gas × H_g"
+        useful_heat_output: "Q_water = Q_fire × η_boiler"
+        efficiency: "η_boiler = 85-95% (现代冷凝锅可98%+)"
+
+      correlation_to_water_temperature:
+        temperature_rise_equation: "Q_water = ṁ_water × c_p_water × (T_boiler_out - T_boiler_return)"
+        gas_consumption: "V̇_gas = Q_water / (H_g × η_boiler)"
+
+    # 燃油载热耦合
+    fuel_oil_coupling:
+      combustion_properties:
+        density: "ρ_fuel ≈ 0.82-0.88 kg/L"
+        heating_value: "H_g_fuel = 42-46 MJ/kg"
+        storage_calculation: "Daily_consumption = Q_heating / (H_g × η_boiler × ρ_fuel)"
+
+      combustion_chamber_balance: "散热+烟气+输入燃料=燃烧产物+热量输出"
+      excess_air_factor: "保证完全燃烧，需过量空气1.15-1.25"
+
+  # 多学科耦合综合模型
+  multidisciplinary_coupling:
+    description: "系统级多种能量耦合分析"
+
+    # HVAC系统综合耦合
+    hvac_comprehensive_coupling:
+      title: "冷冻机→冷冻水→空气处理→房间的综合能量耦合"
+
+      cold_chain_analysis:
+        primary_energy_INPUT: "W_compressor [kW_electric]"
+        refrigeration_output: "Q_evap = Q_cooling [kW]"
+        refrigerant_flow: "ṁ_refrigerant = Q_evap / (h_evap_out - h_evap_in)"
+        double_coupling_effect: "ṁ_refrigerant × h_evap = ṁ_chilled_water × c_p_water × 5K"
+
+      air_side_coupling_to_rooms:
+        chilled_water_effective_use: "Q_room = ε_r × Q_planish (房间分配系数ε_r=0.8-0.95)"
+        indoor_conditioning: "Q_room = ṁ_supply_air × Δh_room"
+
+      integrated_supply_consume_balance:
+        supply_chain: "W_elec → Q_refrig → Q_chilled_water → Q_air_handle → Q_room_consumption"
+        energy_stages_conversion:
+          - stage: "1. 电能转换为制冷量"
+            efficiency: "COP = Q_refrig / W_electric (2.8-7.1)"
+          - stage: "2. 制冷量传递给冷冻水"
+            efficiency: "Pump_efficiency ≈ 95%"
+          - stage: "3. 冷冻水传递给处理空气"
+            efficiency: "Heat_exchanger_η = 80-95%"
+          - stage: "4. 空气分配给房间空间"
+            efficiency: "Distribution_effectiveness = 80-90%"
+
+    # 热电联产综合耦合
+    chp_comprehensive_coupling:
+      energy_steam:
+        description: "同时供应电力和热能的能量高效转换"
+        gas_fuel_consumption: "V_gas [m³/h] determined by electric load"
+        electric_output: "P_electric = V_gas × H_g × η_electric_generater"
+        useful_heat_output: "Q_thermal = V_gas × H_g × η_thermal_recovery"
+
+      total_efficiency:
+        overall_chp_efficiency: "η_CHP = η_power + η_thermal = 60-85%"
+        wasted_rejection: "通常尾排放热<10%"
+        environmental_benefit: "相比纯电+锅炉节能15-25%"
+
+    # 可再生能源耦合
+    renewable_energy_coupling:
+      solar_thermal_systems:
+        solar_collector_efficiency: "η_coll = 0.75-0.80 (清慮度，空温影响)"
+        stored_solar_energy: "Q_solar = A_collect × I_solar × η_coll"
+        connection_to_conventional: "Q_solar + Q_boiler = Q_total_thermal_damand"
+
+      photovoltaic_dc_coupling:
+        solar_electrical_output: "P_photo = A_pv × I_solar × η_pv"
+        seasonal_coverage: "P_photo / P_load = solar_contribution_ratio"
+        grid_interaction" "Supply_cec = P_photo - p_load <=> Grid_transaction"
+
+  # 季节性分析耦合
+  seasonal_coupling_analysis:
+    thermal_mass_impact:
+      building_thermal_inertia: "τ_building = R_building · C_building (10-50h)"
+      equipment_dynamic_response: "HVAC thermal storage effects"
+      comfort_constraint: "Must meet 20-26°C and 40-65%RH comfort"
+
+    demand_side_response:
+      peak_shaving_operation: "Shift_thermal_loads during peak electricity hours"
+      thermal_energy_storage:
+        chilled_water_storage:
+          capacity: "Volume_required [m³] = ΔQ_shaved [kWh] × 3600 / (TEMP_DIFF × ρ × c_p)"
+          temperature_control: "4-6°C storage, matched with chiller supply"
+        ice_storage:
+          capacity: "Volume_ice [m³] = Q_shaved / (ρ_ice × h_latent_ice)"
+          system_cop: "Ice making COP = 3.0-3.5 vs chilled water COP = 5.5-7.0"
+
+    equipment_seasonal_performance:
+      hydronic_chiller:
+        part_load_optimization: "Capacity modulation with VSD"
+        cooling_tower_operation: "Optimizing approach and flow"
+      air_handling_configuation_limiteload switching
+        economizer_mode: "Free cooling when outdoor temp < indoor return"
+        heat_recovery: "Air-to-air heat exchanger effectiveness 60-75%"
+
+  # 控制系统集成耦合
+  control_system_integration:
+    temperature_control_coupling:
+      chilled_water_reset:
+        principle: "Supply temperature reset based on cooling load"
+        control_law" "T_chws_set = T_chws_min + K_p×Load_error"
+        benefits: "5-15% pumpsenergyesterday saved with reset"
+
+      differential_pressure_control:
+        control_objective: "Maintain constant pressure differential across system"
+        sensor_placement: "Across critical circuits or statistical validation"
+        valve_authority" "DP_control_limit = 50-70% of total system pressure"
+
+    flow_control_coupling:
+      variable_flow_systems:
+        pump_variable_frequency: "VSD operating range 20-100% of design flow"
+        temperature_vs_flow_tradeoff: "Higher ΔT requires lower flow for same capacity"
+        valve_trim_characteristics: "Equal_percentage vs linear vs quick_opening"
+
+      flow_metering_application:
+        energy_metering: "Flow × ΔT × constant = Energy consumption"
+        billing_accuracy: "±2% for custody transfer applications"
+        verification_standard: "ISO 4064 for water meters, EN 1434 for heat meters"
+
+    energy_efficiency_optimization:
+      chiller_plant_optimization:
+        sequencing_benefit: "Load-based chiller staging and capacity control"
+        plant_efficiency_target: "kw/ton 0.5-0.8 for modern plants"
+        constant_set_point_vs_reset: }
+          constant: "T_set = 7°C (traditional)"
+          reset: "T_set = f(Load, OUTDOOR_TEMP) (optimal)"
+
+      air_supply_optimization:
+        ratio_strategy: "Fresh_air_ratio based on need5>covid_19_pandemic_Level_constituents"
+        supply_pressure_reset" "Fan_PS.reset_function( demand_based_temperature_sat_control)"
+
+  # 经济性耦合优化
+  economic_coupling_optimization:
+    energy_cost_structure:
+      electricity_tariffs:
+        - type: "Time-of-use"
+          peak_weekday: "¥1.2-1.8/kWh"
+          off_peak: "¥0.6-0.9/kWh"
+          average_industrial: "¥0.8-1.2/kWh"
+        - type: "Demand charge"
+          structure: "¥20-40/kW·month based on maximum demand"
+
+      natural_gas_costs:
+        heating_value_billing: "¥2.5-4.0/m³ or ¥70-110/GJ"
+        seasonal_variation: "Winter 30-50% higher than summer"
+
+    life_cycle_economics:
+      present_worth_analysis: "Life_cycle_cost/(1+r){savings_benefit= True}"
+      energy_price_escalation: "Historical 3-5% annual increase"
+      technology_improvement_factor: "Equipment efficiency improvement 1-2% per year"
+
+    optimization_algorithms:
+      objective_function":]","Minimize: Annual_Energy_Cost + Maintenance_Costs"
+      constraints: ]
+        comfort: "20-26°C, 40-65%RH"
+        reliability: "Primary+backup systems"
+        first_cost: "Capital cost limits"
+      decision_variables: ]
+        equipment sizing, operating schedules, setpoints
+
+  # 数值计算示例
+  calculation_examples:
+
+    example1_chilled_water_sizing:
+      given: "Building cooling load 500 kW, ΔT = 5°C"
+      calculations:
+        - step: "Calculate flow rate"
+          formula: "V̇ = Q / (ρ × c_p × ΔT) = 500 / (1000 × 4.186 × 5) = 0.024 m³/s = 24 L/s"
+        - step: "Select pipe size"
+          formula: "Velocity = V̇ / A = 0.024 / (π × 0.125²) = 1.22 m/s (DN125)"
+        - step: "Calculate pump power"
+          formula: "W = ρgQH/η = 1000 × 9.81 × 0.024 × 25 / 0.75 = 7.8 kW"
+
+    example2_air_flow_capacity:
+      given: "Room sensible load 15 kW, ΔT = 8°C"
+      calculations:
+        - step: "Calculate airflow"
+          formula: "V̇ = Q / (ρ × c_p × ΔT) = 15 / (1.204 × 1.006 × 8) = 1.55 m³/s"
+        - step: "Check air changes"
+          formula: "ACH = V̇ × 3600 / Room_volume = 1.55 × 3600 / 500 = 11.2 ACH"
+
+    example3_combined_energy:
+      given: "Hotel building: 200 room"
+      energy_systems:
+        - system: "Cooling"
+          capacity: "800 kW"
+          consumption: "800×0.7×8760×¥1.0 = ¥490万/年" # 70%负荷率
+        - system: "Heating"
+          capacity: "600 kW"
+          consumption: "600×0.6×4500×¥0.8 = ¥129万/年"  # 60%负荷率，4-5月
+        - system: "Domestic hot water"
+          capacity: "300 kW"
+          consumption: "300×0.5×8760×¥0.8 = ¥105万/年"
+        - system: "Lighting & equipment"
+          capacity: "150 kW"
+          consumption: "150×0.8×8760×¥1.0 = ¥105万/年"
+        total_annual_cost: "约¥830万"
+
+  # 模型验证与标准
+  model_validation:
+    accuracy_requirements:
+      design_calculation: "±5% accuracy for quick sizing"
+      detailed_calculation: "±2% accuracy for final design"
+      measurement_verification: "±3-5% accuracy for water flow meters"
+
+    standards_references:
+      - standard: "ISO 12205"
+        scope: "粉丝热性能计算"
+      - standard: "ASHRAE Fundamentals"
+        scope: "传热学和热力学基础"
+      - standard: "ISO 11855"
+        scope: "嵌入式辐射加热/冷却系统"
+      - standard: "GB 50666"
+        scope: "建筑节能设计统一技术标准"
+
+    validation_methodology:
+      theoretical_check: "1) 量纲分析 2) 极限情况检验 3) 对称性检验"
+      physical_consistency: "1) 能量守恒符合 2) 质量守恒 3) 第二定律分析"
+      instrumentation_calibration: "仪表校准±2%精度要求"
+      measurement_uncertainty: "综合不确定度±5% (95%置信度)"
+
+    real_world_application_verification:
+      performance_monitoring: "长期性能监测验证模型预测"
+      case_study_validation: "实际工程案例与模型计算对比"
+      seasonal_verification: "各季节实际表现与模型差异分析"
+      continuous_improvement: "基于运行数据迭代优化模型参数"
+
+conclusion:
+  model_comprehensiveness: "建立了从微观传热到宏观系统级的完整耦合模型体系"
+  engineering_applications: ["负荷计算", "设备选型", "能效分析", "控制优化", "故障诊断"]
+  next_development_phase: "与Agent-05控制模型接口，建立动态优化控制策略"

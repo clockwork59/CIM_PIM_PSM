@@ -1,0 +1,8 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_RHHV_BATCH_ARCHIVES_TRANS_RECORD,表全名,JHPDL:JH_RHHV_BATCH_ARCHIVES_TRANS_RECORD,,,,,,
+,表说明,批量档案迁移记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,VBU,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引

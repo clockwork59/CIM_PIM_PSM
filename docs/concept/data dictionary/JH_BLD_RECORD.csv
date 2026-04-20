@@ -1,0 +1,32 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_BLD_RECORD,表全名,JHPDL:JH_BLD_RECORD,,,,,,
+,表说明,输血记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,BMR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,BMR0001,String字符串（变长）,,BLD_RECORD_SN,输血记录编号,输血记录编号，系统生成三级编码，如“BR0.000.000.001”,20,是,是
+,\x00\x02,BMR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,BMR0003,String字符串（变长）,,BLD_APPLY_SN,输血申请单编号,输血申请单编号，来源JH_BLD_APPLY的BAP0001,20,是,是
+,\x00\x04,BMR0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,BMR0005,String字符串（变长）,,HIS_APPLY_NO,业务申请号,业务系统生成的输血申请单号,200,是,是
+,\x00\x06,BMR0006,String字符串（变长）,,BLD_PACKAGE_CODE,血袋条码,,200,,
+,\x00\x07,BMR0007,String字符串（变长）,,TAKE_OUT_MAN,取血人,,200,,
+,\x00\x08,BMR0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,TAKE_OUT_TIME,取血时间,,19,,
+,\x00\x09,BMR0009,String字符串（变长）,,BLD_START_MAN,输血开始人,,200,,
+,\x00\x0A,BMR0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BLD_START_TIME,输血开始时间,,19,,
+,\x00\x0B,BMR0011,String字符串（变长）,,BLD_END_MAN,输血结束人,,200,,
+,\x00\x0C,BMR0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BLD_END_TIME,输血结束时间,,19,,
+,\x00\x0D,BMR0013,String字符串（变长）,,BLD_NAME,输血品种,,200,,
+,\x00\x0E,BMR0014,Double双精度浮点型（8个字节）,,BLD_VOLUME,输血量,,38,,
+,\x00\x0F,BMR0015,String字符串（变长）,,BLD_ABO,ABO血型,,200,,
+,\x00\x10,BMR0016,String字符串（变长）,,BLD_RH,RH血型,,200,,
+,\x00\x12,BMR0018,String字符串（变长）,,BLD_REMARK,输血备注,,4000,,
+,\x00\x13,BMR0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x14,BMR0020,简化字典（Integer整型，4个字节）,449,SD_APPLY_STATE,申请状态简码,"0、草稿；1、保存,申请未提交；2、已提交，待输血科确认；3、输血科已确认需配血；4、输血科已拒绝；12、待医务处审批；13、医务处审批通过；21、输血科配血完成；22、等待输血；31、输血中；32、输血完成",20,,
+,\x00\x15,BMR0021,String字符串（变长）,,ST_APPLY_STATE,申请状态描述,,200,,
+,\x00\x16,BMR0022,String字符串（变长）,,SC_APPLY_STATE,申请状态编码,源业务系统的申请状态编码,200,,
+,\x00\x17,BMR0023,String字符串（变长）,,PROC_NO,产品码（血液编码）,血液编码，对应血液入出库记录的产品名,,,
+,\x00\x18,BMR0024,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x11,BMR0017,自定义字典类型，字符串（变长）,449,APPLY_STATE,申请状态,"0、草稿；1、保存,申请未提交；2、已提交，待输血科确认；3、输血科已确认需配血；4、输血科已拒绝；12、待医务处审批；13、医务处审批通过；21、输血科配血完成；22、等待输血；31、输血中；32、输血完成",200,,

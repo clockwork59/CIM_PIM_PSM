@@ -1,0 +1,14 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_HOSP_SUB,表全名,JHPDL:JH_OUT_HOSP_SUB,,,,,,
+,表说明,门诊就诊附表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,SUD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,SUD0001,String字符串（变长）,,OUT_HOSP_SUB_SN,门诊就诊附表编号,"住院就诊附表编号，系统生成三级编码，如""SD0.000.000.001""",20,是,是
+,\x00\x02,SUD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,SUD0003,String字符串（变长）,,OUT_HOSP_SN,门诊就诊编号,门诊就诊编号，来源JH_OUT_HOSP的OHR0001,20,是,是
+,\x00\x04,SUD0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,,200,,
+,\x00\x05,SUD0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,,,
+,\x00\x06,SUD0006,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

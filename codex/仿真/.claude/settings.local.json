@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Volumes/M4-SSD/项目 Project/项目 Project/A 工作项目/A 10 研发与产品项目/门诊管理/clinic-sync/**)",
+      "Read(//Volumes/M4-SSD/项目 Project/项目 Project/A 工作项目/A 10 研发与产品项目/CIM-PIM-PSM/统一领域模型（CIM）/docs/concept/data dictionary/**)",
+      "Bash(python3:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

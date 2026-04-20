@@ -1,0 +1,36 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CU_ORDER,表全名,JHPDL:JH_CU_ORDER,,,,,,
+,表说明,体检套餐记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CHB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CHB0001,String字符串（变长）,,CHECK_ORDER_SN,体检套餐记录,体检套餐记录编号，系统生成三级编码，如“CB0.000.000.001”,20,是,是
+,\x00\x02,CHB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,CHB0003,String字符串（变长）,,CHECK_UP_SN,体检记录编号,体检记录编号，来源JH_CU_HOSP的CHR0001,20,是,是
+,\x00\x04,CHB0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,CHB0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,19,是,
+,\x00\x08,CHB0008,String字符串（变长）,,SC_TEAM_CHK_PKG,关联团体套餐编码,,50,,
+,\x00\x09,CHB0009,String字符串（变长）,,ST_TEAM_CHK_PKG,关联团体套餐名称,,150,,
+,\x00\x06,CHB0006,String字符串（变长）,,SC_CHK_PKG,套餐编码,,50,,是
+,\x00\x07,CHB0007,String字符串（变长）,,ST_CHK_PKG,套餐名称,,150,,
+,\x00\x0A,CHB0010,String字符串（变长）,,SC_PKG_STATUS,套餐状态编码,,20,,是
+,\x00\x0B,CHB0011,String字符串（变长）,,ST_PKG_STATUS,套餐状态描述,,50,,
+,\x00\x0C,CHB0012,Double双精度浮点型（8个字节）,,PKG_ORG_FEE,套餐原价,,,,
+,\x00\x0D,CHB0013,Double双精度浮点型（8个字节）,,PKG_ACT_FEE,套餐实际价格,,,,
+,\x00\x0E,CHB0014,简化字典（Integer整型，4个字节）,379,SD_ADD_ITEM,是否加项,是否套餐外单独购买项目,,,
+,\x00\x0F,CHB0015,String字符串（变长）,,SC_DIS_TYPE,优惠类型编码,如：无优惠、总价优惠、单项优惠、折扣比等,20,,
+,\x00\x10,CHB0016,String字符串（变长）,,ST_DIS_TYPE,优惠类型描述,,50,,
+,\x00\x11,CHB0017,String字符串（变长）,,SC_PAY_WAY,支付方式代码,自费、团体公费等,20,,
+,\x00\x12,CHB0018,String字符串（变长）,,ST_PAY_WAY,支付方式描述,,50,,
+,\x00\x1B,CHB0027,简化字典（Integer整型，4个字节）,243,SD_PAY_WAY,支付方式简码,中台代码标准，医疗费用支付方式代码,,,
+,\x00\x16,CHB0022,String字符串（变长）,,SC_PAY_STATUS,支付状态编码,已支付、部分支付、挂账、统结等,20,,是
+,\x00\x17,CHB0023,String字符串（变长）,,ST_PAY_STATUS,支付状态描述,,50,,
+,\x00\x18,CHB0024,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PAY_TIME,收费时间,,19,,
+,\x00\x1A,CHB0026,String字符串（变长）,,CHECK_PAT_ID,体检系统内部患者ID,,50,,是
+,\x00\x19,CHB0025,String字符串（变长）,,REMARKS,备注,,500,,
+,\x00\x13,CHB0019,String字符串（变长）,,SC_OPRE_USER,操作人编码,,50,,
+,\x00\x14,CHB0020,String字符串（变长）,,ST_OPRE_USER,操作人姓名,,100,,
+,\x00\x15,CHB0021,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CREATED_TIME,创建时间,,19,,
+,\x00\x1C,CHB0028,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

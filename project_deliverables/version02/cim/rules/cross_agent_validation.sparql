@@ -1,0 +1,72 @@
+# CIM Cross-Agent Consistency Validation Queries
+# Generated: 2025-01-17
+
+# CST-TOPO-001: All systems must have source node
+PREFIX cim-topo: <https://cim.medical/ontology/v3.4/topology#>
+ASK WHERE { 
+    FILTER NOT EXISTS {  
+        ?system a cim-topo:System .
+        FILTER NOT EXISTS { ?system cim-topo:hasSourceNode ?source }
+    }
+}
+
+# CST-TOPO-002: All sink nodes must trace back to source
+PREFIX cim-topo: <https://cim.medical/ontology/v3.4/topology#>
+ASK WHERE {
+    FILTER NOT EXISTS {
+        ?sink a cim-topo:Sink_Node .
+        FILTER NOT EXISTS {
+            ?source a cim-topo:Source_Node .
+            ?source (cim-topo:feedsTo)+ ?sink
+        }
+    }
+}
+
+# CST-EQUIP-001: Non-logical topology nodes must have equipment mapping
+PREFIX cim-topo: <https://cim.medical/ontology/v3.4/topology#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim: <https://cim.medical/ontology/v3.4#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?node ?nodeType WHERE {
+    ?node a ?nodeType .
+    ?nodeType rdfs:subClassOf* cim-topo:Node .
+    FILTER NOT EXISTS { ?node a cim-topo:LogicalNode }
+    FILTER NOT EXISTS {
+        ?equip cim:mapsToNode ?node .
+        ?equip a/rdfs:subClassOf* cim-equip:Equipment
+    }
+}
+
+# CST-SPACE-001: Equipment must have location
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-space: <https://cim.medical/ontology/v3.4/space#>
+PREFIX cim: <https://cim.medical/ontology/v3.4#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?equip WHERE {
+    ?equip a/rdfs:subClassOf* cim-equip:Equipment
+    FILTER NOT EXISTS { ?equip cim:locatedIn ?loc }
+}
+
+# CST-CTRL-001: Control devices must reference valid target equipment
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-ctrl: <https://cim.medical/ontology/v3.4/control#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+ASK WHERE {
+    { ?ctrl a cim-ctrl:Sensor } UNION { ?ctrl a cim-ctrl:Actuator }
+    ?ctrl (cim-ctrl:monitors|cim-ctrl:controls) ?target
+    FILTER NOT EXISTS { ?target a/rdfs:subClassOf* cim-equip:Equipment }
+}
+
+# CST-METER-001: Meters must have metering target (equipment or space)
+PREFIX cim-meter: <https://cim.medical/ontology/v3.4/metering#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-space: <https://cim.medical/ontology/v3.4/space#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?meter WHERE {
+    ?meter a cim-meter:Meter
+    FILTER NOT EXISTS {
+        ?meter cim-meter:meters ?obj
+        FILTER EXISTS { ?obj a/rdfs:subClassOf* cim-equip:Equipment }
+    }
+}

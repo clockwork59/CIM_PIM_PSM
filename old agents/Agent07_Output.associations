@@ -1,0 +1,355 @@
+# Agent-07: 关联关系图谱
+# Integrated Association Relationship Network
+
+master_association_network = {
+    "network_overview": {
+        "network_name": "医疗建筑综合能源计量关联网络",
+        "node_types": ["四层级计量节点", "四能源介质节点", "组织架构节点", "分摊算法节点", "空间布局节点"],
+        "relationship_types": ["层级关系", "分配关系", "转换关系", "聚合关系", "依赖关系", "时空关系"],
+        "network_complexity": "多层次、多维度、动态耦合",
+        "data_flow_direction": "集中（L0）⟹ 分散（L3）, 分散 ⟹ 集中（数据汇聚）"
+    },
+
+    "hierarchical_connections": {
+        "vertical_hierarchies": {
+            "L0_to_L1_relationships": {
+                "description": "总表层到区域表层的分解关系",
+                "relationship_pattern": "TOTAL(100%) = ΣAREAS + COMMON_AREAS + LOSSES",
+                "data_consistency_rules": {
+                    "balance_equation": "L0_total = L1_outpatient + L1_inpatient + L1_medical_tech + L1_admin + L1_support + L1_others",
+                    "tolerance_limit": "上下级差异≤±3%",
+                    "breakdown_methodology": "理论分解 + 实测验证 + 损耗分析"
+                },
+                "example_relationships": {
+                    "total_electricity_L0": {
+                        "100% =": {
+                            "outpatient_building": "35%",
+                            "inpatient_building_A": "30%",
+                            "medical_tech_building": "20%",
+                            "admin_support_buildings": "10%",
+                            "common_area_consumption": "3%",
+                            "transmission_losses": "2%"
+                        }
+                    }
+                }
+            },
+
+            "L1_to_L2_relationships": {
+                "description": "区域表层到分户表层的二级分解",
+                "aggregation_methodology": "Area → Department collocation mapping",
+                "allocation_challenges": ["共同区域分配", "共享设备分配", "时间分布处理"],
+                "ground_truth_validation": "科室级实际测量+数据对比分析",
+                "allocation_rules": {
+                    "clinical_priority": "医疗科室优先计量独立",
+                    "area_proportion_basis": "行政科室按面积比例",
+                    "usage_intensity_weighting": "技术科室考虑设备密度",
+                    "common_area_snowball": "公共区域按服务半径分配"
+                }
+            },
+
+            "L2_to_L3_relationships": {
+                "description": "分户表层到分项表层的最终分解",
+                "horizontal_decomposition": "科室总耗⟹HVAC+LIGHTING+POWER+SPECIAL+LIFE_SAFETY",
+                "system_integration": "科室级别⟹系统级分项能耗重组",
+                "precision_requirements": "支持详细能效分析和改造决策",
+                "data_reconstruction": "L3数据可重新聚合形成多维度报告"
+            }
+        }
+    },
+
+    "energy_media_interconnections": {
+        "cross_media_flows": {
+            "electrical_to_thermal_conversions": {
+                "chiller_plant_efficiency": {
+                    "cop_calculation": "COP = Cooling_Production_Thermal / Electrical_Power_Input",
+                    "typical_cop_range": "4.0-6.0 for centrifugal chillers",
+                    "variable_flow_impact": "VFD pumps reduce electrical consumption 15-25%",
+                    "sequencing_control": "Optimal chiller staging based on load profile"
+                },
+                "heat_pump_applications": {
+                    "domestic_hot_water": "COP=3.0-4.0, electricity to heat conversion",
+                    "space_heating_backup": "Air-source heat pumps for shoulder seasons",
+                    "waste_heat_recovery": "Electric-driven heat recovery from chillers"
+                }
+            },
+
+            "water_thermal_energy_relationships": {
+                "hot_water_systems": {
+                    "calorimetric_calculation": "Energy = Volume × ρ × Cp × ΔT",
+                    "thermal_meter_accuracy": "±2% integrated thermal energy measurement",
+                    "system_fingerprinting": "基准曲线建立与异常检测"
+                },
+                "cooling_tower_water_energy": {
+                    "evaporation_losses": "Typically 1.5-2.5% of circulation flow",
+                    "concentration_cycles": "6-8 cycles for makeup water optimization",
+                    "blowdown_heat_recovery": "Potential for heat integration"
+                }
+            },
+
+            "gas_thermal_integration": {
+                "boiler_plant_meters": {
+                    "thermal_efficiency": "η = Heat_output / Fuel_energy_input ≈ 85-92%",
+                    "combustion_analysis": "O2, CO, NOx monitoring for optimization",
+                    "stack_temperature": "Flue gas temperature 120-180°C typical"
+                },
+                "cogeneration_opportunities": {
+                    "overall_efficiency": "85-90% total energy utilization",
+                    "power_heat_ratio": "Typical 0.6-1.0 for hospital applications",
+                    "economic_drivers": "Spark spread analysis for CHP economics"
+                }
+            }
+        }
+    },
+
+    "organizational_hierarchy_mappings": {
+        "campus_to_building_mapping": {
+            "spatial_containment": "Campus ╌̣ Buildings（一对多关系）",
+            "building_functional_assignment": {
+                "clinical_buildings": ["outpatient_comprehensive", "inpatient_A", "inpatient_B", "medical_tech"],
+                "support_buildings": ["energy_center", "central_sterile", "kitchen_dining", "laundry"],
+                "administrative_buildings": ["admin_office", "research_center", "library_archive"],
+                "external_functional_areas": ["parking_structures", "landscaping_grounds", "emergency_access"]
+            },
+            "infrastructure_utility_mappings": {
+                "electrical_feeds": "L1 electrical meters map to specific buildings",
+                "thermal_zones": "HVAC thermal meters serve defined building groups",
+                "water_distribution": "Water meters correspond to plumbing zones",
+                "gas_service_areas": "Gas meters serve specific building functions"
+            }
+        },
+
+        "building_to_department_mapping": {
+            "floor_level_organization": {
+                "vertical_functional_zones": {
+                    "basement_levels": "Parking + equipment + storage + utilities",
+                    "ground_levels": "Public access + emergency + pharmacy + cafeteria",
+                    "mid_levels": "Clinical departments + exam rooms + surgery",
+                    "high_levels": "Administration + library + meeting + IT systems"
+                },
+                "departmental_colocation_analysis": {
+                    "synergistic_grouping": "Related clinical services adjacent（e.g., cardiology + cath lab）",
+                    "workflow_optimization": "Patient flow minimization + staff efficiency",
+                    "shared_resources_efficiency": "Consolidation of imaging, labs, pharmacy services"
+                }
+            }
+        },
+
+        "department_to_itemized_system_mapping": {
+            "energy_use_decomposition": "Department total comprehensive⟹system-level breakdown",
+            "equipment_asset_linkage": "Department equipment inventory⟹system meter mapping",
+            "floor_area_allocation_rules": {
+                "shared_equipment_zones": "e.g., Radiology serves multiple departments",
+                "common_area_proportions": "Corridors, waiting areas proportional distribution",
+                "specialist_equipment_dedication": "Dedicated equipment directly assigned"
+            },
+            "operating_schedule_integration": "Department operational hours⟹system usage profiles",
+            "peak_demand_synchronization": "Department peak alignment⟹utility peak shaving opportunities"
+        }
+    },
+
+    "allocation_algorithm_hierarchies": {
+        "algorithm_responsibility_domains": {
+            "primary_system_meters": {
+                "techniques": ["Direct measurement", "High-accuracy validation", "Reconciliation factors"],
+                "allocation_accuracy": "±2% for measured parameters",
+                "real_time_availability": "15-minute resolution",
+                "applications": "Major HVAC systems, central plants, critical loads"
+            },
+
+            "secondary_estimation_methods": {
+                "model_based_approaches": ["Physics-based models", "Statistical regression", "Machine learning"],
+                "allocation_accuracy": "±10-15% for non-measured parameters",
+                "validation_methods": ["Cross-validation", "Benchmark comparison", "Historical calibration"],
+                "confidence_intervals": "95% confidence bounds reported"
+            },
+        },
+
+        "algorithm_interdependency_network": {
+            "cascading_allocation_effects": {
+                "chiller_allocation_impacts": "Cooling allocation⟹pump allocation⟹final energy attribution",
+                "lighting_efficiency_synergies": "Lighting efficiency⟹cooling load reduction⟹HVAC re-allocation",
+                "common_area_distributions": "Common area distribution⟹ affects all department level energy costs"
+            },
+
+            "conflict_resolution_mechanisms": {
+                "allocation_overlap_prevention": "Clear responsibility boundaries to prevent double-counting",
+                "prioritization_rules": "Note allocation conflicts: measured data > modeled estimates",
+                "consensus_building_reconciliation": "Iterative solver to resolve multi-way allocation conflicts",
+                "uncertainty_propagation": "Error propagation through allocation chain"
+            },
+
+            "performance_tracking_metrics": {
+                "allocation_consistency": "Self-consistency across hierarchical levels",
+                "accuracy_improvement_trends": "Historical accuracy trend tracking",
+                "stakeholder_satisfaction": "Department satisfaction with allocation fairness",
+                "energy_intensity_reliability": "Consistent EUI benchmarking capability"
+            }
+        }
+    },
+
+    "spatial_integration_networks": {
+        "building_grid_coordination": {
+            "coordinate_system_reference": "GPS + Local building coordinate system",
+            "meter_location_cataloging": "3D coordinate positioning for every meter",
+            "proximity_based_relationships": "Spatial adjacency⟹system coupling strength analysis",
+            "access_route_optimization": "Maintenance access route planning based on spatial proximity",
+            "expansion_planning_support": "Spatial capacity planning for future meter additions"
+        },
+
+        "multi_facility_scaling_patterns": {
+            "campus_replication_model": "Standardized metering templates for multi-building campuses",
+            "network_scaling_laws": "How system relationships change with campus scale",
+            "central_vs_distributed_utilities": "Trade-offs: central plant vs. distributed systems",
+            "inter_building_utility_sharing": "Shared utility systems across building clusters"
+        },
+
+        "zoning_and_geographic_correlations": {
+            "thermal_zoning_patterns": "Building orientation⟹thermal load distribution",
+            "daylight_zone_analysis": "Facade orientation⟹natural lighting utilization",
+            "wind_pattern_effects": "Local wind patterns⟹natural ventilation opportunities",
+            "microclimate_influences": "Urban heat island⟹local cooling requirements"
+        }
+    },
+
+    "temporal_correlation_networks": {
+        "daily_load_profile_synchronization": {
+            "peak_alignment_analysis": "Building peak⟹Department peak⟹System peak correlation",
+            "demand_response_synchronization": "Utility DR signals⟹Building response capability",
+            "load_diversity_modeling": "Diversity factors across time⟹coincidence analysis",
+            "capacity_planning_temporal": "System sizing based on diversified vs. coincidence peaks"
+        },
+
+        "seasonal_transition_patterns": {
+            "heating_to_cooling_transition": "Autumn/Spring transition periods: mixed-mode operations",
+            "occupancy_seasonal_variations": "Holidays, campaigns, seasonal patient patterns",
+            "weather_normalization_methods": "Typical meteorological year vs. actual conditions",
+            "degree_day_correlation_analysis": "Heating/cooling degree days⟹energy consumption relationships"
+        },
+
+        "real_time_operational_integration": {
+            "demand_forecasting_coordination": "Multi-system load forecasting with cross-correlation",
+            "real_time_optimization_targeting": "Real-time system dispatch optimization",
+            "fault_detection_diagnostics_fdd": "Cross-system fault propagation analysis",
+            "dynamic_efficiency_monitoring": "Real-time efficiency tracking across interconnected systems"
+        }
+    },
+
+    "data_network_interconnections": {
+        "communication_protocol_standards": {
+            "meter_level_protocols": ["Modbus RTU/TCP", "BACnet", "LonWorks", "DNP3", "IEC 61850"],
+            "data_concentrator_integration": "Local data concentrators⟹enterprise network",
+            "cloud_connectivity_requirements": "M2M communication, cellular failover, network redundancy",
+            "cybersecurity_architecture": "Segmented networks, VPN connections, data encryption standards"
+        },
+
+        "data_quality_consistency_networks": {
+            "temporal_synchronization": "NTP time synchronization across all devices",
+            "data_validation_rules": "Cross-validity checks across meter levels",
+            "gaps_imputation_systems": "Automated missing data interpolation with uncertainty quantification",
+            "anomaly_detection_networks": "System-wide outlier detection based on statistical relationships"
+        },
+
+        "enterprise_system_integration_networks": {
+            "EMS_BAS_integration": "Energy Management System & Building Automation System",
+            "CMMS_connectivity": "Computerized Maintenance Management System integration",
+            "ERP_data_feeds": "Enterprise Resource Planning system data integration",
+            "dashboard_visualization": "Multi-level dashboard architecture with drill-down capabilities"
+        }
+    },
+
+    "optimization_and_control_networks": {
+        "multi_system_optimization_strategies": {
+            "integrated_control_systems": "HVAC + lighting + envelope integrated optimization",
+            "model_predicative_control": "MPC coordinating multiple building systems",
+            "rule_based_optimization": "Expert system rules for multi-system coordination",
+            "machine_learning_adaptive": "Reinforcement learning for optimal control strategies"
+        },
+
+        "energy_management_coordination": {
+            "peak_demand_management": "Multi-system coordinated demand reduction",
+            "energy_storage_optimization": "Battery + thermal storage coordination",
+            "renewable_energy_integration": "Solar PV + thermal solar integration",
+            "electric_vehicle_charging": "EV charging load management with building loads"
+        },
+
+        "continuous_improvement_networks": {
+            "performance_baselines": "Multi-system energy baselines with correlation analysis",
+            "benchmarking_networks": "Campus-to-building-to-system benchmarking hierarchies",
+            "retrofit_impact_modeling": "Predictive modeling of multi-system retrofit impacts",
+            "measurement_verification": "IPMVP-based energy savings verification across systems"
+        }
+    },
+
+    "resilience_and_reliability_networks": {
+        "critical_system_interdependencies": {
+            "power_thermal_coupling": "Electrical system⟹chilled water system⟹cooling loads",
+            "life_safety_system_reliability": "Emergency power criticality mapping for all life safety systems",
+            "backup_system_coordination": "UPS, generator, battery backup system interactions",
+            "redundancy_analysis": "N+1 vs. 2N redundancy impact on system reliability"
+        },
+
+        "fault_tolerance_and_recoverability": {
+            "single_point_failure_analysis": "Critical failure points across system boundaries",
+            "cascading_failure_prevention": "Preventing system domino failures",
+            "graceful_degradation_strategies": "System performance degrading under failure conditions",
+            "recovery_sequence_planning": "Multi-system restoration priority sequences"
+        },
+
+        "resilience_interconnection_analysis": {
+            "climate_adaptation_strategies": "System design for changing climate conditions",
+            "disaster_preparedness_coordination": "Multi-system disaster recovery procedures",
+            "supply_chain_risks": "Critical meter and control equipment supply chain analysis",
+            "cyber_resilience_architecture": "Cyber attack resilience across interconnected systems"
+        }
+    },
+}
+
+# 关联网络的数值化定义
+quantitative_association_networks = {
+    "correlation_coefficients": {
+        "electrical_thermal_correlation": {
+            "cooling_electricity_vs_temperature": "-0.85 to -0.92 (negative correlation)",
+            "heating_electricity_vs_temperature": "0.78 to 0.88 (positive correlation)",
+            "lighting_electricity_vs_daylight": "-0.65 to -0.75 (daylight availability)",
+            "occupancy_vs_electrical_demand": "0.80 to 0.90 (occupancy correlation)"
+        }
+    },
+
+    "efficiency_coupling_factors": {
+        "thermal_system_performance": {
+            "chiller_efficiency_temperature": "-2% per 1°C condenser water temperature increase",
+            "pump_vfd_savings": "15-25% pump power reduction with VFD control",
+            "thermal_distribution_losses": "5-15% of total thermal energy (typical)"
+        }
+    },
+
+    "allocation_accuracy_measures": {
+        "direct_measurement_accuracy": {
+            "thermal_energy_allocation": "±2% (measured basis)",
+            "electrical_submeter_allocation": "±1% (direct submetering)",
+            "water_flow_allocation": "±3% (flow measurement basis)"
+        },
+        "model_based_allocation_accuracy": {
+            "chilled_water_distribution": "±8-12% (model-based)",
+            "lighting_occupancy_allocation": "±10-15% (usage pattern models)",
+            "common_area_area_allocation": "±5-8% (area-based distribution)"
+        }
+    }
+}
+
+# 关联网络的可视化定义
+visualization_network_specifications = {
+    "network_graph_structures": {
+        "hierarchical_layering": "四层级垂直结构可视化",
+        "multi_dimensional_projections": "时间、空间、能源多维度网络图",
+        "interactive_dashboard_architecture": "可钻取多层关联仪表盘",
+        "anomaly_highlighting": "异常关联关系和趋势突出显示"
+    },
+
+    "performance_monitoring_displays": {
+        "real_time_correlation_matrix": "实时相关性矩阵热力图",
+        "temporal_correlation_tracking": "时间序列相关性变化跟踪",
+        "efficiency_circularity_diagrams": "多系统效率循环图",
+        "allocation_fairness_gauges": "分摊公平性仪表板"
+    }
+}

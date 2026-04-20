@@ -1,0 +1,85 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+
+<https://cim.medical/ontology/v3.4/equipment/mechanical>
+    a owl:Ontology ;
+    rdfs:label "CIM HVAC Equipment Module"@en ;
+    rdfs:comment "HVAC and air handling equipment for building systems."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/topology/node_types> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> .
+
+cim-equip:Chiller
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Chiller"@en ;
+    rdfs:label "冷水机组"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "离心式或螺杆式冷水机组，用于空调系统制冷"@zh-CN .
+
+cim-equip:AHU
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Air Handling Unit"@en ;
+    rdfs:label "空调机组"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "组合式空调机组，包含风机、盘管、过滤器等"@zh-CN .
+
+cim-equip:Clean_AHU
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:AHU ;
+    rdfs:label "Clean Air Handling Unit"@en ;
+    rdfs:label "洁净空调机组"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "用于洁净室和手术室的专用净化空调机组"@zh-CN .
+
+cim-equip:HEPA_Filter
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Component ;
+    rdfs:label "HEPA Filter"@en ;
+    rdfs:label "HEPA高效过滤器"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "高效空气过滤器，用于洁净空间和手术室"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-equip:CoolingTower
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Cooling Tower"@en ;
+    rdfs:label "冷却塔"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "用于冷却水系统散热"@zh-CN .
+
+cim-equip:Pump
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Pump"@en ;
+    rdfs:label "水泵"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "冷冻/冷却/热水循环泵"@zh-CN .
+
+cim-equip:VAV_Terminal
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "VAV Terminal"@en ;
+    rdfs:label "VAV末端"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "变风量末端装置，用于空调分区控制"@zh-CN .
+
+cim-equip:FCU
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Fan Coil Unit"@en ;
+    rdfs:label "风机盘管"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "风机盘管机组，通常用于房间级空调"@zh-CN .
+
+# ============================================================================
+# END OF HVAC EQUIPMENT MODULE
+# ============================================================================

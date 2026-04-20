@@ -1,0 +1,71 @@
+# Agent-06 控制系统建模师 输出文件元数据
+
+meta:
+  agent_id: "Agent-06"
+  agent_role: "控制系统建模师 (Control System Architect)"
+  mission: "基于Agent-01、Agent-03、Agent-04的输出，构建传感器、执行器、控制器和控制回路的完整模型"
+
+  inputs:
+    - "Agent-01: 系统拓扑（控制节点）"
+    - "Agent-03: 设备本体（控制属性、联锁）"
+    - "Agent-04: 流动模型（需要控制的流动参数）"
+
+  modeling_scope:
+    - "传感器分类与建模（50+传感器类型）"
+    - "执行器分类与建模（20+执行器类型）"
+    - "控制器类型与配置模型"
+    - "关键系统控制回路（6-8个典型回路）"
+    - "控制网络架构"
+    - "冷站、AHU、洁净室控制策略"
+
+  output_files:
+    - "Agent06_Output.meta"
+    - "Agent06_Output.sensor_models"
+    - "Agent06_Output.actuator_models"
+    - "Agent06_Output.controller_models"
+    - "Agent06_Output.control_loop_models"
+    - "Agent06_Output.control_strategies"
+
+  modeling_date: "2025-12-02"
+  model_version: "v1.0"
+  project_scope: "医疗建筑机电系统控制系统设计"
+
+# 建模基础数据
+data_sources:
+  building_topology: "Agent01_Output.system_topologies.md"
+  payload_models: "Agent04_Output.carrier_payload_models"
+  equipment_models: "Agent03_Output.equipment_type_models"
+  flow_models: "Agent04_Output.flow_path_models"
+
+# 控制工程设计标准
+standards:
+  electrical: "GB 50054-2011 低压配电设计规范"
+  hvac: "GB 50736-2012 民用建筑供暖通风与空气调节设计规范"
+  medical: "GB 51039-2014 综合医院建筑设计规范"
+  cleanroom: "GB 50591-2010 洁净室施工及验收规范"
+  buildings: "GB 50314-2015 智能建筑设计标准"
+  controls: "ASHRAE Guideline 13-2014 Specifying DDC Systems"
+
+# 控制回路设计参数
+calculation_bases:
+  temperature:
+    design_delta_t: "5K (冷冻水)"
+    seasonal_variation: "夏季7°C/12°C，冬季过渡季可变"
+  pressure:
+    pump_head: "0.2-0.4 MPa"
+    pipe_velocity: "1.0-3.0 m/s"
+  flow:
+    accuracy_requirement: "±2%"
+    response_time: "1-5秒"
+  control:
+    scan_rate: "1-2秒"
+    control_loop_time: "0.1-1.0秒"
+    pid_tuning: "Ziegler-Nichols或Cohen-Coon"
+
+# 建模方法
+modeling_principles:
+  systematic_approach: "基于系统拓扑和控制需求进行三级建模"
+  level_1: "现场级：传感器和执行器建模"
+  level_2: "控制级：控制器和控制回路建模"
+  level_3: "管理级：控制策略和网络建模"
+  validation: "基于工程实际运行参数进行模型验证"

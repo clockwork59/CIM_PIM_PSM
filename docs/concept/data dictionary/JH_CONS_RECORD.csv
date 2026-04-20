@@ -1,0 +1,58 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CONS_RECORD,表全名,JHPDL:JH_CONS_RECORD,,,,,,
+,表说明,会诊记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CSR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CSR0001,String字符串（变长）,,CONS_RECORD_SN,会诊记录编号,会诊记录编号，系统生成三级编码，如“CM0.000.000.001”,20,是,是
+,\x00\x02,CSR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,CSR0003,String字符串（变长）,,CONS_APY_SN,会诊申请单编号,会诊申请单编号，来源JH_CONS_APPLY的CAP0001,20,是,是
+,\x00\x04,CSR0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,CSR0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x06,CSR0006,String字符串（变长）,,CONS_REC_CODE,会诊记录单号,业务系统使用的会诊记录单号,200,是,是
+,\x00\x07,CSR0007,简化字典（Integer整型，4个字节）,383,SD_CONS_VISIT,会诊就诊类型,会诊记录单患者的就诊类型；直接引用JH_PAT_VISIT的PAV0012；使用中台标准编码“就诊类型”,20,是,是
+,\x00\x11,CSR0017,String字符串（变长）,,SC_CONS_DEPT,会诊科室编码,实际会诊的科室编码；源业务系统的科室编码,200,是,是
+,\x00\x12,CSR0018,String字符串（变长）,,ST_CONS_DEPT,会诊科室名称,实际会诊的科室的名称，多个科室直接分割叠加；源业务系统的科室名称,200,,
+,\x00\x08,CSR0008,简化字典（Integer整型，4个字节）,379,SD_OUTLAND_CONS,是否外院会诊,外院会诊标记，中台标准“是否”编码,20,,
+,\x00\x09,CSR0009,简化字典（Integer整型，4个字节）,379,SD_REMOTE_CONS,是否远程会诊,远程网络方式会诊标记，中台标准“是否”编码,20,,
+,\x00\x0A,CSR0010,String字符串（变长）,,ST_CONS_TYPE,会诊类型描述,源业务系统的会诊类型描述,500,,
+,\x00\x0B,CSR0011,String字符串（变长）,,SC_APY_DEPT,申请科室编码,会诊申请发起科室的编码；源业务系统的科室编码,200,,
+,\x00\x0C,CSR0012,String字符串（变长）,,ST_APY_DEPT,申请科室名称,会诊申请发起科室的名称；源业务系统的科室名称,200,,
+,\x00\x0D,CSR0013,String字符串（变长）,,SC_APY_DOCT,申请人编码,会诊申请发起医生的编码；源业务系统的医生编码,200,,
+,\x00\x0E,CSR0014,String字符串（变长）,,ST_APY_DOCT,申请人名称,会诊申请发起医生的名称；源业务系统的医生名称,200,,
+,\x00\x0F,CSR0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CONS_PLAN_TIME,拟会诊时间,,19,,
+,\x00\x10,CSR0016,String字符串（变长）,,CONS_PLAN_ADDR,拟会诊地点,,500,,
+,\x00\x13,CSR0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CONS_START_TIME,会诊开始时间,实际会诊开始时间,19,是,是
+,\x00\x14,CSR0020,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CONS_STOP_TIME,会诊结束时间,实际会诊结束时间,19,,
+,\x00\x15,CSR0021,String字符串（变长）,,CONS_ADDR,会诊地点,实际会诊地点,500,,
+,\x00\x16,CSR0022,String字符串（变长）,,CONS_CONDITION,病情情况,会诊前的一般病情描述,16000,,
+,\x00\x17,CSR0023,String字符串（变长）,,APPLY_NOTE,申请备注,会诊申请的其他备注,16000,,
+,\x00\x18,CSR0024,String字符串（变长）,,CONS_RESULT,会诊评价内容,会诊结束后给出的会诊评价内容，针对申请会诊科室提出会诊的必要性以及材料准备情况给出的评价,4000,,
+,\x00\x19,CSR0025,String字符串（变长）,,CONS_MR_CODE,会诊文书编号,会诊记录文书的编码,500,,
+,\x00\x1A,CSR0026,String字符串（变长）,,SC_CONS_DOCT,实际会诊医生编码,实际会诊医生编码,200,,
+,\x00\x1B,CSR0027,String字符串（变长）,,ST_CONS_DOCT,实际会诊医生姓名,实际会诊医生姓名,200,,
+,\x00\x1C,CSR0028,String字符串（变长）,,ORDER_LINK,会诊关联医嘱ID,业务存在多科会诊申请情况，会出现只有会诊科室回复时才插入医嘱表，否则不插入,500,,
+,\x00\x1D,CSR0029,String字符串（变长）,,CONS_OPINION,会诊意见,记录会诊科室给出的会诊意见或者退回原因，不同于会诊评价，会诊评价主要是对会诊科室准备资料以及必要性的评价,200,,
+,\x00\x1E,CSR0030,String字符串（变长）,,SC_CONS_VISIT,申请就诊类型编码,源业务系统的申请就诊类型编码,200,,
+,\x00\x1F,CSR0031,String字符串（变长）,,ST_CONS_VISIT,申请就诊类型描述,源业务系统的申请就诊类型描述,200,,
+,\x00\x20,CSR0032,String字符串（变长）,,CONS_FINAL_TREATMENT,会诊最终治疗措施,会诊意见后产生对患者的最终治疗措施,200,,
+,\x00\x21,CSR0033,String字符串（变长）,,CONS_OPINION2,会诊意见2,,2000,,
+,\x00\x22,CSR0034,String字符串（变长）,,CONS_OPINION3,会诊意见3,,2000,,
+,\x00\x23,CSR0035,String字符串（变长）,,CONS_OPINION4,会诊意见4,,2000,,
+,\x00\x24,CSR0036,String字符串（变长）,,CONS_OPINION5,会诊意见5,,2000,,
+,\x00\x2E,CSR0046,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,INVITE_REC_TIME,会诊受邀接收时间,会诊受邀接收时间,19,,
+,\x00\x25,CSR0037,String字符串（变长）,,APPLY_CONS_RESULT1,申请科室评价1,,2000,,
+,\x00\x2F,CSR0047,String字符串（变长）,,SC_REPORT_DOC,报告医生编码,报告医生编码,200,,
+,\x00\x26,CSR0038,String字符串（变长）,,APPLY_CONS_RESULT2,申请科室评价2,,2000,,
+,\x00\x30,CSR0048,String字符串（变长）,,ST_REPORT_DOC,报告医生名称,报告医生名称,200,,
+,\x00\x27,CSR0039,String字符串（变长）,,APPLY_CONS_RESULT3,申请科室评价3,,2000,,
+,\x00\x31,CSR0049,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RECORD_TIME,数据创建时间,数据创建时间,,,
+,\x00\x28,CSR0040,String字符串（变长）,,APPLY_CONS_RESULT4,申请科室评价4,,2000,,
+,\x00\x32,CSR0050,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x29,CSR0041,String字符串（变长）,,APPLY_CONS_RESULT5,申请科室评价5,,2000,,
+,\x00\x2A,CSR0042,String字符串（变长）,,INVITED_CONS_RESULT2,受邀科室评价2,,2000,,
+,\x00\x2B,CSR0043,String字符串（变长）,,INVITED_CONS_RESULT3,受邀科室评价3,,2000,,
+,\x00\x2C,CSR0044,String字符串（变长）,,INVITED_CONS_RESULT4,受邀科室评价4,,2000,,
+,\x00\x2D,CSR0045,String字符串（变长）,,INVITED_CONS_RESULT5,受邀科室评价5,,2000,,

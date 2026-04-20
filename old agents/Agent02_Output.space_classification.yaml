@@ -1,0 +1,563 @@
+# 医疗建筑空间分类体系（Healthcare Space Classification System）
+# 基于GB50333、JGJ49、GSP等医疗建筑标准
+
+# 功能区域分类 Zone Classification
+zone_classification:
+  zone_type_medical:  # 医疗区
+    description: "提供医疗服务的核心功能区域"
+    gb_standard_code: "GB50333-2013"
+    sub_categories:
+
+      # 门诊医疗区
+      outpatient_medical:
+        code: "ZM"
+        description: "门急诊医疗服务区域"
+        primary_functions: ["门诊诊断", "急诊救治", "预防保健", "健康咨询"]
+        infection_control_level: "standard"
+        cleanliness_requirement: "standard"
+        typical_rooms: ["诊室", "急诊室", "抢救室", "观察室", "输液室", "换药室"]
+        zonal_relationships:
+          adjacent_to: ["医技区", "公共区"]
+          separated_from: ["住院区", "后勤区"]
+        hvac_requirements:
+          fresh_air_rate: "30 m³/h·人"
+          filtration_level: "H11"
+          air_changes: "4-6 次/h"
+        pressure_differential: "0 Pa (中性)"
+
+      # 住院医疗区
+      inpatient_medical:
+        code: "IM"
+        description: "住院患者医疗服务区域"
+        primary_functions: ["住院治疗", "护理服务", "康复护理", "临终关怀"]
+        infection_control_level: "enhanced"
+        cleanliness_requirement: "enhanced"
+        typical_rooms: ["病房", "护士站", "治疗室", "处置室", "配液室"]
+        zonal_relationships:
+          adjacent_to: ["医技医疗区", "后勤保障区"]
+          separated_from: ["门诊区", "公共区"]
+        hvac_requirements:
+          fresh_air_rate: "40 m³/h·床"
+          filtration_level: "H12"
+          air_changes: "6-8 次/h"
+        pressure_differential: "+5 Pa (正压)"
+
+      # 急诊医疗区
+      emergency_medical:
+        code: "EM"
+        description: "急诊急救医疗服务区域"
+        primary_functions: ["急诊预检", "急救复苏", "创伤处理", "中毒救治"]
+        infection_control_level: "critical"
+        cleanliness_requirement: "critical"
+        typical_rooms: ["分诊室", "抢救室", "EICU", "创伤手术室", "留观室"]
+        zonal_relationships:
+          adjacent_to: ["门诊入口", "影像诊断区", "检验区"]
+          separated_from: ["普通门诊区", "住院区"]
+        hvac_requirements:
+          fresh_air_rate: "50 m³/h·人"
+          filtration_level: "H13"
+          air_changes: "10-12 次/h"
+        pressure_differential: "-10 Pa (负压)"
+
+      # 手术区
+      surgical_room:
+        code: "SR"
+        description: "手术和麻醉服务区域"
+        primary_functions: ["手术治疗", "麻醉管理", "无菌操作", "术后恢复"]
+        infection_control_level: "strict"
+        cleanliness_requirement: "I级洁净"
+        typical_rooms: ["手术室", "麻醉准备室", "器械室", "刷手室", "洁净走廊"]
+        zonal_relationships:
+          adjacent_to: ["术前准备区", "术后恢复区", "无菌物品区"]
+          separated_from: ["普通病房", "污染区"]
+        hvac_requirements:
+          fresh_air_rate: "60 m³/h·人"
+          filtration_level: "H13"
+          air_changes: "15-20 次/h"
+        pressure_differential: "+15 Pa (正压)"
+
+      # ICU医疗区
+      intensive_care_medical:
+        code: "ICU"
+        description: "重症监护医疗服务区域"
+        primary_functions: ["重症监护", "生命支持", "器官功能维护", "多器官功能衰竭救治"]
+        infection_control_level: "strict"
+        cleanliness_requirement: "II级洁净"
+        typical_rooms: ["ICU病房", "隔离病房", "护士站", "治疗室", "家属谈话室"]
+        zonal_relationships:
+          adjacent_to: ["手术区", "检验区", "药房"]
+          separated_from: ["普通病房", "门诊区"]
+        hvac_requirements:
+          fresh_air_rate: "50 m³/h·床"
+          filtration_level: "H13"
+          air_changes: "12-15 次/h"
+        pressure_differential: "+10 Pa (正压)"
+
+  zone_type_medical_technology:  # 医技区
+    description: "医疗技术和诊断服务区域"
+    gb_standard_code: "JGJ49-2014"
+    sub_categories:
+
+      # 影像诊断区
+      imaging_diagnostic:
+        code: "ID"
+        description: "医学影像诊断服务区域"
+        primary_functions: ["X线诊断", "CT诊断", "MRI诊断", "超声诊断", "核医学"]
+        infection_control_level: "standard"
+        cleanliness_requirement: "enhanced"
+        typical_rooms: ["DR室", "CT室", "MRI室", "超声室", "阅片室", "控制室"]
+        zonal_relationships:
+          adjacent_to: ["门诊区", "住院区"]
+          separated_from: ["污染区", "振动源"]
+        shielding_requirements:
+          radiation_shielding: "required"
+          electromagnetic_shielding: "conditional"
+          vibration_isolation: "required"
+        hvac_requirements:
+          fresh_air_rate: "25 m³/h·人"
+          filtration_level: "H11"
+          air_changes: "4-6 次/h"
+        special_requirements:
+          - "放射防护屏蔽"
+          - "电磁屏蔽（MRI）"
+          - "防振措施"
+          - "设备机房专用冷却"
+
+      # 检验病理区
+      laboratory_pathology:
+        code: "LP"
+        description: "医学检验和病理诊断服务区域"
+        primary_functions: ["临床检验", "病理诊断", "微生物检验", "分子诊断"]
+        infection_control_level: "enhanced"
+        cleanliness_requirement: "enhanced"
+        biohazard_level: "BSL-2"
+        typical_rooms: ["常规检验室", "生化检验室", "微生物室", "病理室", "分子实验室"]
+        zonal_relationships:
+          adjacent_to: ["门诊区", "住院区", "手术区"]
+          separated_from: ["食品加工区", "生活垃圾区"]
+        hvac_requirements:
+          fresh_air_rate: "30 m³/h·人"
+          filtration_level: "H12"
+          air_changes: "6-8 次/h"
+        pressure_differential: "-5 Pa (负压)"
+
+      # 药剂科区
+      pharmacy_department:
+        code: "PD"
+        description: "药品调剂和制剂服务区域"
+        primary_functions: ["药品调剂", "静脉用药配置", "制剂生产", "药品检验"]
+        infection_control_level: "enhanced"
+        cleanliness_requirement: "enhanced"
+        gb_standard_code: "GSP"
+        typical_rooms: ["门诊药房", "住院药房", "静脉用药配置室", "制剂室", "药库"]
+        zonal_relationships:
+          adjacent_to: ["门诊区", "住院区"]
+          separated_from: ["污染区", "潮湿区域"]
+        environmental_requirements:
+          temperature_range: "18-26°C"
+          humidity_range: "45-75%"
+          light_protection: "required"
+          ventilation: "closed-system"
+        hvac_requirements:
+          fresh_air_rate: "25 m³/h·人"
+          filtration_level: "H11"
+          air_changes: "4-6 次/h"
+        special_requirements:
+          - "药品温湿度控制"
+          - "光照防护"
+          - "洁净环境（PIVAs）"
+          - "易燃易制毒储存"
+
+      # 医疗设备区
+      medical_equipment:
+        code: "ME"
+        description: "大型医疗设备运行支持区域"
+        primary_functions: ["医疗设备运行", "设备维护", "放射治疗", "核医学治疗"]
+        infection_control_level: "standard"
+        cleanliness_requirement: "enhanced"
+        typical_rooms: ["设备机房", "控制室", "治疗室", "候诊室", "设备维修室"]
+        zonal_relationships:
+          adjacent_to: ["影像诊断区", "手术区"]
+          separated_from: ["强振动源", "电磁干扰源"]
+        special_requirements:
+          - "设备专用冷却"
+          - "电磁屏蔽"
+          - "放射防护"
+          - "设备用电专线"
+
+  zone_type_logistics:  # 后勤区
+    description: "后勤保障和支持服务区域"
+    gb_standard_code: "GB51251-2017"
+    sub_categories:
+
+      # 供应室区域
+      central_supply_service:
+        code: "CSSD"
+        description: "医疗器械和物品供应服务区域"
+        primary_functions: ["器械回收", "清洗消毒", "包装灭菌", "无菌储存", "发放"]
+        infection_control_level: "strict"
+        cleanliness_requirement: "III级洁净"
+        typical_rooms: ["回收区", "清洗区", "包装区", "灭菌区", "无菌储存区"]
+        workflow_pattern: "单向流程设计"
+        pressure_differential: "")
+        contamination_control:
+          - "污-洁分区"
+          - "单流程设计"
+          - "压力梯度控制"
+        hvac_requirements:
+          fresh_air_rate: "35 m³/h·人"
+          filtration_level: "H12"
+          air_changes: "10-12 次/h"
+        pressure_gradients:
+          "dirty_area": "-10 Pa"
+          "clean_area": "+5 Pa"
+          "sterile_area": "+15 Pa"
+
+      # 后勤保障区
+      logistics_support:
+        code: "LS"
+        description: "综合后勤保障服务区域"
+        primary_functions: ["餐饮服务", "被服洗涤", "污水处理", "垃圾处理", "设备维护"]
+        infection_control_level: "standard"
+        cleanliness_requirement: "standard"
+        typical_rooms: ["营养厨房", "洗涤中心", "污水处理站", "垃圾房", "设备维修间"]
+        zonal_relationships:
+          separated_from: ["医疗核心区", "洁净区"]
+        environmental_requirements:
+          ventilation_priority: "exhaust"
+          odor_control: "required"
+          waste_management: "centralized"
+
+      # 机电设备区
+      mechanical_electrical:
+        code: "MEP"
+        description: "建筑机电设备运行区域"
+        primary_functions: ["冷源供应", "热源供应", "电力配送", "通信中枢", "消防控制"]
+        infection_control_level: "minimal"
+        cleanliness_requirement: "minimal"
+        typical_rooms: ["制冷机房", "锅炉房", "变配电室", "消防控制室", "弱电机房"]
+        special_requirements:
+          - "防噪声传播"
+          - "防振动传播"
+          - "通风散热"
+          - "设备运输通道"
+          - "维护检修空间"
+
+  zone_type_public:  # 公共区
+    description: "患者和访客的公共服务区域"
+    gb_standard_code: "JGJ49-2014"
+    sub_categories:
+
+      # 交通流线区
+      circulation_public:
+        code: "CP"
+        description: "公共交通流线区域"
+        primary_functions: ["垂直交通", "水平交通", "集散等候", "导向标识"]
+        infection_control_level: "minimal"
+        cleanliness_requirement: "standard"
+        typical_rooms: ["大厅", "走廊", "楼梯", "电梯厅", "候梯厅"]
+        design_principles:
+          - "无障碍通行"
+          - "导向清晰"
+          - "自然采光优先"
+          - "防拥挤设计"
+          - "应急疏散"
+
+      # 公共服务区
+      public_service:
+        code: "PS"
+        description: "综合性公共服务区域"
+        primary_functions: ["挂号收费", "导医咨询", "等候休息", "商业服务", "便民设施"]
+        infection_control_level: "minimal"
+        cleanliness_requirement: "standard"
+        typical_rooms: ["挂号厅", "收费处", "等候区", "咖啡厅", "便利店"]
+        service_population: "全人群"
+        accessibility_required: "full"
+
+      # 家属陪伴区
+      family_support:
+        code: "FS"
+        description: "患者家属陪伴支持区域"
+        primary_functions: ["家属等候", "陪伴住宿", "心理支持", "信息沟通", "便民服务"]
+        infection_control_level: "minimal"
+        cleanliness_requirement: "standard"
+        typical_rooms: ["家属等候区", "陪伴房", "谈话室", "祈祷室", "休息区"]
+        privacy_level: "enhanced"
+        comfort_priorities: ["安静", "私密", "舒适", "便利"]
+
+# 房间类型分类 Room Classification
+room_classification:
+  medical_function_rooms:  # 医疗功能房间
+    description: "直接提供医疗服务的房间"
+    standard_references: ["GB50333-2013", "GB51039-2014", "JGJ49-2014"]
+    categories:
+
+      # 手术室类
+      operating_rooms:
+        code: "OR"
+        cleanliness_classes: ["I级", "II级", "III级", "IV级"]  # GB50333标准
+        environmental_requirements:
+          temperature_range: "21-25°C"
+          humidity_range: "30-60%"
+          pressure_differential: "+15 Pa"
+          air_changes: "15-20 次/h"
+          filtration: "H13"
+          recovery_time: "≤15 min"
+        key_features:
+          - "层流送风系统"
+          - "专用医疗气体系统"
+          - "不间断电源(UPS)"
+          - "麻醉废气排放"
+          - "X线防护屏蔽"
+          - "对讲通讯系统"
+        sub_types:
+          - code: "OR-I"
+            name: "I级特别洁净手术室"
+            cleanliness_standard: "I级"
+            applications: ["关节置换", "器官移植", "神经外科"]
+            air_changes: "20 次/h"
+            particle_count: "≤350个/m³ (≥0.5μm)"
+          - code: "OR-II"
+            name: "II级标准洁净手术室"
+            cleanliness_standard: "II级"
+            applications: ["胸外科", "整形外科", "泌尿外科"]
+            air_changes: "18 次/h"
+            particle_count: "≤3500个/m³ (≥0.5μm)"
+          - code: "OR-III"
+            name: "III级一般洁净手术室"
+            cleanliness_standard: "III级"
+            applications: ["普通外科", "妇产科"]
+            air_changes: "15 次/h"
+            particle_count: "≤35000个/m³ (≥0.5μm)"
+          - code: "OR-IV"
+            name: "IV级准洁净手术室"
+            cleanliness_standard: "IV级"
+            applications: ["肛肠外科", "污染手术"]
+            air_changes: "12 次/h"
+            particle_count: "≤350000个/m³ (≥0.5μm)"
+
+      # 重症监护类
+      intensive_care_rooms:
+        code: "ICU"
+        types: ["综合ICU", "专科ICU", "NICU", "PICU", "MICU", "SICU", "CCU", "RICU"]
+        environmental_requirements:
+          temperature_range: "22-26°C"
+          humidity_range: "45-65%"
+          pressure_differential: "+10 Pa"
+          air_changes: "12-15 次/h"
+          filtration: "H13"
+          noise_level: "≤45 dB"
+        key_features:
+          - "正压环境"
+          - "独立空调系统"
+          - "医疗气体集中供应"
+          - "紧急呼叫系统"
+          - "不间断电源"
+          - "净化水系统"
+          - "远程会诊系统"
+        space_requirements:
+          - "床均建筑面积≥20㎡"
+          - "医患通道分区"
+          - "足够的设备放置空间"
+          - "家属等候区"
+
+      # 隔离病房类
+      isolation_rooms:
+        code: "ISR"
+        types: ["负压隔离", "正压隔离", "保护性隔离", "接触隔离"]
+        isolation_levels: ["一级", "二级", "三级"]
+        environmental_requirements:
+          temperature_range: "22-26°C"
+          humidity_range: "45-65%"
+          air_changes: "12 次/h"
+          filtration: "H13 + HEPA"
+          recovery_time: "≤10 min"
+        pressure_control:
+          negative_pressure:
+            differential_range: "-10 to -30 Pa"
+            applications: ["呼吸道传染病", "空气传播疾病"]
+          positive_pressure:
+            differential_range: "+10 to +25 Pa"
+            applications: ["免疫缺陷患者", "器官移植"]
+        key_features:
+          - "压力梯度控制"
+          - "独立空调系统"
+          - "HEPA高效过滤"
+          - "气流单向流动"
+          - "传递窗设置"
+          - "专用卫生间"
+          - "医疗废物收集"
+          - "紧急淋浴和洗眼器"
+
+  diagnostic_function_rooms:  # 诊断功能房间
+    description: "提供医疗诊断服务的房间"
+    categories:
+
+      # 影像诊断类
+      imaging_rooms:
+        code: "IMG"
+        types: ["DR室", "CT室", "MRI室", "DSA室", "超声室", "核医学室"]
+        radiation_protection:
+          - "X线防护屏蔽"
+          - "辐射安全标识"
+          - "放射工作人员防护"
+          - "患者辐射防护"
+        electromagnetic_compatibility:
+          - "MRI专用电磁屏蔽"
+          - "设备间电磁干扰隔离"
+          - "电源滤波"
+        environmental_requirements:
+          temperature_range: "18-26°C"
+          humidity_range: "40-60%"
+          air_changes: "4-6 次/h"
+          noise_level: "≤55 dB"
+          vibration_limit: "≤0.02 mm/s"
+        special_requirements:
+          - "设备专用冷却系统"
+          - "不间断电源(UPS)"
+          - "设备专用接地"
+          - "防电磁干扰措施"
+          - "设备运输通道"
+
+      # 检验病理类
+      laboratory_rooms:
+        code: "LAB"
+        biosafety_levels: ["BSL-1", "BSL-2", "BSL-3"]
+        types: ["临床检验", "生化检验", "微生物检验", "病理诊断", "分子诊断"]
+        environmental_requirements:
+          temperature_range: "18-26°C"
+          humidity_range: "40-70%"
+          air_changes: "6-8 次/h"
+          filtration: "H12"
+        biosafety_requirements:
+          - "生物安全柜"
+          - "负压工作台"
+          - "洗眼器和紧急淋浴"
+          - "高压灭菌器"
+          - "生物废弃物收集"
+        pressure_differential: "-5 Pa (负压)"
+        contamination_prevention:
+          - "气流定向控制"
+          - "洁净/污染分区"
+          - "人员流向控制"
+          - "物资流向控制"
+
+  support_function_rooms:  # 支持功能房间
+    description: "提供医疗支持服务的房间"
+    categories:
+
+      # 供应室类
+      supply_service_rooms:
+        code: "SSR"
+        primary_function: "医疗器械和物品的清洗、消毒、灭菌"
+        workflow: "污-洁-无菌单向流程"
+        cleanliness_zones:
+          - name: "污水处理区"
+            classification: "dirty"
+            pressure: "-10 Pa"
+          - name: "清洁区"
+            classification: "clean"
+            pressure: "+5 Pa"
+          - name: "灭菌包装区"
+            classification: "clean"
+            pressure: "+10 Pa"
+          - name: "无菌储存区"
+            classification: "sterile"
+            pressure: "+15 Pa"
+        environmental_requirements:
+          temperature_range: "18-28°C"
+          humidity_range: "35-75%"
+          air_changes: "10-12 次/h"
+          filtration: "H12"
+        key_equipment:
+          - "全自动清洗消毒器"
+          - "超声波清洗器"
+          - "压力蒸汽灭菌器"
+          - "环氧乙烷灭菌器"
+          - "低温等离子灭菌器"
+          - "洁净工作台"
+
+      # 药房类
+      pharmacy_rooms:
+        code: "PHR"
+        types: ["门诊药房", "住院药房", "静脉用药配置中心(PIVAs)", "制剂室", "药库"]
+        gsp_compliance: "required"  # 药品经营质量管理规范
+        environmental_requirements:
+          temperature_range: "18-26°C"
+          humidity_range: "45-75%"
+          air_changes: "4-6 次/h"
+          filtration: "H11"
+        storage_requirements:
+          - "常温库 10-30°C"
+          - "阴凉库 ≤20°C"
+          - "冷藏库 2-8°C"
+          - "特殊药品库(贵重/毒麻/精神)"
+          - "危险品库(易燃易制毒)"
+        pivas_requirements:
+          cleanliness_level: "万级 + 百级超净工作台"
+          pressure_gradients: "+15Pa (正压)"
+          airflow_pattern: "垂直单向流"
+          temperature_range: "18-26°C"
+          humidity_range: "40-65%"
+
+  public_function_rooms:  # 公共功能房间
+    description: "为全体用户提供的公共服务房间"
+    categories:
+
+      # 厅堂类
+      lobby_hall_rooms:
+        code: "LHR"
+        types: ["门诊大厅", "急诊大厅", "住院大厅", "等候厅"]
+        service_functions: ["挂号", "收费", "咨询", "等候", "导诊"]
+        design_principles:
+          - "无障碍设计"
+          - "导向清晰"
+          - "采光通风"
+          - "防拥挤措施"
+          - "便民服务"
+
+      # 交通辅助类
+      circulation_support_rooms:
+        code: "CSR"
+        types: ["走廊", "楼梯间", "电梯厅", "候梯厅", "连廊"]
+        fire_safety_requirements:
+          - "防烟分区"
+          - "防火分区"
+          - "疏散通道"
+          - "应急照明"
+          - "消防广播"
+        accessibility_requirements:
+          - "无障碍通道"
+          - "扶手设置"
+          - "地面防滑"
+          - "照明充足"
+
+# 分类编码规则
+classification_coding:
+  zone_classification_format: "{ZoneTypeCode}-{SubCategoryCode}"
+  room_classification_format: "{CategoryCode}-{TypeCode}"
+  examples:
+    - "ZM-EM"  # 门诊医疗区-急诊医疗
+    - "ID-CT"  # 影像诊断区-CT室
+    - "OR-II"  # II级洁净手术室
+    - "ICU-SICU"  # 外科重症监护病房
+    - "ISR-NG"  # 负压隔离病房
+    - "SSR-CSSD"  # 供应室
+    - "PHR-PIVAs"  # 静脉用药配置中心
+
+# 分类关系映射
+classification_mapping:
+  zone_to_room_compatibility:
+    "ZM-EM": ["OR-IV", "ISR-NG", "ICU-EICU", "IMG-DR"]  # 急诊区适配房间
+    "SR": ["OR-I", "OR-II", "OR-III", "OR-IV"]  # 手术区适配手术室
+    "ICU": ["ICU-SICU", "ICU-CICU", "ICU-NICU", "ICU-PICU", "ISR-PP"]  # ICU区适配病房
+    "ID": ["IMG-CT", "IMG-MRI", "IMG-DR", "IMG-US", "IMG-NM"]  # 影像区适配房间
+    "LP": ["LAB-CLIN", "LAB-BIO", "LAB-PATH", "LAB-MOLE"]  # 检验区适配实验室
+    "SSR": ["SSR-SOAK", "SSR-PACK", "SSR-STERILE"]  # 供应室适配房间
+
+  room_to_system_requirements:
+    "OR-I": ["HVAC洁净系统", "医疗气体", "UPS电源", "对讲系统", "麻醉废气排放"]
+    "ICU": ["独立空调", "医疗气体", "紧急呼叫", "净化水", "远程会诊"]
+    "ISR-NG": ["负压系统", "HEPA过滤", "单向气流", "传递窗", "专用卫生间"]
+    "PIVAs": ["洁净空调", "超净工作台", "正压环境", "净化水", "监控摄像"]
+    "IMG-MRI": ["电磁屏蔽", "设备冷却", "防振动", "UPS供电", "患者通话"]

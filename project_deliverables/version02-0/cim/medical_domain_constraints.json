@@ -1,0 +1,556 @@
+{
+  "meta": {
+    "file_id": "MDC-CIM-20260405",
+    "version": "2.0.0",
+    "description": "医疗建筑领域强制性约束库（扩展版）",
+    "generated_from": "Agent-02, Agent-06, Agent-08 成果 + 国家标准",
+    "total_constraints": 52,
+    "standards_referenced": [
+      "GB 50333-2013 医院洁净手术部建筑技术规范",
+      "GB 51039-2014 综合医院建筑设计规范",
+      "WS/T 311-2009 医院隔离技术规范",
+      "GB 19489-2008 实验室生物安全通用要求",
+      "GB 50736-2012 民用建筑供暖通风与空气调节设计规范",
+      "GB 50751-2012 医用气体工程技术规范",
+      "IEC 60364-7-710 医疗场所电气安全",
+      "GB/T 50378-2019 绿色建筑运行管理标准",
+      "YY/T 0187-1994 医疗器械 生物学评价"
+    ]
+  },
+
+  "space_environmental_constraints": [
+    {
+      "constraint_id": "MED-OR-001",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "Class_I (I级洁净手术室/特别洁净)",
+      "standard_ref": "GB 50333-2013, §3.0.1",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-5", "note": "手术区100级，周边区1000级"},
+        "temperature": {"min": 21, "max": 25, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 15, "unit": "Pa", "ref": "走廊"},
+        "air_changes": {"min": 36, "max": 44, "unit": "ACH"},
+        "noise": {"max": 52, "unit": "dB(A)"}
+      }
+    },
+    {
+      "constraint_id": "MED-OR-002",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "Class_II (II级洁净手术室/标准洁净)",
+      "standard_ref": "GB 50333-2013, §3.0.1",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-6"},
+        "temperature": {"min": 21, "max": 25, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 12, "unit": "Pa"},
+        "air_changes": {"min": 24, "max": 30, "unit": "ACH"},
+        "noise": {"max": 50, "unit": "dB(A)"}
+      }
+    },
+    {
+      "constraint_id": "MED-OR-003",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "Class_III (III级洁净手术室/一般洁净)",
+      "standard_ref": "GB 50333-2013, §3.0.1",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-7"},
+        "temperature": {"min": 21, "max": 25, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 10, "unit": "Pa"},
+        "air_changes": {"min": 18, "max": 22, "unit": "ACH"},
+        "noise": {"max": 50, "unit": "dB(A)"}
+      }
+    },
+    {
+      "constraint_id": "MED-OR-004",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "Class_IV (准洁净手术室)",
+      "standard_ref": "GB 50333-2013, §3.0.1",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-8"},
+        "temperature": {"min": 21, "max": 25, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 8, "unit": "Pa"},
+        "air_changes": {"min": 12, "max": 15, "unit": "ACH"},
+        "noise": {"max": 50, "unit": "dB(A)"}
+      }
+    },
+    {
+      "constraint_id": "MED-OR-005",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "ALL",
+      "standard_ref": "GB 50333-2013, §4.3.1",
+      "rule": "手术室门开启时压差应≥+8Pa",
+      "requirements": {
+        "pressure_differential_door_open": {"min": 8, "unit": "Pa"}
+      }
+    },
+    {
+      "constraint_id": "MED-OR-006",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "ALL",
+      "standard_ref": "GB 50333-2013, §4.5.1",
+      "rule": "不同级别洁净用房间保持相邻级别压差5Pa以上",
+      "requirements": {
+        "adjacent_pressure_step": {"min": 5, "unit": "Pa"}
+      }
+    },
+
+    {
+      "constraint_id": "MED-ICU-001",
+      "target_class": "cim-space:ICU",
+      "target_subtype": "ICU_General (综合ICU)",
+      "standard_ref": "GB 51039-2014, §6.9",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-7"},
+        "temperature": {"min": 22, "max": 26, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 8, "unit": "Pa"},
+        "air_changes": {"min": 6, "max": 12, "unit": "ACH"},
+        "noise": {"max": 45, "unit": "dB(A)"}
+      }
+    },
+    {
+      "constraint_id": "MED-ICU-002",
+      "target_class": "cim-space:ICU",
+      "target_subtype": "NICU (新生儿ICU)",
+      "standard_ref": "GB 51039-2014",
+      "requirements": {
+        "temperature": {"min": 22, "max": 26, "unit": "°C"},
+        "humidity": {"min": 40, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 10, "unit": "Pa"},
+        "air_changes": {"min": 8, "max": 15, "unit": "ACH"},
+        "noise": {"max": 40, "unit": "dB(A)"},
+        "illuminance": {"max": 300, "unit": "lx", "note": "避免光损伤"}
+      }
+    },
+    {
+      "constraint_id": "MED-ICU-003",
+      "target_class": "cim-space:ICU",
+      "target_subtype": "PICU (儿童ICU)",
+      "standard_ref": "GB 51039-2014",
+      "requirements": {
+        "temperature": {"min": 22, "max": 26, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 8, "unit": "Pa"},
+        "air_changes": {"min": 6, "max": 10, "unit": "ACH"}
+      }
+    },
+    {
+      "constraint_id": "MED-ICU-004",
+      "target_class": "cim-space:ICU",
+      "target_subtype": "CSICU (心外ICU)",
+      "standard_ref": "GB 51039-2014",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-7"},
+        "temperature": {"min": 22, "max": 25, "unit": "°C"},
+        "humidity": {"min": 40, "max": 60, "unit": "%RH"},
+        "pressure_differential": {"min": 10, "unit": "Pa"},
+        "air_changes": {"min": 10, "max": 15, "unit": "ACH"}
+      }
+    },
+
+    {
+      "constraint_id": "MED-ISO-001",
+      "target_class": "cim-space:NegativePressureRoom",
+      "target_subtype": "标准负压隔离",
+      "standard_ref": "WS/T 311-2009, §A.3",
+      "requirements": {
+        "pressure_differential": {"max": -8, "unit": "Pa", "ref": "走廊", "note": "负压"},
+        "air_changes": {"min": 12, "unit": "ACH"},
+        "exhaust": {"type": "全排风", "filtration": "HEPA 99.97%"},
+        "temperature": {"min": 20, "max": 26, "unit": "°C"},
+        "humidity": {"min": 30, "max": 65, "unit": "%RH"}
+      }
+    },
+    {
+      "constraint_id": "MED-ISO-002",
+      "target_class": "cim-space:NegativePressureRoom",
+      "target_subtype": "强化负压隔离（传染病）",
+      "standard_ref": "WS/T 311-2009",
+      "requirements": {
+        "pressure_differential": {"max": -15, "unit": "Pa"},
+        "air_changes": {"min": 12, "max": 15, "unit": "ACH"},
+        "exhaust_filtration": "双级HEPA",
+        "anteroom": "必须设缓冲间，缓冲间为负压"
+      }
+    },
+    {
+      "constraint_id": "MED-ISO-003",
+      "target_class": "cim-space:PositivePressureRoom",
+      "target_subtype": "正压保护隔离（免疫缺陷患者）",
+      "standard_ref": "WS/T 311-2009, §A.4",
+      "requirements": {
+        "pressure_differential": {"min": 8, "unit": "Pa", "ref": "走廊"},
+        "air_changes": {"min": 12, "unit": "ACH"},
+        "supply_filtration": "HEPA",
+        "temperature": {"min": 22, "max": 26, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"}
+      }
+    },
+
+    {
+      "constraint_id": "MED-LAB-001",
+      "target_class": "cim-space:CleanLaboratory",
+      "target_subtype": "BSL-2",
+      "standard_ref": "GB 19489-2008, §6.3",
+      "requirements": {
+        "pressure_differential": {"max": -10, "unit": "Pa", "ref": "走廊"},
+        "air_changes": {"min": 8, "max": 12, "unit": "ACH"},
+        "temperature": {"min": 18, "max": 27, "unit": "°C"},
+        "humidity": {"min": 30, "max": 70, "unit": "%RH"},
+        "exhaust": "全排，不循环"
+      }
+    },
+    {
+      "constraint_id": "MED-LAB-002",
+      "target_class": "cim-space:CleanLaboratory",
+      "target_subtype": "BSL-3",
+      "standard_ref": "GB 19489-2008, §6.4",
+      "requirements": {
+        "pressure_differential": {"max": -25, "unit": "Pa", "ref": "走廊"},
+        "pressure_gradient": "三级负压梯度（走廊→缓冲→实验室）",
+        "air_changes": {"min": 12, "max": 15, "unit": "ACH"},
+        "exhaust_filtration": "双级HEPA + 高空排放",
+        "temperature": {"min": 18, "max": 25, "unit": "°C"},
+        "humidity": {"min": 30, "max": 65, "unit": "%RH"},
+        "power_backup": "不间断电源保障"
+      }
+    },
+
+    {
+      "constraint_id": "MED-WARD-001",
+      "target_class": "cim-space:Room",
+      "target_subtype": "普通病房",
+      "standard_ref": "GB 51039-2014, §6.8",
+      "requirements": {
+        "temperature_summer": {"min": 24, "max": 28, "unit": "°C"},
+        "temperature_winter": {"min": 18, "max": 22, "unit": "°C"},
+        "humidity": {"min": 30, "max": 65, "unit": "%RH"},
+        "air_changes": {"min": 2, "max": 6, "unit": "ACH"},
+        "noise": {"max": 40, "unit": "dB(A)", "note": "夜间≤35dB"}
+      }
+    },
+    {
+      "constraint_id": "MED-WARD-002",
+      "target_class": "cim-space:Room",
+      "target_subtype": "产科病房",
+      "standard_ref": "GB 51039-2014",
+      "requirements": {
+        "temperature": {"min": 22, "max": 26, "unit": "°C"},
+        "humidity": {"min": 40, "max": 60, "unit": "%RH"},
+        "air_changes": {"min": 3, "max": 6, "unit": "ACH"}
+      }
+    },
+
+    {
+      "constraint_id": "MED-PHARM-001",
+      "target_class": "cim-space:Room",
+      "target_subtype": "药房/制剂室 (D级洁净区)",
+      "standard_ref": "GMP附录",
+      "requirements": {
+        "cleanliness_class": {"value": "ISO-8"},
+        "temperature": {"min": 18, "max": 26, "unit": "°C"},
+        "humidity": {"min": 30, "max": 65, "unit": "%RH"},
+        "pressure_differential": {"min": 10, "unit": "Pa"},
+        "air_changes": {"min": 10, "max": 20, "unit": "ACH"}
+      }
+    },
+    {
+      "constraint_id": "MED-CSSD-001",
+      "target_class": "cim-space:Room",
+      "target_subtype": "CSSD (消毒供应中心)",
+      "standard_ref": "WS 310.1-2016",
+      "requirements": {
+        "pressure_gradient": "从清洁区流向污染区",
+        "temperature": {"min": 20, "max": 26, "unit": "°C"},
+        "humidity": {"max": 70, "unit": "%RH"},
+        "air_changes": {"min": 10, "unit": "ACH"}
+      }
+    },
+    {
+      "constraint_id": "MED-IMG-001",
+      "target_class": "cim-space:Room",
+      "target_subtype": "MRI机房",
+      "standard_ref": "GB 51039-2014",
+      "requirements": {
+        "temperature": {"min": 18, "max": 22, "unit": "°C", "precision": "±0.5°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "vibration": {"max": 0.005, "unit": "mm/s"},
+        "noise": {"max": 45, "unit": "dB(A)"},
+        "electromagnetic_shielding": "required"
+      }
+    }
+  ],
+
+  "equipment_constraints": [
+    {
+      "constraint_id": "MED-EQUIP-001",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "ALL",
+      "rule": "必须配备独立净化空调机组",
+      "required_equipment": ["cim-equip:CleanAHU", "cim-equip:HEPA_Filter"],
+      "standard_ref": "GB 50333-2013"
+    },
+    {
+      "constraint_id": "MED-EQUIP-002",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "ALL",
+      "rule": "手术室必须配备医用隔离电源系统(IPS)",
+      "required_equipment": ["cim-equip:IsolationTransformer"],
+      "standard_ref": "IEC 60364-7-710"
+    },
+    {
+      "constraint_id": "MED-EQUIP-003",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "ALL",
+      "rule": "手术室必须配备UPS不间断电源",
+      "required_equipment": ["cim-equip:UPS"],
+      "standard_ref": "GB 51039-2014"
+    },
+    {
+      "constraint_id": "MED-EQUIP-004",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "ALL",
+      "rule": "手术室必须接入医用气体终端",
+      "required_gas_terminals": ["O2", "VAC", "AIR", "N2O"],
+      "standard_ref": "GB 50751-2012"
+    },
+    {
+      "constraint_id": "MED-EQUIP-005",
+      "target_class": "cim-space:ICU",
+      "target_subtype": "ALL",
+      "rule": "ICU每床位必须有独立医用气体终端",
+      "required_per_bed": {"O2_terminals": 2, "VAC_terminals": 2, "AIR_terminals": 1},
+      "standard_ref": "GB 50751-2012"
+    },
+    {
+      "constraint_id": "MED-EQUIP-006",
+      "target_class": "cim-space:NegativePressureRoom",
+      "target_subtype": "ALL",
+      "rule": "负压隔离病房排风必须配HEPA过滤",
+      "required_equipment": ["cim-equip:HEPA_Filter"],
+      "exhaust_location": "高空排放",
+      "standard_ref": "WS/T 311-2009"
+    },
+    {
+      "constraint_id": "MED-EQUIP-007",
+      "target_class": "cim-space:OperatingRoom",
+      "target_subtype": "Class_I",
+      "rule": "I级手术室必须配层流送风天花",
+      "required_equipment": ["LAMINAR_FLOW_CEILING"],
+      "standard_ref": "GB 50333-2013"
+    },
+    {
+      "constraint_id": "MED-EQUIP-008",
+      "target_class": "cim-space:Room",
+      "target_subtype": "MRI机房",
+      "rule": "MRI机房必须配备电磁屏蔽和独立空调",
+      "required_equipment": ["SHIELDED_ROOM", "DEDICATED_AHU"],
+      "standard_ref": "GB 51039-2014"
+    },
+    {
+      "constraint_id": "MED-EQUIP-009",
+      "target_class": "cim-space:Room",
+      "target_subtype": "DSA导管室",
+      "rule": "导管室必须配备铅防护和独立空调",
+      "required_equipment": ["LEAD_SHIELDING", "DEDICATED_AHU", "cim-equip:UPS"],
+      "standard_ref": "GBZ 130-2020"
+    },
+    {
+      "constraint_id": "MED-EQUIP-010",
+      "target_class": "ANY",
+      "rule": "所有设备必须有明确的位置信息",
+      "property": "cim:locatedIn",
+      "mandatory": true,
+      "standard_ref": "CIM Meta Schema"
+    }
+  ],
+
+  "system_constraints": [
+    {
+      "constraint_id": "MED-SYS-001",
+      "target_system": "HVAC",
+      "target_space": "cim-space:OperatingRoom",
+      "rule": "手术室空调恢复时间不超过30分钟",
+      "property": "recovery_time",
+      "max_value": 30,
+      "unit": "minutes",
+      "standard_ref": "GB 50333-2013"
+    },
+    {
+      "constraint_id": "MED-SYS-002",
+      "target_system": "HVAC-CHP",
+      "rule": "冷站系统应采用N+1冗余配置",
+      "redundancy": "N+1",
+      "standard_ref": "GB 51039-2014"
+    },
+    {
+      "constraint_id": "MED-SYS-003",
+      "target_system": "ELECTRICAL-EPS",
+      "rule": "应急柴油发电机启动至满载不超过15秒",
+      "property": "startup_time",
+      "max_value": 15,
+      "unit": "seconds",
+      "standard_ref": "GB 51039-2014"
+    },
+    {
+      "constraint_id": "MED-SYS-004",
+      "target_system": "ELECTRICAL-EPS",
+      "rule": "应急柴油发电机燃料储备不少于24小时",
+      "property": "fuel_autonomy",
+      "min_value": 24,
+      "unit": "hours",
+      "standard_ref": "GB 51039-2014"
+    },
+    {
+      "constraint_id": "MED-SYS-005",
+      "target_system": "ELECTRICAL-IPS",
+      "rule": "手术室/ICU隔离电源系统绝缘监视仪实时报警",
+      "property": "insulation_monitoring",
+      "mandatory": true,
+      "standard_ref": "IEC 60364-7-710"
+    },
+    {
+      "constraint_id": "MED-SYS-006",
+      "target_system": "ELECTRICAL",
+      "target_space": "cim-space:ICU",
+      "rule": "ICU电源应为一级负荷中特别重要负荷",
+      "load_class": "一级特别重要",
+      "redundancy": "双路+UPS",
+      "standard_ref": "GB 51039-2014"
+    },
+    {
+      "constraint_id": "MED-SYS-007",
+      "target_system": "MEDICAL_GAS-O2",
+      "rule": "氧气储量不少于7天用量，供应源N+1冗余",
+      "property": "storage_days",
+      "min_value": 7,
+      "redundancy": "N+1 (液氧+汇流排)",
+      "standard_ref": "GB 50751-2012"
+    },
+    {
+      "constraint_id": "MED-SYS-008",
+      "target_system": "MEDICAL_GAS",
+      "rule": "医用气体系统应设区域阀门箱(ZVB)",
+      "mandatory_per": "每个护理单元/手术区",
+      "monitoring": "压力实时监测",
+      "standard_ref": "GB 50751-2012"
+    },
+    {
+      "constraint_id": "MED-SYS-009",
+      "target_system": "FIRE_PROTECTION",
+      "rule": "消防联动应采用硬接点优先，软件联动为辅",
+      "wiring_priority": "硬接点",
+      "standard_ref": "GB 50116-2013"
+    },
+    {
+      "constraint_id": "MED-SYS-010",
+      "target_system": "HVAC",
+      "rule": "压差梯度必须连续递减，不允许跨级跳变",
+      "property": "pressure_cascade_continuity",
+      "mandatory": true,
+      "direction": "洁净区→半洁净区→普通区",
+      "standard_ref": "GB 50333-2013"
+    },
+    {
+      "constraint_id": "MED-SYS-011",
+      "target_system": "BUILDING_AUTOMATION",
+      "rule": "关键区域传感器应采用冗余配置",
+      "applicable_areas": ["手术室", "ICU", "负压隔离"],
+      "redundancy": "双传感器+自动切换",
+      "standard_ref": "CIM Best Practice"
+    },
+    {
+      "constraint_id": "MED-SYS-012",
+      "target_system": "BUILDING_AUTOMATION",
+      "rule": "DDC控制器断网后可独立运行不少于48小时",
+      "property": "offline_autonomy",
+      "min_value": 48,
+      "unit": "hours",
+      "standard_ref": "CIM Best Practice"
+    },
+
+    {"_comment": "=== Phase 6C: 放射科/核医学空间约束 (5条) ==="},
+
+    {
+      "constraint_id": "MED-RAD-001",
+      "category": "radiology_space",
+      "target_class": "cim-space:CT_Room",
+      "rule": "CT机房辐射屏蔽与环境要求",
+      "parameters": {
+        "shielding": {"material": "铅", "wall_thickness_mm": 3, "door_leaf_mm": 4, "window_lead_glass_mm": 12},
+        "temperature": {"min": 18, "max": 24, "unit": "°C"},
+        "humidity": {"min": 40, "max": 65, "unit": "%RH"},
+        "floor_loading": {"min": 10, "unit": "kN/m²"},
+        "room_height": {"min": 3.0, "unit": "m"},
+        "vibration": {"max": 0.05, "unit": "mm/s"},
+        "required_equipment": ["UPS ≥30kVA", "独立空调", "辐射防护门"],
+        "ventilation": {"min_ach": 6}
+      },
+      "standard_ref": ["GBZ 130-2020", "GB 50849-2014"]
+    },
+    {
+      "constraint_id": "MED-RAD-002",
+      "category": "radiology_space",
+      "target_class": "cim-space:DSA_CathLab",
+      "rule": "DSA/导管室辐射屏蔽与生命安全要求",
+      "parameters": {
+        "shielding": {"material": "铅", "wall_thickness_mm": 3, "observation_window_mm": 12},
+        "temperature": {"min": 20, "max": 25, "unit": "°C"},
+        "humidity": {"min": 40, "max": 60, "unit": "%RH"},
+        "cleanliness": "ISO-7",
+        "pressure_differential": {"min": 8, "unit": "Pa"},
+        "required_equipment": ["UPS ≥60kVA", "IPS医用隔离电源", "医疗气体终端", "HEPA过滤"],
+        "ventilation": {"min_ach": 10}
+      },
+      "standard_ref": ["GBZ 130-2020", "GB 50333-2013"]
+    },
+    {
+      "constraint_id": "MED-RAD-003",
+      "category": "radiology_space",
+      "target_class": "cim-space:LinearAccelerator_Room",
+      "rule": "放射治疗室/直线加速器防护要求",
+      "parameters": {
+        "shielding": {"primary_barrier": "1.5-2.5m混凝土", "secondary_barrier": "1.0-1.5m混凝土", "maze_design": true},
+        "door_interlock": {"type": "双重机电联锁", "function": "门开即停束"},
+        "monitoring": {"area_monitor": "固定式区域γ辐射监测仪", "personal_dosimeter": true},
+        "ventilation": {"min_ach": 6, "ozone_exhaust": true, "negative_pressure": true},
+        "temperature": {"min": 20, "max": 25, "unit": "°C"},
+        "humidity": {"min": 30, "max": 60, "unit": "%RH"},
+        "required_safety": ["紧急停机按钮", "CCTV监控", "对讲系统", "警告灯"]
+      },
+      "standard_ref": ["GBZ 126-2011", "GBZ 121-2020"]
+    },
+    {
+      "constraint_id": "MED-RAD-004",
+      "category": "radiology_space",
+      "target_class": "cim-space:NuclearMedicine_HotLab",
+      "rule": "核医学热室放射性药物操作防护要求",
+      "parameters": {
+        "pressure_differential": {"max": -10, "unit": "Pa", "note": "负压防扩散"},
+        "shielding": {"material": "铅", "wall_thickness_mm": 5, "hot_cell_mm": 50},
+        "ventilation": {"min_ach": 10, "exhaust": "专用排风+高效过滤", "no_recirculation": true},
+        "waste_management": {"radioactive_liquid": "衰变池存储", "solid_waste": "铅容器暂存"},
+        "monitoring": {"surface_contamination": "定期擦拭测量", "air_activity": "连续采样監测"},
+        "temperature": {"min": 18, "max": 25, "unit": "°C"}
+      },
+      "standard_ref": ["GBZ 120-2020", "GB 18871-2002"]
+    },
+    {
+      "constraint_id": "MED-RAD-005",
+      "category": "radiology_space",
+      "target_class": "cim-space:PETCT_Room",
+      "rule": "PET-CT室防护与注射后等候室要求",
+      "parameters": {
+        "shielding": {"wall_thickness_mm": 5, "door_mm": 6, "observation_window_mm": 15},
+        "injection_waiting_room": {"shielding_mm": 3, "negative_pressure": true, "individual_rooms": true},
+        "temperature": {"min": 18, "max": 24, "unit": "°C"},
+        "humidity": {"min": 40, "max": 60, "unit": "%RH"},
+        "ventilation": {"min_ach": 8},
+        "required_equipment": ["铅屏风", "注射防护装置", "衰变池"]
+      },
+      "standard_ref": ["GBZ 130-2020", "GBZ 120-2020"]
+    }
+  ]
+}

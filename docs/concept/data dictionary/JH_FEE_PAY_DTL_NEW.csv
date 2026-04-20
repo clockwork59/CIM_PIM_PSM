@@ -1,0 +1,63 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FEE_PAY_DTL_NEW,表全名,JHPDL:JH_FEE_PAY_DTL_NEW,,,,,,
+,表说明,费用明细清单新,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PFJ,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PFJ0001,String字符串（变长）,,FEE_PAY_DTL_SN,费用结算明细编号,费用结算明细编号，系统生成三级编码，如“AC0.000.000.001”,20,是,是
+,\x00\x02,PFJ0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,PFJ0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,PFJ0004,String字符串（变长）,,FEE_BILL_SN,费用账单编号,"费用账单编号,与费用账单弱关联，存放账单规范的PFB0001",20,是,是
+,\x00\x05,PFJ0005,String字符串（变长）,,BILL_CODE,账单条码号,对应业务系统账单唯一编号,200,是,是
+,\x00\x06,PFJ0006,String字符串（变长）,,FEE_PAY_SN,费用结算编号,"费用结算编号,与费用结算弱关联，存放结算规范的0001字段",20,是,是
+,\x00\x07,PFJ0007,String字符串（变长）,,POSTRANS_NO,结算交易号,对应业务系统结算记录唯一编号,200,是,是
+,\x00\x08,PFJ0008,String字符串（变长）,,PAY_DTL_CODE,费用明细号,显示给患者看的费用明细编号，唯一编号,20,,
+,\x00\x09,PFJ0009,Integer整型（4个字节）,,PAY_DTL_ORDER,费用显示顺序,费用项在账单中的排列顺序,20,,
+,\x00\x0A,PFJ0010,Double双精度浮点型（8个字节）,,BILL_TOTAL,账单总费用,,200,,
+,\x00\x0B,PFJ0011,Double双精度浮点型（8个字节）,,BILL_SELF,账单自费额,,20,,
+,\x00\x0C,PFJ0012,Double双精度浮点型（8个字节）,,BILL_SOC_INS,账单医保额,,38,,
+,\x00\x0D,PFJ0013,Double双精度浮点型（8个字节）,,BILL_BUS_INS,账单商保额,,38,,
+,\x00\x0E,PFJ0014,Double双精度浮点型（8个字节）,,BILL_OTHER_INS,账单其它付费额,,38,,
+,\x00\x0F,PFJ0015,Double双精度浮点型（8个字节）,,PAY_TOTAL,本次结算总额,,38,,
+,\x00\x10,PFJ0016,Double双精度浮点型（8个字节）,,PAY_SELF,本次自费金额,,38,,
+,\x00\x11,PFJ0017,Double双精度浮点型（8个字节）,,PAY_SOC_INS,本次医保金额,,38,,
+,\x00\x12,PFJ0018,Double双精度浮点型（8个字节）,,PAY_BUS_INS,本次商保金额,,38,,
+,\x00\x13,PFJ0019,Double双精度浮点型（8个字节）,,PAY_OTHER_INS,本次其它付费金额,,38,,
+,\x00\x14,PFJ0020,String字符串（变长）,,LINK_ORDER,关联医嘱号,该费用关联医嘱项唯一编号,38,是,是
+,\x00\x15,PFJ0021,String字符串（变长）,,LINK_ORDER_TAB,关联医嘱表,该费用关联的医嘱项在那张表保存,38,,
+,\x00\x16,PFJ0022,String字符串（变长）,,LINK_REMARK,关联说明,该费用关联的医嘱说明，如把对应的医嘱内容写入，不需要关联再读取医嘱信息,200,,
+,\x00\x17,PFJ0023,String字符串（变长）,,CHARGE_CODE,费用项目编码,,200,,
+,\x00\x18,PFJ0024,String字符串（变长）,,CHARGE_NAME,费用项目名称,,4000,,
+,\x00\x19,PFJ0025,String字符串（变长）,,SC_APPLY_DETP,开单科室编号,开单科室编号,200,,
+,\x00\x1A,PFJ0026,String字符串（变长）,,ST_APPLY_DETP,开单科室名称,开单科室名称,200,,
+,\x00\x1B,PFJ0027,String字符串（变长）,,SC_APPLY_OPERA,申请人编号,申请人编号,200,,
+,\x00\x1C,PFJ0028,String字符串（变长）,,ST_APPLY_OPERA,申请人名称,申请人名称,200,,
+,\x00\x1D,PFJ0029,String字符串（变长）,,SC_EXEC_DEPT,执行科室编号,执行科室编号,200,,
+,\x00\x1E,PFJ0030,String字符串（变长）,,ST_EXEC_DEPT,执行科室名称,执行科室名称,200,,
+,\x00\x1F,PFJ0031,String字符串（变长）,,SC_CHARGE_TYPE,项目类别编码,,200,,
+,\x00\x20,PFJ0032,String字符串（变长）,,ST_CHARGE_TYPE,项目类别描述,,200,,
+,\x00\x21,PFJ0033,Double双精度浮点型（8个字节）,,CHARGE_AMOUNT,数量,,200,,
+,\x00\x22,PFJ0034,String字符串（变长）,,CHARGE_UNIT,单位,,200,,
+,\x00\x23,PFJ0035,String字符串（变长）,,SC_CHARGE_STATE,费用状态,费用状态编码,50,,
+,\x00\x24,PFJ0036,String字符串（变长）,,ST_CHARGE_STATE,费用状态,费用状态描述,50,,
+,\x00\x25,PFJ0037,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,INPUT_TIME,录入时间,,50,,
+,\x00\x28,PFJ0040,简化字典（Integer整型，4个字节）,379,SD_REFUND,是否退费,是否退费，退费的话以下金额为负数,200,,
+,\x00\x29,PFJ0041,String字符串（变长）,,MAIN_ORDER_NO,长期医嘱对应主医嘱ID号,长期医嘱为滚医嘱方式时，对应的主医嘱ID号,50,,是
+,\x00\x2A,PFJ0042,简化字典（Integer整型，4个字节）,379,SD_HIGH_CONS,高值耗材标记,,50,,是
+,\x00\x2B,PFJ0043,String字符串（变长）,,CONS_BARCODE,高值耗材条码号,,200,,是
+,\x00\x2C,PFJ0044,简化字典（Integer整型，4个字节）,470,SD_FEE_CLASS,标化病案费用分类,,50,,是
+,\x00\x2D,PFJ0045,String字符串（变长）,,SC_FEE_CLASS,费用分类编码,原业务系统费用分类编码,200,,是
+,\x00\x2E,PFJ0046,String字符串（变长）,,ST_FEE_CLASS,费用分类描述,原业务系统费用分类描述,200,,
+,\x00\x26,PFJ0038,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x27,PFJ0039,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,19,是,是
+,\x00\x2F,PFJ0047,Double双精度浮点型（8个字节）,,EXPECT_COST,单价,,,,
+,\x00\x30,PFJ0048,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,FEE_CREATE_TIME,费用发生时间,费用发生时间,,,
+,\x00\x31,PFJ0049,String字符串（变长）,,FEE_REMARK,费用备注,费用备注,200,是,是
+,\x00\x32,PFJ0050,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x33,PFJ0051,String字符串（变长）,,SC_BILL_USER,计费人工号,收费项目的计费人的工号,200,,
+,\x00\x34,PFJ0052,String字符串（变长）,,ST_BILL_USER,计费人名称,收费项目的计费人的名称,200,,
+,\x00\x35,PFJ0053,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CHARGE_CONFIRM_TIME,计费审核时间,,,,
+,\x00\x36,PFJ0054,String字符串（变长）,,SC_CHARGE_CONFIRMER,计费审核人编码,,50,,
+,\x00\x37,PFJ0055,String字符串（变长）,,ST_CHARGE_CONFIRMER,计费审核人名称,,50,,

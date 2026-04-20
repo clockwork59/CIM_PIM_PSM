@@ -1,0 +1,39 @@
+# 医疗建筑技术系统拓扑建模项目
+# Agent-01: 系统拓扑建模师输出文件
+# 项目阶段: CIM模型构建 - Phase 1&2
+
+output_version: "v1.0"
+agent_id: "Agent-01"
+agent_name: "系统拓扑建模师 (System Topology Architect)"
+task_phase: "Phase 1: 系统列项" -> "Phase 2: 逐系统拓扑建模"
+project_type: "医疗建筑CIM模型构建"
+target_domain: "医疗建筑能源管理平台"
+
+requirements_scope:
+  - 构建8大系统类别的完整目录
+  - 对每个系统进行节点-边拓扑建模
+  - 定义系统边界和依赖关系
+  - 输出标准化YAML格式模型
+
+modeling_principles:
+  - 采用节点-边有向图模型
+  - 定义Source/Distribution/Sink节点类型
+  - 定义Trunk/Branch/Terminal边类型
+  - 识别系统间依赖关系
+  - 关注医疗场景特殊要求
+
+special_focus_areas:
+  - 手术室环境控制系统
+  - 负压病房隔离系统
+  - ICU重症监护系统
+  - 医疗气体安全系统
+  - 洁净空调系统
+
+output_files:
+  - Agent01_Output.meta (本文件)
+  - Agent01_Output.system_catalog
+  - Agent01_Output.system_topologies[]
+  - Agent01_Output.system_dependencies
+
+generation_date: "2025-12-02"
+status: "Phase 1 进行中"

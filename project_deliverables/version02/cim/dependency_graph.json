@@ -1,0 +1,60 @@
+{
+  "graph_meta": {
+    "graph_id": "DEP-CIM-20250117-FINAL",
+    "type": "Directed Acyclic Graph (DAG)",
+    "description": "CIM本体工程任务与Agent间依赖关系图"
+  },
+  "agent_dependencies": {
+    "nodes": {
+      "Agent-01": {"name": "系统拓扑建模师", "phase": 1, "is_foundation": true},
+      "Agent-02": {"name": "空间本体建模师", "phase": 1, "is_foundation": true},
+      "Agent-03": {"name": "设备本体建模师", "phase": 2},
+      "Agent-04": {"name": "流动模型建模师", "phase": 2},
+      "Agent-05": {"name": "系统-空间耦合建模师", "phase": 3},
+      "Agent-06": {"name": "控制系统建模师", "phase": 3}
+    },
+    "edges": [
+      {"from": "Agent-01", "to": "Agent-03", "data": "系统拓扑结构、节点定义"},
+      {"from": "Agent-01", "to": "Agent-04", "data": "系统拓扑、边定义"},
+      {"from": "Agent-02", "to": "Agent-05", "data": "空间本体、医疗空间"},
+      {"from": "Agent-03", "to": "Agent-05", "data": "设备本体、节点映射"}
+    ]
+  },
+  "task_dependencies": {
+    "nodes": {
+      "TASK-001": {"file": "core/base_entities.ttl", "critical_path": true},
+      "TASK-002": {"file": "topology/node_types.ttl", "critical_path": true},
+      "TASK-003": {"file": "spaces/spatial_hierarchy.ttl", "critical_path": true},
+      "TASK-004": {"file": "equipment/equipment_hierarchy.ttl", "critical_path": true},
+      "TASK-005": {"file": "spaces/medical_special_spaces.ttl", "critical_path": true},
+      "TASK-006": {"file": "equipment/mechanical.ttl", "critical_path": false},
+      "TASK-007": {"file": "coupling/equipment_location.ttl", "critical_path": false},
+      "TASK-008": {"file": "control/sensors.ttl", "critical_path": false},
+      "TASK-009": {"file": "metering/metering_hierarchy.ttl", "critical_path": false},
+      "TASK-010": {"file": "rules/cross_agent_validation.sparql", "critical_path": false},
+      "TASK-011": {"file": "rules/shacl_constraints.ttl", "critical_path": true},
+      "TASK-012": {"file": "_index.ttl", "critical_path": true}
+    },
+    "edges": [
+      {"from": "TASK-001", "to": "TASK-002"},
+      {"from": "TASK-001", "to": "TASK-003"},
+      {"from": "TASK-001", "to": "TASK-004"},
+      {"from": "TASK-003", "to": "TASK-005"},
+      {"from": "TASK-002", "to": "TASK-006"},
+      {"from": "TASK-004", "to": "TASK-006"},
+      {"from": "TASK-003", "to": "TASK-007"},
+      {"from": "TASK-004", "to": "TASK-007"},
+      {"from": "TASK-004", "to": "TASK-008"},
+      {"from": "TASK-004", "to": "TASK-009"},
+      {"from": "TASK-010", "to": "TASK-012"},
+      {"from": "TASK-011", "to": "TASK-012"}
+    ]
+  },
+  "critical_path": ["TASK-001", "TASK-003", "TASK-005", "TASK-011", "TASK-012"],
+  "parallel_groups": [
+    {"phase": 2, "tasks": ["TASK-002", "TASK-003", "TASK-004"], "max_parallel": 3},
+    {"phase": 3, "tasks": ["TASK-005", "TASK-006"], "max_parallel": 2},
+    {"phase": 4, "tasks": ["TASK-007", "TASK-008", "TASK-009"], "max_parallel": 3},
+    {"phase": 5, "tasks": ["TASK-010", "TASK-011"], "max_parallel": 2}
+  ]
+}

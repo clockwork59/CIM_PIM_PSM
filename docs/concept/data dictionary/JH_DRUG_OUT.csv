@@ -1,0 +1,33 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_OUT,表全名,JHPDL:JH_DRUG_OUT,,,,,,
+,表说明,药库调拨记录主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MKO,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MKO0001,String字符串（变长）,,DRUG_OUT_SN,药库调拨唯一号,DE0.000.000.001,20,是,是
+,\x00\x02,MKO0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x05,MKO0005,String字符串（变长）,,SC_APP_STOR_ROOM,申请部门编码,发起申请的科室。明确申请方,200,,
+,\x00\x06,MKO0006,String字符串（变长）,,ST_APP_STOR_ROOM,申请部门名称,,200,,
+,\x00\x09,MKO0009,String字符串（变长）,,SC_APPLY_USER,申请人编码,,200,,
+,\x00\x0A,MKO0010,String字符串（变长）,,ST_APPLY_USER,申请人姓名,,200,,
+,\x00\x08,MKO0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,TRANS_APP_TIME,调拨申请时间,,31,是,是
+,\x00\x0D,MKO0013,String字符串（变长）,,SC_TRANS_OUT_ROOM,转出部门编码,转出库房,200,是,是
+,\x00\x0E,MKO0014,String字符串（变长）,,ST_TRANS_OUT_ROOM,转出部门名称,,200,,
+,\x00\x0F,MKO0015,String字符串（变长）,,SC_TRANS_OUT_USER,转出确认人编码,操作员,200,,
+,\x00\x10,MKO0016,String字符串（变长）,,ST_TRANS_OUT_USER,转出确认人姓名,操作员,200,,
+,\x00\x11,MKO0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,TRANS_OUT_TIME,转出操作时间,,31,是,是
+,\x00\x07,MKO0007,String字符串（变长）,,TRANS_APP_NO,调拨单号,,200,是,是
+,\x00\x17,MKO0023,String字符串（变长）,,SC_TRANS_TYPE,调拨类型编码,,200,是,是
+,\x00\x18,MKO0024,String字符串（变长）,,ST_TRANS_TYPE,调拨单据类型,科室领药、药房调入、药房退回N药库转出、药库转出退回,200,,
+,\x00\x12,MKO0018,String字符串（变长）,,SC_TRANS_IN_ROOM,转入部门编码,转入库房,200,是,是
+,\x00\x13,MKO0019,String字符串（变长）,,ST_TRANS_IN_ROOM,转入部门名称,,200,,
+,\x00\x14,MKO0020,String字符串（变长）,,SC_TRANS_IN_USER,转入确认人编码,操作员,200,,
+,\x00\x15,MKO0021,String字符串（变长）,,ST_TRANS_IN_USER,转入确认人姓名,操作员,200,,
+,\x00\x16,MKO0022,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,TRANS_IN_TIME,转入操作时间,,31,是,是
+,\x00\x0B,MKO0011,String字符串（变长）,,SC_TRANS_STATUS,调拨单据状态编码,,200,,
+,\x00\x0C,MKO0012,String字符串（变长）,,ST_TRANS_STATUS,调拨单据状态描述,调拨是否生效（提交、审核、领用）,500,,
+,\x00\x04,MKO0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x03,MKO0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x19,MKO0025,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

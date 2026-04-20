@@ -1,0 +1,45 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FEE_PAY_DTL,表全名,JHPDL:JH_FEE_PAY_DTL,,,,,,
+,表说明,费用结算明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PFL,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PFL0001,String字符串（变长）,,FEE_PAY_DTL_SN,费用结算明细编号,费用结算明细编号，系统生成三级编码，如“PL0.000.000.001”,20,是,是
+,\x00\x02,PFL0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x16,PFL0022,String字符串（变长）,,APPLY_DETP,开单科室,,200,,
+,\x00\x17,PFL0023,String字符串（变长）,,APPLY_OPERA,申请人,,200,,
+,\x00\x18,PFL0024,String字符串（变长）,,EXEC_DEPT,执行科室,,200,,
+,\x00\x19,PFL0025,String字符串（变长）,,CHARGE_TYPE,项目类别,,200,,
+,\x00\x11,PFL0017,String字符串（变长）,,LINK_ORDER,关联医嘱号,该费用关联医嘱项唯一编号,200,是,是
+,\x00\x12,PFL0018,String字符串（变长）,,LINK_ORDER_TAB,关联医嘱表,该费用关联的医嘱项在那张表保存,200,,
+,\x00\x13,PFL0019,String字符串（变长）,,LINK_REMARK,关联说明,该费用关联的医嘱说明，如把对应的医嘱内容写入，不需要关联再读取医嘱信息,4000,,
+,\x00\x1A,PFL0026,Double双精度浮点型（8个字节）,,CHARGE_AMOUNT,数量,,38,,
+,\x00\x1B,PFL0027,String字符串（变长）,,CHARGE_UNIT,单位,,50,,
+,\x00\x24,PFL0036,Double双精度浮点型（8个字节）,,EXPECT_COST,单价,,,,
+,\x00\x1C,PFL0028,String字符串（变长）,,CHARGE_STATE,费用状态,费用状态描述,200,,
+,\x00\x1D,PFL0029,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,INPUT_TIME,录入时间,,19,,
+,\x00\x14,PFL0020,String字符串（变长）,,CHARGE_CODE,费用项目编码,,200,,
+,\x00\x15,PFL0021,String字符串（变长）,,CHARGE_NAME,费用项目名称,,200,,
+,\x00\x21,PFL0033,String字符串（变长）,,MAIN_ORDER_NO,长期医嘱对应主医嘱ID号,长期医嘱为滚医嘱方式时，对应的主医嘱ID号,100,,是
+,\x00\x23,PFL0035,String字符串（变长）,,SC_INSURANCE,医保项目编码,,50,,
+,\x00\x22,PFL0034,String字符串（变长）,,ST_INSURANCE,医保项目名称,,200,,
+,\x00\x03,PFL0003,String字符串（变长）,,FEE_PAY_SN,费用结算编号,费用结算编号，来源JH_FEE_PAY的PFP0001,20,是,是
+,\x00\x04,PFL0004,String字符串（变长）,,PAY_DTL_CODE,结算明细号,显示给患者看的费用明细编号,200,,
+,\x00\x05,PFL0005,Integer整型（4个字节）,,PAY_DTL_ORDER,费用显示顺序,费用项在账单中的排列顺序,20,,
+,\x00\x06,PFL0006,Double双精度浮点型（8个字节）,,BILL_TOTAL,账单总费用,,38,,
+,\x00\x07,PFL0007,Double双精度浮点型（8个字节）,,BILL_SELF,账单自费额,,38,,
+,\x00\x08,PFL0008,Double双精度浮点型（8个字节）,,BILL_SOC_INS,账单医保额,,38,,
+,\x00\x09,PFL0009,Double双精度浮点型（8个字节）,,BILL_BUS_INS,账单商保额,,38,,
+,\x00\x0A,PFL0010,Double双精度浮点型（8个字节）,,BILL_OTHER_INS,账单其它付费额,,38,,
+,\x00\x0B,PFL0011,自定义字典类型，字符串（变长）,379,REFUND_FLAG,退费标记,是否退费，退费的话以下金额为负数,200,,
+,\x00\x20,PFL0032,简化字典（Integer整型，4个字节）,379,SD_REFUND,是否退费,是否退费，退费的话以下金额为负数,20,,
+,\x00\x0C,PFL0012,Double双精度浮点型（8个字节）,,PAY_TOTAL,本次结算总额,,38,,
+,\x00\x0D,PFL0013,Double双精度浮点型（8个字节）,,PAY_SELF,本次自费金额,,38,,
+,\x00\x0E,PFL0014,Double双精度浮点型（8个字节）,,PAY_SOC_INS,本次医保金额,,38,,
+,\x00\x0F,PFL0015,Double双精度浮点型（8个字节）,,PAY_BUS_INS,本次商保金额,,38,,
+,\x00\x10,PFL0016,Double双精度浮点型（8个字节）,,PAY_OTHER_INS,本次其它付费金额,,38,,
+,\x00\x1E,PFL0030,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x1F,PFL0031,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x25,PFL0037,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

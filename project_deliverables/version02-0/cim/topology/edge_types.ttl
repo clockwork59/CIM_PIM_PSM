@@ -1,0 +1,15 @@
+@prefix cim-topo: <https://cim.medical/ontology/v3.4/topology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+cim-topo:Trunk a owl:Class ;
+  rdfs:label "干管/主线"@zh ;
+  rdfs:comment "主要传输通道，承载大流量"@zh .
+
+cim-topo:Branch a owl:Class ;
+  rdfs:label "支路"@zh ;
+  rdfs:comment "从主干分出的支路"@zh .
+
+cim-topo:Terminal a owl:Class ;
+  rdfs:label "终端连接"@zh ;
+  rdfs:comment "连接末端的最终段"@zh .

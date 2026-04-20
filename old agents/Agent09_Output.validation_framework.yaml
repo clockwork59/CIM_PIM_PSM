@@ -1,0 +1,350 @@
+# Agent-09: 模型整合验证框架 (Model Integration Validation Framework)
+# 统一CIM模型验证和交叉引用分析框架
+
+meta:
+  agent_id: "Agent-09"
+  agent_name: "模型整合验证师 (Model Integration Validator)"
+  mission: "整合Agent-01到Agent-08的全部输出，验证模型一致性、完整性，并生成统一CIM"
+  execution_date: "2025-12-02"
+  version: "v1.0"
+
+# 统一ID体系和命名规范
+id_systems:
+  system_id_format: "{CATEGORY}-{SUBSYSTEM}-{SEQUENCE}"
+  category_codes:
+    HVAC: "暖通空调系统"
+    PLUMBING: "给排水系统"
+    ELECTRICAL: "电气系统"
+    MEDICAL_GAS: "医疗气体系统"
+    FIRE_PROTECTION: "消防系统"
+    VERTICAL_TRANSPORT: "垂直交通系统"
+    BUILDING_AUTOMATION: "楼宇自动化系统"
+
+  equipment_id_format: "{TYPE}-{LOCATION}-{SEQUENCE}"
+  type_codes:
+    CH: "冷水机组 (Chiller)"
+    CT: "冷却塔 (Cooling Tower)"
+    AHU: "空调机组 (Air Handling Unit)"
+    PUMP: "水泵 (Pump)"
+    FAN: "风机 (Fan)"
+    VALVE: "阀门 (Valve)"
+    SENSOR: "传感器 (Sensor)"
+    CTRL: "控制器 (Controller)"
+
+  space_id_format: "{BUILDING}-{FLOOR}-{ZONE}-{ROOM}"
+  space_codes:
+    BL: "主楼 (Building)"
+    F1-F9: "楼层标识 (Floor)"
+    OR: "手术室 (Operating Room)"
+    ICU: "重症监护室 (ICU)"
+    WARD: "普通病房 (Ward)"
+    ADMIN: "行政区 (Administration)"
+
+  node_id_format: "{SYSTEM}-{TYPE}-{SEQUENCE}"
+  node_types:
+    SRC: "源节点 (Source)"
+    DIST: "分配节点 (Distribution)"
+    SINK: "汇节点 (Sink)"
+    CTRL: "控制节点 (Control)"
+
+  sensor_id_format: "{CATEGORY}-{MEASURE}-{LOCATION}-{SEQUENCE}"
+  sensor_categories:
+    SENSOR-TEMP: "温度传感器"
+    SENSOR-PRES: "压力传感器"
+    SENSOR-FLOW: "流量传感器"
+    SENSOR-AIR: "空气质量传感器"
+
+  meter_id_format: "{METER}-{TYPE}-{LOCATION}-{SEQUENCE}"
+  meter_types:
+    METER-ELEC: "电能表"
+    METER-WATER: "水表"
+    METER-GAS: "燃气表"
+    METER-HEAT: "热量表"
+
+# 一致性验证规则
+consistency_rules:
+  rule_1_node_equipment_mapping:
+    rule_id: "CR001"
+    description: "节点-设备映射完整性验证"
+    validation_criteria:
+      - "Agent-01中的每个系统节点必须在Agent-03中存在对应的设备映射"
+      - "设备类型定义必须与系统功能要求匹配"
+      - "节点属性（容量、流量、压力）必须与设备规格参数对应"
+    check_method:
+      - "统计节点覆盖率"
+      - "验证映射功能匹配度"
+      - "核对参数一致性"
+    pass_criteria: "映射覆盖率≥95%，参数一致率≥90%"
+
+  rule_2_equipment_location_mapping:
+    rule_id: "CR002"
+    description: "设备-位置映射完整性验证"
+    validation_criteria:
+      - "Agent-03中的每个设备必须在Agent-02或Agent-05中指明位置"
+      - "医疗专用空间中的设备必须符合相应的环境要求"
+      - "设备布置必须满足医疗操作和安全要求"
+    check_method:
+      - "位置归属核实"
+      - "环境要求匹配"
+      - "空间约束检查"
+    pass_criteria: "设备位置明确率≥98%，环境匹配率≥100%"
+
+  rule_3_space_system_coverage:
+    rule_id: "CR003"
+    description: "空间-系统需求覆盖完整性验证"
+    validation_criteria:
+      - "每个医疗特殊空间的功能需求必须在系统模型中得到满足"
+      - "关键医疗设备必须配置相应的支持系统"
+      - "必需的环境参数必须在系统中定义相应的控制节点"
+    check_method:
+      - "需求追溯矩阵"
+      - "系统功能覆盖分析"
+      - "关键路径验证"
+    pass_criteria: "空间需求覆盖率≥99%，关键系统覆盖率=100%"
+
+  rule_4_flow_topology_consistency:
+    rule_id: "CR004"
+    description: "流动路径与拓扑一致性验证"
+    validation_criteria:
+      - "Agent-04定义的流动路径必须与Agent-01的拓扑结构一致"
+      - "载体-荷载耦合关系必须保持能量和质量守恒"
+      - "流动参数（温度、压力、流量）必须在合理范围内"
+    check_method:
+      - "拓扑路径一致性验证"
+      - "能量守恒检核"
+      - "流动参数合理性检查"
+    pass_criteria: "路径一致性=100%，守恒定律满足率=100%"
+
+  rule_5_control_equipment_association:
+    rule_id: "CR005"
+    description: "控制回路-设备关联完整性验证"
+    validation_criteria:
+      - "Agent-06定义的每个传感器/执行器必须在Agent-03中存在对应的设备定义"
+      - "控制回路的控制对象必须是实际存在的设备或系统节点"
+      - "传感器测量点必须在系统中物理可安装"
+    check_method:
+      - "设备ID交叉引用"
+      - "物理安装可行性验证"
+      - "控制逻辑完整性检查"
+    pass_criteria: "控制设备关联率=100%，安装可行性=100%"
+
+  rule_6_metering_point_equipment_linkage:
+    rule_id: "CR006"
+    description: "计量点-设备关联完整性验证"
+    validation_criteria:
+      - "Agent-07定义的每个计量点必须能追溯到Agent-03中的具体设备或装置"
+      - "计量数据必须与相应的能源系统（电、水、气等）关联"
+      - "计量精度等级必须与设备技术规格匹配"
+    check_method:
+      - "计量点设备追溯"
+      - "精度等级匹配验证"
+      - "能源系统关联性检查"
+    pass_criteria: "计量点可溯率=100%，精度匹配率≥95%"
+
+# 完整性验证检查清单
+completeness_checks:
+  check_1_system_coverage:
+    check_id: "CC001"
+    description: "系统覆盖率检查"
+    items:
+      - "8大系统类别是否全部建模完成"
+      - "26个子系统是否都有详细的设备定义"
+      - "医疗专用系统是否有额外的安全和冗余设计"
+      - "消防和生命安全系统是否完全符合建筑规范"
+    expected_results: "覆盖率=100%"
+
+  check_2_equipment_attributes:
+    check_id: "CC002"
+    description: "设备属性完整性检查"
+    items:
+      - "所有设备是否有基础技术规格"
+      - "关键设备的性能参数是否完整"
+      - "设备的安装要求是否明确定义"
+      - "医疗设备的特殊要求是否标注"
+    expected_results: "属性完整率≥95%"
+
+  check_3_relationship_definitions:
+    check_id: "CC003"
+    description: "设备间关系完整性检查"
+    items:
+      - "上下游关系是否正确定义"
+      - "并联/串联设备的连接关系"
+      - "备用设备的切换逻辑"
+      - "计量设备的关联关系"
+      - "控制设备的数据流关系"
+    expected_results: "关系覆盖率≥90%"
+
+  check_4_medical_space_requirements:
+    check_id: "CC004"
+    description: "医疗专用空间环境要求满足度检查"
+    items:
+      - "手术室的洁净度等级和环境参数"
+      - "ICU的环境控制参数和冗余要求"
+      - "负压病房的压差控制和安全要求"
+      - "药房的温湿度和洁净度要求"
+      - "检验科的特殊环境要求"
+    expected_results: "环境要求满足率=100%"
+
+  check_5_control_loop_coverage:
+    check_id: "CC005"
+    description: "控制回路覆盖完整性检查"
+    items:
+      - "关键系统是否有完整的控制回路定义"
+      - "传感器和执行器的选择是否合理"
+      - "控制策略是否适应医疗环境要求"
+      - "故障安全模式是否定义"
+    expected_results: "关键系统覆盖率=100%"
+
+  check_6_metering_system_completeness:
+    check_id: "CC006"
+    description: "计量体系完整性检查"
+    items:
+      - "四级计量层级是否完整定义"
+      - "各种能源类型是否都有计量方案"
+      - "分摊规则和算法是否明确"
+      - "计量精度和数据质量要求是否定义"
+    expected_results: "计量体系完整率=100%"
+
+  check_7_o_m_coverage:
+    check_id: "CC007"
+    description: "运维管理覆盖完整性检查"
+    items:
+      - "P0-P3级告警是否都有定义"
+      - "工单流程是否完整"
+      - "预防性维护策略是否制定"
+      - "资产生命周期管理方案是否完整"
+      - "应急预案是否覆盖医疗特殊场景"
+    expected_results: "运维覆盖率=100%"
+
+# 交叉引用分类索引
+cross_reference_categories:
+
+  forward_references:  # 正向索引：系统→空间→设备
+    system_to_equipment:
+      index_id: "FWD_SYS2EQ"
+      description: "系统到设备的正向索引"
+      structure: "System → Subsystem → Equipment → Component"
+
+    equipment_to_space:
+      index_id: "FWD_EQ2SPC"
+      description: "设备到空间的正向索引"
+      structure: "Equipment → Location → Space Attributes"
+
+    control_to_equipment:
+      index_id: "FWD_CTRL2EQ"
+      description: "控制到设备的正向索引"
+      structure: "Control_loop → Sensor → Actuator → Controlled_Equipment"
+
+  reverse_references:  # 反向索引：空间→设备→系统
+    space_to_equipment:
+      index_id: "REV_SPC2EQ"
+      description: "空间到设备的反向索引"
+      structure: "Space → Equipment_list → System_affiliation"
+
+    equipment_to_system:
+      index_id: "REV_EQ2SYS"
+      description: "设备到系统的反向索引"
+      structure: "Equipment → Belongs_to_system → System_functions"
+
+    location_to_control:
+      index_id: "REV_LOC2CTRL"
+      description: "位置到控制的反向索引"
+      structure: "Location → Monitoring_devices → Control_loops"
+
+  association_references:  # 关联索引：设备间关系
+    upstream_downstream:
+      index_id: "ASSOC_UP_DOWN"
+      description: "设备上下游关联索引"
+      structure: "Equipment ←→ Upstream_Equipment ←→ Downstream_Equipment"
+      relationship_types: ["series", "parallel", "backup", "auxiliary"]
+
+    metering_associations:
+      index_id: "ASSOC_METER"
+      description: "计量关联索引"
+      structure: "Meter ←→ Cost_object ←→ Allocation_rules"
+
+    maintenance_dependencies:
+      index_id: "ASSOC_MAINT"
+      description: "维护依赖关联索引"
+      structure: "Equipment ←→ Spare_parts ←→ Maintenance_procedures"
+
+# 冲突检测与解决规则
+conflict_detection_rules:
+
+  parameter_conflicts:
+    conflict_type: "参数范围不一致"
+    examples:
+      - "同一设备的温度范围在不同系统定义中不一致"
+      - "压力参数在拓扑和控制系统中定义有差异"
+    resolution_strategy: "优先级排序 + 医疗要求优先"
+
+  naming_conflicts:
+    conflict_type: "命名规范不统一"
+    examples:
+      - "同名不同物"
+      - "同物不同名"
+    resolution_strategy: "标准化命名规范 + 建立同义词字典"
+
+  dependency_conflicts:
+    conflict_type: "依赖关系矛盾"
+    examples:
+      - "循环依赖"
+      - "缺少依赖方"
+    resolution_strategy: "依赖图分析 + 拓扑排序"
+
+  space_allocation_conflicts:
+    conflict_type: "空间分配冲突"
+    examples:
+      - "同一空间分配多个不兼容设备"
+      - "设备需要的空间与实际可用空间不匹配"
+    resolution_strategy: "空间冲突检测 + 约束优化算法"
+
+# 质量评估指标
+quality_metrics:
+
+  completeness_score:
+    weight: 25%
+    criteria:
+      - system_coverage: 25%
+      - equipment_attributes: 25%
+      - relationship_definitions: 25%
+      - standards_compliance: 25%
+
+  consistency_score:
+    weight: 25%
+    criteria:
+      - id_uniqueness: 30%
+      - parameter_consistency: 30%
+      - relationship_consistency: 25%
+      - reference_integrity: 15%
+
+  accuracy_score:
+    weight: 25%
+    criteria:
+      - engineering_validity: 40%
+      - standards_compliance: 30%
+      - medical_specific_accuracy: 30%
+
+  usability_score:
+    weight: 25%
+    criteria:
+      - documentation_quality: 30%
+      - model_clarity: 25%
+      - implementation_guide: 25%
+      - maintainability: 20%
+
+# 执行日志记录
+execution_log:
+  phase_1_data_collection:
+    status: "completed"
+    discoveries:
+      - "Agent-05和Agent-07的部分输出文件缺失，需要根据已有元数据和引用关系进行重构"
+      - "各Agent的输出格式存在差异，需要格式标准化"
+    timestamp: "2025-12-02 10:00:00"
+
+  phase_2_consistency_validation:
+    status: "in_progress"
+    findings: []
+    timestamp: "2025-12-02 10:30:00"
+
+  overall_progress: 15%

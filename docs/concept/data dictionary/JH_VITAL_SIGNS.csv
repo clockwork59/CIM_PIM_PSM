@@ -1,0 +1,45 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_VITAL_SIGNS,表全名,JHPDL:JH_VITAL_SIGNS,,,,,,
+,表说明,生命体征记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,IVS,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,IVS0001,String字符串（变长）,,VITAL_SIGNS_SN,生命体征记录编号,生命体征记录编号，系统生成三级编码，如“ZV0.000.000.001”,20,是,是
+,\x00\x02,IVS0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,IVS0003,String字符串（变长）,,IN_HOSP_SN,住院就诊编号,住院就诊编号，来源JH_IN_HOSP的IHR0001,20,是,是
+,\x00\x04,IVS0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,MEASURING_TIME,测量时间,实际测量的时间与日期,19,是,是
+,\x00\x05,IVS0005,Integer整型（4个字节）,,MEASURING_POINT,测量点,属于那个测量时间点，如2、4、6点,20,,
+,\x00\x06,IVS0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RECORD_TIME,录入时间,护士转录到系统的时间,19,,
+,\x00\x08,IVS0008,String字符串（变长）,,VITAL_SIGN_NO,体征类型码,体征类型编码,200,是,是
+,\x00\x09,IVS0009,String字符串（变长）,,VITAL_SIGN_NAME,体征类型名,体征名称，可以是英文,200,,
+,\x00\x0A,IVS0010,String字符串（变长）,,VITAL_SIGN_LAB,体征描述,显示给用户的体征名称描述，如体温等,4000,,
+,\x00\x0B,IVS0011,String字符串（变长）,,VITAL_SIGN_UNIT,体征单位,体征值的单位,50,,
+,\x00\x0C,IVS0012,Double双精度浮点型（8个字节）,,VITAL_SIGN_VAL_N,体征数值,数值型体征，用于计算,50,,
+,\x00\x0D,IVS0013,String字符串（变长）,,VITAL_SIGN_VAL_C,体征值描述,非数值型体征值,1000,,
+,\x00\x0E,IVS0014,String字符串（变长）,,VITAL_SIGN_MEMO,体征备注,,4000,,
+,\x00\x0F,IVS0015,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x10,IVS0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x11,IVS0017,简化字典（Integer整型，4个字节）,379,DELETE_FLAG,体征删除标记,是否作废的体征数据,20,是,是
+,\x00\x12,IVS0018,String字符串（变长）,,VITAL_REF,参考范围,,500,,
+,\x00\x13,IVS0019,String字符串（变长）,,TAKE_IN_WAY,摄入方式,入出量专用；口入、输液,500,,
+,\x00\x14,IVS0020,String字符串（变长）,,TAKE_IN,摄入物,入出量专用；饮水/葡萄糖/鸡蛋等,500,,
+,\x00\x15,IVS0021,String字符串（变长）,,TAKE_OUT_WAY,排出方式,入出量专用；尿、大便,500,,
+,\x00\x16,IVS0022,String字符串（变长）,,TAKE_OUT,排出物,入出量专用；尿、大便,500,,
+,\x00\x17,IVS0023,String字符串（变长）,,TAKE_OUT_ATT,排出物性质,入出量专用；清亮、稀、淡黄等,500,,
+,\x00\x18,IVS0024,简化字典（Integer整型，4个字节）,379,TAKE_OUT_H_FLAG,排查物困难标志,CDA需要，是否，可根据排出物性质判断,20,,
+,\x00\x19,IVS0025,简化字典（Integer整型，4个字节）,379,ICU_FLAG,重症患者标记,是否来源重症患者体征,20,是,是
+,\x00\x1A,IVS0026,String字符串（变长）,,ICU_DEVICE,机采设备,若是重症机器采集体征，描述来源的机器设备,500,,
+,\x00\x1B,IVS0027,简化字典（Integer整型，4个字节）,453,SD_VS_TYPE_DT,体征分类,体征类型内部简化字典,20,是,是
+,\x00\x1C,IVS0028,Integer整型（4个字节）,,VS_ORDER_NUM,体征显示顺序,体征数据显示的顺序编号,20,是,是
+,\x00\x1D,IVS0029,String字符串（变长）,,SC_REC_NURSE,录入护士编码,转录数据的护士,200,,
+,\x00\x1E,IVS0030,String字符串（变长）,,ST_REC_NURSE,录入护士名称,,200,,
+,\x00\x1F,IVS0031,String字符串（变长）,,SC_VS_TYPE_DT,体征分类编码,源业务系统的体征分类编码,200,是,是
+,\x00\x20,IVS0032,String字符串（变长）,,ST_VS_TYPE_DT,体征分类描述,源业务系统的体征分类描述,200,,
+,\x00\x21,IVS0033,String字符串（变长）,,VITAL_SIGN2_UNIT,体征单位2,,50,,
+,\x00\x22,IVS0034,String字符串（变长）,,VITAL_SIGN2_VALUE,体征值2,,50,,
+,\x00\x23,IVS0035,String字符串（变长）,,VITAL_SIGN3_UNIT,体征单位3,,50,,
+,\x00\x24,IVS0036,String字符串（变长）,,VITAL_SIGN3_VALUE,体征值3,,50,,
+,\x00\x25,IVS0037,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x07,IVS0007,String字符串（变长）,,RECORD_NURSE,录入护士,转录数据的护士,100,,

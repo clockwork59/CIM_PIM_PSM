@@ -1,0 +1,41 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_LAB_RES_DTL,表全名,JHPDL:JH_LAB_RES_DTL,,,,,,
+,表说明,检验结果明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,LRD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,LRD0001,String字符串（变长）,,LAB_RES_DTL_SN,检验结果明细编号,检验结果明细编号，系统生成三级编码，如“LL0.000.000.001”,20,是,是
+,\x00\x02,LRD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,LRD0003,String字符串（变长）,,LAB_RESULT_SN,检验结果编号,检验结果编号，来源JH_LAB_RESULT的LRS0001,50,是,是
+,\x00\x0B,LRD0011,自定义字典类型，字符串（变长）,397,RESULT_TYPE,检验结果分类,"检验结果分类，如“1#,#001#,#普通检验”（普通检验、细菌、药敏）",200,,
+,\x00\x11,LRD0017,简化字典（Integer整型，4个字节）,397,SD_RESULT_TYPE,检验结果分类,检验结果分类，如普通检验、细菌、药敏,20,,
+,\x00\x16,LRD0022,String字符串（变长）,,SC_RESULT_TYPE,检验结果分类编码,源业务系统的检验结果分类编码,200,,
+,\x00\x12,LRD0018,String字符串（变长）,,ST_RESULT_TYPE,检验结果分类描述,,500,,
+,\x00\x14,LRD0020,String字符串（变长）,,RESULT_CODE,检验结果明细项编码,检验结果明细项编码，结果明细包含编码、英文名称、中文名称三个信息,200,,
+,\x00\x04,LRD0004,String字符串（变长）,,ITEM_EN_NAME,项目英文名称,,200,是,是
+,\x00\x05,LRD0005,String字符串（变长）,,ITEM_CN_NAME,项目中文名称,,200,,
+,\x00\x06,LRD0006,Double双精度浮点型（8个字节）,,RESULT_NUM,定量结果,数值型结果值,38,,
+,\x00\x07,LRD0007,String字符串（变长）,,RESULT_CHAR,定性结果,文本方式的结果,500,,
+,\x00\x09,LRD0009,String字符串（变长）,,RESULT_UNIT,结果单位,结果单位,100,,
+,\x00\x0A,LRD0010,String字符串（变长）,,RESULT_REF,参考范围,,500,,
+,\x00\x08,LRD0008,自定义字典类型，字符串（变长）,396,RESULT_WARN,结果提醒标记,"结果提醒类型，如“1#,#002#,#偏低”（偏低、偏高、正常、阴性、阳性）",200,,
+,\x00\x0F,LRD0015,简化字典（Integer整型，4个字节）,396,SD_RESULT_WARN,结果提醒标记,结果提醒类型，如偏低、偏高、正常、阴性、阳性,20,,
+,\x00\x15,LRD0021,String字符串（变长）,,SC_RESULT_WARN,结果提醒标记编码,源业务系统的结果提醒类型说明,200,,
+,\x00\x10,LRD0016,String字符串（变长）,,ST_RESULT_WARN,结果提醒描述,源系统结果提醒类型描述,4000,,
+,\x00\x0C,LRD0012,自定义字典类型，字符串（变长）,379,RESULT_CTL_FLAG,危急值标志,危急值标志，是否,200,,
+,\x00\x13,LRD0019,简化字典（Integer整型，4个字节）,379,SD_RESULT_CTL,是否危急值,危急值标志，是否,20,,
+,\x00\x18,LRD0024,String字符串（变长）,,SC_RESULT_CTL,是否危急值编码,源业务系统是否危急值编码,20,,
+,\x00\x17,LRD0023,String字符串（变长）,,ST_RESULT_CTL,是否危急值说明,源业务系统是否危急值说明,20,,
+,\x00\x19,LRD0025,String字符串（变长）,,SC_RESULT_ISPRINT,是否打印检验结果明细编码,检验结果明细项目并不是所有的都会展示在报告上，有的项目可能不需要,50,,
+,\x00\x1A,LRD0026,String字符串（变长）,,ST_RESULT_ISPRINT,是否打印检验结果明细说明,不是所有的明细项目都需要打印到报告上,50,,
+,\x00\x0D,LRD0013,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x0E,LRD0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x1B,LRD0027,String字符串（变长）,,PRINT_SN,项目顺序号,,,,
+,\x00\x1C,LRD0028,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x1D,LRD0029,String字符串（变长）,,SC_LIS_METHOD,检验方法编码,检验方法编码,200,,
+,\x00\x1E,LRD0030,String字符串（变长）,,ST_LIS_METHOD,检验方法名称,检验方法名称,200,,
+,\x00\x1F,LRD0031,String字符串（变长）,,LAB_RESULT_CODE,检验报告单号,业务系统使用的检验报告单号,200,,
+,\x00\x20,LRD0032,String字符串（变长）,,LAB_APPLY_CODE,检验申请单号,业务系统使用的检验申请单号,200,,
+,\x00\x21,LRD0033,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPCM_SAM_TIME,标本采样时间,标本采样时间,,,

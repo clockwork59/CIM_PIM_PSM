@@ -1,0 +1,323 @@
+# 介质物理模型 - 主要流动介质的物性参数
+
+medium_models:
+  meta:
+    data_sources: ["ASHRAE Handbook 2021", "工程热力学", "流体力学手册", "医疗气体标准ISO7396"]
+    temperature_ranges: "涵盖运行范围 -10°C 至 200°C"
+    pressure_ranges: "0.01MPa 至 1.5MPa"
+    accuracy: "±2% for design calculations"
+    conditions: "标准大气压 101.325kPa"
+
+  # 水系统介质模型
+  water_phases:
+    liquid_water:
+      state: "饱和液态"
+      temperature_range: "0-99.9°C"
+      pressure_range: "1-15 bar"
+
+      density: # ρ(T)的水密度模型
+        correlation: "ρ(T) = ρ₀[1-β(T-T₀)]"
+        reference_temp: "T₀ = 4°C where ρ₀ = 999.972 kg/m³"
+        thermal_expansion: "β = 2.07×10⁻⁴ K⁻¹ (λ = 20°C)"
+        accuracy: "±0.1% for 0-100°C"
+
+        piecewise_thermal_expansion:
+          - temp_range: "0-20°C"
+            expansion_rate: "0.005% per °C"
+          - temp_range: "20-60°C"
+            expansion_rate: "0.015% per °C"
+          - temp_range: "60-100°C"
+            expansion_rate: "0.040% per °C"
+
+      specific_heat: # 定压比热容模型
+        polynomial_model: "c_p = a₀ + a₁T + a₂T²"
+        coefficients:
+          a0: "4186.0 J/(kg·K)"
+          a1: "-0.037 J/(kg·K²)"
+          a2: "0.0001 J/(kg·K³)"
+        reference: "T in °C"
+        accuracy: "±0.2%"
+
+        simplified_model:
+          constant_approximation: "4200 J/(kg·K)^@20°C"
+          temperature_dependence: "(-0.002/°C for 0-80°C"
+
+      dynamic_viscosity: # 动力粘度模型
+        source: "水动力粘度 (Kinematic viscosity)"
+        correlations:
+          ippt_bejan: "μ(T) = 2.414 × 10⁻⁵ × 10^{247.8/(T+273.15-140)}"
+          range_of_validity: "0-370°C"
+          uncertainty: "±2.5%"
+
+        at_7C: "%n = 1.42 × 10⁻³ Pa·s (HVAC chiller supply water)"
+        at_12C: "%n = 1.24 × 10⁻³ Pa·s (HVAC chiller return water)"
+        at_80C: "%n = 0.364×10⁻³ Pa·s (Impeded flow)"
+
+      kinematic_viscosity: # 运动粘度
+        definition: "ν = μ/ρ"
+        unit: "m²/s 或 cSt (1 cSt = 10⁻⁶ m²/s)"
+
+        values_at_key_temperatures:
+          - temp: "0°C"
+            viscosity: "1.79×10⁻⁶ m²/s"
+          - temp: "10°C"
+            viscosity: "1.31×10⁻⁶ m²/s"
+          - temp: "20°C"
+            viscosity: "1.00×10⁻⁶ m²/s"
+          - temp: "40°C"
+            viscosity: "0.66×10⁻⁶ m²/s"
+          - temp: "60°C"
+            viscosity: "0.48×10⁻⁶ m²/s"
+          - temp: "80°C"
+            viscosity: "0.37×10⁻⁶ m²/s"
+          - temp: "100°C"
+            viscosity: "0.30×10⁻⁶ m²/s"
+
+      thermal_conductivity: # 导热系数
+        theory: "由分子间碰撞和氢键效应引起热量传递"
+        correlations:
+          lahiri: "k(T) = 4.18[(0.99985 + 0.02T)/(1 + 0.02)]"
+          reference: "T in °C, k in mW/(m·K)"
+
+        values:
+          - temp: "0°C"
+            conductivity: "0.560 W/(m·K)"
+          - temp: "20°C"
+            conductivity: "0.598 W/(m·K)"
+          - temp: "40°C"
+            conductivity: "0.628 W/(m·K)"
+          - temp: "60°C"
+            conductivity: "0.650 W/(m·K)"
+          - temp: "80°C"
+            conductivity: "0.666 W/(m·K)"
+          - temp: "100°C"
+            conductivity: "0.678 W/(m·K)"
+
+      prandtl_number: # 普朗特数 (Prandtl number)
+        definition: "Pr = μc_p/k (动量扩散率/热扩散率)"
+        typical_values:
+          - temp: "0°C"
+            prandtl_number: "12.99"
+          - temp: "20°C"
+            prandtl_number: "7.02"
+          - temp: "40°C"
+            prandtl_number: "4.34"
+          - temp: "60°C"
+            prandtl_number: "2.99"
+          - temp: "80°C"
+            prandtl_number: "2.22"
+          - temp: "100°C"
+            prandtl_number: "1.75"
+
+    steam:
+      state: "饱和蒸汽"
+      quality_specifications:
+        dryness: "x ≥ 0.95 (typically ≥ 0.98)"
+        moisture_content: "≤5% (at point of use)"
+        purity: "condensate conductivity <100μS/cm"
+
+      properties_at_pressures:
+        low_pressure: # 0.2 MPa
+          saturation_temp: "120.2°C"
+          density_saturated: "1.13 kg/m³"
+          density_liquid: "943 kg/m³"
+          latent_heat: "2202 kJ/kg"
+          specific_volume: "0.885 m³/kg"
+
+        medium_pressure: # 0.6 MPa
+          saturation_temp: "158.8°C"
+          density_saturated: "3.17 kg/m³"
+          density_liquid: "908 kg/m³"
+          latent_heat: "2087 kJ/kg"
+          specific_volume: "0.315 m³/kg"
+
+      linear_approximations:
+        density_pressure_relation: "ρ_g = 4.8×10⁻³P (MPa) kg/m³" # for 0.1-1MPa
+        entropy_pressure_relation: "s_g = 7.36 + 1.7×(P MPa) kJ/(kg·K)"
+
+  air_phases:
+    standard_dry_air:
+      state: "理想气体近似，低湿度状态"
+      composition_by_mass:
+        nitrogen: "75.53%"
+        oxygen: "23.14%"
+        argon: "1.27%"
+        carbon_dioxide: "0.06%"
+        neon_trace: "<0.01%"
+
+      temperature_range: "-50 to 200°C"
+      pressure_range: "0.5 to 5 bar"
+
+      density_models:
+        ideal_gas_law: "ρ = P/(R_specific·T)"
+        specific_gas_constant: "R = 287 J/(kg·K)"
+        reference_conditions:
+          - temp: "0°C"
+            pressure: "101.325kPa"
+            density: "1.292 kg/m³"
+          - temp: "20°C"
+            pressure: "101.325kPa"
+            density: "1.204 kg/m³"
+          - temp: "40°C"
+            pressure: "101.325kPa"
+            density: "1.127 kg/m³"
+
+      specific_heat:
+        constant_pressure: "c_p = 1006 J/(kg·K) (at 20°C)"
+        constant_volume: "c_v = 719 J/(kg·K)"
+        specific_heat_ratio: "κ = γ = c_p/c_v = 1.4"
+        temperature_dependence: "+0.0002 J/(kg·K²) (航空工程简化)"
+
+      dynamic_viscosity:
+        sutherland_model: "μ=1.72×10⁻⁵(T/273)⁰·⁷⁸(273+125)/(T+125)"
+        reference: "T in K"
+
+        at_locations:
+          supply_ducts: "25°C μ≈1.84×10⁻⁵ Pa·s"
+          mixed_air: "18°C μ≈1.81×10⁻⁵ Pa·s"
+          cold_spaces: "24°C μ≈1.84×10⁻⁵ Pa·s"
+
+      thermal_conductivity:
+        temperature_correlation: "k = 0.0241 + 8.13×10⁻⁵T (T in °C)"
+
+        values:
+          - temp: "0°C"
+            conductivity: "0.0242 W/(m·K)"
+          - temp: "20°C"
+            conductivity: "0.0257 W/(m·K)"
+          - temp: "40°C"
+            conductivity: "0.0274 W/(m·K)"
+          - temp: "60°C"
+            conductivity: "0.0290 W/(m·K)"
+          - temp: "100°C"
+            conductivity: "0.0322 W/(m·K)"
+
+    humid_air:
+      state: "湿空气，考虑水蒸气影响"
+      humidity_ratios:
+        summer_outdoor: "d = 16-22 g/kg"
+        winter_outdoor: "d = 2-6 g/kg"
+        indoor_comfort: "d = 7-10 g/kg"
+
+      psychrometric_properties:
+        specific_enthalpy:
+          enthalpy_dry_calc: "h_dry = 1.006T"
+          enthalpy_vapor_calc: "h_vapor = 2501 + 1.805T"
+          mixed_air: "h = 1.006T + d(2501 + 1.805T)"
+
+        specific_volume:
+          perry_model: "v = 287T/P_h - 508Td/P_h"
+          approximate: "v = 287(T+273)/P_h m³/kg" # Dries out
+
+      temperature_definitions:
+        dry_bulb: "常规温度计测量 T"
+        wet_bulb: "绝热饱和温度 T_wb"
+        dew_point: "Td = (Φ/100)^(1/8)(112 + 0.9T) + 0.1T - 112"
+        relative_humidity:
+          calculation: "Φ = P_v/P_vs × 100%"
+          vapor_pressure: "P_v = ΦP_vs" # Magnus formula
+          saturation_pressure: "P_vs = 611exp(17.62T/(243.12+T))"
+
+      # 全压 = 静压 + 动压
+      bernoulli_equation:
+        total_pressure: "P_t = P_s + P_d = P_s + ½ρv²"
+        static_pressure: "P_s = static pressure"
+        dynamic_pressure: "P_d = ½ρv²"
+
+      typical_velocities:
+        main_ducts: "6-8m/s"
+        branch_ducts: "3-6m/s"
+        terminal_ducts: "1.5-2.5m/s"
+        fresh_outlets: "1-3m/s"
+        terminals: "2.5-3.5m/s"
+
+  medical_gas_phases:
+    oxygen:
+      chemical_formula: "O₂"
+      molecular_weight: "31.998 kg/kmol"
+
+      physical_properties:
+        critical_temperature: "154.6 K (-118.6 °C)"
+        critical_pressure: "5.04 MPa (49.77 atm)"
+        critical_density: "436 kg/m³"
+        boiling_point_at_1atm: "90.2 K (-183.0 °C)"
+
+      density_models:
+        ambient: "1.429 kg/m³ at 0°C, 101kPa"
+        supply_pressure: "1.634 kg/m³ at 20°C, 0.5MPa"
+        high_pressure: "1.013 kg/m³ at 20°C, 15MPa"
+
+      compressibility_factor:
+        low_pressure: "Z = 1.00 (high accuracy)"
+        high_pressure: "Do real gas corrections"
+
+    medical_air:
+      components:
+        nitrogen: "78.09%"
+        oxygen: "20.94%"
+        argon: "0.93%"
+        carbon_dioxide: "0.03%"
+
+      requirements:
+        moisture_content: "≤0.5 mg/m³"
+        lubricating_oil: "≤0.1 mg/m³"
+        solid_particles: "≥1μm 颗粒≤0.1mg/m³"
+        co_content: "≤5ppm"
+        co2_content: "≤300ppm"
+
+    medical_vacuum:
+      fluid_properties:
+        must_be_treated_as: "湿气体的特殊物性"
+        pumping_capacity: "40-60kPa (abs) = 40-60%真空度"
+        air_temperature_after_expansion: "0.8T_in"
+
+      contamination_safety:
+        sterile_filtration: "0.2μm除菌过滤器"
+        liquid_separator: "分离器 TRAP50-100"
+        odor_clarifier: "活性炭过滤器"
+
+  properties_summary:
+    comparison_at_20°C:
+      - medium: "水"
+        density: "998 kg/m³"
+        specific_heat: "4.18 kJ/(kg·K)"
+        conductivity: "0.600 W/(m·K)"
+        viscosity: "1.00×10⁻⁶ m²/s"
+        application: "理想的热载体，比热容大"
+
+      - medium: "干空气"
+        density: "1.204 kg/m³"
+        specific_heat: "1.006 kJ/(kg·K)"
+        conductivity: "0.0256 W/(m·K)"
+        viscosity: "15.12×10⁻⁶ m²/s"
+        application: "传热能力弱但流动性好"
+
+      - medium: "氧气"
+        density: "1.331 kg/m³"
+        specific_heat: "0.92 kJ/(kg·K)"
+        conductivity: "0.0263 W/(m·K)"
+        viscosity: "20.4×10⁻⁶ m²/s"
+        application: "医疗气体，比空气稍重"
+
+    energy_storage_capacity:
+      water_per_K: "4.18 kJ/(kg·K)"
+      water_latent_freezing: "335 kJ/kg"
+      water_latent_vaporization: "2400 kJ/kg"
+      air_per_K: "1.0 kJ/(kg·K)"
+      oil_vs_water: "50%" # 油的比热容约是水的50%
+
+    special_considerations:
+      applications:
+        - "冷冻水：低温下粘度增大，阻力损失增加"
+        - "热水：高温下易结垢，需水处理"
+        - "蒸汽：相变能量密集，注意汽水分离"
+        - "空气：考虑温度对密度的影响"
+        - "氧气：助燃性，安全性设计重要"
+
+      actual_vs_theoretical:
+        accuracy_notes:
+          - "上述模型精度用于设计计算"
+          - "实际运行需考虑污染、老化"
+          - "温度和成分变化会影响物性"
+          - "仪表测量精度为±2-5%"
+          - "控制和优化的分辨率有限"

@@ -1,0 +1,28 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_LAB_QC_VALUE,表全名,JHPDL:JH_LAB_QC_VALUE,,,,,,
+,表说明,实验室质控结果表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,LAQ,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,LAQ0001,String字符串（变长）,,LAB_QC_VALUE_SN,实验室指控条目自增编号,,20,,
+,\x00\x02,LAQ0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,LAQ0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,LAQ0005,String字符串（变长）,,QC_DEVICE,仪器名称,,100,,
+,\x00\x06,LAQ0006,String字符串（变长）,,QC_ITEM,质控项目,,100,,是
+,\x00\x07,LAQ0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,QC_DATE,质控日期,,50,,
+,\x00\x08,LAQ0008,String字符串（变长）,,QC_RESULT,质控结果,,500,,
+,\x00\x09,LAQ0009,String字符串（变长）,,QC_LEVEL,质控水平,,100,,
+,\x00\x0A,LAQ0010,简化字典（Integer整型，4个字节）,379,SD_QC_FLAG,审核标志（0未审核 1审核）,,100,,
+,\x00\x0B,LAQ0011,String字符串（变长）,,QC_PAR_NAME,质控物名称,,200,,
+,\x00\x0C,LAQ0012,String字符串（变长）,,QC_RUNAWAY_RULE,失控规则,,200,,
+,\x00\x0D,LAQ0013,String字符串（变长）,,QC_TARGET_VAL,靶值,,50,,
+,\x00\x0E,LAQ0014,String字符串（变长）,,QC_STD,标准差,,100,,
+,\x00\x0F,LAQ0015,String字符串（变长）,,QC_RESON,失控原因,,500,,
+,\x00\x10,LAQ0016,String字符串（变长）,,QC_FUN,处理方式,,500,,
+,\x00\x11,LAQ0017,String字符串（变长）,,SC_QC_OPERATOR,检验者编码,,100,,
+,\x00\x12,LAQ0018,String字符串（变长）,,ST_QC_OPERATOR,检验者姓名,,100,,
+,\x00\x13,LAQ0019,String字符串（变长）,,RESULT_REMARKS,备注,,500,,
+,\x00\x04,LAQ0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,19,是,
+,\x00\x14,LAQ0020,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

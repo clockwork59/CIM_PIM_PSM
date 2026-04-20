@@ -1,0 +1,34 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_OUT_DTL,表全名,JHPDL:JH_DRUG_OUT_DTL,,,,,,
+,表说明,药品耗材库存调拨明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MOD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MOD0001,String字符串（变长）,,DRUG_OUT_DTL_SN,库存调拨明细唯一号,内部三级编码DF0.000.000.001,20,是,是
+,\x00\x02,MOD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MOD0003,String字符串（变长）,,DRUG_OUT_SN,药库调拨唯一号,来源JH_DRUG_OUT的MKO0001,20,是,是
+,\x00\x08,MOD0008,String字符串（变长）,,BATCH_NO,批次号,业务实际批次号,200,是,是
+,\x00\x0E,MOD0014,Double双精度浮点型（8个字节）,,DRUG_KC_NUM,当前库存,当前药品在转出库的库存量,38,,
+,\x00\x09,MOD0009,String字符串（变长）,,SC_INVENTORY_ITM,库存项编码,,200,,
+,\x00\x0A,MOD0010,String字符串（变长）,,ST_INVENTORY_ITM,库存项名称,,200,,
+,\x00\x0F,MOD0015,String字符串（变长）,,DRUG_SPEC,药品规格,在转出库的规格,200,,
+,\x00\x10,MOD0016,String字符串（变长）,,SC_DRUG_OUT_UNIT,药品单位编码,在转出库的单位,200,,
+,\x00\x19,MOD0025,String字符串（变长）,,ST_DRUG_OUT_UNIT,药品单位名称,,200,,
+,\x00\x0B,MOD0011,String字符串（变长）,,DRUG_OUT_NO,调拨单号,调拨单主单号,200,是,是
+,\x00\x0C,MOD0012,String字符串（变长）,,DRUG_OUT_SUB_NO,调拨子序号,调拨单明细子顺序号,200,,
+,\x00\x0D,MOD0013,Double双精度浮点型（8个字节）,,DRUG_OUT_NUM,调拨数量,申请数量,38,,
+,\x00\x11,MOD0017,Double双精度浮点型（8个字节）,,OUT_BAT_AMOUNT,调拨批次总金额,药品批发价,38,,
+,\x00\x12,MOD0018,Double双精度浮点型（8个字节）,,OUT_BAT_AVE_PRICE,调拨批次单价,,38,,
+,\x00\x13,MOD0019,Double双精度浮点型（8个字节）,,OUT_PUR_AMOUNT,调拨进价总金额,药品进货价,38,,
+,\x00\x14,MOD0020,Double双精度浮点型（8个字节）,,OUT_PUR_AVE_PRICE,调拨进价单价,,38,,
+,\x00\x15,MOD0021,Double双精度浮点型（8个字节）,,OUT_SEL_AMOUNT,调拨售价总金额,药品零售价,38,,
+,\x00\x16,MOD0022,Double双精度浮点型（8个字节）,,OUT_SEL_AVE_PRICE,调拨售价单价,,38,,
+,\x00\x17,MOD0023,String字符串（变长）,,REMARKS,备注,,4000,,
+,\x00\x18,MOD0024,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x07,MOD0007,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x1A,MOD0026,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x04,MOD0004,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x05,MOD0005,String字符串（变长）,,DRUG_BATCH_SN,批次SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x06,MOD0006,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是

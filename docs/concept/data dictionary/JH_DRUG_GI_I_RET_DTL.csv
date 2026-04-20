@@ -1,0 +1,34 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_GI_I_RET_DTL,表全名,JHPDL:JH_DRUG_GI_I_RET_DTL,,,,,,
+,表说明,住院退药明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGH,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGH0001,String字符串（变长）,,GI_I_RET_DTL_SN,住院药房退药唯一号,内部产生三级编码DR0.000.000.001,20,是,是
+,\x00\x02,MGH0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MGH0003,String字符串（变长）,,GIVE_I_RET_SN,住院药房退药唯一号,来源JH_DRUG_GI_I_RET的MGG0001,20,是,是
+,\x00\x08,MGH0008,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x04,MGH0004,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x05,MGH0005,String字符串（变长）,,DRUG_BATCH_SN,批次SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x06,MGH0006,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x07,MGH0007,String字符串（变长）,,BATCH_NO,批次号,,200,是,是
+,\x00\x0C,MGH0012,String字符串（变长）,,PHA_RETURN_NO,退药单号,,200,,
+,\x00\x0A,MGH0010,String字符串（变长）,,SC_PHARMACY,实际接收药房ID,,200,是,是
+,\x00\x0B,MGH0011,String字符串（变长）,,ST_PHARMACY,实际接收药房名称,,200,,
+,\x00\x15,MGH0021,Double双精度浮点型（8个字节）,,PHA_UNIT_PRICE,单价,,38,,
+,\x00\x12,MGH0018,Double双精度浮点型（8个字节）,,PHA_RET_ACT_QTY,实际确认退药数量,,38,,
+,\x00\x16,MGH0022,Double双精度浮点型（8个字节）,,ACT_TOT_AMOUNT,实际退药总金额,,38,,
+,\x00\x17,MGH0023,String字符串（变长）,,RET_REASON,原因,确认及拒绝原因,4000,,
+,\x00\x13,MGH0019,String字符串（变长）,,SC_PHA_UNIT,单位编码,,200,,
+,\x00\x14,MGH0020,String字符串（变长）,,ST_PHA_UNIT,单位名称,,200,,
+,\x00\x0D,MGH0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PHA_RET_CHK_TIME,审核时间,,31,是,是
+,\x00\x0E,MGH0014,String字符串（变长）,,SC_RET_CHK_USER,审核人编码,,200,,
+,\x00\x0F,MGH0015,String字符串（变长）,,ST_RET_CHK_USER,审核人姓名,,200,,
+,\x00\x10,MGH0016,String字符串（变长）,,SC_RET_CHK_STATUS,审核状态编码,确认、拒绝等,200,,
+,\x00\x11,MGH0017,String字符串（变长）,,ST_RET_CHK_STATUS,审核状态描述,,500,,
+,\x00\x19,MGH0025,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_TIME,退药时间,退药时间,,,
+,\x00\x18,MGH0024,String字符串（变长）,,REMARKS,备注,,4000,,
+,\x00\x09,MGH0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x1A,MGH0026,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

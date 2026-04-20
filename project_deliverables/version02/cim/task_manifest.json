@@ -1,0 +1,217 @@
+{
+  "manifest_meta": {
+    "manifest_id": "TM-CIM-20250117-FINAL",
+    "version": "2.0.0",
+    "description": "CIM本体工程完整任务清单",
+    "target_executor": "Claude-Code",
+    "execution_strategy": "Topological Sort (DAG-based)",
+    "entry_point": "从TASK-001开始，按execution_order顺序执行"
+  },
+  "execution_phases": [
+    {"phase": 1, "name": "Foundation", "tasks": ["TASK-001"], "parallel": false, "blocking": true},
+    {"phase": 2, "name": "Domain Foundations", "tasks": ["TASK-002", "TASK-003", "TASK-004"], "parallel": true, "blocking": true},
+    {"phase": 3, "name": "Domain Extensions", "tasks": ["TASK-005", "TASK-006"], "parallel": true, "blocking": false},
+    {"phase": 4, "name": "Integration", "tasks": ["TASK-007", "TASK-008", "TASK-009"], "parallel": true, "blocking": false},
+    {"phase": 5, "name": "Validation Rules", "tasks": ["TASK-010", "TASK-011"], "parallel": true, "blocking": false},
+    {"phase": 6, "name": "Finalization", "tasks": ["TASK-012"], "parallel": false, "blocking": true}
+  ],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "priority": "P0-Critical",
+      "target_file": "cim/core/base_entities.ttl",
+      "description": "实现核心基类定义 (Entity, PhysicalObject, LogicalObject)",
+      "source_agents": ["Agent-09"],
+      "concepts_to_implement": ["cim:Entity", "cim:PhysicalObject", "cim:LogicalObject"],
+      "dependencies": [],
+      "input_documents": ["ontology_skeleton.ttl"],
+      "expected_output": {"classes": 3, "properties": 2}
+    },
+    {
+      "id": "TASK-002",
+      "priority": "P0-Critical",
+      "target_file": "cim/topology/node_types.ttl",
+      "description": "实现Agent-01定义的拓扑节点类型",
+      "source_agents": ["Agent-01"],
+      "concepts_to_implement": [
+        "cim-topo:Node", "cim-topo:Source_Node", "cim-topo:Sink_Node",
+        "cim-topo:Distribution_Node", "cim-topo:LogicalNode", "cim-topo:Junction",
+        "cim-topo:Splitter", "cim-topo:Regulator", "cim-topo:Transformer_Node"
+      ],
+      "dependencies": ["TASK-001"],
+      "input_documents": ["ontology_skeleton.ttl#TOPOLOGY_DOMAIN", "concept_extraction_report.json#topology_domain"],
+      "expected_output": {"classes": 9}
+    },
+    {
+      "id": "TASK-003",
+      "priority": "P0-Critical",
+      "target_file": "cim/spaces/spatial_hierarchy.ttl",
+      "description": "实现Agent-02定义的6级空间层级",
+      "source_agents": ["Agent-02"],
+      "concepts_to_implement": [
+        "cim-space:Space", "cim-space:Site", "cim-space:Building",
+        "cim-space:Floor", "cim-space:Zone", "cim-space:Room", "cim-space:SubSpace"
+      ],
+      "dependencies": ["TASK-001"],
+      "input_documents": ["ontology_skeleton.ttl#SPACE_DOMAIN", "concept_extraction_report.json#space_domain.hierarchy_levels"],
+      "expected_output": {"classes": 7}
+    },
+    {
+      "id": "TASK-004",
+      "priority": "P0-Critical",
+      "target_file": "cim/equipment/equipment_hierarchy.ttl",
+      "description": "实现Agent-03定义的设备层级与可靠性分级",
+      "source_agents": ["Agent-03"],
+      "concepts_to_implement": [
+        "cim-equip:Equipment", "cim-equip:Component", "cim-equip:Part",
+        "cim-equip:reliabilityLevel", "cim-equip:hasLocalControl",
+        "cim-equip:externalControlSystem", "cim-equip:isUncontrolledLoad"
+      ],
+      "dependencies": ["TASK-001"],
+      "input_documents": ["ontology_skeleton.ttl#EQUIPMENT_DOMAIN", "concept_extraction_report.json#equipment_domain"],
+      "expected_output": {"classes": 3, "datatype_properties": 4}
+    },
+    {
+      "id": "TASK-005",
+      "priority": "P0-Critical",
+      "target_file": "cim/spaces/medical_special_spaces.ttl",
+      "description": "实现医疗专用空间定义，包含完整环境属性",
+      "source_agents": ["Agent-02", "Agent-09"],
+      "concepts_to_implement": [
+        "cim-space:CleanSpace", "cim-space:OperatingRoom", "cim-space:ICU",
+        "cim-space:IsolationWard", "cim-space:CleanLab",
+        "ALL environment properties from ontology_skeleton.ttl#SPACE_ENVIRONMENT_PROPERTIES"
+      ],
+      "dependencies": ["TASK-003"],
+      "input_documents": [
+        "ontology_skeleton.ttl#SPACE_ENVIRONMENT_PROPERTIES",
+        "medical_domain_constraints.json#property_definitions",
+        "concept_extraction_report.json#space_domain.medical_special_spaces"
+      ],
+      "expected_output": {"classes": 5, "datatype_properties": 11}
+    },
+    {
+      "id": "TASK-006",
+      "priority": "P1-Important",
+      "target_file": "cim/equipment/mechanical.ttl",
+      "description": "实现HVAC设备本体",
+      "source_agents": ["Agent-03"],
+      "concepts_to_implement": [
+        "cim-equip:HVAC_Equipment", "cim-equip:Chiller", "cim-equip:AHU",
+        "cim-equip:Clean_AHU", "cim-equip:HEPA_Filter", "cim-equip:CoolingTower",
+        "cim-equip:Pump", "cim-equip:VAV_Terminal", "cim-equip:FCU"
+      ],
+      "dependencies": ["TASK-002", "TASK-004"],
+      "input_documents": ["concept_extraction_report.json#equipment_domain.p0_core_equipment"],
+      "expected_output": {"classes": 9}
+    },
+    {
+      "id": "TASK-007",
+      "priority": "P1-Important",
+      "target_file": "cim/coupling/equipment_location.ttl",
+      "description": "实现Agent-05定义的设备-空间位置耦合",
+      "source_agents": ["Agent-05"],
+      "concepts_to_implement": [
+        "cim-loc:MEP_Room", "cim-loc:Shaft", "cim-loc:Ceiling_Void",
+        "cim-loc:Served_Space", "cim:locatedIn", "cim:locationStatus"
+      ],
+      "dependencies": ["TASK-003", "TASK-004"],
+      "input_documents": ["ontology_skeleton.ttl#LOCATION_DOMAIN", "concept_extraction_report.json#coupling_domain"],
+      "expected_output": {"classes": 4, "object_properties": 1, "datatype_properties": 1}
+    },
+    {
+      "id": "TASK-008",
+      "priority": "P1-Important",
+      "target_file": "cim/control/sensors.ttl",
+      "description": "实现Agent-06定义的传感器本体",
+      "source_agents": ["Agent-06"],
+      "concepts_to_implement": [
+        "cim-ctrl:ControlDevice", "cim-ctrl:Sensor", "cim-ctrl:Temperature_Sensor",
+        "cim-ctrl:Humidity_Sensor", "cim-ctrl:Pressure_Sensor", "cim-ctrl:monitors"
+      ],
+      "dependencies": ["TASK-004"],
+      "input_documents": ["ontology_skeleton.ttl#CONTROL_DOMAIN", "concept_extraction_report.json#control_domain.sensor_types"],
+      "expected_output": {"classes": 5, "object_properties": 1}
+    },
+    {
+      "id": "TASK-009",
+      "priority": "P1-Important",
+      "target_file": "cim/metering/metering_hierarchy.ttl",
+      "description": "实现Agent-07定义的4级计量层级",
+      "source_agents": ["Agent-07"],
+      "concepts_to_implement": [
+        "cim-meter:Meter", "cim-meter:VirtualMeter", "cim-meter:MeteringHierarchy",
+        "cim-meter:meters", "cim-meter:derivedFrom"
+      ],
+      "dependencies": ["TASK-004"],
+      "input_documents": ["ontology_skeleton.ttl#METERING_DOMAIN", "concept_extraction_report.json#metering_domain"],
+      "expected_output": {"classes": 3, "object_properties": 2}
+    },
+    {
+      "id": "TASK-010",
+      "priority": "P1-Important",
+      "target_file": "cim/rules/cross_agent_validation.sparql",
+      "description": "实现跨Agent一致性验证SPARQL查询",
+      "source_agents": ["Agent-09"],
+      "concepts_to_implement": [
+        "CST-TOPO-001 验证查询", "CST-TOPO-002 验证查询", "CST-EQUIP-001 验证查询",
+        "CST-SPACE-001 验证查询", "CST-CTRL-001 验证查询", "CST-METER-001 验证查询"
+      ],
+      "dependencies": ["TASK-002", "TASK-003", "TASK-004", "TASK-007", "TASK-008", "TASK-009"],
+      "input_documents": ["concept_extraction_report.json#extracted_constraints"],
+      "expected_output": {"sparql_queries": 6}
+    },
+    {
+      "id": "TASK-011",
+      "priority": "P1-Important",
+      "target_file": "cim/rules/shacl_constraints.ttl",
+      "description": "实现医疗领域SHACL数据形状约束",
+      "source_agents": ["Agent-02", "Agent-09"],
+      "concepts_to_implement": [
+        "cim-shape:OperatingRoom_Class_I_Shape", "cim-shape:IsolationWard_Negative_Shape",
+        "cim-shape:CleanLab_BSL3_Shape", "cim-shape:EquipmentMustHaveLocationShape",
+        "cim-shape:NodeMustHaveEquipmentShape"
+      ],
+      "dependencies": ["TASK-005", "TASK-007"],
+      "input_documents": [
+        "medical_domain_constraints.json#space_environmental_constraints[*].shacl_shape",
+        "concept_extraction_report.json#extracted_constraints[*].shacl_shape"
+      ],
+      "expected_output": {"shacl_shapes": 5}
+    },
+    {
+      "id": "TASK-012",
+      "priority": "P0-Critical",
+      "target_file": "cim/_index.ttl",
+      "description": "生成本体入口文件，包含所有模块的owl:imports",
+      "source_agents": [],
+      "concepts_to_implement": [
+        "owl:Ontology声明", "owl:imports for all .ttl files", "namespace prefix declarations"
+      ],
+      "dependencies": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008", "TASK-009", "TASK-010", "TASK-011", "TASK-013"],
+      "input_documents": ["cim_document_structure.md", "_config.json#namespace_registry"],
+      "expected_output": {"imports": 12}
+    },
+    {
+      "id": "TASK-013",
+      "priority": "P1-Important",
+      "target_file": "cim/equipment/electrical.ttl",
+      "description": "[修复-H-001] 创建电气设备层级，修复Transformer继承链问题",
+      "source_agents": ["Agent-03"],
+      "concepts_to_implement": [
+        "cim-equip:Electrical_Equipment", "cim-equip:Transformer", "cim-equip:Circuit_Breaker",
+        "cim-equip:Distribution_Panel", "cim-equip:UPS", "cim-equip:Generator"
+      ],
+      "dependencies": ["TASK-004"],
+      "input_documents": ["docs/issues/CIM 统一领域模型建模成果审核报告.md#H-001"],
+      "expected_output": {"classes": 6, "notes": "修复Transformer从HVAC模块移至电气模块"}
+    }
+  ],
+  "success_criteria": {
+    "all_tasks_completed": true,
+    "all_validations_passed": true,
+    "total_files_generated": 24,
+    "index_file_valid": true,
+    "actual_completion_date": "2025-12-12"
+  }
+}

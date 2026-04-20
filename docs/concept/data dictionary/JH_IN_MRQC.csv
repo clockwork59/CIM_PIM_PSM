@@ -1,0 +1,41 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_IN_MRQC,表全名,JHPDL:JH_IN_MRQC,,,,,,
+,表说明,病历质控记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,IMA,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,IMA0001,String字符串（变长）,,IN_MRQC_SN,病历质控整改通知书记录编号,病历质控整改通知书记录编号，系统生成三级编码，如“ZT0.000.000.001”,20,是,是
+,\x00\x02,IMA0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,IMA0003,String字符串（变长）,,IN_HOSP_SN,住院就诊编号,住院就诊编号，来源JH_IN_HOSP的IHR0001,20,是,是
+,\x00\x04,IMA0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RECTIFICATION_DATE_TIME,整改通知书发出时间,,19,,
+,\x00\x05,IMA0005,String字符串（变长）,,RECTIFICATION_UNIQUE_ID,整改记录唯一标识,,200,是,是
+,\x00\x06,IMA0006,String字符串（变长）,,RECTIFICATION_STATUS,整改状态,草稿、已发送、结束,200,,
+,\x00\x07,IMA0007,String字符串（变长）,,RECTIFICATION_LEVEL,整改级别,科室质控、环节质控、终末质控、病案评分,200,,
+,\x00\x08,IMA0008,String字符串（变长）,,MR_SCORE,整改扣分,如果为0，则说明本次质控未发现问题,50,,
+,\x00\x09,IMA0009,String字符串（变长）,,QC_MARK,整改备注,,200,,
+,\x00\x0A,IMA0010,String字符串（变长）,,RECTIFICATION_DEADLINE,整改期限,,200,,
+,\x00\x0B,IMA0011,String字符串（变长）,,CLINIC_TYPE,临床标志,住院医疗、住院护理,200,,
+,\x00\x0C,IMA0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SEND_DATE_TIME,整改通知发送时间,,19,,
+,\x00\x0D,IMA0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DISCHARGE_DATE_TIME,出院日期,,19,,
+,\x00\x0E,IMA0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ADMISSION_DATE_TIME,入院日期,,19,,
+,\x00\x0F,IMA0015,String字符串（变长）,,MR_DOCTOR_PART_STATUS,医生部分病案状态,书写、科室质控、病历完成、病案签收、终末质控、病案签收（预留满足终末质控签收）、病案编目、病案归档,200,,
+,\x00\x10,IMA0016,String字符串（变长）,,BED_LABEL,床位标签,,50,,
+,\x00\x11,IMA0017,String字符串（变长）,,TOTAL_SCORE,总分值,,50,,
+,\x00\x12,IMA0018,String字符串（变长）,,PLEAD_COUNT,申诉记录数量,,50,,
+,\x00\x13,IMA0019,String字符串（变长）,,DIRECTOR,医师签名,,50,,
+,\x00\x14,IMA0020,String字符串（变长）,,SC_QC_USER,质控者ID,,50,,是
+,\x00\x15,IMA0021,String字符串（变长）,,ST_USER_NAME,质控者姓名,,50,,
+,\x00\x16,IMA0022,String字符串（变长）,,SC_RECEIVE_USER,接收人ID,,50,,是
+,\x00\x17,IMA0023,String字符串（变长）,,ST_RECEIVE_USER,接收人姓名,,50,,
+,\x00\x18,IMA0024,String字符串（变长）,,SC_CHIEF_DOCTOR,副主任医师ID,,50,,
+,\x00\x19,IMA0025,String字符串（变长）,,ST_CHIEF_DOCTOR,副主任医师姓名,,50,,
+,\x00\x1A,IMA0026,String字符串（变长）,,SC_ATTENDING_DOCTOR,主治医生ID,,50,,
+,\x00\x1B,IMA0027,String字符串（变长）,,ST_ATTENDING_DOCTOR,主治医师姓名,,50,,
+,\x00\x1C,IMA0028,String字符串（变长）,,SC_QC_DEPT,质控科室代码,,50,,
+,\x00\x1D,IMA0029,String字符串（变长）,,ST_QC_DEPT,质控科室名称,,50,,
+,\x00\x1E,IMA0030,String字符串（变长）,,SC_RECEIVE_DEPT,接收科室代码,,50,,
+,\x00\x1F,IMA0031,String字符串（变长）,,ST_RECEIVE_DEPT,接收科室名称,,50,,
+,\x00\x20,IMA0032,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,19,是,是
+,\x00\x21,IMA0033,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

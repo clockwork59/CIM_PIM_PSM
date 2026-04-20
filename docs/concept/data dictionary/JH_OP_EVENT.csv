@@ -1,0 +1,38 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OP_EVENT,表全名,JHPDL:JH_OP_EVENT,,,,,,
+,表说明,手术事件表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,OAE,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,OAE0001,String字符串（变长）,,OPER_EVENT_SN,手术事件编号,手术事件编号，系统生成三级编码，如“PE0.000.000.001”,20,是,是
+,\x00\x02,OAE0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x12,OAE0018,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x03,OAE0003,String字符串（变长）,,OPER_RECORD_SN,手术记录单编号,手术记录单编号，来源JH_OP_RECORD的OAR0001,20,是,是
+,\x00\x06,OAE0006,String字符串（变长）,,OPER_SN_NO,手术号,手术系统生成的手术编号,200,,
+,\x00\x04,OAE0004,String字符串（变长）,,EVENT_SN_NO,事件编号,手术中发生的事件编码,200,,
+,\x00\x05,OAE0005,Short短整型（2个字节）,,EVENT_NUM,事件次序号,手术中发生的事件顺序号,6,,
+,\x00\x08,OAE0008,String字符串（变长）,,EVENT_CONTENT,事件说明,,4000,,
+,\x00\x09,OAE0009,String字符串（变长）,,ORDER_NAME,项目名称,,200,,
+,\x00\x0A,OAE0010,String字符串（变长）,,ORDER_CODE,项目编号,,200,,
+,\x00\x0B,OAE0011,String字符串（变长）,,ORDER_SPEC,项目规格,,200,,
+,\x00\x0C,OAE0012,Double双精度浮点型（8个字节）,,DOSAGE,剂量,,38,,
+,\x00\x0F,OAE0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,START_TIME,开始时间,,19,,
+,\x00\x10,OAE0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,STOP_TIME,结束时间,,19,,
+,\x00\x13,OAE0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x14,OAE0020,简化字典（Integer整型，4个字节）,448,SD_EVENT_TYPE,事件类别简码,事件类别(1-事件、2-麻醉用药、3-输液、4-输氧、5-手术、6-麻醉、7-置管、8-拔管、9-辅助呼吸、A-控制呼吸、B-输血、0-数据修改，T-ACT),20,,
+,\x00\x15,OAE0021,String字符串（变长）,,ST_EVENT_TYPE,事件类别描述,,500,,
+,\x00\x16,OAE0022,简化字典（Integer整型，4个字节）,410,SD_DOSAGE_UNITS,剂量单位简码,,20,,
+,\x00\x17,OAE0023,String字符串（变长）,,ST_DOSAGE_UNITS,剂量单位描述,,500,,
+,\x00\x18,OAE0024,简化字典（Integer整型，4个字节）,389,SD_PHY_WAY,用药途径简码,,20,,
+,\x00\x19,OAE0025,String字符串（变长）,,ST_PHY_WAY,用药途径描述,,500,,
+,\x00\x1A,OAE0026,简化字典（Integer整型，4个字节）,379,SD_FEE,是否划价,,20,,
+,\x00\x1B,OAE0027,String字符串（变长）,,SC_EVENT_TYPE,事件类别编码,源业务系统的事件类别编码,200,,
+,\x00\x1C,OAE0028,String字符串（变长）,,SC_DOSAGE_UNITS,剂量单位编码,源业务系统的剂量单位编码,200,,
+,\x00\x1D,OAE0029,String字符串（变长）,,SC_PHY_WAY,用药途径编码,源业务系统的用药途径编码,200,,
+,\x00\x1E,OAE0030,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x07,OAE0007,自定义字典类型，字符串（变长）,448,EVENT_TYPE,事件类别,事件类别(1-事件、2-麻醉用药、3-输液、4-输氧、5-手术、6-麻醉、7-置管、8-拔管、9-辅助呼吸、A-控制呼吸、B-输血、0-数据修改，T-ACT),200,,
+,\x00\x0D,OAE0013,自定义字典类型，字符串（变长）,410,DOSAGE_UNITS,剂量单位,,200,,
+,\x00\x0E,OAE0014,自定义字典类型，字符串（变长）,389,PHARMACY_WAY,用药途径,,200,,
+,\x00\x11,OAE0017,自定义字典类型，字符串（变长）,379,FEE_FLAG,划价标志,,200,,

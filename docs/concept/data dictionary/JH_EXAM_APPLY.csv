@@ -1,0 +1,107 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_EXAM_APPLY,表全名,JHPDL:JH_EXAM_APPLY,,,,,,
+,表说明,检查申请,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,EAP,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,EAP0001,String字符串（变长）,,EXAM_APPLY_SN,检查申请单编号,检查申请单编号，系统生成三级编码，如“EA0.000.000.001”,20,是,是
+,\x00\x02,EAP0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,EAP0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,EAP0004,String字符串（变长）,,EXAM_APPLY_CODE,检查申请单号,业务系统使用的检查申请单号,200,是,是
+,\x00\x05,EAP0005,String字符串（变长）,,EXAM_APPLY_SRC,检查申请来源,检查申请单来源，如门诊、住院、外来、急诊,200,,
+,\x00\x0D,EAP0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ORDER_TIME,申请时间,申请日期及时间,19,是,是
+,\x00\x0E,EAP0014,String字符串（变长）,,ORDER_DEPT,申请科室,"申请科室，科室编号＋名称，如“001#,#内科”",200,,
+,\x00\x34,EAP0052,String字符串（变长）,,SC_ORDER_DEPT,申请科室编码,申请科室，源业务系统的科室编号,200,,
+,\x00\x35,EAP0053,String字符串（变长）,,ST_ORDER_DEPT,申请科室名称,申请科室，源业务系统的科室描述,200,,
+,\x00\x0F,EAP0015,String字符串（变长）,,ORDER_DOCTOR,申请医生,"申请医生，医生编号＋名称，如“001#,#张三”",200,,
+,\x00\x36,EAP0054,String字符串（变长）,,SC_ORDER_DOCT,申请医生编码,申请医生，源业务系统的医生工号,200,,
+,\x00\x37,EAP0055,String字符串（变长）,,ST_ORDER_DOCT,申请医生名称,申请医生，源业务系统的医生名称,200,,
+,\x00\x11,EAP0017,自定义字典类型，字符串（变长）,401,EXAM_APPLY_STATE,申请状态,"申请状态，如“1#,#002#,#申请提交”（申请中、未排期、已排期、已签到、已检查、已出报告、确认报告、申请取消、已取消）",200,,
+,\x00\x2F,EAP0047,简化字典（Integer整型，4个字节）,401,SD_EXAM_APY_STA,申请状态,申请状态，如申请中、未排期、已排期、已签到、已检查、已出报告、确认报告、申请取消、已取消,20,,
+,\x00\x46,EAP0070,String字符串（变长）,,SC_EXAM_APY_STA,申请状态编码,源业务系统的申请状态编码,200,,
+,\x00\x47,EAP0071,String字符串（变长）,,ST_EXAM_APY_STA,申请状态说明,源业务系统的申请状态描述,200,,
+,\x00\x51,EAP0081,String字符串（变长）,,APPLY_DESC,申请单详细内容,申请单详细内容,2000,,
+,\x00\x1F,EAP0031,String字符串（变长）,,ORDER_WARD,申请病区,申请病区,200,,
+,\x00\x3E,EAP0062,String字符串（变长）,,SC_ORDER_WARD,申请病区编码,申请病区，源业务系统的病区编码,200,,
+,\x00\x3F,EAP0063,String字符串（变长）,,ST_ORDER_WARD,申请病区名称,申请病区，源业务系统的病区名称,200,,
+,\x00\x18,EAP0024,String字符串（变长）,,BAR_CODE,条码编码,申请单上的条码,200,是,是
+,\x00\x19,EAP0025,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BAR_CODE_TIME,条码生成时间,申请单上的条码生成时间,19,,
+,\x00\x17,EAP0023,Integer整型（4个字节）,,PRINT_NUM,打印次数,该申请单已经打印的次数,20,,
+,\x00\x20,EAP0032,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PRINT_LAST_TIME,最后打印时间,该申请单最后一次打印时间,19,,
+,\x00\x1B,EAP0027,String字符串（变长）,,ORDER_LINK,关联医嘱,关联住院医嘱或门诊处方的唯一码,500,是,是
+,\x00\x1D,EAP0029,String字符串（变长）,,ORDER_CODE,医嘱代码,医嘱代码,50,是,是
+,\x00\x1E,EAP0030,String字符串（变长）,,ORDER_TEXT,医嘱正文,医嘱正文,500,,
+,\x00\x30,EAP0048,简化字典（Integer整型，4个字节）,391,SD_BILLING_ATTR,计价属性,,20,,
+,\x00\x48,EAP0072,String字符串（变长）,,SC_BILLING_ATTR,计价属性编码,源业务系统的计价属性编码,200,,
+,\x00\x49,EAP0073,String字符串（变长）,,ST_BILLING_ATTR,计价属性说明,源业务系统的计价属性描述,200,,
+,\x00\x31,EAP0049,简化字典（Integer整型，4个字节）,392,SD_BILLING_DONE,计价状态,,20,,
+,\x00\x4A,EAP0074,String字符串（变长）,,SC_BILLING_DONE,计价状态编码,源业务系统的计价状态编码,200,,
+,\x00\x4B,EAP0075,String字符串（变长）,,ST_BILLING_DONE,计价状态说明,源业务系统的计价状态描述,200,,
+,\x00\x25,EAP0037,Double双精度浮点型（8个字节）,,EXAM_APPLY_FEE,总费用,,38,,
+,\x00\x29,EAP0041,自定义字典类型，字符串（变长）,383,VISIT_TYPE,就诊类型,"就诊类型，如“3#,#4#,#门诊”（直接复制JH_PAT_VISIT）",200,是,是
+,\x00\x41,EAP0065,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,就诊类型的中台标准编码,20,是,是
+,\x00\x4C,EAP0076,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,200,是,是
+,\x00\x4D,EAP0077,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,200,,
+,\x00\x0A,EAP0010,String字符串（变长）,,CLINIC_DIAG,临床诊断,"临床诊断编码+描述，如“2222#,#肺炎”",16000,,
+,\x00\x32,EAP0050,String字符串（变长）,,SC_CLINIC_DIAG,临床诊断编码,源业务系统的临床诊断编码,200,,
+,\x00\x33,EAP0051,String字符串（变长）,,ST_CLINIC_DIAG,临床诊断描述,源业务系统的临床诊断描述,16000,,
+,\x00\x06,EAP0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,WILL_EXAM_DATE,拟检查时间,准备执行检查的日期和时间,31,是,是
+,\x00\x07,EAP0007,自定义字典类型，字符串（变长）,400,EXAM_CLASS,检查类别,"检查类别，如“1#,#001#,#放射”",200,是,是
+,\x00\x2D,EAP0045,简化字典（Integer整型，4个字节）,400,SD_EXAM_CLASS,检查类别简码,检查类别，中台标准编码,20,,
+,\x00\x45,EAP0069,String字符串（变长）,,SC_EXAM_CLASS,检查类别编码,源业务系统的检查类别编码,200,是,是
+,\x00\x2E,EAP0046,String字符串（变长）,,ST_EXAM_CLASS,检查类别简码,检查类别描述，如“放射”,500,,
+,\x00\x42,EAP0066,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,EXAM_TIME,检查时间,检查时间,31,是,是
+,\x00\x2A,EAP0042,String字符串（变长）,,EXAM_ITEM_CODE,检查项目编码,检查项目编码,200,,
+,\x00\x2B,EAP0043,String字符串（变长）,,EXAM_ITEM_NAME,检查项目名称,检查项目名称,500,,
+,\x00\x08,EAP0008,String字符串（变长）,,EXAM_SUB_CLASS,检查子类,,50,是,是
+,\x00\x09,EAP0009,String字符串（变长）,,EXAM_ATTENTION,检查注意事项,检查注意事项（如检查前须空腹，憋尿等）,4000,,
+,\x00\x0B,EAP0011,String字符串（变长）,,EXAM_MODE,检查方式,描述检查的场所，如病房，检查科室等,200,,
+,\x00\x0C,EAP0012,String字符串（变长）,,EXAM_DEVICE,使用仪器,,200,,
+,\x00\x1A,EAP0026,String字符串（变长）,,EXAM_APPLY_URGENT,急查类型,急查类型，如急诊、特诊,200,,
+,\x00\x24,EAP0036,String字符串（变长）,,EXAM_PART,检查部位,,500,,
+,\x00\x5D,EAP0093,String字符串（变长）,,SC_EXAM_PART,检查部位编码 ,检查部位编码 ,200,,
+,\x00\x5E,EAP0094,String字符串（变长）,,ST_EXAM_PART,检查部位名称,检查部位名称,200,,
+,\x00\x26,EAP0038,String字符串（变长）,,EXAM_ORG,第三方检验机构,区分院外或院内检验,200,,
+,\x00\x27,EAP0039,String字符串（变长）,,EXAM_HOSP,检验医院,,200,,
+,\x00\x10,EAP0016,String字符串（变长）,,EXAM_DEPT,执行科室,"执行检验的科室，科室编号＋名称，如“001#,#内科”",200,,
+,\x00\x38,EAP0056,String字符串（变长）,,SC_EXAM_DEPT,执行科室编码,执行检验的科室，源业务系统的科室编号,200,,
+,\x00\x39,EAP0057,String字符串（变长）,,ST_EXAM_DEPT,执行科室名称,执行检验的科室，源业务系统的科室名称,200,,
+,\x00\x43,EAP0067,String字符串（变长）,,SC_EXAM_DOCT,检查执行人编码,检查执行人编码,200,,
+,\x00\x44,EAP0068,String字符串（变长）,,ST_EXAM_DOCT,检查执行人名称,检查执行人名称,200,,
+,\x00\x4E,EAP0078,String字符串（变长）,,EXAM_GOAL,检查目的,检查目的,200,,
+,\x00\x52,EAP0082,String字符串（变长）,,INSORG_DESC,送检组织描述,送检组织描述,2000,,
+,\x00\x53,EAP0083,String字符串（变长）,,INSORG_NUM,送检组织数量,送检组织数量,200,,
+,\x00\x54,EAP0084,String字符串（变长）,,INSORG_UNITS,送检组织数量单位,送检组织数量单位,200,,
+,\x00\x55,EAP0085,String字符串（变长）,,DRAW_MATERIALS_DESC,取材部位,取材部位,200,,
+,\x00\x56,EAP0086,String字符串（变长）,,DRAW_MATERIALS_NUM,取材数量,取材数量,200,,
+,\x00\x57,EAP0087,String字符串（变长）,,DRAW_MATERIALS_UNITS,取材数量单位,取材数量单位,200,,
+,\x00\x58,EAP0088,String字符串（变长）,,FIXED_LIQUID,固定液,固定液,200,,
+,\x00\x59,EAP0089,String字符串（变长）,,CONFIRM_TIME,确认时间 ,确认时间 ,200,,
+,\x00\x5A,EAP0090,String字符串（变长）,,SC_CONFIRM_DOCTER,确认医生工号,确认医生工号,200,,
+,\x00\x5B,EAP0091,String字符串（变长）,,ST_CONFIRM_DOCTER,确认人姓名,确认人姓名,200,,
+,\x00\x21,EAP0033,自定义字典类型，字符串（变长）,379,CANCEL_FLAG,是否作废,,200,,
+,\x00\x40,EAP0064,简化字典（Integer整型，4个字节）,379,SD_CANCEL,是否作废,,20,,
+,\x00\x50,EAP0080,String字符串（变长）,,SC_CANCEL,是否作废,源业务系统的是否作废编码,20,,
+,\x00\x4F,EAP0079,String字符串（变长）,,ST_CANCEL,是否作废,源业务系统的是否作废描述,20,,
+,\x00\x22,EAP0034,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CANCEL_TIME,作废时间,,19,,
+,\x00\x23,EAP0035,String字符串（变长）,,CANCEL_EMP,作废人,,50,,
+,\x00\x12,EAP0018,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,REPORT_TIME,出报告时间,报告结果发布日期及时间,19,是,是
+,\x00\x13,EAP0019,String字符串（变长）,,REPORT_DOCTOR,报告者,报告结果发布人,200,,
+,\x00\x3A,EAP0058,String字符串（变长）,,SC_REPORT_DOCT,报告者编码,报告结果发布人，源业务系统的发布人工号,200,,
+,\x00\x3B,EAP0059,String字符串（变长）,,ST_REPORT_DOCT,报告者名称,报告结果发布人，源业务系统的发布人名称,200,,
+,\x00\x14,EAP0020,String字符串（变长）,,REPORT_CHECK,报告审核者,报告结果审核人,200,,
+,\x00\x3C,EAP0060,String字符串（变长）,,SC_REPORT_CHECK,报告审核者编码,报告结果审核人，源业务系统的审核人工号,200,,
+,\x00\x3D,EAP0061,String字符串（变长）,,ST_REPORT_CHECK,报告审核者名称,报告结果审核人，源业务系统的审核人名称,200,,
+,\x00\x60,EAP0096,String字符串（变长）,,CHECK_TIME,审核日期时间,审核日期时间,200,,
+,\x00\x61,EAP0097,String字符串（变长）,,SC_APPLY_CHECK,审核者工号,审核者工号,200,,
+,\x00\x62,EAP0098,String字符串（变长）,,ST_APPLY_CHECK,审核者姓名,审核者姓名,200,,
+,\x00\x1C,EAP0028,String字符串（变长）,,APPLY_NOTE,备注,,4000,,
+,\x00\x28,EAP0040,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x2C,EAP0044,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x5C,EAP0092,String字符串（变长）,,CASE_SUMMARY,病历摘要及手术所见,病历摘要及手术所见,2000,,
+,\x00\x5F,EAP0095,String字符串（变长）,,PRIORITY_LEVEL,优先（紧急）度,优先（紧急）度,200,,
+,\x00\x15,EAP0021,自定义字典类型，字符串（变长）,391,BILLING_ATTR,计价属性,正常计价、自带药,200,,
+,\x00\x16,EAP0022,自定义字典类型，字符串（变长）,392,BILLING_DONE,计价状态,未计价、计价完成、已缴费、申请退费、已退费,200,,
+,\x00\x63,EAP0099,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

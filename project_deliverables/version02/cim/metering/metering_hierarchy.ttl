@@ -1,0 +1,58 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-meter:  <https://cim.medical/ontology/v3.4/metering#> .
+
+<https://cim.medical/ontology/v3.4/metering>
+    a owl:Ontology ;
+    rdfs:label "CIM Metering Module"@en ;
+    rdfs:comment "Metering hierarchy for energy and utility tracking."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> .
+
+cim-meter:Meter
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Meter"@en ;
+    rdfs:label "计量表"@zh-CN ;
+    cim:sourceAgent "Agent-07" ;
+    rdfs:comment "Physical metering device for measuring consumption."@en .
+
+cim-meter:VirtualMeter
+    a owl:Class ;
+    rdfs:subClassOf cim-meter:Meter ;
+    rdfs:label "Virtual Meter"@en ;
+    rdfs:label "虚拟计量表"@zh-CN ;
+    rdfs:comment "通过计算派生的计量点。用于解决GAP-004。"@zh-CN ;
+    cim:sourceAgent "Agent-07" .
+
+cim-meter:MeteringHierarchy
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Metering Hierarchy"@en ;
+    rdfs:label "计量层级"@zh-CN ;
+    rdfs:comment "Hierarchical grouping of metering points."@en .
+
+cim-meter:meters
+    a owl:ObjectProperty ;
+    rdfs:domain cim-meter:Meter ;
+    rdfs:range cim:Entity ;
+    rdfs:label "meters"@en ;
+    rdfs:label "计量"@zh-CN ;
+    rdfs:comment "计量对象可以是设备、流动、或空间。Range扩展以支持GAP-004。"@zh-CN .
+
+cim-meter:derivedFrom
+    a owl:ObjectProperty ;
+    rdfs:domain cim-meter:VirtualMeter ;
+    rdfs:range cim-meter:Meter ;
+    rdfs:label "derived from"@en ;
+    rdfs:label "派生自"@zh-CN ;
+    rdfs:comment "虚拟表的计算来源。用于GAP-004。"@zh-CN .
+
+# ============================================================================
+# END OF METERING HIERARCHY MODULE
+# ============================================================================

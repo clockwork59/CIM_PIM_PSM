@@ -1,0 +1,34 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_TREAT_APY,表全名,JHPDL:JH_TREAT_APY,,,,,,
+,表说明,高压氧/康复治疗申请,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,RAD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,RAD0001,String字符串（变长）,,TREAT_APY_SN,高压氧/康复治疗申请编号,内部三级编码RD0.000.000.001,20,是,是
+,\x00\x02,RAD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,RAD0003,String字符串（变长）,,PAT_VISIT_SN,就诊流水号,来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,RAD0004,String字符串（变长）,,TREAT_PAT_ID,治疗系统患者ID,治疗系统患者ID,100,,
+,\x00\x05,RAD0005,String字符串（变长）,,PAT_NAME,姓名,姓名,40,,
+,\x00\x06,RAD0006,String字符串（变长）,,ID_CARD_NO,身份证号,患者身份证号,40,,
+,\x00\x07,RAD0007,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,20,,
+,\x00\x08,RAD0008,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,40,,
+,\x00\x09,RAD0009,String字符串（变长）,,SC_TREAT_TYPE,治疗类型,治疗类型,20,,
+,\x00\x0A,RAD0010,String字符串（变长）,,ST_TREAT_TYPE,治疗类型,治疗类型,20,,
+,\x00\x0B,RAD0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,APY_DATE,申请时间,申请时间,31,,
+,\x00\x0C,RAD0012,String字符串（变长）,,SC_APY_DOC,申请医生,申请医生,40,,
+,\x00\x0D,RAD0013,String字符串（变长）,,ST_APY_DOC,申请医生,申请医生,40,,
+,\x00\x0E,RAD0014,String字符串（变长）,,SC_DEPT,申请科室,申请科室,40,,
+,\x00\x0F,RAD0015,String字符串（变长）,,ST_DEPT,申请科室,申请科室,40,,
+,\x00\x10,RAD0016,String字符串（变长）,,SC_APY_STAT,申请单状态,申请单状态,20,,
+,\x00\x11,RAD0017,String字符串（变长）,,ST_APY_STAT,申请单状态,申请单状态,20,,
+,\x00\x12,RAD0018,String字符串（变长）,,TREAT_PASS,治疗经过,治疗经过,500,,
+,\x00\x13,RAD0019,String字符串（变长）,,TREAT_GOAL,治疗目的,治疗目的,500,,
+,\x00\x14,RAD0020,String字符串（变长）,,RIS_RESULT,检查结果,检查结果,1000,,
+,\x00\x15,RAD0021,String字符串（变长）,,TREAT_COMMENT,备注,备注,500,,
+,\x00\x16,RAD0022,String字符串（变长）,,HIS_PAT_ID,HIS患者ID,HIS患者ID,100,,
+,\x00\x17,RAD0023,String字符串（变长）,,HIS_VIS_ID,HIS就诊流水号,HIS就诊流水号,20,,
+,\x00\x18,RAD0024,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x19,RAD0025,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x1A,RAD0026,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

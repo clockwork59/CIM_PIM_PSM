@@ -1,0 +1,25 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_PUR_PL_DTL,表全名,JHPDL:JH_DRUG_PUR_PL_DTL,,,,,,
+,表说明,采购计划明细表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGQ,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGQ0001,String字符串（变长）,,PUR_PL_DTL_SN,采购计划明细唯一号,采购计划明细编号，系统生成二级编码，如“DY0.000.000.001”,20,是,是
+,\x00\x02,MGQ0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MGQ0003,String字符串（变长）,,DRUG_PUR_PLAN_SN,采购计划唯一号,来源JH_DRUG_PUR_PLAN的MGP0001,20,是,是
+,\x00\x04,MGQ0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x06,MGQ0006,String字符串（变长）,,PUR_PLAN_NO,采购计划单号,,200,是,是
+,\x00\x07,MGQ0007,String字符串（变长）,,PUR_PL_DTL_NO,采购计划明细单号,,200,是,是
+,\x00\x08,MGQ0008,String字符串（变长）,,PUR_ORD_DTL_NO,订单子表单号,弱关联,200,是,是
+,\x00\x0B,MGQ0011,Double双精度浮点型（8个字节）,,PRICE,计划单价,,38,,
+,\x00\x09,MGQ0009,Double双精度浮点型（8个字节）,,NUM,计划数量,,38,,
+,\x00\x0A,MGQ0010,String字符串（变长）,,UNIT,单位,,200,,
+,\x00\x0C,MGQ0012,Double双精度浮点型（8个字节）,,TOT_AMOUNT,计划总额,,38,,
+,\x00\x0F,MGQ0015,String字符串（变长）,,SC_SUPPLIER,供应商编码,,200,,
+,\x00\x10,MGQ0016,String字符串（变长）,,ST_SUPPLIER,供应商名称,,200,,
+,\x00\x0D,MGQ0013,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x0E,MGQ0014,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x05,MGQ0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x11,MGQ0017,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

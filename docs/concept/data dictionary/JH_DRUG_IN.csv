@@ -1,0 +1,29 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_IN,表全名,JHPDL:JH_DRUG_IN,,,,,,
+,表说明,药品耗材入库记录单主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MKI,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MKI0001,String字符串（变长）,,DRUG_IN_SN,药库入库唯一号,DA0.000.000.001,20,是,是
+,\x00\x02,MKI0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x04,MKI0004,String字符串（变长）,,PUR_ORD_NO,采购订单编号,对应业务订单的唯一号,200,,
+,\x00\x05,MKI0005,String字符串（变长）,,PUR_PLAN_NO,采购计划编号,,200,,
+,\x00\x06,MKI0006,String字符串（变长）,,DRUG_IN_NO,入库单号,,200,是,是
+,\x00\x07,MKI0007,String字符串（变长）,,SC_DRUG_IN_CREATOR,入库人编码,,200,,
+,\x00\x08,MKI0008,String字符串（变长）,,ST_DRUG_IN_CREATOR,入库人名称,,200,,
+,\x00\x09,MKI0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_IN_TIME,入库时间,,31,是,是
+,\x00\x0A,MKI0010,String字符串（变长）,,SC_DRUG_IN_CHECK,入库审核人编码,,200,,
+,\x00\x0B,MKI0011,String字符串（变长）,,ST_DRUG_IN_CHECK,入库审核人名称,,200,,
+,\x00\x0C,MKI0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_IN_CHECK_TIME,入库审核时间,,31,,
+,\x00\x0D,MKI0013,String字符串（变长）,,SC_STORAGE_ROOM,入库库房编码,,200,是,是
+,\x00\x0E,MKI0014,String字符串（变长）,,ST_STORAGE_ROOM,入库库房名称,,200,,
+,\x00\x0F,MKI0015,String字符串（变长）,,SC_IN_STATUS,状态编码,,200,,
+,\x00\x10,MKI0016,String字符串（变长）,,ST_IN_STATUS,状态描述,,500,,
+,\x00\x11,MKI0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x12,MKI0018,Double双精度浮点型（8个字节）,,ACCOUNT_RECEIVABLE,应付款,该批药品的总应付款（含附加费）,38,,
+,\x00\x13,MKI0019,Double双精度浮点型（8个字节）,,ACCOUNT_PAYED,已付款,该批药品的已付款,38,,
+,\x00\x14,MKI0020,Double双精度浮点型（8个字节）,,ADDITIONAL_FEE,附加费,该批药品的附加费，如运杂费,38,,
+,\x00\x03,MKI0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x15,MKI0021,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

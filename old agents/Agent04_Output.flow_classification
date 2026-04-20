@@ -1,0 +1,276 @@
+# 流动分类体系 - 三层流动模型
+
+flow_classification:
+  meta:
+    principle: "基于能量系统工程学，将流动分为载体（物质）、荷载（能量）和控制（信息）"
+    standards: "参考ASHRAE Handbook, IEEE Standards, ISO 15695"
+    updating_frequency: "基于设计变更动态更新"
+
+  # 第一层：物质流 - 能量载体
+  mass_flow:
+    description: "能够被传递能量的物质介质，流动的物理载体"
+
+    water_systems:
+      chilled_water: # 冷冻水系统
+        carrier_type: "二次冷媒"
+        temperature_range: "5-12°C供给，13-20°C回水"
+        function: "传递冷量"
+        common_uses: ["空调制冷", "设备冷却", "除湿"]
+        thermo_properties:
+          density_at_7C: "1000 kg/m³"
+          specific_heat: "4.2 kJ/(kg·K)"
+          nominal_deltaT: "5K" # 供回水温差
+
+      cooling_water: # 冷却水系统
+        carrier_type: "一次冷媒载体"
+        temperature_range: "32-37°C供给，37-42°C回水"
+        function: "冷却制冷设备散热"
+        evolution_path: "蒸汽→凝结水→冷却塔→冷却水→制冷机→冷冻水"
+
+      hot_water:
+        carrier_type: "热媒"
+        temperature_range: "45-60°C供给，40-55°C回水"
+        function: "传递热量"
+        sources: ["锅炉燃烧", "热电联产", "余热回收"]
+
+      domestic_water:
+        carrier_type: "生活流体"
+        temperature_range: "冷10-25°C，热45-65°C"
+        sub_types: ["冷水", "热水", "循环水"]
+        quality_requirements: "符合生活饮用水标准GB5749"
+
+      fire_water:
+        carrier_type: "灭火介质"
+        pressure_requirements: "满足消火栓最低0.35MPa"
+        storage_requirements: "消防水池可持续供水"
+        flow_demands: "按GB50016防火规范计算"
+
+      steam_condensate:
+        carrier_type: "汽化介质"
+        pressure_range: "高压蒸汽0.8-1MPa，低压蒸汽0.2-0.4MPa"
+        condensation_return_temp: "80-95°C"
+        phase_change_temperature: "100-180°C"
+
+    air_systems:
+      fresh_air:
+        carrier_type: "新风介质"
+        flow_rates: ["30m³/h·人", "8-10% of total air"]
+        quality_requirements: "过滤PM2.5≤75μg/m³"
+        temperature_range: "夏季26-32°C，冬季-5-15°C"
+
+      supply_air:
+        carrier_type: "送风介质"
+        temperature_range: "夏季16-20°C，冬季35-45°C"
+        design_velocity: "2.5-6m/s in ducts"
+        humidity_control: "45-65%RH"
+
+      return_air:
+        carrier_type: "回风介质"
+        recirculation_ratio: "80-85%"
+        return_temperature: "= 室温+(1-2)°C"
+        air_mixing_ratio: "与新风按温差控制"
+
+      exhaust_air:
+        carrier_type: "排风介质"
+        categories: ["一般排风", "有害气体排风", "锅炉排烟"]
+        locations: ["设备发热区", "污染区", "卫生间"]
+        ventilation_rate: "按污染物发生量计算"
+
+      flue_gas:
+        carrier_type: "燃烧产物"
+        temperature_range: "120-220°C"
+        harmful_components: ["SO₂", "NOx", "颗粒物"]
+        emission_standards: "符合GB13271锅炉大气污染物排放标准"
+
+    medical_gases:
+      oxygen:
+        carrier_type: "医疗气体"
+        concentration: "min 99.5% O₂"
+        pressure_level: "0.4-0.6MPa"
+        supply_redundancy: "双主管+备用气瓶"
+        alarm_pressure: "低于0.3MPa报警"
+
+      compressed_air:
+        carrier_type: "动力气体"
+        air_quality: "符合ISO8573-1:2010"
+        pressure_range: "0.7-0.9MPa正常, 1.2MPa最大"
+        oil_content: "≤0.01mg/m³"
+        dew_point: "+3°C atmospheric"
+
+      medical_vacuum:
+        carrier_type: "负压气体"
+        vacuum_level: "40-60kPa"
+        flow_capacity: ["手术室40-60L/min", "病房20-30L/min"]
+        bacterial_filters: "HEPA过滤杀死细菌"
+
+      nitrous_oxide:
+        carrier_type: "麻醉气体"
+        concentration: "纯N₂O"
+        pressure: "5-6MPa钢瓶压力"
+        safety_class: "手术室必配麻醉气体"
+        control_method: "呼吸机混合控制"
+
+    energy_fuel:
+      natural_gas:
+        carrier_type: "燃料"
+        composition: "CH4≥85%，Hg≤50mg/m³"
+        calorific_value: "32-37 MJ/m³"
+        supply_pressure: "居民2-3kPa，工商5-10kPa"
+
+      fuel_oil:
+        carrier_type: "液体燃料"
+        types: ["轻质柴油(10#)", "重油", "煤油"]
+        calorific_value: "42-46 MJ/kg"
+        storage_capacity: "不少于7天用量"
+
+  # 第二层：能量流 - 被传递的荷载
+  energy_flow:
+    description: "通过物质载体流动所传递的各类能量"
+
+    electrical:
+      ac_single_phase:
+        energy_type: "交流电能"
+        voltage: "220V ±5%"
+        frequency: "50Hz ±0.2Hz"
+        applications: ["照明", "插座", "小型设备"]
+        power_calculation: "P = U × I × cosφ"
+
+      ac_three_phase:
+        energy_type: "三相交流电能"
+        voltage: "380V/220V"
+        phase_sequence: "A→B→C 正序"
+        power_calculation: "P = √3 × U_L × I_L × cosφ"
+        applications: ["大型机电设备", "变压器", "主配电"]
+
+      dc_power:
+        energy_type: "直流电能"
+        common_voltages: ["12V", "24V", "48V", "110V", "230V"]
+        applications: ["电子系统", "电池", "UPS", "太阳能"]
+        ripple_requirements: "≤2%"
+
+    thermal:
+      cooling_energy:
+        energy_type: "吸收冷量"
+        measure_form: "Q_c [kW] or Q_c [kWh]"
+        refrigeration_coefficient: "COP=Q_c/W_in"
+        temperature_reference: "相对于0°C"
+
+      heating_energy:
+        energy_type: "释放热量"
+        measure_form: "Q_h [kW] or Q_h [kWh]"
+        efficiency_factor: "锅炉效率η=85-95%"
+        temperature_difference: "ΔT = T_supply - T_return"
+
+      steam_heat:
+        energy_type: "蒸汽潜热"
+        calculation_formula: "Q = m × γ (汽化潜热)"
+        common_pressure: "0.2-0.6MPa表压"
+        condensation_return: "80-95°C"
+
+    mechanical:
+      fluid_pressure:
+        energy_type: "流体压力潜能"
+        calculation: "E_p = P × V"
+        pressure_units:
+          - "1Pa = 1N/m²"
+          - "1kPa = 1000Pa"
+          - "bar ≈100kPa"
+
+      kinetic_energy:
+        energy_type: "流动动能"
+        formula: "E_k = ½ × ρ × V²"
+        air_velocity: "2.5-6m/s in ducts"
+        water_velocity: "1.0-3.0m/s in pipes"
+
+  # 第三层：信息流 - 控制与监测
+  information_flow:
+    description: "系统运行状态的监测信号和控制指令"
+
+    sensing_signals:
+      temperature:
+        signal_type: "模拟量信号"
+        signal_range: "4-20mA或0-10V"
+        accuracy: "±0.3°C (Class A铂电阻)"
+        response_time: "≤10s"
+        sampling_period: "1-5s"
+
+      pressure:
+        signal_type: "模拟量信号"
+        measurement_types: ["静压", "动压", "余压"]
+        signal_stability: "±0.25% FS/年"
+        zero_drift: "±0.015% FS/月"
+
+      flow:
+        signal_type: "多变量信号"
+        verification: "理论与实测对比"
+        standards: "ISO 5167孔板流量计"
+        communication: ["HART协议", "Modbus-RTU", "4-20mA"]
+
+      status_digital:
+        signal_type: "开关量信号"
+        normal_form: "常开/常闭触点"
+        isolation: "光电耦合隔离"
+        power: "DC24V 20mA"
+
+      analytics_multi:
+        signal_type: "分析仪表信号"
+        output_type: ["RS485", "4-20mA", "数字通讯"]
+        measurement_parameter: ["pH", "电导率", "溶解氧", "浊度"]
+        calibration_method: ["2点", "3点", "多点标定"]
+
+    control_commands:
+      setpoints:
+        command_type: "设定值"
+        temperature_setpoints:
+          cooling: "18-25°C"
+          heating: "20-24°C"
+          variation_range: "±1°C"
+
+        pressure_setpoints:
+          domestic_water: "0.1-0.4MPa"
+          fire_water: "≥0.35MPa"
+          compressed_air: "0.7-0.9MPa"
+
+        flow_setpoints:
+          fresh_air: "30m³/h·p"
+          cooling_water: "按制冷量计算"
+          hot_water: "按热负荷计算"
+
+      on_off:
+        command_type: "开关命令"
+        format: "1-bit or 2-bit"
+        response_time: "do/di channels ≤100ms"
+        fail_safe: "故障时保持安全状态"
+        power_drive: "relay, SSR, contactor"
+
+      modulating:
+        command_type: "调节命令"
+        actuator_types: ["电动阀", "气动阀", "变频器"]
+        positioning_accuracy: "±1%"
+        response_time: "电动阀10-30s, 气动阀1-5s"
+        stem_seal_leakage: "ANSI B16.104 Class IV"
+
+      sequence:
+        command_type: "顺序控制"
+        programming_standard: "IEC61131-3"
+        ladder_logic: "遵循工艺连锁关系"
+        timing_control: "延时启动, 风险评估"
+
+    alarm_events:
+      critical_alarm:
+        event_level: "极危险"
+        response_time: "≤30s"
+        verification: "双确认方式"
+        emergency_action: "自动停机保护"
+        reporting: "同时向值班、负责人发送"
+
+      warning_alarm:
+        event_level: "告警"
+        likely_causes: ["设备老化", "操作不当", "环境变化"]
+        suggestions: ["监控维持", "调整参数", "计划检修"]
+
+      pre_alarm:
+        event_level: "预测"
+        role_to_change: "趋势分析"
+        threshold_type: "动态设定"
+        learning_capability: "支持自学习"

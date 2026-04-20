@@ -1,0 +1,741 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医院机电系统拓扑模型 - 可视化展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .tab:hover {
+            background: #e8e8e8;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 介质类型表格样式 */
+        .medium-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .medium-table th {
+            background: #f5f5f5;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .medium-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .medium-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 拓扑可视化样式 */
+        .topology-container {
+            display: flex;
+            gap: 20px;
+            height: 600px;
+        }
+
+        .system-sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .system-sidebar h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .system-list-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .system-list-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .system-list-item.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .topology-main {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topology-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .topology-canvas {
+            padding: 30px;
+            min-height: 500px;
+            position: relative;
+            background: #fafafa;
+            background-image: radial-gradient(circle, #e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* 流程阶段标签 */
+        .stage-label {
+            position: absolute;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 节点样式 */
+        .topology-node {
+            position: absolute;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 15px 20px;
+            min-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .topology-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            z-index: 20;
+        }
+
+        .topology-node.source {
+            background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+            border-color: #1890ff;
+        }
+
+        .topology-node.processing {
+            background: linear-gradient(135deg, #fff7e6 0%, #ffe7ba 100%);
+            border-color: #faad14;
+        }
+
+        .topology-node.distribution {
+            background: linear-gradient(135deg, #f6ffed 0%, #d9f7be 100%);
+            border-color: #52c41a;
+        }
+
+        .topology-node.terminal {
+            background: linear-gradient(135deg, #f9f0ff 0%, #efdbff 100%);
+            border-color: #9254de;
+        }
+
+        .node-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .node-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .node-type {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        /* 连接线 */
+        .connection-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .connection-line {
+            stroke: #999;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 5,5;
+            animation: flow 1s linear infinite;
+        }
+
+        @keyframes flow {
+            to {
+                stroke-dashoffset: -10;
+            }
+        }
+
+        .connection-line.active {
+            stroke: #667eea;
+            stroke-width: 3;
+            stroke-dasharray: none;
+        }
+
+        /* 系统详情面板 */
+        .system-info-panel {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            z-index: 30;
+            display: none;
+        }
+
+        .system-info-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(320px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .info-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-close:hover {
+            background: #e0e0e0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .topology-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .system-sidebar {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .topology-main {
+                min-height: 500px;
+            }
+        }
+    </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>医院机电系统拓扑模型</h1>
+            <div class="subtitle">智能建筑系统可视化平台</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="overview">总览</button>
+            <button class="tab" data-tab="mediums">介质类型定义</button>
+            <button class="tab" data-tab="topology">拓扑可视化</button>
+            <button class="tab" data-tab="systems">系统详情</button>
+        </div>
+
+        <div class="content">
+            <!-- 总览 -->
+            <div id="overview" class="tab-content active">
+                <h2 style="color: #667eea; margin-bottom: 20px;">系统总览</h2>
+                <p>医院机电系统拓扑模型包含46个子系统，涵盖HVAC、电气、给排水、消防、医疗气体等关键领域。</p>
+            </div>
+
+            <!-- 介质类型定义 -->
+            <div id="mediums" class="tab-content">
+                <h2 style="color: #667eea; margin-bottom: 20px;">介质类型定义</h2>
+                <p style="color: #666; margin-bottom: 20px;">定义了系统中流动的各类物质（水、气、电、信号）及其标准颜色代码。</p>
+                
+                <table class="medium-table">
+                    <thead>
+                        <tr>
+                            <th>代码</th>
+                            <th>名称</th>
+                            <th>颜色标识</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CHW</td>
+                            <td>冷冻水</td>
+                            <td><span class="color-dot" style="background: #52c41a;"></span>绿色</td>
+                        </tr>
+                        <tr>
+                            <td>HW</td>
+                            <td>空调热水</td>
+                            <td><span class="color-dot" style="background: #ff6b6b;"></span>红色</td>
+                        </tr>
+                        <tr>
+                            <td>CW</td>
+                            <td>冷却水</td>
+                            <td><span class="color-dot" style="background: #40c5c5;"></span>青色</td>
+                        </tr>
+                        <tr>
+                            <td>WATER-DW</td>
+                            <td>生活给水</td>
+                            <td><span class="color-dot" style="background: #1890ff;"></span>蓝色</td>
+                        </tr>
+                        <tr>
+                            <td>AIR-SA</td>
+                            <td>送风</td>
+                            <td><span class="color-dot" style="background: #91d5ff;"></span>浅蓝</td>
+                        </tr>
+                        <tr>
+                            <td>AIR-RA</td>
+                            <td>回风</td>
+                            <td><span class="color-dot" style="background: #bfbfbf;"></span>灰色</td>
+                        </tr>
+                        <tr>
+                            <td>ELEC-HV</td>
+                            <td>高压电</td>
+                            <td><span class="color-dot" style="background: #fadb14;"></span>黄色</td>
+                        </tr>
+                        <tr>
+                            <td>GAS-O2</td>
+                            <td>医用氧气</td>
+                            <td><span class="color-dot" style="background: white; border: 2px solid #333;"></span>白色</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 拓扑可视化 -->
+            <div id="topology" class="tab-content">
+                <h2 style="color: #667eea; margin-bottom: 20px;">系统拓扑可视化</h2>
+                
+                <div class="topology-container">
+                    <div class="system-sidebar">
+                        <h3>选择系统</h3>
+                        <div id="systemList">
+                            <div class="system-list-item active" data-system="HVAC-CHP">冷热源系统</div>
+                            <div class="system-list-item" data-system="HVAC-AHU">组合式空调箱</div>
+                            <div class="system-list-item" data-system="HVAC-CHW">冷冻水系统</div>
+                            <div class="system-list-item" data-system="HVAC-FCU">风机盘管系统</div>
+                            <div class="system-list-item" data-system="ELEC-HV">高压配电系统</div>
+                            <div class="system-list-item" data-system="WATER-DW">生活给水系统</div>
+                            <div class="system-list-item" data-system="GAS-O2">医用氧气系统</div>
+                        </div>
+                    </div>
+                    
+                    <div class="topology-main">
+                        <div class="topology-header">
+                            <h3 id="currentSystemName" style="color: #333; margin: 0;">冷热源系统 (HVAC-CHP)</h3>
+                        </div>
+                        <div class="topology-canvas" id="topologyCanvas">
+                            <!-- 阶段标签 -->
+                            <div class="stage-label" style="left: 100px; top: 10px;">INTAKE</div>
+                            <div class="stage-label" style="left: 350px; top: 10px;">PROCESSING</div>
+                            <div class="stage-label" style="left: 600px; top: 10px;">DISTRIBUTION</div>
+                            <div class="stage-label" style="left: 850px; top: 10px;">TERMINAL</div>
+                            
+                            <!-- SVG连接线 -->
+                            <svg class="connection-svg" id="connectionSvg">
+                                <defs>
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" fill="#667eea">
+                                        <polygon points="0 0, 10 3.5, 0 7"></polygon>
+                                    </marker>
+                                </defs>
+                            </svg>
+                            
+                            <!-- 动态节点将在这里生成 -->
+                        </div>
+                        
+                        <!-- 系统信息面板 -->
+                        <div class="system-info-panel" id="infoPanel">
+                            <button class="info-close" onclick="closeInfoPanel()">×</button>
+                            <h4 style="color: #667eea; margin-bottom: 10px;">节点详情</h4>
+                            <div id="nodeInfo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 系统详情 -->
+            <div id="systems" class="tab-content">
+                <h2 style="color: #667eea; margin-bottom: 20px;">系统详细信息</h2>
+                <p>各系统的详细技术参数和运行要求。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 系统拓扑数据
+        const topologyData = {
+            'HVAC-CHP': {
+                name: '冷热源系统',
+                nodes: [
+                    { id: 'chiller', name: '冷水机组', type: 'source', icon: '❄️', x: 100, y: 100 },
+                    { id: 'boiler', name: '燃气锅炉', type: 'source', icon: '🔥', x: 100, y: 250 },
+                    { id: 'pump', name: '水泵组', type: 'processing', icon: '⚙️', x: 350, y: 175 },
+                    { id: 'header', name: '分集水器', type: 'distribution', icon: '🔀', x: 600, y: 175 },
+                    { id: 'terminal', name: '末端设备', type: 'terminal', icon: '🏢', x: 850, y: 175 }
+                ],
+                connections: [
+                    { from: 'chiller', to: 'pump' },
+                    { from: 'boiler', to: 'pump' },
+                    { from: 'pump', to: 'header' },
+                    { from: 'header', to: 'terminal' }
+                ]
+            },
+            'HVAC-AHU': {
+                name: '组合式空调箱',
+                nodes: [
+                    { id: 'fresh', name: '新风口', type: 'source', icon: '🌬️', x: 100, y: 100 },
+                    { id: 'return', name: '回风口', type: 'source', icon: '🔄', x: 100, y: 250 },
+                    { id: 'ahu', name: '组合式空调箱', type: 'processing', icon: '📦', x: 350, y: 175 },
+                    { id: 'duct', name: '送风主风管', type: 'distribution', icon: '🌊', x: 600, y: 175 },
+                    { id: 'vav', name: 'VAV末端', type: 'distribution', icon: '🎛️', x: 750, y: 100 },
+                    { id: 'diffuser', name: '送风散流器', type: 'terminal', icon: '⬜', x: 900, y: 175 }
+                ],
+                connections: [
+                    { from: 'fresh', to: 'ahu' },
+                    { from: 'return', to: 'ahu' },
+                    { from: 'ahu', to: 'duct' },
+                    { from: 'duct', to: 'vav' },
+                    { from: 'vav', to: 'diffuser' },
+                    { from: 'duct', to: 'diffuser' }
+                ]
+            },
+            'HVAC-CHW': {
+                name: '冷冻水系统',
+                nodes: [
+                    { id: 'chiller', name: '冷水机组', type: 'source', icon: '❄️', x: 100, y: 175 },
+                    { id: 'primary', name: '一次泵', type: 'processing', icon: '⚙️', x: 300, y: 175 },
+                    { id: 'secondary', name: '二次泵', type: 'processing', icon: '⚙️', x: 500, y: 175 },
+                    { id: 'riser', name: '立管系统', type: 'distribution', icon: '🔀', x: 700, y: 175 },
+                    { id: 'coil', name: '冷却盘管', type: 'terminal', icon: '🌀', x: 900, y: 175 }
+                ],
+                connections: [
+                    { from: 'chiller', to: 'primary' },
+                    { from: 'primary', to: 'secondary' },
+                    { from: 'secondary', to: 'riser' },
+                    { from: 'riser', to: 'coil' }
+                ]
+            }
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initTabs();
+            initSystemList();
+            loadTopology('HVAC-CHP');
+        });
+
+        // 标签切换
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    // 更新标签状态
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新内容显示
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabName).classList.add('active');
+                });
+            });
+        }
+
+        // 系统列表初始化
+        function initSystemList() {
+            const items = document.querySelectorAll('.system-list-item');
+            items.forEach(item => {
+                item.addEventListener('click', function() {
+                    const systemId = this.dataset.system;
+                    
+                    // 更新选中状态
+                    items.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 加载拓扑
+                    loadTopology(systemId);
+                });
+            });
+        }
+
+        // 加载拓扑图
+        function loadTopology(systemId) {
+            const canvas = document.getElementById('topologyCanvas');
+            const svg = document.getElementById('connectionSvg');
+            const data = topologyData[systemId];
+            
+            if (!data) {
+                // 如果没有数据，显示默认内容
+                createDefaultTopology(systemId);
+                return;
+            }
+            
+            // 更新标题
+            document.getElementById('currentSystemName').textContent = `${data.name} (${systemId})`;
+            
+            // 清除现有节点（保留标签和SVG）
+            const existingNodes = canvas.querySelectorAll('.topology-node');
+            existingNodes.forEach(node => node.remove());
+            
+            // 清除现有连接线
+            svg.innerHTML = `
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                        refX="10" refY="3.5" orient="auto" fill="#667eea">
+                        <polygon points="0 0, 10 3.5, 0 7" />
+                    </marker>
+                </defs>
+            `;
+            
+            // 创建节点
+            data.nodes.forEach(node => {
+                const nodeEl = document.createElement('div');
+                nodeEl.className = `topology-node ${node.type}`;
+                nodeEl.style.left = `${node.x}px`;
+                nodeEl.style.top = `${node.y}px`;
+                nodeEl.id = `node-${node.id}`;
+                nodeEl.innerHTML = `
+                    <div class="node-icon">${node.icon}</div>
+                    <div class="node-title">${node.name}</div>
+                    <div class="node-type">${node.type}</div>
+                `;
+                
+                // 添加点击事件
+                nodeEl.addEventListener('click', function() {
+                    showNodeInfo(node);
+                });
+                
+                canvas.appendChild(nodeEl);
+            });
+            
+            // 延迟绘制连接线，确保节点已渲染
+            setTimeout(() => {
+                drawConnections(data.connections);
+            }, 100);
+        }
+
+        // 创建默认拓扑
+        function createDefaultTopology(systemId) {
+            const canvas = document.getElementById('topologyCanvas');
+            
+            // 清除现有节点
+            const existingNodes = canvas.querySelectorAll('.topology-node');
+            existingNodes.forEach(node => node.remove());
+            
+            // 创建通用节点结构
+            const defaultNodes = [
+                { id: 'source', name: '源节点', type: 'source', icon: '📍', x: 100, y: 175 },
+                { id: 'process', name: '处理节点', type: 'processing', icon: '⚙️', x: 350, y: 175 },
+                { id: 'dist', name: '分配节点', type: 'distribution', icon: '🔀', x: 600, y: 175 },
+                { id: 'terminal', name: '终端节点', type: 'terminal', icon: '📌', x: 850, y: 175 }
+            ];
+            
+            defaultNodes.forEach(node => {
+                const nodeEl = document.createElement('div');
+                nodeEl.className = `topology-node ${node.type}`;
+                nodeEl.style.left = `${node.x}px`;
+                nodeEl.style.top = `${node.y}px`;
+                nodeEl.innerHTML = `
+                    <div class="node-icon">${node.icon}</div>
+                    <div class="node-title">${node.name}</div>
+                    <div class="node-type">${node.type}</div>
+                `;
+                canvas.appendChild(nodeEl);
+            });
+            
+            document.getElementById('currentSystemName').textContent = systemId;
+        }
+
+        // 绘制连接线
+        function drawConnections(connections) {
+            const svg = document.getElementById('connectionSvg');
+            
+            connections.forEach(conn => {
+                const fromNode = document.getElementById(`node-${conn.from}`);
+                const toNode = document.getElementById(`node-${conn.to}`);
+                
+                if (fromNode && toNode) {
+                    const fromRect = fromNode.getBoundingClientRect();
+                    const toRect = toNode.getBoundingClientRect();
+                    const canvasRect = svg.getBoundingClientRect();
+                    
+                    const x1 = fromRect.left - canvasRect.left + fromRect.width / 2;
+                    const y1 = fromRect.top - canvasRect.top + fromRect.height / 2;
+                    const x2 = toRect.left - canvasRect.left + toRect.width / 2;
+                    const y2 = toRect.top - canvasRect.top + toRect.height / 2;
+                    
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    
+                    // 创建贝塞尔曲线路径
+                    const midX = (x1 + x2) / 2;
+                    const d = `M ${x1} ${y1} Q ${midX} ${y1} ${midX} ${(y1 + y2) / 2} T ${x2} ${y2}`;
+                    
+                    line.setAttribute('d', d);
+                    line.setAttribute('class', 'connection-line');
+                    line.setAttribute('marker-end', 'url(#arrowhead)');
+                    
+                    svg.appendChild(line);
+                }
+            });
+        }
+
+        // 显示节点信息
+        function showNodeInfo(node) {
+            const panel = document.getElementById('infoPanel');
+            const info = document.getElementById('nodeInfo');
+            
+            info.innerHTML = `
+                <p><strong>节点名称:</strong> ${node.name}</p>
+                <p><strong>节点类型:</strong> ${node.type}</p>
+                <p><strong>节点ID:</strong> ${node.id}</p>
+                <p style="margin-top: 10px; color: #666;">
+                    点击其他节点查看详情，或关闭此面板。
+                </p>
+            `;
+            
+            panel.classList.add('show');
+        }
+
+        // 关闭信息面板
+        function closeInfoPanel() {
+            document.getElementById('infoPanel').classList.remove('show');
+        }
+    </script>
+
+
+</body></html>

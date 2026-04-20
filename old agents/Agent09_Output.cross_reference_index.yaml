@@ -1,0 +1,419 @@
+# Agent-09: 统一交叉引用索引系统
+# Integrated Cross-Reference Index for Unified CIM Model
+
+meta:
+  index_version: "v1.0"
+  generation_date: "2025-12-02"
+  source_agents: ["Agent-01", "Agent-02", "Agent-03", "Agent-04", "Agent-05", "Agent-06", "Agent-07", "Agent-08"]
+  reconstruction_status: {"Agent-05": "reconstructed", "Agent-07": "reconstructed"}
+  validation_confidence: "83.6%"
+  critical_flow_issues: "identified_in_CR004"
+
+# 统一ID词典系统
+unified_id_dictionary:
+
+  # 系统分类编码
+  system_category_codes:
+    HVAC:
+      code: "HVAC"
+      name: "暖通空调系统"
+      english: "Heating, Ventilation and Air Conditioning"
+      criticality: "CRITICAL"
+      medical_specific: true
+      component_systems: ["CHP", "HTP", "AHU", "CLN", "ISO", "SMO"]
+
+    PLUMBING:
+      code: "PLU"
+      name: "给排水系统"
+      english: "Plumbing Systems"
+      criticality: "CRITICAL"
+      medical_specific: true
+      component_systems: ["WSS", "HWS", "DRN", "PW"]
+
+    ELECTRICAL:
+      code: "ELE"
+      name: "电气系统"
+      english: "Electrical Systems"
+      criticality: "CRITICAL"
+      medical_specific: true
+      component_systems: ["HV", "LV", "EPS", "LGT", "IPS"]
+
+    MEDICAL_GAS:
+      code: "GAS"
+      name: "医疗气体系统"
+      english: "Medical Gas Systems"
+      criticality: "LIFE_SAFETY"
+      medical_specific: true
+      regulatory: "GB50751"
+      component_systems: ["O2", "VAC", "AIR", "N2O", "CO2"]
+
+    FIRE_PROTECTION:
+      code: "FIR"
+      name: "消防系统"
+      english: "Fire Protection Systems"
+      criticality: "LIFE_SAFETY"
+      regulatory: ["GB50016", "GB50084", "GB51251"]
+      component_systems: ["HYDRANT", "SPRINKLER", "GAS_FIRE", "ALARM"]
+
+    VERTICAL_TRANSPORT:
+      code: "VT"
+      name: "垂直交通系统"
+      english: "Vertical Transportation"
+      criticality: "CRITICAL"
+      medical_specific: true
+      component_systems: ["ELEVATOR", "ESCALATOR"]
+
+    BUILDING_AUTOMATION:
+      code: "BA"
+      name: "楼宇自动化系统"
+      english: "Building Automation"
+      criticality: "CRITICAL"
+      medical_specific: true
+      component_systems: ["BAS", "EMS", "ENV", "DDC"]
+
+# 正向引用索引 (自上而下索引)
+forward_references:
+
+  system_to_equipment_index:
+    index_id: "SYS2EQ"
+    description: "系统到设备的正向层次索引"
+    indexing_rules:
+      - "系统 → 子系统 → 设备类型 → 具体设备实例"
+      - "每个索引包含技术参数和关联关系"
+      - "医疗关键设备标注life_safety标识"
+
+    hvac_systems:
+      HVAC-CHP:
+        system_name: "冷源系统"
+        description: "中央制冷系统，包括冷水机组、冷却塔"
+        critical_equipment:
+          - equipment_id: "CH-001"
+            type: "CENTRIFUGAL_CHILLER"
+            capacity: "500RT"
+            location: "BL-MAIN-B1-MR01"
+            life_safety: false
+            coupling:
+              upstream: ["POWER-001", "COOLING-TOWER-001"]
+              downstream: ["CHW-HEADER-001", "AHU-001"]
+
+          - equipment_id: "CT-001"
+            type: "COOLING-TOWER"
+            capacity: "500RT"
+            location: "BL-MAIN-ROOF-CT01"
+            life_safety: false
+            coupling:
+              upstream: ["CH-001"]
+              downstream: ["CONDENSER-WATER-001"]
+
+        control_systems:
+          controlled_by: "DDC-001"
+          monitored_by: ["SENSOR-TEMP-001", "SENSOR-FLOW-001"]
+          controlled_parameters: ["supply_temp", "flow_rate"]
+
+        service_spaces:
+          served_spaces: ["BL-MAIN-F3-OR01", "BL-MAIN-F5-ICU01"]
+          service_type: "COOLING_SUPPLY"
+          criticality_level: "CRITICAL"
+
+      HVAC-CLN:
+        system_name: "洁净空调系统"
+        description: "手术室、ICU等洁净环境空调"
+        life_safety_relevant: true
+        critical_equipment:
+          - equipment_id: "AHU-OR-001"
+            type: "CLEAN-AHU"
+            cleanliness: "ISO_5"
+            location: "BL-MAIN-B1-MECH02"
+            served_spaces: ["BL-MAIN-F3-OR01", "BL-MAIN-F3-OR02"]
+            hepa_filtration: "99.97%@0.3micron"
+            air_changes: "20-24_ACH"
+            pressure_gradient: "+18Pa"
+
+        sensor_integration:
+          temperature_sensors: ["SENSOR-TEMP-ROOM-OR01", "SENSOR-TEMP-SUPPLY-OR01"]
+          pressure_sensors: ["SENSOR-PRES-DIFF-OR01"]
+          air_quality_sensors: ["SENSOR-AIR-PM-OR01", "SENSOR-AIR-CO2-OR01"]
+
+      # 其他系统遵循类似模式...
+
+    electrical_systems:
+      ELECTRICAL-EPS:
+        system_name: "应急电源系统"
+        description: "备用电源柴油机UPS"
+        life_safety: true
+        critical_equipment:
+          - equipment_id: "GEN-001"
+            type: "DIESEL_GENERATOR"
+            capacity: "800kW"
+            location: "BL-MAIN-B1-GEN01"
+            startup_time: "15s"
+            fuel_capacity: "24h"
+            load_coverage: "FIRST_CLASS_PLUS_CRITICAL"
+            backup_for: ["BL-MAIN-F3-OR01", "BL-MAIN-F5-ICU01"]
+
+          - equipment_id: "UPS-OR-001"
+            type: "MEDICAL_UPS"
+            capacity: "20kVA"
+            location: "BL-MAIN-F3-OR01"
+            backup_time: "4h"
+            served_equipment: ["IPS-OR-001", "SURGICAL_LIGHTS-001", "MONITOR_SYSTEMS"]
+
+    medical_gas_systems:
+      MEDICAL_GAS-O2:
+        system_name: "医用氧气系统"
+        description: "生命支持氧气供应"
+        life_safety: true
+        regulated_by: "GB50751"
+
+        source_equipment:
+          - equipment_id: "LOX-001"
+            type: "LOX_STORAGE_TANK"
+            capacity: "5000L"
+            location: "BL-MAIN-B1-GAS01"
+            redundancy: "dual_tank_system"
+            supply_capacity: "100m³/h"
+            backup_source: "MANIFOLD-001"
+
+        distribution_equipment:
+          - equipment_id: "O2-VALVE-001"
+            type: "AREA_VALVE"
+            served_areas: ["OR-zones", "ICU-zones"]
+            pressure_regulation: "0.4MPa_to_0.2MPa"
+            emergency_shutoff: true
+
+  equipment_to_space_index:
+    index_id: "EQ2SPC"
+    description: "设备到空间位置的层次索引"
+
+    by_building_floors:
+      BL-MAIN:
+        B1_LEVEL:
+          mechanical_rooms:
+            - space_id: "B1-MR01"
+              equipment_list:
+                - "CH-001"  # 冷水机组
+                - "CT-001"  # 冷却水泵
+                - "CH-PUMP-001"  # 冷冻水泵
+              space_type: "MECHANICAL_ROOM"
+              dimensions: "12m×8m×4m"
+              load_capacity: "15kN/m²"
+              environmental: "well_ventilated, maintenance_access"
+
+            - space_id: "B1-SR01"
+              equipment_list:
+                - "SUB-T-001"  # 低压配电
+                - "UPS-001"  # UPS间
+                - "GEN-001"  # 发电机组
+              space_type: "ELECTRICAL_ROOM"
+              safety_classification: "CRITICAL_INFRASTRUCTURE"
+              fire_protection: "gaseous_suppression"
+
+        F3_LEVEL:
+          operating_suites:
+            - space_id: "F3-OR01"
+              room_type: "ISO_5_THEATER"
+              equipment_integration:
+                hhvac_systems:
+                  - "AHU-OR-001"
+                  - "LAF-001"
+                  - "HEPA-001"
+                medical_systems:
+                  - "O2-TERMINAL-001"
+                  - "VAC-TERMINAL-001"
+                  - "IPS-OR-001"
+                environmental_monitoring:
+                  - "PRESS_DIFF_MONITOR-001"
+                  - "TEMP_MONITOR-001"
+                  - "PARTICLE_MONITOR-001"
+              space_requirements:
+                ceiling_height: "≥3.0m"
+                floor_loading: "≥4.0kN/m²"
+                pressure_gradient: "+18Pa relative to corridor"
+                air_changes: "24ACH"
+                airflow_pattern: "vertical_laminar"
+
+  control_to_equipment_index:
+    index_id: "CTRL2EQ"
+    description: "控制系统到设备的逻辑关联索引"
+
+    control_hierarchies:
+      facility_level:
+        control_systems:
+          - system_id: "BA-MASTER"
+            network_type: "BACNET_IP"
+            redundancy: "hot_standby"
+            integration_scope:
+              - hvac_facility_level
+              - electrical_facility_level
+              - medical_gas_facility_level
+              - fire_safety_integration
+
+            control_loops:
+              chiller_plant_optimization:
+                loop_id: "CHP-OPT-001"
+                controlled_equipment:
+                  - "CH-001"
+                  - "CT-001"
+                  - "CH-PUMP-001"
+                primary_sensors:
+                  - "TEMP-CHWS-001"  # 冷冻水供温
+                  - "TEMP-CHWR-001"  # 冷冻水回温
+                  - "FLOW-CHW-001"   # 冷冻水流量
+                  - "ELEC-POWER-CHILLER" # 电耗
+                control_objective: "cop_optimization"
+                target_cop: ">5.0"
+                constraint_functions:
+                  - "equipment_safety_limits"
+                  - "occupant_comfort_requiments"
+                  - "energy_efficiency_requirements"
+
+              critical_space_pressure_control:
+                loop_id: "PRESS-CRIT-001"
+                served_spaces: ["F3-OR01", "F3-OR02", "F5-ICU01", "ISO-ROOMS"]
+
+                controlled_devices:
+                  supply_side:
+                    - "AHU-OR-001.SUPPLY_FAN"
+                    - "VAV-OR-001.DAMPER"
+                  return_side:
+                    - "AHU-OR-001.RETURN_FAN"
+                    - "RD-OR-001.DAMPER"
+
+                monitoring_points:
+                  - "DP-OR01.RELATIVE_TO_CORRIDOR"
+                  - "DP-OR02.RELATIVE_TO_CORRIDOR"
+                  - "DP-ICU.RELATIVE_TO_ADJOINING"
+
+                safety_integrity_level: "SIL2"
+                control_strategy: "cascade_control"
+                alarms_integration: "life_safety_priority"
+
+# 反向引用索引 (自底向上索引)
+reverse_references:
+
+  space_to_equipment_index:
+    index_id: "SPC2EQ"
+    description: "从空间到服务的设备列表反向索引"
+
+    by_space_type:
+      OPERATING_THEATERS:
+        spaces_list:
+          - space_id: "BL-MAIN-F3-OR01"
+            cleanliness_class: "ISO_5"
+            life_safety_priority: "HIGH"
+
+            technical_equipment:
+              critical_environmental:
+                - "AHU-OR-001"  # 净化空调机组
+                - "LAF-001"     # 层流送风天花
+                - "HEPA-001"    # HEPA过滤器
+                - "DPS-OR-001"  # 压差传感器
+
+              medical_life_support:
+                - "O2-TERMINAL-004"
+                - "VAC-TERMINAL-002"
+                - "IPS-OR-001"  # 医用隔离电源
+                - "MANIFOLD-001" # 气体汇流排备用
+
+              environmental_monitoring:
+                - "TEMP-OR-001"
+                - "HUM-OR-001"
+                - "PARTICLE-OR-001"
+                - "PRESSURE-OR-001"
+
+              emergency_support:
+                - "E-EXHAUST-OR01"  # 紧急排风
+                - "E-LIGHT-OR01"    # 应急照明
+                - "E-CALL-OR01"     # 紧急呼叫
+
+            spatial_requirements:
+              floor_area: "48m²"
+              ceiling_height: "3.0m"
+              floor_loading: "4.0kN/m²"
+              maintenance_clearance: "1.5m all sides"
+              equipment_penetrations: "minimized"
+              cleaning_accessibility: "all surfaces"
+
+            critical_performance_requirements:
+              air_changes: "24ACH ±2ACH"
+              temperature: "20-25°C ±1°C"
+              humidity: "45-55%RH ±5%RHS"
+              pressure_differential: "+18Pa±2Pa to corridor"
+              filtration_efficiency: "≥99.97% at 0.3μm"
+              recovery_time_post_door_opening: "≤30min"
+
+      ICU_UNITS:
+        standard_icu_room:
+          - space_id: "BL-MAIN-F5-ICU01"
+            patient_capacity: "12 beds"
+            environmental_classification: "CLEAN_NON_STERILE"
+
+            equipment_integration:
+              environmental_hvac:
+                main_unit: "AHU-ICU-001"
+                backup_unit: "AHU-ICU-002"
+                terminal_units: "ICU-FCU-001 TO ICU-FCU-012"
+                filtration_grade: "初效+中效+亚高效"
+
+              medical_gas_distribution:
+                oxygen: "O2-ICU-TERM-001 to O2-ICU-TERM-012"
+                vacuum: "VAC-ICU-TERM-001 to VAC-ICU-TERM-012"
+                medical_air: "AIR-ICU-TERM-001 to AIR-ICU-TERM-012"
+                emergency_backup: "PORTABLE-CYL-ICU"
+
+              electrical_life_support:
+                normal_power: "ICU-PANEL-001"
+                emergency_power: "UPS-ICU-001"
+                isolated_power: "IPS-ICU-001"
+                ground_protection: "LINE_ISOLATION_MONITOR"
+
+              monitoring_systems:
+                environmental_bms: "ICU-ENV-MON-001"
+                patient_signals: "ICU-NURSE-CALL-001"
+                security_integration: "ICU-CCTV-001"
+
+            space_utilization:
+              single_patient_rooms: "8 rooms × 18m²"
+              double_occupancy_rooms: "2 rooms × 24m²"
+              nurse_station: "1 × 45m²"
+              storage_clean: "1 × 12m²"
+              storage_dirty: "1 × 15m², negative_pressure"
+
+            performance_criteria:
+              air_changes: "12ACH"
+              temperature: "22-26°C"
+              humidity: "40-60%RH"
+              airborne_particles: "Class 7 (ISO 14644-1)"
+              pressure_differential: "+5Pa to adjacent areas"
+              noise_level: "≤45dB(A)"
+
+      NEGATIVE_PRESSURE_ISOLATION:
+        category_description: "传染性呼吸道疾病隔离病房"
+        spaces:
+          - space_id: "BL-ANNEX-F2-ISO01"
+            biosafety_level: "BSL-2"
+            airflow_control_type: "UNIDIRECTIONAL_NEGATIVE"
+            primary_carriers: "respiratory_infections"
+
+            specialized_equipment:
+              hvac_isolation_systems:
+                - "ISO-AHU-001"  # 专用全新风空调组
+                - "ISO-EXHAUST-001"  # 专用排风风机
+                - "ISO-EXHAUST-002"  # 备用排风机
+                - "HEPA-ISO-SUPPLY"  # 送风HEPA过滤
+                - "HEPA-ISO-EXHAUST" # 排风HEPA过滤
+                - "PRESS_CTRL-ISO01" # 压差控制系统
+
+              monitoring_safety:
+                - "MON-PRESS-ISO01"  # 压差监控报警
+                - "MON-AIRFLOW-ISO01" # 气流方向监测
+                - "MON-TEMP-ISO01"
+                - "MON-HUM-ISO01"
+                - "MON-AIR-CHANGES"   # 换气次数监测
+                - "MON-EXHAUST-HOUR"  # HEPA运行小时计
+
+              safety_containment:
+                - "PASS-BOX-TC-001"   # 传递窗 (清洁→污染)
+                - "PASS-BOX-CT-001"   # 传递窗 (污染→清洁)
+                - "INTERLOCK-ISO01"   # 门互锁系统
+                - "SHOWER-AIR-ISO01"  # 全身淋浴器 (如果需要)

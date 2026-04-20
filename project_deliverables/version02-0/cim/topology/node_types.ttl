@@ -1,0 +1,15 @@
+@prefix cim-topo: <https://cim.medical/ontology/v3.4/topology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+cim-topo:Source_Node a owl:Class ;
+  rdfs:label "源节点"@zh ;
+  rdfs:comment "系统能量/介质输入端"@zh .
+
+cim-topo:Sink_Node a owl:Class ;
+  rdfs:label "末端节点"@zh ;
+  rdfs:comment "系统能量/介质消耗端"@zh .
+
+cim-topo:Distribution_Node a owl:Class ;
+  rdfs:label "分配节点"@zh ;
+  rdfs:comment "用于分配、汇集、调节或转换的中间节点"@zh .

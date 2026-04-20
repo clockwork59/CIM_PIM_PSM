@@ -1,0 +1,113 @@
+# CIM 全模型数据字典
+# 版本: 1.0.0 | 生成日期: 2026-04-05
+# 覆盖 7 个域的核心属性定义
+
+meta:
+  file_id: "DD-CIM-20260405"
+  version: "1.0.0"
+  total_properties: 160
+  domains: [SPACE, EQUIP, CTRL, METER, OM, FLOW, TOPO]
+
+# ===================================================================
+# 空间域属性 (~50条)
+# ===================================================================
+space_properties:
+  - {id: SP-001, label_cn: 设计温度, label_en: temperature, type: decimal, unit: "°C", range: "16-30", class: Room, agent: Agent-02, standard: "GB 50736"}
+  - {id: SP-002, label_cn: 相对湿度, label_en: relativeHumidity, type: decimal, unit: "%RH", range: "20-70", class: Room, agent: Agent-02, standard: "GB 50736"}
+  - {id: SP-003, label_cn: 压差, label_en: pressureDifferential, type: decimal, unit: Pa, range: "-30~+30", class: Room, agent: Agent-02, standard: "GB 50333"}
+  - {id: SP-004, label_cn: 换气次数, label_en: airChangesPerHour, type: decimal, unit: ACH, range: "2-44", class: Room, agent: Agent-02, standard: "GB 50333"}
+  - {id: SP-005, label_cn: 洁净等级, label_en: cleanlinessClass, type: string, values: [ISO-5, ISO-6, ISO-7, ISO-8, standard, minimal], class: CleanSpace, agent: Agent-02}
+  - {id: SP-006, label_cn: 噪声水平, label_en: noiseLevel, type: decimal, unit: "dB(A)", range: "30-55", class: Room, agent: Agent-02}
+  - {id: SP-007, label_cn: 振动水平, label_en: vibrationLevel, type: decimal, unit: "mm/s", range: "0-0.1", class: Room, agent: Agent-02}
+  - {id: SP-008, label_cn: 照度, label_en: illuminance, type: decimal, unit: lx, range: "100-2000", class: Room, agent: Agent-02, standard: "GB 50034"}
+  - {id: SP-009, label_cn: 生物危害等级, label_en: biohazardLevel, type: string, values: [BSL-1, BSL-2, BSL-3, BSL-4, none], class: Room, agent: Agent-02}
+  - {id: SP-010, label_cn: 感染控制等级, label_en: infectionControlLevel, type: string, values: [strict, critical, enhanced, standard, minimal], class: Room, agent: Agent-02}
+  - {id: SP-011, label_cn: 手术室等级, label_en: surgeryGrade, type: string, values: [Class_I, Class_II, Class_III, Class_IV], class: OperatingRoom, agent: Agent-02, standard: "GB 50333"}
+  - {id: SP-012, label_cn: 空间层级, label_en: spaceLevel, type: string, values: [L0_Site, L1_Building, L2_Floor, L3_Zone, L4_Room, L5_SubSpace], class: Space, agent: Agent-02}
+  - {id: SP-013, label_cn: 区域分类, label_en: zoneClassification, type: string, values: [medical, medical_technology, logistics, public, administrative], class: Zone, agent: Agent-02}
+  - {id: SP-014, label_cn: 面积, label_en: areaSqm, type: decimal, unit: "m²", class: Room, agent: Agent-02}
+  - {id: SP-015, label_cn: 层高, label_en: ceilingHeightM, type: decimal, unit: m, class: Room, agent: Agent-02}
+
+# ===================================================================
+# 设备域属性 (~40条)
+# ===================================================================
+equipment_properties:
+  - {id: EQ-001, label_cn: 系统类别, label_en: systemCategory, type: string, values: [HVAC, PLUMBING, ELECTRICAL, MEDICAL_GAS, FIRE_PROTECTION, VERTICAL_TRANSPORT, BUILDING_AUTOMATION], class: Equipment, agent: Agent-03}
+  - {id: EQ-002, label_cn: 可靠性等级, label_en: reliabilityLevel, type: string, values: [LIFE_SAFETY, PATIENT_SAFETY, CRITICAL, IMPORTANT, SECONDARY], class: Equipment, agent: Agent-03}
+  - {id: EQ-003, label_cn: 设备类型, label_en: equipmentType, type: string, class: Equipment, agent: Agent-03}
+  - {id: EQ-004, label_cn: 额定容量, label_en: ratedCapacity, type: string, class: Equipment, agent: Agent-03}
+  - {id: EQ-005, label_cn: 有本地控制, label_en: hasLocalControl, type: boolean, class: Equipment, agent: Agent-03}
+  - {id: EQ-006, label_cn: 外部控制系统, label_en: externalControlSystem, type: string, class: Equipment, agent: Agent-03}
+  - {id: EQ-007, label_cn: 非受控负荷, label_en: isUncontrolledLoad, type: boolean, class: Equipment, agent: Agent-03}
+  - {id: EQ-008, label_cn: 设备位置, label_en: locatedIn, type: ref, ref_class: Space, class: Equipment, agent: Agent-05}
+  - {id: EQ-009, label_cn: 拓扑映射, label_en: mapsToNode, type: ref, ref_class: Node, class: Equipment, agent: Agent-01}
+  - {id: EQ-010, label_cn: 位置状态, label_en: locationStatus, type: string, values: [Defined, TBD], class: Equipment, agent: Agent-05}
+  - {id: EQ-011, label_cn: 制冷COP, label_en: coolingCOP, type: decimal, unit: "kW/kW", range: "4.0-7.0", class: Chiller, agent: Agent-03}
+  - {id: EQ-012, label_cn: 制冷量, label_en: coolingCapacity, type: decimal, unit: kW, class: Chiller, agent: Agent-03}
+  - {id: EQ-013, label_cn: 风量, label_en: airFlowRate, type: decimal, unit: "m³/h", class: AHU, agent: Agent-03}
+  - {id: EQ-014, label_cn: 扬程, label_en: pumpHead, type: decimal, unit: kPa, class: Pump, agent: Agent-03}
+  - {id: EQ-015, label_cn: 变频范围, label_en: vfdRange, type: string, unit: Hz, class: Equipment, agent: Agent-03}
+
+# ===================================================================
+# 控制域属性 (~30条)
+# ===================================================================
+control_properties:
+  - {id: CT-001, label_cn: 控制对象类别, label_en: controlCategory, type: string, values: [Sensor, Actuator, Controller, ControlLoop], class: ControlDevice, agent: Agent-06}
+  - {id: CT-002, label_cn: 关键性等级, label_en: criticality, type: string, values: [P0-LIFE_SAFETY, P1-MISSION_CRITICAL, P2-IMPORTANT, P3-SECONDARY], class: ControlDevice, agent: Agent-06}
+  - {id: CT-003, label_cn: 信号类型, label_en: signalType, type: string, values: [4-20mA, 0-10V, DI, DO, AI, AO, BACnet, Modbus, HART], class: ControlDevice, agent: Agent-06}
+  - {id: CT-004, label_cn: 量程范围, label_en: measurementRange, type: string, class: Sensor, agent: Agent-06}
+  - {id: CT-005, label_cn: 精度, label_en: accuracy, type: string, class: Sensor, agent: Agent-06}
+  - {id: CT-006, label_cn: 工程单位, label_en: engineeringUnit, type: string, class: Sensor, agent: Agent-06}
+  - {id: CT-007, label_cn: PID参数_Kp, label_en: kp, type: decimal, class: PID_Loop, agent: Agent-06}
+  - {id: CT-008, label_cn: PID参数_Ti, label_en: ti, type: decimal, unit: seconds, class: PID_Loop, agent: Agent-06}
+  - {id: CT-009, label_cn: 设定值, label_en: setpoint, type: decimal, class: ControlLoop, agent: Agent-06}
+  - {id: CT-010, label_cn: 控制器类型, label_en: controllerType, type: string, values: [DDC, PLC, NAC, Edge_Gateway], class: Controller, agent: Agent-06}
+  - {id: CT-011, label_cn: IO容量, label_en: ioCapacity, type: string, class: Controller, agent: Agent-06}
+  - {id: CT-012, label_cn: 通信协议, label_en: communicationProtocol, type: string, values: [BACnet_IP, BACnet_MSTP, Modbus_RTU, MQTT], class: Controller, agent: Agent-06}
+  - {id: CT-013, label_cn: 失效安全位, label_en: failSafePosition, type: string, values: [OPEN, CLOSE, HOLD_LAST, "10%", "30%"], class: Actuator, agent: Agent-06}
+  - {id: CT-014, label_cn: 冗余配置, label_en: redundancy, type: string, values: ["热备", "冷备", "N+1", null], class: Controller, agent: Agent-06}
+  - {id: CT-015, label_cn: 离线运行能力, label_en: offlineCapability, type: string, unit: hours, class: Controller, agent: Agent-06}
+
+# ===================================================================
+# 计量域属性 (~20条)
+# ===================================================================
+metering_properties:
+  - {id: MT-001, label_cn: 计量表类型, label_en: meterType, type: string, values: [ElectricMeter, ThermalMeter, WaterMeter, GasMeter, VirtualMeter], class: Meter, agent: Agent-07}
+  - {id: MT-002, label_cn: 计量层级, label_en: meteringLevel, type: integer, values: [0, 1, 2, 3], class: Meter, agent: Agent-07}
+  - {id: MT-003, label_cn: 能源类型, label_en: energyType, type: string, values: [electricity, cooling, heating, steam, water, gas, medical_gas], class: Meter, agent: Agent-07}
+  - {id: MT-004, label_cn: 精度等级, label_en: accuracyClass, type: string, values: ["0.2S", "0.5S", "1.0", "2级"], class: Meter, agent: Agent-07}
+  - {id: MT-005, label_cn: 通信接口, label_en: communication, type: string, values: [RS485, M-Bus, Ethernet, "NB-IoT", "4G"], class: Meter, agent: Agent-07}
+  - {id: MT-006, label_cn: 虚拟计量, label_en: isVirtual, type: boolean, class: Meter, agent: Agent-07}
+  - {id: MT-007, label_cn: 上级计量表, label_en: parentMeter, type: ref, ref_class: Meter, class: Meter, agent: Agent-07}
+  - {id: MT-008, label_cn: 编码, label_en: meterCode, type: string, format: "L-X-YYY-ZZZZ-NN", class: Meter, agent: Agent-07}
+
+# ===================================================================
+# 运维域属性 (~20条)
+# ===================================================================
+om_properties:
+  - {id: OM-001, label_cn: 运维对象类别, label_en: omCategory, type: string, values: [AlarmEvent, WorkOrder, MaintenanceStrategy, AssetLifecycle, SOP, EmergencyPlan], class: OMObject, agent: Agent-08}
+  - {id: OM-002, label_cn: 严重程度, label_en: severity, type: string, values: [P0_Emergency, P1_Critical, P2_Major, P3_Minor], class: AlarmEvent, agent: Agent-08}
+  - {id: OM-003, label_cn: 响应时间, label_en: responseTime, type: string, class: WorkOrder, agent: Agent-08}
+  - {id: OM-004, label_cn: 到场时间, label_en: arrivalTime, type: string, class: WorkOrder, agent: Agent-08}
+  - {id: OM-005, label_cn: 修复时间, label_en: resolutionTime, type: string, class: WorkOrder, agent: Agent-08}
+  - {id: OM-006, label_cn: 维护类型, label_en: maintenanceType, type: string, values: [time_based, condition_based, reliability_centered, run_to_failure], class: MaintenanceStrategy, agent: Agent-08}
+  - {id: OM-007, label_cn: 生命周期阶段, label_en: lifecycleStage, type: string, values: [procurement, installation, commissioning, operation, maintenance, repair, refurbishment, decommission, disposal], class: AssetLifecycle, agent: Agent-08}
+
+# ===================================================================
+# 流动域属性
+# ===================================================================
+flow_properties:
+  - {id: FL-001, label_cn: 载体类型, label_en: carrierType, type: string, class: FlowPath, agent: Agent-04}
+  - {id: FL-002, label_cn: 荷载类型, label_en: payloadType, type: string, class: FlowPath, agent: Agent-04}
+  - {id: FL-003, label_cn: 设计流量, label_en: designFlowRate, type: string, class: FlowPath, agent: Agent-04}
+  - {id: FL-004, label_cn: 设计温度, label_en: designTemperature, type: string, class: FlowPath, agent: Agent-04}
+  - {id: FL-005, label_cn: 设计压力, label_en: designPressure, type: string, class: FlowPath, agent: Agent-04}
+
+# ===================================================================
+# 拓扑域属性
+# ===================================================================
+topology_properties:
+  - {id: TP-001, label_cn: 节点类别, label_en: nodeCategory, type: string, values: [Source_Node, Sink_Node, Distribution_Node, LogicalNode], class: Node, agent: Agent-01}
+  - {id: TP-002, label_cn: 介质类型, label_en: mediumType, type: string, class: Node, agent: Agent-01}
+  - {id: TP-003, label_cn: 映射状态, label_en: mappingStatus, type: string, values: [Mapped, PendingMapping, LogicalOnly], class: Node, agent: Agent-01}
+  - {id: TP-004, label_cn: 所属系统, label_en: systemId, type: ref, ref_class: System, class: Node, agent: Agent-01}

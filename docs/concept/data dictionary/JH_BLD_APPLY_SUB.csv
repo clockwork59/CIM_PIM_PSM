@@ -1,0 +1,25 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_BLD_APPLY_SUB,表全名,JHPDL:JH_BLD_APPLY_SUB,,,,,,
+,表说明,输血申请附表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,BLG,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,BLG0001,String字符串（变长）,,BLD_APPLY_DTL_SN,输血申请明细唯一号,内部三级编码BG0.000.000.001,20,是,是
+,\x00\x02,BLG0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,BLG0003,String字符串（变长）,,BLD_APPLY_SN,输血申请号,来源JH_BLD_APPLY的BAP0001,20,是,是
+,\x00\x04,BLG0004,String字符串（变长）,,BLD_NAME,输血品种,,200,,
+,\x00\x05,BLG0005,Double双精度浮点型（8个字节）,,PLAN_BLD_VOLUME,预定输血量,,200,,
+,\x00\x06,BLG0006,String字符串（变长）,,PLAN_BLD_COMPONENTS,预定血液成分,,200,,
+,\x00\x07,BLG0007,String字符串（变长）,,PLAN_BLD_UNIT,预定血液成分单位,,200,,
+,\x00\x08,BLG0008,简化字典（Integer整型，4个字节）,114,SD_APPLY_ABO,申请ABO血型,申请ABO血型,200,,
+,\x00\x09,BLG0009,String字符串（变长）,,SC_APPLY_ABO,申请ABO血型编码,业务系统申请ABO血型编码,200,,
+,\x00\x0A,BLG0010,String字符串（变长）,,ST_APPLY_ABO,申请ABO血型名称,业务系统申请ABO血型名称,200,,
+,\x00\x0B,BLG0011,简化字典（Integer整型，4个字节）,120,SD_APPLY_RH,申请RH血型,申请RH血型,200,,
+,\x00\x0C,BLG0012,String字符串（变长）,,SC_APPLY_RH,申请RH血型编码,业务系统申请ABO血型编码,200,,
+,\x00\x0D,BLG0013,String字符串（变长）,,ST_APPLY_RH,申请RH血型名称,业务系统申请ABO血型名称,200,,
+,\x00\x0E,BLG0014,String字符串（变长）,,BLD_AIM,输血指正,,200,,
+,\x00\x0F,BLG0015,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x10,BLG0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x11,BLG0017,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

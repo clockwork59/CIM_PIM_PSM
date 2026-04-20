@@ -1,0 +1,32 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FOLLOW_UP,表全名,JHPDL:JH_FOLLOW_UP,,,,,,
+,表说明,随访记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PAF,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PAF0001,String字符串（变长）,,FOLLOW_UP_SN,随访记录编号,随访记录编号，系统生成三级编码，如“PF0.000.000.001”,20,是,是
+,\x00\x02,PAF0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,PAF0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,PAF0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,PAF0005,String字符串（变长）,,FOLLOW_UP_CODE,随访登记号,随访登记表上的编号或条码,200,,
+,\x00\x06,PAF0006,Integer整型（4个字节）,,FOLLOW_UP_ORDER,随访顺序号,随访记录排序号,20,,
+,\x00\x09,PAF0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,FOLLOW_UP_TIME,随访时间,,19,,
+,\x00\x0B,PAF0011,Integer整型（4个字节）,,FOLLOW_UP_NUM,随访次数,第几次随访,20,,
+,\x00\x0C,PAF0012,String字符串（变长）,,FOLLOW_UP_SLOT,随访间隔时间,每7天随访一次,200,,
+,\x00\x0D,PAF0013,String字符串（变长）,,FOLLOW_UP_ITEM,随访内容明细项,出入量/精神状态,4000,,
+,\x00\x0E,PAF0014,String字符串（变长）,,FOLLOW_UP_QUAL_RESULT,随访定性结果,定性描述,4000,,
+,\x00\x0F,PAF0015,String字符串（变长）,,FOLLOW_UP_QUAN_RESULT,随访定量结果,定量描述,4000,,
+,\x00\x10,PAF0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x11,PAF0017,String字符串（变长）,,SC_FOLLOW_UP_TYPE,随访类型编码,例如：术后随访、治疗随访、康复随访,200,,
+,\x00\x12,PAF0018,String字符串（变长）,,ST_FOLLOW_UP_TYPE,随访类型描述,例如：术后随访、治疗随访、康复随访,200,,
+,\x00\x13,PAF0019,String字符串（变长）,,SC_FOLLOW_UP_EM,随访者编码,,100,,
+,\x00\x14,PAF0020,String字符串（变长）,,ST_FOLLOW_UP_EM,随访者姓名,,200,,
+,\x00\x15,PAF0021,String字符串（变长）,,FOLLOW_PLAN_CODE,随访计划编码,关联随访计划的唯一编码,50,,
+,\x00\x16,PAF0022,String字符串（变长）,,SC_FOLLOW_UP_WAY,随访方式编码,,50,,
+,\x00\x17,PAF0023,String字符串（变长）,,ST_FOLLOW_UP_WAY,随访方式描述,,100,,
+,\x00\x18,PAF0024,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x07,PAF0007,String字符串（变长）,,FOLLOW_UP_TYPE,随访类型,例如：术后随访、治疗随访、康复随访,200,,
+,\x00\x08,PAF0008,String字符串（变长）,,FOLLOW_UP_WAY,随访方式,电话、视频、短信,200,,
+,\x00\x0A,PAF0010,String字符串（变长）,,FOLLOW_UP_EM,随访者,随访医生,200,,

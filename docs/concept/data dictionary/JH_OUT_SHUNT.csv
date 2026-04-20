@@ -1,0 +1,33 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_SHUNT,表全名,JHPDL:JH_OUT_SHUNT,,,,,,
+,表说明,门诊分诊,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,OSR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,OSR0001,String字符串（变长）,,OUT_SHUNT_SN,门诊分诊编号,门诊分诊编号，系统生成三级编码，如“MS0.000.000.001”,20,是,是
+,\x00\x02,OSR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,OSR0003,String字符串（变长）,,OUT_RVN_SN,门诊预约记录编号,门诊预约记录编号，来源JH_OUT_RVN的ORR0001,20,,
+,\x00\x04,OSR0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SHUNT_TIME,分诊时间,分诊操作的时间,19,是,是
+,\x00\x05,OSR0005,String字符串（变长）,,SHUNT_AREA,诊区,,200,,
+,\x00\x06,OSR0006,String字符串（变长）,,SHUNT_TRIAGE,分诊台,,200,,
+,\x00\x07,OSR0007,String字符串（变长）,,SHUNT_OPERATOR,分诊人,,200,,
+,\x00\x10,OSR0016,String字符串（变长）,,SC_SHUNT_OPERA,分诊人编码,,200,,
+,\x00\x11,OSR0017,String字符串（变长）,,ST_SHUNT_OPERA,分诊人名称,,200,,
+,\x00\x08,OSR0008,String字符串（变长）,,OUT_DEPT,就诊科室,"门诊就诊科室编码＋名称，如“001#,#内科”",200,,
+,\x00\x12,OSR0018,String字符串（变长）,,SC_OUT_DEPT,就诊科室编码,,200,是,是
+,\x00\x13,OSR0019,String字符串（变长）,,ST_OUT_DEPT,就诊科室名称,,200,,
+,\x00\x09,OSR0009,String字符串（变长）,,OUT_ROOM,就诊诊间,"门诊就诊诊间编码＋名称，如“001#,#内科一室”",200,,
+,\x00\x14,OSR0020,String字符串（变长）,,SC_OUT_ROOM,就诊诊间编码,,200,,
+,\x00\x15,OSR0021,String字符串（变长）,,ST_OUT_ROOM,就诊诊间名称,,200,,
+,\x00\x0A,OSR0010,String字符串（变长）,,OUT_DOCTOR,就诊医师,"就诊医师编码＋名称，如“1001#,#张三”",200,,
+,\x00\x16,OSR0022,String字符串（变长）,,SC_OUT_DOCT,就诊医师编码,,200,是,是
+,\x00\x17,OSR0023,String字符串（变长）,,ST_OUT_DOCT,就诊医师名称,,200,,
+,\x00\x18,OSR0024,String字符串（变长）,,PAT_VISIT_SN,通用就诊编号,来源JH_PAT_VISIT表的PAV0001,200,是,是
+,\x00\x0B,OSR0011,Integer整型（4个字节）,,SHUNT_SEQUENCE,排队序号,,20,,
+,\x00\x0C,OSR0012,自定义字典类型，字符串（变长）,379,RECEIVE_FLAG,是否已接诊,,200,,
+,\x00\x0F,OSR0015,简化字典（Integer整型，4个字节）,379,SD_RECEIVE,是否已接诊,,20,是,是
+,\x00\x0D,OSR0013,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x0E,OSR0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x19,OSR0025,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

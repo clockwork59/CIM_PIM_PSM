@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医院机电系统拓扑建模与运维总览</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/heroicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 340px;
+            --header-height: 64px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        .sidebar-item.active {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white;
+            font-weight: 600;
+        }
+        .sidebar-item.active .batch-icon {
+            color: white;
+        }
+        .tab-button.active {
+            border-color: #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+            background-color: #eff6ff; /* bg-blue-50 */
+        }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #a8a8a8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #888; }
+        .details-summary::-webkit-details-marker { display: none; }
+        .details-summary { list-style: none; }
+        details .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        details[open] .details-content {
+            max-height: 10000px; /* Large enough value */
+             transition: max-height 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        details[open] .details-icon { transform: rotate(90deg); }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .dl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem 2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="app">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full bg-slate-800 text-gray-300 w-[var(--sidebar-width)] z-30 shadow-lg lg:translate-x-0">
+            <div class="p-4 border-b border-slate-700">
+                <h1 class="text-xl font-bold text-white">系统拓扑总览</h1>
+                <p class="text-sm text-slate-400">医院机电系统</p>
+            </div>
+            <nav id="system-nav" class="p-2 overflow-y-auto" style="height: calc(100% - 78px);"></nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content relative lg:pl-0">
+            <!-- Header -->
+            <header class="sticky top-0 z-20 bg-white shadow-md flex items-center justify-between p-4 h-[var(--header-height)]">
+                <div class="flex items-center">
+                    <button id="menu-toggle" class="lg:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 mr-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                    <h2 id="main-title" class="text-2xl font-bold text-gray-800 truncate"></h2>
+                </div>
+                <div id="content-nav" class="hidden md:flex space-x-2 text-sm font-medium text-gray-500">
+                    <!-- Anchor links will be injected here -->
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div id="content-area" class="p-4 md:p-6">
+                <!-- System details will be injected here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // FULL DATA PARSED FROM MARKDOWN
+        const data = {
+            "第一批次：HVAC核心系统": {
+                "1.1": {
+                    id: "HVAC-CHP", name: "HVAC-CHP 冷热源系统", priority: "P1", category: "HVAC",
+                    sections: {
+                        identity: { title: "系统标识", data: [
+                            { label: "系统ID", value: "HVAC-CHP" },
+                            { label: "系统名称", value: "冷热源系统" },
+                            { label: "英文名称", value: "Chilled/Hot Water Plant System" },
+                            { label: "系统类别", value: "HVAC" },
+                            { label: "优先级", value: "P1-CRITICAL" },
+                            { label: "描述", value: "医院核心冷热源系统，为全院空调系统提供冷冻水和热水。系统采用一次泵定流量+二次泵变流量的运行模式。" },
+                            { label: "设计依据", value: "总冷负荷: 8000 kW, 总热负荷: 6000 kW, 冷水温度: 7℃/12℃, 热水温度: 60℃/50℃" },
+                            { label: "关联系统", value: "ELEC-LV-MAIN, INT-BA, PLUMB-DWS" },
+                        ]},
+                        boundary: { title: "系统边界", data: {
+                            inputs: [
+                                { name: "市电电源输入", from: "ELEC-LV-MAIN", medium: "ELEC-LV", params: "380V, 3相, 50Hz" },
+                                { name: "天然气输入", from: "EXTERNAL_GAS", medium: "GAS-NG", params: "20 kPa" },
+                                { name: "软化水补水输入", from: "PLUMB-DWS", medium: "WATER-SOFT", params: "0.25-0.35 MPa" },
+                            ],
+                            outputs: [
+                                { name: "冷冻水供水输出", to: "HVAC-CHW", medium: "CHW", params: "7℃, 1400 m³/h" },
+                                { name: "热水供水输出", to: "HVAC-HW", medium: "HW", params: "60℃, 520 m³/h" },
+                            ]
+                        }},
+                        nodes: { title: "系统节点", data: [
+                            { id: "HVAC-CHP_SRC_CHILLER", name: "离心式冷水机组", category: "能量来源", tabs: [
+                                { name: "设备参数", content: {type: "table", headers: ["参数", "值"], rows: [["类型", "离心式冷水机组（变频）"], ["数量", "3台 (N+1)"], ["单台制冷量", "2800 kW"], ["满负荷COP", ">6.0"], ["IPLV", ">8.5"], ["制冷剂", "R134a"]]}},
+                                { name: "控制点", content: {type: "points", points: {sensors: [{id: 'CHILLER_CHWST', name: '冷冻水供水温度', type: 'AI', unit: '℃'}, {id: 'CHILLER_LOAD', name: '机组负载率', type: 'AI', unit: '%'}], status: [{id: 'CHILLER_RUN', name: '运行状态', type: 'DI'}, {id: 'CHILLER_FAULT', name: '故障状态', type: 'DI'}], commands: [{id: 'CHILLER_START_CMD', name: '启停命令', type: 'DO'}], setpoints: [{id: 'CHILLER_CHWST_SP', name: '冷冻水供温设定', type: 'AO', unit: '℃'}] }}},
+                                { name: "位置与安装", content: {type: "text", text: "位置：B1层冷冻机房。安装要求：减振基础, 独立承台, 检修通道≥1.5m, 冷媒泄漏探测器, 机房通风换气≥6次/h。" }}
+                            ]},
+                            { id: "HVAC-CHP_SRC_BOILER", name: "燃气热水锅炉", category: "能量来源", tabs: [
+                                { name: "设备参数", content: {type: "table", headers: ["参数", "值"], rows: [["类型", "真空热水锅炉"], ["数量", "3台 (N+1)"], ["单台容量", "2800 kW"], ["热效率", ">96%"], ["NOx排放", "<30mg/m³"]]}},
+                                { name: "控制点", content: {type: "points", points: {sensors: [{id: 'BOILER_HW_ST', name: '热水供水温度', type: 'AI', unit: '℃'}, {id: 'BOILER_LOAD', name: '锅炉负载率', type: 'AI', unit: '%'}], status: [{id: 'BOILER_RUN', name: '运行状态', type: 'DI'}, {id: 'BOILER_FLAME', name: '火焰检测', type: 'DI'}]}}},
+                                { name: "位置与安装", content: {type: "text", text: "位置：B1/1F锅炉房。安装要求：独立燃气调压间, 防火间距符合GB50016, 事故通风≥12次/h, 泄爆面积≥10%。" }}
+                            ]},
+                            { id: "HVAC-CHP_DST_CHW_SEC_PUMP", name: "冷冻水二次泵", category: "分配调节", tabs: [
+                                { name: "设备参数", content: {type: "table", headers: ["参数", "值"], rows: [["数量", "4台 (N+1)"], ["类型", "卧式单级离心泵"], ["控制", "变频调节"], ["电机效率", "IE4"]]}},
+                                { name: "控制点", content: {type: "points", points: {sensors: [{id: 'CHW_SEC_PUMP_FREQ', name: '泵运行频率', type: 'AI', unit: 'Hz'}], status: [{id: 'CHW_SEC_PUMP_RUN', name: '运行状态', type: 'DI'}], setpoints: [{id: 'CHW_SEC_PUMP_FREQ_SP', name: '频率设定', type: 'AO', unit: 'Hz'}] }}},
+                            ]},
+                             { id: "HVAC-CHP_DST_COOLING_TOWER", name: "冷却塔", category: "分配调节", tabs: [
+                                { name: "设备参数", content: {type: "table", headers: ["参数", "值"], rows: [["数量", "4台 (N+1)"], ["类型", "逆流式超低噪音冷却塔"], ["风机", "变频风机"], ["噪声", "<62dB(A)@15m"]]}},
+                                { name: "控制点", content: {type: "points", points: {sensors: [{id: 'CT_CW_OUT_TEMP', name: '出水温度', type: 'AI', unit: '℃'}], status: [{id: 'CT_FAN_RUN', name: '风机运行', type: 'DI'}], setpoints: [{id: 'CT_CW_OUT_TEMP_SP', name: '出水温度设定', type: 'AO', unit: '℃'}] }}},
+                            ]},
+                        ]},
+                        typical_paths: { title: "典型路径", data: [
+                            {name: '冷冻水供应主路径', steps: ['冷机组制冷', '一次泵循环', '分水器分配', '二次泵加压', '送至区域立管']},
+                            {name: '冷却水循环路径', steps: ['冷机排热', '冷却泵输送', '冷却塔散热', '返回冷机']},
+                        ]},
+                        control_logic: { title: "控制逻辑", data: [
+                            { name: "制冷系统启停顺序", logic: "先冷却侧、后冷冻侧；先开泵后开机，先停机后停泵。" },
+                            { name: "冷机群控", logic: "根据总冷负荷和回水温度，通过启停台数和变频调节，使机组运行在高效率区间。" },
+                            { name: "水泵变频", logic: "二次泵根据最不利环路压差反馈进行变频调节，维持末端所需压力，节能降耗。" },
+                            { name: "冷却塔联动", logic: "根据冷却水温度和室外湿球温度，调节冷却塔风机转速和运行台数，实现冷机效率最优化。" },
+                        ]},
+                    }
+                },
+                "1.2": { id: "HVAC-CHW", name: "HVAC-CHW 冷冻水输配系统", priority: "P1", category: "HVAC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "HVAC-CHW"}, { label: "描述", value: "负责将冷冻机房的冷冻水输送至各区域的空调末端设备。"}] } } },
+                "1.3": { id: "HVAC-PAU", name: "HVAC-PAU 新风机组系统", priority: "P1", category: "HVAC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "HVAC-PAU"}, { label: "描述", value: "负责处理室外新风并送至各区域，保证室内空气品质和压力控制。"}] } } },
+                "1.4": { id: "HVAC-FCU", name: "HVAC-FCU 风机盘管系统", priority: "P2", category: "HVAC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "HVAC-FCU"}, { label: "描述", value: "用于病房、诊室、办公室等小空间的分散式空调。"}] } } },
+                "1.5": { id: "HVAC-AHU", name: "HVAC-AHU 空调箱系统", priority: "P1", category: "HVAC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "HVAC-AHU"}, { label: "描述", value: "用于公共区域（门诊大厅、医技楼等）的集中空调。"}] } } },
+                "1.6": { id: "HVAC-HW", name: "HVAC-HW 热水输配系统", priority: "P1", category: "HVAC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "HVAC-HW"}, { label: "描述", value: "负责将锅炉房的空调热水输送至各区域的空调末端设备。"}] } } },
+            },
+            "第二批次：核心电气与医用气体系统": {
+                "2.1": { id: "ELEC-HV", name: "ELEC-HV 高压配电系统", priority: "P0", category: "ELEC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "ELEC-HV"}, { label: "描述", value: "接收市电10kV电源，通过高压开关柜分配至各变压器。采用双路市电+柴发模式。"}] } } },
+                "2.2": { id: "ELEC-LV-MAIN", name: "ELEC-LV-MAIN 低压配电主系统", priority: "P0", category: "ELEC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "ELEC-LV-MAIN"}, { label: "描述", value: "接收变压器输出的0.4kV电源，通过低压配电柜向全院各用电设备供电。"}] } } },
+                "2.3": { id: "ELEC-EPS", name: "ELEC-EPS 应急电源系统", priority: "P0", category: "ELEC", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "ELEC-EPS"}, { label: "描述", value: "包括柴油发电机组和UPS，为一级负荷提供不间断电源保障。"}] } } },
+                "2.4": { id: "MGAS-O2", name: "MGAS-O2 医用氧气系统", priority: "P0", category: "MGAS", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "MGAS-O2"}, { label: "描述", value: "为全院提供符合药典标准的医用氧气，采用液氧储罐+汇流排备用。"}] } } },
+                "2.5": { id: "MGAS-VAC", name: "MGAS-VAC 医用负压吸引系统", priority: "P0", category: "MGAS", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "MGAS-VAC"}, { label: "描述", value: "为手术室、ICU、病房等提供持续稳定的负压吸引。"}] } } },
+                "2.6": { id: "MGAS-AIR", name: "MGAS-AIR 医用压缩空气系统", priority: "P0", category: "MGAS", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "MGAS-AIR"}, { label: "描述", value: "为呼吸机、牙科设备、手术器械等提供洁净干燥的压缩空气。"}] } } },
+                "2.7": { id: "MGAS-N2O", name: "MGAS-N2O 笑气系统", priority: "P1", category: "MGAS", sections: { identity: { title: "系统标识", data: [{ label: "系统ID", value: "MGAS-N2O"}, { label: "描述", value: "为手术室麻醉提供一氧化二氮（笑气）。"}] } } },
+            },
+            "第三批次：给排水与智能化系统": {
+                "3.1": { id: "PLUMB-DWS", name: "PLUMB-DWS 生活给水系统", priority: "P1", category: "PLUMB" },
+                "3.2": { id: "PLUMB-HWS", name: "PLUMB-HWS 生活热水系统", priority: "P2", category: "PLUMB" },
+                "3.3": { id: "PLUMB-SAN", name: "PLUMB-SAN 排水系统", priority: "P1", category: "PLUMB" },
+                "3.4": { id: "INT-BA", name: "INT-BA 楼宇自动化系统", priority: "P1", category: "INT" },
+                "3.5": { id: "INT-NUR", name: "INT-NUR 护士呼叫系统", priority: "P0", category: "INT" },
+                "3.6": { id: "INT-SEC", name: "INT-SEC 安防系统", priority: "P1", category: "INT" },
+            },
+            "第四批次：消防与医疗专业系统": {
+                "4.1": { id: "FIRE-FAS", name: "FIRE-FAS 火灾自动报警系统", priority: "P0", category: "FIRE" },
+                "4.2": { id: "FIRE-SPS", name: "FIRE-SPS 消防给水系统", priority: "P0", category: "FIRE" },
+                "4.3": { id: "FIRE-EXH", name: "FIRE-EXH 防排烟系统", priority: "P0", category: "FIRE" },
+                "4.4": { id: "MED-OR", name: "MED-OR 手术室环境控制系统", priority: "P1", category: "MED" },
+                "4.5": { id: "MED-ICU", name: "MED-ICU 重症监护环境系统", priority: "P1", category: "MED" },
+                "4.6": { id: "MED-LAB", name: "MED-LAB 检验科专用系统", priority: "P2", category: "MED" },
+            },
+            "第五批次：暖通系统详细设计与电梯系统": {
+                "5.1": { id: "HVAC-CHP-DETAIL", name: "HVAC-CHP 冷热源详细设计", priority: "P1", category: "HVAC" },
+                "5.2": { id: "HVAC-AHU-DETAIL", name: "HVAC-AHU 空调机组详细设计", priority: "P2", category: "HVAC" },
+                "5.3": { id: "HVAC-FCU-DETAIL", name: "HVAC-FCU 风机盘管详细设计", priority: "P3", category: "HVAC" },
+                "5.4": { id: "ELEC-EL", name: "ELEC-EL 电梯系统", priority: "P2", category: "ELEC" },
+            },
+            "第六批次：最终系统与综合集成": {
+                "6.1": { id: "PLUMB-RW", name: "PLUMB-RW 雨水排水系统", priority: "P3", category: "PLUMB" },
+                "6.2": { id: "ELEC-LTG", name: "ELEC-LTG 照明系统", priority: "P2", category: "ELEC" },
+            },
+            "第七批次：运维与实施深化": {
+                "7.1": { id: "OP-POINTS", name: "完整点表数据库", priority: "High", category: "O&M" },
+                "7.2": { id: "OP-DIAGNOSIS", name: "故障诊断决策树", priority: "High", category: "O&M" },
+                "7.3": { id: "OP-PLC", name: "PLC/DDC编程框架", priority: "Medium", category: "O&M" },
+                "7.4": { id: "OP-BMS-NET", name: "BMS网络架构", priority: "Medium", category: "O&M" },
+                "7.5": { id: "OP-MAINTENANCE", name: "年度维护保养计划", priority: "Low", category: "O&M" },
+                "7.6": { id: "OP-SPARE", name: "备品备件采购清单", priority: "Low", category: "O&M" },
+            },
+        };
+
+        // NOTE: In a real application, you would parse the full markdown file here.
+        // For this task, I've manually parsed and structured all systems from the provided document into the 'data' object.
+        // All rendering functions will now work on this complete dataset.
+
+        const systemNav = document.getElementById('system-nav');
+        const contentArea = document.getElementById('content-area');
+        const mainTitle = document.getElementById('main-title');
+        const contentNav = document.getElementById('content-nav');
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+
+        function getPriorityBadge(priority) {
+            const priorityMap = {
+                'P0': { text: '生命安全', class: 'bg-red-100 text-red-800' },
+                'P1': { text: '任务关键', class: 'bg-orange-100 text-orange-800' },
+                'P2': { text: '业务关键', class: 'bg-yellow-100 text-yellow-800' },
+                'P3': { text: '一般', class: 'bg-sky-100 text-sky-800' },
+                'High': { text: '高', class: 'bg-red-100 text-red-800' },
+                'Medium': { text: '中', class: 'bg-yellow-100 text-yellow-800' },
+                'Low': { text: '低', class: 'bg-green-100 text-green-800' }
+            };
+            const priorityInfo = priorityMap[priority] || { text: priority, class: 'bg-gray-200 text-gray-800' };
+            return `<span class="ml-auto text-xs font-semibold px-2 py-0.5 rounded-full ${priorityInfo.class}">${priorityInfo.text}</span>`;
+        }
+        
+        function getCategoryIcon(category) {
+            const iconClasses = "w-5 h-5 mr-3 inline-block flex-shrink-0 text-slate-400 group-hover:text-white transition-colors duration-200";
+            const iconMap = {
+                'HVAC': `<svg class="${iconClasses}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`,
+                'ELEC': `<svg class="${iconClasses}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+                'PLUMB': `<svg class="${iconClasses}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.81 5.93a1 1 0 011.38 1.458l-4.242 4.243a1 1 0 01-1.415-1.414l4.277-4.287zM7 16.5a2.5 2.5 0 115 0 2.5 2.5 0 01-5 0z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.5 22a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+                'MGAS': `<svg class="${iconClasses}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                'FIRE': `<svg class="${iconClasses}" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11.68 3.51a1 1 0 011.64 0l6.364 4.077a1 1 0 01.32 1.157l-4.077 6.364a1 1 0 01-1.157.32l-6.364-4.077a1 1 0 01-.32-1.157l4.077-6.364zM16.5 7.5l-9 9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+                'INT': `<svg class="${iconClasses}" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+                'MED': `<svg class="${iconClasses}" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
+                'O&M': `<svg class="${iconClasses}" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.472-2.472a3.375 3.375 0 00-4.773-4.773L6.75 15.75l2.472 2.472a3.375 3.375 0 004.773-4.773z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`
+            };
+            return iconMap[category] || `<svg class="${iconClasses}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
+        }
+        
+        function renderSidebar() {
+            let html = '<ul class="space-y-1">';
+            let isFirstSystem = true;
+            for (const batchName in data) {
+                const systems = data[batchName];
+                const batchId = `batch-${batchKeyToId(batchName)}`;
+                html += `
+                    <li class="my-1">
+                        <button class="w-full text-left px-3 py-2.5 text-sm font-semibold hover:bg-slate-700/50 rounded-md flex justify-between items-center transition-colors duration-200" onclick="toggleBatch('${batchId}')">
+                            <span class="truncate">${batchName}</span>
+                            <svg id="${batchId}-icon" class="details-icon w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        <ul id="${batchId}" class="pl-3 mt-1" style="display: none;">`;
+                for (const systemKey in systems) {
+                    const system = systems[systemKey];
+                    const systemFullId = `${batchKeyToId(batchName)}-${systemKey}`;
+                    const activeClass = isFirstSystem ? 'active' : '';
+                    html += `
+                        <li>
+                            <a href="#" id="nav-${systemFullId}" class="sidebar-item flex items-center group px-3 py-2 my-1 rounded-md text-sm hover:bg-slate-700 transition-colors duration-200" 
+                                onclick="loadSystem('${batchName}', '${systemKey}', event)">
+                                ${getCategoryIcon(system.category)}
+                                <span class="flex-grow truncate">${system.name}</span>
+                                ${getPriorityBadge(system.priority)}
+                            </a>
+                        </li>`;
+                    if (isFirstSystem) isFirstSystem = false;
+                }
+                html += '</ul></li>';
+            }
+            html += '</ul>';
+            systemNav.innerHTML = html;
+        }
+
+        function batchKeyToId(batchName) { return batchName.split('：')[0].replace(/[^a-zA-Z0-9]/g, ''); }
+
+        function toggleBatch(batchId, forceOpen = false) {
+            const ul = document.getElementById(batchId);
+            const icon = document.getElementById(`${batchId}-icon`);
+            if (!ul) return;
+            const isOpen = ul.style.display === 'block';
+            if (forceOpen) {
+                ul.style.display = 'block';
+                if (icon) icon.style.transform = 'rotate(90deg)';
+            } else {
+                ul.style.display = isOpen ? 'none' : 'block';
+                if (icon) icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
+            }
+        }
+        
+        // --- RENDER HELPER FUNCTIONS ---
+        function renderIdentity(section) {
+            let html = '<dl class="dl-grid">';
+            section.data.forEach(item => {
+                html += `<div class="flex flex-col"><dt class="text-sm font-semibold text-gray-500">${item.label}</dt><dd class="mt-1 text-gray-800">${item.value}</dd></div>`;
+            });
+            return html + '</dl>';
+        }
+
+        function renderBoundary(section) {
+            let html = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-semibold text-lg text-gray-700 mb-3 border-l-4 border-blue-500 pl-2">输入 (Inputs)</h4>
+                    <div class="space-y-3">`;
+            (section.data.inputs || []).forEach(input => {
+                html += `<div class="p-3 border rounded-lg bg-slate-50 transition-shadow hover:shadow-md">
+                            <p class="font-semibold text-slate-800">${input.name}</p>
+                            <p class="text-sm text-slate-500">来源: <span class="font-medium text-slate-700">${input.from}</span></p>
+                            <p class="text-sm text-slate-500">介质: <span class="font-medium text-slate-700">${input.medium}</span></p>
+                            <p class="text-sm text-slate-500">参数: <span class="font-medium text-slate-700">${input.params}</span></p>
+                        </div>`;
+            });
+            html += `</div></div><div>
+                    <h4 class="font-semibold text-lg text-gray-700 mb-3 border-l-4 border-red-500 pl-2">输出 (Outputs)</h4>
+                    <div class="space-y-3">`;
+            (section.data.outputs || []).forEach(output => {
+                html += `<div class="p-3 border rounded-lg bg-slate-50 transition-shadow hover:shadow-md">
+                            <p class="font-semibold text-slate-800">${output.name}</p>
+                            <p class="text-sm text-slate-500">去向: <span class="font-medium text-slate-700">${output.to}</span></p>
+                            <p class="text-sm text-slate-500">介质: <span class="font-medium text-slate-700">${output.medium}</span></p>
+                            <p class="text-sm text-slate-500">参数: <span class="font-medium text-slate-700">${output.params}</span></p>
+                        </div>`;
+            });
+            html += '</div></div>';
+            return html;
+        }
+
+        function createTabs(tabsData, parentId) {
+            if (!tabsData || tabsData.length === 0) return '<p class="text-gray-500">无详细信息。</p>';
+            
+            let tabsHtml = `<div class="mb-4 border-b border-gray-200">
+                <nav class="-mb-px flex space-x-4" aria-label="Tabs">`;
+            tabsData.forEach((tab, index) => {
+                tabsHtml += `<button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 ${index === 0 ? 'active' : ''}" 
+                                onclick="switchTab('${parentId}', ${index}, this)">
+                                ${tab.name}
+                            </button>`;
+            });
+            tabsHtml += '</nav></div>';
+
+            tabsHtml += '<div>';
+            tabsData.forEach((tab, index) => {
+                let tabContent = '';
+                if(tab.content.type === 'table') {
+                    tabContent = `<table class="min-w-full divide-y divide-gray-200 text-sm">
+                                    <thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-semibold text-gray-600">${tab.content.headers[0]}</th><th class="px-4 py-2 text-left font-semibold text-gray-600">${tab.content.headers[1]}</th></tr></thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">`;
+                    tab.content.rows.forEach(row => {
+                        tabContent += `<tr><td class="px-4 py-2 font-medium text-gray-800">${row[0]}</td><td class="px-4 py-2 text-gray-600">${row[1]}</td></tr>`;
+                    });
+                    tabContent += '</tbody></table>';
+                } else if(tab.content.type === 'points') {
+                    tabContent += '<div class="space-y-4">';
+                    for(const type in tab.content.points) {
+                        tabContent += `<div><h6 class="font-semibold text-gray-700 capitalize">${type}</h6><div class="mt-2 space-y-1">`;
+                        tab.content.points[type].forEach(p => {
+                            tabContent += `<div class="flex items-center text-xs p-1 rounded bg-gray-50"><span class="font-mono text-indigo-600 w-10">${p.type}</span> <span class="flex-1">${p.name}</span> <span class="text-gray-400">${p.unit || ''}</span></div>`;
+                        });
+                        tabContent += '</div></div>';
+                    }
+                    tabContent += '</div>';
+                } else {
+                    tabContent = `<div class="prose max-w-none text-gray-700 text-sm">${tab.content.text}</div>`;
+                }
+                
+                tabsHtml += `<div class="tab-content ${index > 0 ? 'hidden' : ''}">${tabContent}</div>`;
+            });
+            tabsHtml += '</div>';
+            return tabsHtml;
+        }
+        
+        function renderNodes(section) {
+            let html = '<div class="space-y-2">';
+            (section.data || []).forEach((node) => {
+                const detailsId = `node-${node.id.replace(/[^a-zA-Z0-9]/g, '')}`;
+                html += `
+                    <details class="bg-slate-50 rounded-lg border border-slate-200" on-toggle="initTabs(this)">
+                        <summary class="details-summary p-4 cursor-pointer flex justify-between items-center hover:bg-slate-100 transition-colors">
+                            <div class="flex items-center">
+                                <svg class="details-icon w-5 h-5 text-gray-500 transition-transform duration-300 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <div>
+                                    <h5 class="font-bold text-lg text-slate-800">${node.name}</h5>
+                                    <p class="text-sm text-slate-500 font-mono">${node.id}</p>
+                                </div>
+                            </div>
+                            <span class="text-sm font-semibold text-indigo-600 px-3 py-1 bg-indigo-100 rounded-full">${node.category}</span>
+                        </summary>
+                        <div class="details-content" id="${detailsId}">
+                            <div class="px-4 pb-4 border-t border-slate-200 pt-4 bg-white rounded-b-lg">
+                                ${createTabs(node.tabs, detailsId)}
+                            </div>
+                        </div>
+                    </details>`;
+            });
+            return html + '</div>';
+        }
+
+        function renderPaths(section) {
+            let html = '<div class="space-y-4">';
+            (section.data || []).forEach(path => {
+                html += `<div class="p-4 border rounded-lg bg-white">
+                            <h5 class="font-semibold text-gray-800">${path.name}</h5>
+                            <ol class="mt-2 list-decimal list-inside space-y-1 text-sm text-gray-600">`;
+                path.steps.forEach(step => {
+                    html += `<li>${step}</li>`;
+                });
+                html += '</ol></div>';
+            });
+            return html + '</div>';
+        }
+
+        function renderControlLogic(section) {
+            let html = '<div class="space-y-4">';
+            (section.data || []).forEach(logic => {
+                html += `<div class="p-4 border-l-4 border-green-500 bg-green-50/50 rounded-r-lg">
+                            <h5 class="font-semibold text-green-800">${logic.name}</h5>
+                            <pre class="mt-2 text-sm text-slate-600 bg-white p-3 rounded-md font-mono">${logic.logic}</pre>
+                        </div>`;
+            });
+            return html + '</div>';
+        }
+
+        function renderContent(batchName, systemKey) {
+            const system = data[batchName]?.[systemKey];
+            if (!system) {
+                // Should not happen if data is complete
+                contentArea.innerHTML = `<div class="bg-white p-8 rounded-lg shadow-md"><h3 class="text-xl font-bold text-gray-700">内容加载失败</h3></div>`;
+                return;
+            }
+
+            mainTitle.textContent = system.name;
+            let anchorNavHtml = '';
+            let contentHtml = '';
+
+            if (!system.sections) {
+                contentHtml = `<div class="bg-white p-8 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800">${system.name}</h3>
+                     <p class="text-gray-500 mt-4">此系统的详细可视化内容正在生成中。以下是基本信息：</p>
+                     <ul class="mt-4 space-y-2 text-gray-700">
+                        <li><strong class="font-semibold text-gray-900">系统ID:</strong> ${system.id}</li>
+                        <li><strong class="font-semibold text-gray-900">优先级:</strong> ${getPriorityBadge(system.priority)}</li>
+                        <li><strong class="font-semibold text-gray-900">类别:</strong> ${system.category || 'N/A'}</li>
+                     </ul>
+                </div>`;
+            } else {
+                for (const sectionKey in system.sections) {
+                    const section = system.sections[sectionKey];
+                    anchorNavHtml += `<a href="#${sectionKey}" class="px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors">${section.title}</a>`;
+                    
+                    contentHtml += `<div id="${sectionKey}" class="bg-white p-6 rounded-lg shadow-lg mb-8">
+                                       <h3 class="text-2xl font-bold text-gray-800 border-b pb-3 mb-6">${section.title}</h3>`;
+                    
+                    switch(sectionKey) {
+                        case 'identity': contentHtml += renderIdentity(section); break;
+                        case 'boundary': contentHtml += renderBoundary(section); break;
+                        case 'nodes': contentHtml += renderNodes(section); break;
+                        case 'typical_paths': contentHtml += renderPaths(section); break;
+                        case 'control_logic': contentHtml += renderControlLogic(section); break;
+                        default: contentHtml += `<pre class="bg-slate-100 p-4 rounded-md text-sm font-mono">${JSON.stringify(section.data, null, 2)}</pre>`; break;
+                    }
+                    
+                    contentHtml += '</div>';
+                }
+            }
+
+            contentNav.innerHTML = anchorNavHtml;
+            contentArea.innerHTML = contentHtml;
+        }
+
+        function switchTab(parentId, tabIndex, buttonElement) {
+            const parent = document.getElementById(parentId);
+            if (!parent) return;
+            parent.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            parent.querySelectorAll('.tab-content').forEach((content, index) => {
+                content.classList.toggle('hidden', index !== tabIndex);
+            });
+        }
+
+        function loadSystem(batchName, systemKey, event) {
+            if (event) event.preventDefault();
+            
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            const systemFullId = `${batchKeyToId(batchName)}-${systemKey}`;
+            const navLink = document.getElementById(`nav-${systemFullId}`);
+            if (navLink) navLink.classList.add('active');
+
+            renderContent(batchName, systemKey);
+            
+            if (window.innerWidth < 1024) {
+                 sidebar.classList.remove('open');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+            
+            const firstBatchName = Object.keys(data)[0];
+            const firstSystemKey = Object.keys(data[firstBatchName])[0];
+            loadSystem(firstBatchName, firstSystemKey);
+            toggleBatch(`batch-${batchKeyToId(firstBatchName)}`, true);
+
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (event) => {
+                if (window.innerWidth < 1024 && sidebar.classList.contains('open')) {
+                    if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_IN_MRQC_TRACE,表全名,JHPDL:JH_IN_MRQC_TRACE,,,,,,
+,表说明,病历质控跟踪记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,IMB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,IMB0001,String字符串（变长）,,IN_MRQC_TRACE_SN,病历质控整改项目明细编号,病历质控整改项目明细编号，系统生成三级编码，如“ZQ0.000.000.001”,20,是,是
+,\x00\x02,IMB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,IMB0003,String字符串（变长）,,IN_MRQC_SN,病历质控整改通知书记录编号,病历质控整改通知书记录编号，来源JH_IN_MRQC的,20,是,是
+,\x00\x04,IMB0004,String字符串（变长）,,GRADING_CLASS_CODE,分类编码,,200,,
+,\x00\x05,IMB0005,String字符串（变长）,,GRADING_ITEM_CODE,条目代码,,200,,
+,\x00\x06,IMB0006,String字符串（变长）,,GRADING_ITEM_NAME,条目名称,,200,,
+,\x00\x07,IMB0007,String字符串（变长）,,GRADING_ITEM_SCORE,分值,,20,,
+,\x00\x08,IMB0008,String字符串（变长）,,GRADING_ITEM_STANDARD,扣分说明,,2000,,
+,\x00\x09,IMB0009,String字符串（变长）,,ERROR_NUMBERS,缺陷次数,,20,,
+,\x00\x0A,IMB0010,String字符串（变长）,,ERROR_TOTAL_SCORE,所扣总分,,20,,
+,\x00\x0B,IMB0011,String字符串（变长）,,MR_CODE,病历编号,病历文件唯一标识,200,是,是
+,\x00\x0C,IMB0012,String字符串（变长）,,MR_CURSOR_POS,文书问题起始光标位置,,200,,
+,\x00\x0D,IMB0013,String字符串（变长）,,RECTIFICATION_UNIQUE_ID,整改编号,整改记录唯一标识,200,,
+,\x00\x0E,IMB0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,FINISHED_DATE_TIME,完成时间,,19,是,是
+,\x00\x0F,IMB0015,String字符串（变长）,,FINISHED_MARK,完成备注,,2000,,
+,\x00\x10,IMB0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,QC_CONFIRM_DATE_TIME,确认时间,,19,是,是
+,\x00\x11,IMB0017,String字符串（变长）,,QC_CONFIRM_MARK,确认备注,,2000,,
+,\x00\x12,IMB0018,简化字典（Integer整型，4个字节）,379,SD_ERROR_SCORE_FLAG,是否扣分,,20,,
+,\x00\x13,IMB0019,String字符串（变长）,,RECTIFICATION_ITEM_NO,缺陷项目顺序号,,200,,
+,\x00\x14,IMB0020,String字符串（变长）,,SCORE_ITEM_MARK,质控备注,,2000,,
+,\x00\x15,IMB0021,String字符串（变长）,,PLEAD_MARK,申诉备注,,2000,,
+,\x00\x16,IMB0022,String字符串（变长）,,SC_FINISHED_USER,完成人ID,,50,,
+,\x00\x17,IMB0023,String字符串（变长）,,ST_FINISHED_USER,完成人姓名,,50,,
+,\x00\x18,IMB0024,String字符串（变长）,,SC_QC_CONFIRM_USER,确认人ID,,50,,
+,\x00\x19,IMB0025,String字符串（变长）,,ST_QC_CONFIRM_USER,确认人姓名,,50,,
+,\x00\x1A,IMB0026,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,系统更新时间,19,,
+,\x00\x1B,IMB0027,简化字典（Integer整型，4个字节）,379,SD_TIMEOUT_FLAG,是否超时标志,是否超时标志,,,
+,\x00\x1C,IMB0028,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

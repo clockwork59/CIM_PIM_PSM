@@ -1,0 +1,72 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_IN_ADT,表全名,JHPDL:JH_IN_ADT,,,,,,
+,表说明,患者入出转记录表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,IAR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,IAR0001,String字符串（变长）,,IN_ADT_SN,入出转编号,入出转编号，系统生成三级编码，如“ZA0.000.000.001”,20,是,是
+,\x00\x02,IAR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,IAR0003,String字符串（变长）,,IN_HOSP_SN,住院就诊编号,住院就诊编号，来源JH_IN_HOSP的IHR0001,20,是,是
+,\x00\x0D,IAR0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ADT_NEW_TIME,转入时间,患者被接收的时间；出类型为空,19,是,是
+,\x00\x23,IAR0035,String字符串（变长）,,ST_ADT_NEW_DEPT,转入科室名称,转入科室名称,200,,
+,\x00\x22,IAR0034,String字符串（变长）,,SC_ADT_NEW_DEPT,转入科室编码,转入科室编码,200,是,是
+,\x00\x27,IAR0039,String字符串（变长）,,ST_ADT_NEW_BED,转入床位名称,转入床位名称,200,,
+,\x00\x26,IAR0038,String字符串（变长）,,SC_ADT_NEW_BED,转入床位编码,转入床位编码,200,,
+,\x00\x25,IAR0037,String字符串（变长）,,ST_ADT_NEW_WARD,转入病区名称,转入病区名称,200,,
+,\x00\x24,IAR0036,String字符串（变长）,,SC_ADT_NEW_WARD,转入病区编码,转入病区编码,200,,
+,\x00\x38,IAR0056,String字符串（变长）,,ST_ADT_NEW_ROOM,转入病房名称,转入病房名称,200,,
+,\x00\x37,IAR0055,String字符串（变长）,,SC_ADT_NEW_ROOM,转入病房标识,转入病房标识,200,,
+,\x00\x28,IAR0040,String字符串（变长）,,ST_ADT_NEW_OPER,转入办理员名称,转入办理员名称,200,,
+,\x00\x30,IAR0048,String字符串（变长）,,SC_ADT_NEW_OPER,转入办理员编码,源业务系统转入办理员编码,20,,
+,\x00\x08,IAR0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ADT_OLD_TIME,转出时间,患者被送出的时间；入类型为空,19,是,是
+,\x00\x1C,IAR0028,String字符串（变长）,,ST_ADT_OLD_DEPT,转出科室名称,,200,,
+,\x00\x1B,IAR0027,String字符串（变长）,,SC_ADT_OLD_DEPT,转出科室编码,,200,是,是
+,\x00\x20,IAR0032,String字符串（变长）,,ST_ADT_OLD_BED,转出床位名称,,200,,
+,\x00\x1F,IAR0031,String字符串（变长）,,SC_ADT_OLD_BED,转出床位编码,,200,,
+,\x00\x1E,IAR0030,String字符串（变长）,,ST_ADT_OLD_WARD,转出病区名称,,200,,
+,\x00\x1D,IAR0029,String字符串（变长）,,SC_ADT_OLD_WARD,转出病区编码,,200,,
+,\x00\x36,IAR0054,String字符串（变长）,,ST_ADT_OLD_ROOM,转出病房名称,转出病房名称,200,,
+,\x00\x35,IAR0053,String字符串（变长）,,SC_ADT_OLD_ROOM,转出病房标识,转出病房标识,200,,
+,\x00\x21,IAR0033,String字符串（变长）,,ST_ADT_OLD_OPER,转出办理员名称,,200,,
+,\x00\x2F,IAR0047,String字符串（变长）,,SC_ADT_OLD_OPER,转出办理员编码,源业务系统转出办理员编码,20,,
+,\x00\x2C,IAR0044,String字符串（变长）,,ST_SHIFT_STATE,执行状态说明,源业务系统的当前执行状态描述（申请、已确认、已执行、取消申请）,200,,
+,\x00\x2B,IAR0043,String字符串（变长）,,SC_SHIFT_STATE,执行状态编码,源业务系统的当前执行状态编码,200,,
+,\x00\x1A,IAR0026,简化字典（Integer整型，4个字节）,387,SD_SHIFT_STATE,执行状态,当前执行状态（申请、已确认、已执行、取消申请）,20,,
+,\x00\x34,IAR0052,String字符串（变长）,,ST_REFERRAL_PROCE,有无转诊手续内容,源业务系统有无转诊手续内容,20,,
+,\x00\x32,IAR0050,String字符串（变长）,,SC_REFERRAL_PROCE,有无转诊手续编码,源业务系统有无转诊手续编码,20,,
+,\x00\x2E,IAR0046,简化字典（Integer整型，4个字节）,380,SD_REFERRAL_PROCE,有无转诊手续,,50,,
+,\x00\x17,IAR0023,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x18,IAR0024,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x11,IAR0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CONFIRM_TIME,确认申请时间,,19,,
+,\x00\x10,IAR0016,String字符串（变长）,,CONFIRM_OPER,确认人,,200,,
+,\x00\x13,IAR0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CANCEL_TIME,取消申请时间,,19,,
+,\x00\x12,IAR0018,String字符串（变长）,,CANCEL_OPER,取消人,,200,,
+,\x00\x33,IAR0051,String字符串（变长）,,ST_OBSERVATION,留观标志内容,源业务系统留观标志内容,20,,
+,\x00\x31,IAR0049,String字符串（变长）,,SC_OBSERVATION,留观标志编码,源业务系统留观标志编码,20,,
+,\x00\x2D,IAR0045,简化字典（Integer整型，4个字节）,379,SD_OBSERVATION,留观标志,,50,,
+,\x00\x2A,IAR0042,String字符串（变长）,,ST_ADT_TYPE,发生类型说明,源业务系统的状态变化的类型描述（预约入院、入院、入科、入病区、预约出院、出院、转病区、转科、召回）,200,,
+,\x00\x29,IAR0041,String字符串（变长）,,SC_ADT_TYPE,发生类型编码,源业务系统的状态变化的类型编码,200,,
+,\x00\x19,IAR0025,简化字典（Integer整型，4个字节）,386,SD_ADT_TYPE,发生类型,状态变化的类型（预约入院、入院、入科、入病区、预约出院、出院、转病区、转科、召回）,20,是,是
+,\x00\x15,IAR0021,String字符串（变长）,,OPER,操作员,,200,,
+,\x00\x16,IAR0022,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPER_TIME,操作时间,,19,,
+,\x00\x14,IAR0020,String字符串（变长）,,MARK,备注,,4000,,
+,\x00\x39,IAR0057,String字符串（变长）,,SC_DOC_BEF,变更前的医生编码,,50,,
+,\x00\x3A,IAR0058,String字符串（变长）,,ST_DOC_BEF,变更前的医生名称,,100,,
+,\x00\x3B,IAR0059,String字符串（变长）,,SC_DOC_AFT,变更后的医生编码,,50,,
+,\x00\x3C,IAR0060,String字符串（变长）,,ST_DOC_AFT,变更后的医生名称,,100,,
+,\x00\x3D,IAR0061,String字符串（变长）,,SC_TRANS,转科事由编码,,10,,
+,\x00\x3E,IAR0062,String字符串（变长）,,ST_TRANS,转科事由说明,,50,,
+,\x00\x3F,IAR0063,String字符串（变长）,,REMARK,备注,,200,,
+,\x00\x40,IAR0064,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x04,IAR0004,自定义字典类型，字符串（变长）,386,ADT_TYPE,发生类型,状态变化的类型（预约入院、入院、入科、入病区、预约出院、出院、转病区、转科、召回）,200,是,是
+,\x00\x05,IAR0005,String字符串（变长）,,ADT_OLD_DEPT,转出科室,"患者转移之前所在科室编码＋名称，如“001#,#内科”；入类型为空",200,是,是
+,\x00\x06,IAR0006,String字符串（变长）,,ADT_OLD_WARD,转出病区,"患者转移之前所在病区编码＋名称，如“001#,#内科一病区”；入类型为空",200,,
+,\x00\x07,IAR0007,String字符串（变长）,,ADT_OLD_BED,转出床位,"患者转移之前所在床位编码＋名称，如“001#,#36床”；入类型为空",100,,
+,\x00\x09,IAR0009,String字符串（变长）,,ADT_OLD_OPER,转出办理员,"人员编码＋名称，如“1001#,#张三”",200,,
+,\x00\x0A,IAR0010,String字符串（变长）,,ADT_NEW_DEPT,转入科室,"患者转移之后所在科室编码＋名称，如“001#,#内科”；出类型为空",200,是,是
+,\x00\x0B,IAR0011,String字符串（变长）,,ADT_NEW_WARD,转入病区,"患者转移之后所在病区编码＋名称，如“001#,#内科一病区”；出类型为空",200,,
+,\x00\x0C,IAR0012,String字符串（变长）,,ADT_NEW_BED,转入床位,"患者转移之后所在床位编码＋名称，如“001#,#36床”；出类型为空",200,,
+,\x00\x0E,IAR0014,String字符串（变长）,,ADT_NEW_OPER,转入办理员,"人员编码＋名称，如“1001#,#张三”",200,,
+,\x00\x0F,IAR0015,自定义字典类型，字符串（变长）,387,SHIFT_STATE,执行状态,当前执行状态（申请、已确认、已执行、取消申请）,200,,

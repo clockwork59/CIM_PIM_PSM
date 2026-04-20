@@ -1,0 +1,30 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_ALLERGY,表全名,JHPDL:JH_ALLERGY,,,,,,
+,表说明,过敏记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,AMR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,AMR0001,String字符串（变长）,,ALLERGY_SN,过敏记录编号,过敏记录编号，系统生成三级编码，如“AR0.000.000.001”,20,是,是
+,\x00\x02,AMR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,AMR0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,AMR0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x06,AMR0006,Integer整型（4个字节）,,ALLERGY_ORDER,过敏顺序号,,20,,
+,\x00\x07,AMR0007,String字符串（变长）,,ALLERGY_TYPE,过敏分类,,200,,
+,\x00\x08,AMR0008,String字符串（变长）,,ALLERGY_SRC,过敏源,,500,,
+,\x00\x09,AMR0009,String字符串（变长）,,ALLERGY_CONTENT,过敏描述,,4000,,
+,\x00\x0A,AMR0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,INPUT_TIME,记录时间,,19,,
+,\x00\x0B,AMR0011,自定义字典类型，字符串（变长）,451,MESSAGE_SRC,信息来源,患者自己描述、院外检测结果、院内检测结果,200,,
+,\x00\x0C,AMR0012,String字符串（变长）,,ALLERGY_REMARK,其它备注,,4000,,
+,\x00\x0D,AMR0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x0E,AMR0014,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,就诊类型的中台标准编码,20,是,是
+,\x00\x11,AMR0017,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,200,是,是
+,\x00\x12,AMR0018,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,200,,
+,\x00\x0F,AMR0015,简化字典（Integer整型，4个字节）,451,SD_MESSAGE_SRC,信息来源简码,患者自己描述、院外检测结果、院内检测结果,20,,
+,\x00\x10,AMR0016,String字符串（变长）,,ST_MESSAGE_SRC,信息来源描述,,500,,
+,\x00\x13,AMR0019,String字符串（变长）,,SC_MESSAGE_SRC,信息来源编码,源业务系统的信息来源编码,200,,
+,\x00\x14,AMR0020,String字符串（变长）,,SC_RECORDER,记录人编码,,50,,
+,\x00\x15,AMR0021,String字符串（变长）,,ST_RECORDER,记录人名称,,50,,
+,\x00\x16,AMR0022,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x05,AMR0005,自定义字典类型，字符串（变长）,383,VISIT_TYPE,就诊类型,"就诊类型，如“3#,#4#,#门诊”（直接复制JH_PAT_VISIT）",200,,

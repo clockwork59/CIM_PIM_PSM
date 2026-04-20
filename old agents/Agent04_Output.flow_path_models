@@ -1,0 +1,494 @@
+# 流动路径模型 - 基于Agent-01系统拓扑
+
+flow_path_models:
+  meta:
+    based_on: "Agent-01系统拓扑建模结果"
+    modeling_approach: "溯源-汇-回流分析法，重点识别闭环和开环系统"
+    hydraulic_analysis: "基于能量方程和连续性方程"
+    pressure_levels: "从高压侧到低压侧，压差驱动流动"
+    reference_sources: ["ANSI/ASHRAE 90.1", "DIN EN 12828", "VDI 2067"]
+
+  # HVAC核心系统 - 冷冻水系统（双工况系统）
+  hvac_chilled_water:
+    system_id: "HVAC-CHP"
+    fluid_medium: "chilled_water"
+    system_classification: "闭环循环系统"
+    flow_type: "供给-回流双向循环"
+
+    overall_flow_pattern:
+      title: "冷冻水-冷量循环系统"
+      description: "从冷源(制冷机)将冷量传递给空气处理机组"
+      energy_carrier: "冷冻水(5-12°C)传递冷量"
+      energy_queue: "制冷机→冷冻泵→分水器→AHU→集水器→制冷机"
+      thermal_balance: "冷源提供的冷量等于末端消耗的热量"
+
+    supply_path:
+      path_id: "chilled_supply"
+      flow_direction: "source_to_sink"
+      temperature_profile: "供水温度坡度变化"
+      pressure_profile: "沿针方向压降"
+
+      components:
+        - component: "chillers_primary"  # 对应Agent-01中的CHP-CH-01
+          node_id: "CHP-CH-01"
+          function: "产生冷冻水，提供冷量"
+          operating_conditions:
+            supply_temp: "7°C"
+            return_temp: "12°C"
+            pressure_generated: "0.2 MPa"
+            flow_rate_factor: "总扬程的60-70%"
+
+        - component: "primary_pumps"  # 对应Agent-01中的CHP-CP-01
+          node_id: "CHP-CP-01"
+          function: "提供循环系统所需动力"
+          pump_characteristics:
+            head_range: "15-30 mH₂O"
+            efficiency_curve: "elect provided by manufacturer"
+            speed_control: "Variable Speed Drive (VSD)"
+            power_calculation: "P = ρgQH/η"
+
+        - component: "supply_header"  # 对应Agent-01中的CHP-CW-01
+          node_id: "CHP-CW-01"
+          function: "分配冷冻水至各支路系统"
+          hydraulics:
+            distribution_type: "等压分配"
+            branch_impedance: "与长度和局部阻力成比例"
+            pressure_regulation: "安装平衡阀确保流量平衡"
+
+        - component: "ahu_coils"  # 对应Agent-01中的AHU-HW-01
+          node_id: "AHU-HW-01"
+          function: "通过表冷器将冷量传递给处理空气"
+          heat_exchange:
+            coil_arrangement: "顺流-逆流-叉流转换"
+            heat_transfer: "Q = CFΦΔT_lm"
+            approach_temp: "2-5°C"
+            coil_face_velocity: "2-3 m/s"
+
+    return_path:
+      path_id: "chilled_return"
+      flow_direction: "sink_to_source"
+      temperature_changes: "吸收热量后温度上升"
+      pressure_recovery: "重力势能转化为压力能"
+
+      components:
+        - component: "return_header"
+          node_id: "CHP-EW-01"
+          function: "收集各回路回水"
+          design_considerations:
+            temperature_stratification: "需要混合稳定"
+            air_venting: "避免气阻"
+            return_temp_control: "维持12°C为目标"
+
+        - component: "return_to_chiller"
+          function: "回水返回至制冷机重复利用"
+          thermal_considerations:
+            delta_T: "维持5K温差"
+            thermal_inertia: "系统热容量分析"
+            energy_efficiency: "冷机COP与温度的关系"
+
+    energy_conversion_paths:
+      primary_energy: "电能驱动制冷机压缩做功"
+      secondary_energy: "制冷机将低温热源热量排至冷却水或空气"
+      tertiary_energy: "冷冻水流动传递冷量至需求终端"
+
+    hydraulic_balancing:
+      importance: "确保各支路获得设计流量，避免过度或不足"
+      balancing_valves: "手动或自动平衡阀调节"
+      control_strategy: "差压旁通阀稳定系统总流量"
+
+    secondary_loop: # 二次侧水系统
+      description: "大型系统常用一次泵+二次泵的双循环方案"
+      heat_exchanger: "一次侧和二次侧通过板式换热器连接"
+      hydraulic_decoupling: "一次泵和二次泵流量独立调节"
+
+  # HVAC空气系统 - 空气处理系统
+  hvac_air_systems:
+    system_id: "HVAC-AHU"
+    fluid_medium: "humid_air"
+    system_classification: "开环与部分闭环组合系统"
+    architectural_consideration: "空间→环境→系统→控制"
+
+    ahu_flow_pattern:
+      description: "空气处理机组产生处理空气并分配到各房间"
+      air_march: "新风+回风→过滤→盘管→加湿→分布→房间→回风/排风"
+      thermodynamic_process: "空气的热力循环：显热+潜热处理"
+
+    air_paths:
+      fresh_air_paths:
+        path_type: "open_loop_source"
+        source: "outdoor_environment"
+        seasonal_variations:
+          summer: "30-35°C, 50-70%RH"
+          winter: "-5-10°C, 20-40%RH"
+          spring_autumn: "15-25°C, 40-60%RH"
+
+        conditioning_steps:
+          - step: "filtration"
+            description: "新风过滤处理，级别G4-F9"
+            dust_removal: "≥0.5μm颗粒物≥80%"
+          - step: "tempering"
+            description: "冬季预热，夏季配风量冷却"
+            target_temp: "≥5°C预加热" # 防冻
+          - step: "humidity_control"
+            description: "冬季加湿，夏季除湿"
+            target_dew_point: "夏季≤15°C, 冬季≥5°C"
+
+      supply_air_path:
+        path_id: "supply_air_distribution"
+        description: "处理空气从AHU送至末端风口"
+
+        components:
+          - component: "ahu_fan"  # 对应Agent-01中的AHU-FA-01
+            node_id: "AHU-FA-01"
+            function: "提供送风压力，克服管道阻力"
+            fan_types: ["离心风机", "轴流风机", "混流风机"]
+            fan_laws:
+              law1: "Q ∝ N (流量与转速成正比)"
+              law2: "P ∝ N² (压力与转速平方成正比)"
+              law3: "W ∝ N³ (功率与转速立方成正比)"
+            control_method: "变频调速或风机入口导流片"
+            energy_considerations: "风机功耗占系统20-30%电能"
+
+          - component: "supply_ductwork"  # 对应Agent-01中的AHU-SA-01
+            node_id: "AHU-SA-01"
+            function: "输送和分配送风"
+            sizing_criteria:
+              velocity_limits:
+                main_ducts: "6-8 m/s (high velocity)"
+                branch_ducts: "3-6 m/s (medium velocity)"
+                duct_ends: "1.5-2.5 m/s (residual noise <80 dB)"
+              energy_optimization: "采用经济流速，平衡初投资与运行费"
+
+            pressure_factor:
+              frictional_loss: "达西-韦斯巴赫公式ΔP_f = f(L/D)(ρv²/2)"
+              local_losses: "ΣK·ρv²/2，基于局部阻力系数"
+              system_pressure: "300-400Pa送风总阻力"
+
+          - component: "air_terminals"  # 对应Agent-01中的各房间风口
+            function: "均匀分布空气到使用空间"
+            types: ["散流器", "百叶风口", "条形风口", "旋流风口"]
+            performance_metrics:
+              throw_length: "送风气流到指定距离的衰减"
+              induction_ratio: "诱导的室内空气量/送风量"
+              drop_angle: "垂直射流与高差比"
+            control_integration: "VAV末端支持变风量系统"
+
+      room_air_path:
+        path_type: "distributed_sink"
+        description: "室内空气参数形成，空气热力、动力和化学特性融合"
+
+        zone_modeling:
+          thermal_zones: "按功能、朝向、负荷特性分区"
+          load_components:
+            - load: "sensible_heat"
+              description: "显热负荷：人员、照明、设备、传导"
+              calculation: "Q_s = m·c_p·ΔT"
+            - load: "latent_heat"
+              description: "潜热负荷：人员、泄漏、新风湿负荷"
+              calculation: "Q_l = m·γ·Δd"
+          air_mixing_model: "完全混合+局部分层+交换扩散"
+
+        air_age_analysis:
+          fresh_air_age: "置换送风可达40-50s衰减"
+          indoor_air_quality: "表征污染物稀释率和换气充分性"
+
+      return_air_path:
+        path_type: "multiple_return_with_option"
+        description: "空气收集分类处理，确定循环与排放比例"
+
+        paths:
+          - path: "return_air_recirculation"
+            description: "大部分空气回流利用，节能为主"
+            recirculation_ratio: "75-90%"
+            filtration_requirement: "F7级或以上防护"
+            heat_recovery: "空气-空气热回收约50-70%"
+
+          - path: "return_air_exhaust"
+            description: "部分空气直接排放，质控为主"
+            exhaust_ratio: "10-25%"
+            drivers: ["室内污染物超标", "局部排风要求", "压力控制"]
+
+      exhaust_air_path:
+        path_type: "sectionalized_open_loop_sink"
+        purpose: "排除污浊空气，维持室内净健环境"
+
+        sub_paths:
+          - path: "general_exhaust"
+            description: "常规排风，维持房间微负压"
+            locations: ["卫生间", "电梯机房", "设备用房", "垃圾收集"]
+            design_flow_rate: "按换气次数或污染物发生量"
+          - path: "containment_exhaust"
+            description: "含特定污染物的专门排风"
+            locations: ["厨房", "化验室", "动物房", "传染病房"]
+            filtration_treatment: ["油烟过滤器", "HEPA过滤器", "化学吸附器"]
+          - path: "smoke_exhaust"
+            description: "火灾排烟系统"
+            features: ["高温耐受", "排烟风机", "防火阀", "联动控制"]
+            code_compliance: "GB51251建筑防烟排烟系统技术标准"
+
+    pressure_air_relationship:
+      air_balancing: "送风量=回风量+排风量+渗透风量"
+      building_pressure: "-+5-15Pa正压控制，防止外气渗入"
+      infiltration_model: "门窗缝隙渗透量Δm = C·ΔP^n"
+
+  # 电气系统 - 三相四线制配电
+  electrical_power_systems:
+    system_id: "ELECTRICITY"
+    fluid_medium: "ac_three_phase"
+    system_classification: "辐射状网络系统"
+
+    power_flow_pattern:
+      description: "电能从变压器输送到各级配电，最后到达末端设备"
+      electrical_sequence: "电网→高压配电→变压器→低压配电→设备"
+      parallel_paths: "正常情况下互相备用的回路"
+
+    transmission_paths:
+      # 高压侧 (35kV/10kV)
+      high_voltage_path:
+        path_type: "primary_transmission"
+        voltage_level: "35kV"
+        source: "电力部门变电站"
+        control_equipment: "高压断路器，继电保护"
+
+      # 配电侧 (10kV/0.4kV)
+      distribution_path:
+        path_type: "radial_distribution"
+        transformer_node: "Transformation station"
+
+        components:
+          - component: "transformer"  # Agent-01 TR-01
+            node_id: "TR-01"
+            function: "Voltage transformation 35kV→0.4kV"
+            technical_specs:
+              capacity: "Cooling power: 1600-2500 kVA"
+              efficiency: "Full load ≥99%, no-load losses ≈0.5%"
+              voltage_regulation: "±2.5% tap changer"
+              impedance: "uk = 4-6%"
+
+          - component: "main_switchboard"  # Agent-01 SW-01
+            node_id: "SW-01"
+            function: "主配电柜，进线总开关"
+            electrical_specs:
+              bus_capacity: "≥总额负荷125%"
+              short_circuit_withstand: "50kA 0.1s"
+              overload_protection: "热继电器特性曲线"
+              monitoring: "三相电压电流功率电量显示"
+
+          - component: "sub_circuit"  # Agent-01各分支配电
+            function: "分配至动力、照明、弱电等子系统"
+            electrical_flow:
+              single_phase: "L-N-PE 相零-保护接地"
+              three_phase: "L1-L2-L3-N-PE"
+              neutral_balance: "三相负载平衡<15%"
+              grounding: "TN-S保护接地手册"
+
+            power_calculation:
+              active_power: "P = √3 * U * I * cosφ"
+              reactive_power: "Q = √3 * U * I * sinφ"
+              apparent_power: "S = √3 * U * I"
+              power_factor: "cosφ ≥ 0.95 (电网要求)"
+
+    electrical_characteristics:
+      power_flow_method: "前推回代法"
+      load_modeling: "恒功率或恒电流或阻抗模型"
+      voltage_levels:
+        - level: "0.4kV"
+          application: "低压配电"
+          voltage_deviation: "±5%"
+        - level: "10kV"
+          application: "中压配网"
+          voltage_deviation: "±10%"
+      power_quality:
+        harmonics: "THD(U) ≤5% (GB/T 14549)"
+        imbalance: "负序电压≤2%，零序电压≤2%"
+        voltage_fluctuation: "Flicker Pst ≤1.0"
+
+  # 医疗气体系统
+  medical_gas_systems:
+    system_id: "MEDICAL-GAS"
+    fluid_mediums: ["oxygen", "medical_air", "vacuum", "nitrous_oxide"]
+    system_classification: "管道网络+气源汇流+报警监测"
+
+    gas_supply_paths:
+      dual_source_pattern:
+        description: "主管网+备用气瓶的双线路供应方案"
+        reliability_level: "99.999% (每月<4.3分钟中断)"
+
+      central_supply_path:
+        source: "大型液氧喰气站或空气压缩机站"
+        regulation: "降至0.4-0.6MPa管网静止压力"
+        backup_source: "高压气瓶组(≥15MPa)"
+        switch_logic: "压力下降时自动切换"
+
+      terminal_distribution:
+        pipe_networks: "铜管或不锈钢管"
+        pipe_sizing: "按最大同时使用率+20%安全系数"
+        terminal_outlet_pressure: "0.35MPa (surgical tool drive)"
+        termination_standards:
+          oxygen: "符合ISO7396-1,MED等级"
+          air: "ISO8573 Class 1.4.1 制药级"
+          vacuum: "ISODP等级, 过流杀毒除菌"
+
+    vacuum_system:
+      generation: "液环真空泵或干式真空泵"
+      vacuum_level_across_network: "吸压60-70%vacuum manifold"
+      flow_resistance: "真空泵抽力克服管网阻力"
+      contamination_control: "过滤器阻截，消毒灭菌"
+
+  # 生活给排水系统
+  domestic_plumbing:
+    system_id: "DOMESTIC-WATER"
+    fluid_mediums: ["domestic_water_cold", "domestic_water_hot", "sewage_ww", "rainwater_rw"]
+    system_classification: "分区化按需供给+重力排放"
+
+    water_supply_paths:
+      pressure_zones:
+        description: "区分为高压、中压、低压三个区域供给"
+        supply_source: "市政网供水+二次加压供水"
+        pressure_levels:
+          - zone: "低压区(1-4层)"
+            pressure: "0.10-0.35MPa"
+            source: "直接市政供水"
+          - zone: "中高压区(5-10层)"
+            pressure: "0.35-0.50MPa"
+            source: "加压供水"
+          - zone: "高楼区(10+层)"
+            pressure: "0.50-0.80MPa"
+            source: "二次加压+高位水箱"
+
+      hot_water_distribution:
+        generation: "换热系统或电热水器"
+        temperature_maintenance: "60°C出水，回流加热50°C"
+        circulation_systems: "定时循环泵维持热水待供给"
+        heat_exchanger_types:
+          - "板式换热器"
+          - "容积式换热器"
+          - "即热式换热器"
+
+    drainage_paths:
+      gravity_flow: "依靠重力势能推动流动"
+      sewer_systems:
+        - system: "生活污水"
+          classification: "黑水和灰水"
+          flow_characteristics: "间歇性、峰值流量变化大"
+        - system: "天沟屋面水"
+          classification: "初期雨水和中后期雨水"
+          calculation: "屋面汇水面积×降雨强度"
+      equipment:
+        - equipment: "隔油池"
+        - equipment: "化粪池"
+        - equipment: "水封装置"
+        - equipment: "检查井"
+
+  # 消防水系统
+  fire_protection:
+    system_id: "FIRE-PUMP"
+    fluid_medium: "fire_water"
+    system_classification: "有压环网+临时高压(火灾时加压)"
+
+    fire_water_paths:
+      inspection_routes: "环状管网布设，保证双向供水"
+      flow_requirements_for_buidlings:
+        calculate: "按防火等级、建筑体积、功能确定"
+        standards:
+          hydrant_water_guns: "最小水柱充实13m，5L/s"
+          automatic_sprinkler: "gravity-fed or pump-fed, density 4-10 L/(min·m²)"
+
+      fire_pump_activation:
+        trigger_source: "1) 市政革压下降至设定值 2) 消防管路压力开关直接动作"
+        sequencing: "1号主泵启动→若压力不足→2号备用泵启动→..."
+        flow_correlation: "火情的发展决定水量需求"
+
+      standby_state:
+        condition: "管路充剂水但低压(0.1-0.3MPa)"
+        pressure_maintenance: "小泵任电维持系统静止不消耗水量"
+        system_ready_time: "≤30s 启动达到设计流量"
+
+  # 蒸汽/凝结水系统
+  steam_systems:
+    system_id: "STEAM-CONDENSATE"
+    fluid_mediums: ["saturated_steam", "steam_condensate"]
+    system_classification: "开放却式双管道+闭式蒸汽系统"
+
+    steam_paths:
+      # 高压蒸汽
+      high_pressure_steam: # 0.8-1MPa
+        primary_usage: "工艺加热、厨房蒸煮、高温消毒"
+        flow_characteristics:
+          two_phase_flow: "局部凝露和汽水分离"
+          insulation: "蒸汽管道需保温"
+
+      # 低压蒸汽
+      low_pressure_steam: # 0.2-0.4MPa
+        primary_usage: "生活热水加热、冬天空调焓加湿"
+        condensation_management:
+          separators: "重力、离心、挡板式汽水分离器"
+          trapped_condensate: "疏水阀连续排除冷凝水"
+          flash_steam: "二次闪蒸汽需回收利用"
+
+    condensate_return:
+      return_system: "重力回流或泵送回流"
+      heat_recovery:
+        flash_steam: "便极蒸汽发生器提供帮助蒸汽"
+        preheating: "预热补给水100-80°C"
+
+    boiler_circuits:
+      feed_water: "软水处理后的给水，硬度≤30mg/L"
+      blow_down: "定期排放，腐蚀速率和热损失平衡"
+      efficiency_circuit: "燃料-蒸汽能量转换η=燃料低热值/有效蒸汽热值"
+
+  # 流动路径分析总结
+  path_analysis_summary:
+    analysis_methodology:
+      title: "溯源-汇-转换分析法，关键识别闭环/开环"
+      core_techniques:
+        - "源汇识别": "区分能量/物质源和需求终端"
+        - "路径分析": "连接各系统间的均值与回流路径"
+        - "拓扑建模": "基于Agent-01的节点-边模型进行流动建模"
+        - "质量/能量守恒": "在节点和汇聚点严格守恒"
+        - "State-based Analysis": "分析状态累积与动态变化"
+
+    classification_of_systems:
+      closed_loop_systems:
+        - system: "冷冻水"
+          description: "完全回收循环，与负荷断开无直接排放"
+        - system: "热水锅炉"
+          description: "循环使用，损失仅需补水"
+        - system: "医疗气体真空"
+          description: "系统真空维持循环，排污过滤处理"
+
+      quasi_closed_systems:
+        - system: "空气处理"
+          description: "混合比例可调，补充新风，排放少量"
+        - system: "给水系统"
+          description: "使用消耗掉，排水外排，需要持续补给"
+
+      open_loop_systems:
+        - system: "通进风"
+          description: "取外部空气，内排外，单向流动"
+        - system: "消防水喷射"
+          description: "火灾时喷射，流程是一次性"
+        - system: "废水排放"
+          description: "污水收集后排入市政管网"
+
+    design_verification:
+      - "(1)流动方向正确:+ΔP, +驱动力"
+      - "(2)温度和压力沿珍路径变化合理"
+      - "(3)满足热平衡和物质平衡方程"
+      - "(4)路径阻力和泵送能力匹配"
+      - "(5)负荷需求与源能力相匹配"
+      - "(6)和安全相关的应急路径畅通"
+
+    operational_implications:
+      - energy_efficiency: "设计环路优化，减少不必要的损失"
+      - control_strategy: "基于流动路径机理建立控制逻辑"
+      - maintenance_plan: "关键节点和阻力的定期检查和清洁"
+      - fault_diagnosis: "路径异常特征，阀位和温度疏点检测"
+      - performance_optimization: "负荷调度与系统最佳效率点运行"
+
+    integration_points:
+      - "(1)机械设备协调：泵、风机、压缩机的配合"
+      - "(2)热力学负荷：冷热负荷与Handler最佳匹配"
+      - "(3)控制子系统集成：传感器定位与执行器配置"
+      - "(4)安全与可靠性：故障安全状态和备用路径"
+      - "(5)经济优化：运行成本与环境性能的权衡"

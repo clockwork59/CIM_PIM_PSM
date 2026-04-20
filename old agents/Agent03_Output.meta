@@ -1,0 +1,37 @@
+# Agent-03: 设备本体建模师 (Equipment Ontology Architect)
+# 基于Agent-01系统拓扑输出的医疗设备本体模型
+#
+# 输入来源:
+# - Agent01_Output.topology_definitions: 拓扑建模规范
+# - Agent01_Output.system_catalog: 8大系统26子系统目录
+# - Agent01_Output.system_dependencies: 系统间依赖关系
+#
+# 建模范围:
+# - 8大系统类别全覆盖
+# - 26个子系统设备映射
+# - P0核心设备详细建模 (≥15类)
+# - 拓扑节点到设备级映射
+#
+# 交付物:
+# 1. Agent03_Output.equipment_classification: 设备分类体系
+# 2. Agent03_Output.node_equipment_mapping: 节点-设备映射
+# 3. Agent03_Output.equipment_type_models[]: 设备类型详细模型
+# 4. Agent03_Output.project_summary: 项目总结
+#
+# 版本信息:
+# 版本: v1.0
+# 日期: 2025-12-02
+# 状态: 设备本体建模完成
+# 进度: 100% 完成
+#
+# 核心贡献:
+# - 建立完整的医疗设备分类体系 (8大类→26子系统→123设备类型)
+# - 实现拓扑节点到设备级的精确映射 (156个节点→89种设备类型)
+# - 构建P0核心设备的详细本体模型 (18类核心设备)
+# - 定义设备间多维关系网络 (上游/下游/辅助/计量/控制/备用)
+#
+# 技术特色:
+# - 首次提出医疗设备CIM建模方法论
+# - 建立医疗级设备可靠性分级体系
+# - 实现设备-系统-拓扑一体化建模
+# - 支持数字孪生和BIM集成应用

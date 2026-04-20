@@ -1,0 +1,25 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FOLLOW_UP_RPT,表全名,JHPDL:JH_FOLLOW_UP_RPT,,,,,,
+,表说明,随访报告,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PAB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PAB0001,String字符串（变长）,,FOLLOWUP_RPT_SN,随访计划编号,随访计划编号，系统生成三级编码，如“AE0.000.000.001”,20,是,是
+,\x00\x02,PAB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,PAB0003,String字符串（变长）,,FOLLOW_UP_SN,随访记录编号,随访记录编号，来源JH_FOLLOW_UP的PAF0001,20,是,是
+,\x00\x0A,PAB0010,String字符串（变长）,,SC_FOLLOW_TYPE,报告类别编码,记录何种类型报告，满意度调查报告等,100,,
+,\x00\x0B,PAB0011,String字符串（变长）,,ST_FOLLOW_TYPE,报告类别描述,,200,,
+,\x00\x0C,PAB0012,String字符串（变长）,,SC_RPT_ITEM,报告内容编码,如问卷类随访时，问卷问题存在独立编码,100,,
+,\x00\x0D,PAB0013,String字符串（变长）,,ST_RPT_ITEM,报告内容描述,记录该条数据属于什么报告内容，类似病历章节名称，按照行记录报告内容,200,,
+,\x00\x0E,PAB0014,Double双精度浮点型（8个字节）,,TOTAL_SCORE,总分值,问卷类随访报告记录分值使用,38,,
+,\x00\x0F,PAB0015,Double双精度浮点型（8个字节）,,ACTUAL_SCORE,实际分值,问卷类随访报告记录分值使用,38,,
+,\x00\x10,PAB0016,String字符串（变长）,,RPT_RESULT_DESC,报告结果描述,存储内容对应的结果描述内容,2000,,
+,\x00\x06,PAB0006,String字符串（变长）,,FOLLOW_CONTENT_1,内容关联号1,如果随访记录保存在病例流式文件中，保存到二进制的关联唯一号；这是关联的文件唯一编号，关联到表“JH_FILE_CONTENT”,20,是,是
+,\x00\x07,PAB0007,String字符串（变长）,,FOLLOW_CONTENT_2,内容关联号2,如果随访记录保存在病例流式文件中，保存到二进制的关联唯一号；这是关联的文件唯一编号，关联到表“JH_FILE_CONTENT”,20,是,是
+,\x00\x08,PAB0008,String字符串（变长）,,FOLLOW_CONTENT_3,内容关联号3,如果随访记录保存在病例流式文件中，保存到二进制的关联唯一号；这是关联的文件唯一编号，关联到表“JH_FILE_CONTENT”,20,是,是
+,\x00\x09,PAB0009,String字符串（变长）,,FOLLOW_CONTENT_4,内容关联号4,如果随访记录保存在病例流式文件中，保存到二进制的关联唯一号；这是关联的文件唯一编号，关联到表“JH_FILE_CONTENT”,20,是,是
+,\x00\x04,PAB0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,是,是
+,\x00\x05,PAB0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,19,是,是
+,\x00\x11,PAB0017,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

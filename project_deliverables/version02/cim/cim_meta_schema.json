@@ -1,0 +1,326 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CIM Unified Meta Schema",
+  "description": "统一领域模型(CIM)元模型 - 定义所有Agent输出数据模型的通用结构和约束",
+  "version": "1.0.0",
+  "generated_at": "2026-04-05",
+
+  "definitions": {
+    "cim_id_pattern": {
+      "type": "string",
+      "pattern": "^CIM-(TOPO|SPACE|EQUIP|FLOW|CTRL|METER|OM)-[A-Z0-9_]+-\\d{3}$",
+      "description": "全局唯一ID，格式: CIM-{域}-{类型}-{序号}"
+    },
+
+    "agent_ref": {
+      "type": "string",
+      "enum": ["Agent-01", "Agent-02", "Agent-03", "Agent-04", "Agent-05", "Agent-06", "Agent-07", "Agent-08", "Agent-09"],
+      "description": "来源Agent标识"
+    },
+
+    "standard_ref": {
+      "type": "object",
+      "properties": {
+        "standard_id": {"type": "string", "description": "标准编号，如 GB50333-2013"},
+        "section": {"type": "string", "description": "标准章节"},
+        "requirement": {"type": "string", "description": "具体要求"}
+      },
+      "required": ["standard_id"]
+    },
+
+    "cross_reference": {
+      "type": "object",
+      "properties": {
+        "ref_id": {"$ref": "#/definitions/cim_id_pattern"},
+        "ref_domain": {"type": "string", "enum": ["TOPO", "SPACE", "EQUIP", "FLOW", "CTRL", "METER", "OM"]},
+        "relationship": {"type": "string", "enum": ["locatedIn", "serves", "contains", "controls", "monitors", "meters", "mapsToNode", "flowsThrough", "interlocksWith", "componentOf"]}
+      },
+      "required": ["ref_id", "ref_domain", "relationship"]
+    },
+
+    "base_entity": {
+      "type": "object",
+      "properties": {
+        "id": {"$ref": "#/definitions/cim_id_pattern"},
+        "type": {"type": "string", "description": "实体类型标识"},
+        "label_cn": {"type": "string", "description": "中文标签"},
+        "label_en": {"type": "string", "description": "英文标签"},
+        "description": {"type": "string", "description": "详细描述"},
+        "source_agent": {"$ref": "#/definitions/agent_ref"},
+        "version": {"type": "string", "pattern": "^v\\d+\\.\\d+(\\.\\d+)?$"},
+        "cross_references": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/cross_reference"}
+        },
+        "standard_refs": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/standard_ref"}
+        }
+      },
+      "required": ["id", "type", "label_cn", "source_agent"]
+    },
+
+    "TopologyNode": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "TopologyNode"},
+            "node_category": {
+              "type": "string",
+              "enum": ["Source_Node", "Sink_Node", "Distribution_Node", "LogicalNode"],
+              "description": "节点类别"
+            },
+            "node_subtype": {
+              "type": "string",
+              "enum": ["Junction", "Splitter", "Regulator", "Transformer_Node"],
+              "description": "Distribution_Node或LogicalNode的子类型"
+            },
+            "system_id": {"type": "string", "description": "所属系统ID"},
+            "subsystem_id": {"type": "string", "description": "所属子系统ID"},
+            "medium_type": {
+              "type": "string",
+              "enum": ["chilled_water", "cooling_water", "hot_water", "steam", "domestic_water", "fire_water", "supply_air", "return_air", "exhaust_air", "fresh_air", "oxygen", "compressed_air", "medical_vacuum", "nitrous_oxide", "natural_gas", "electricity_hv", "electricity_lv", "electricity_ups", "data_signal"],
+              "description": "承载介质类型"
+            },
+            "capacity": {"type": "string", "description": "节点容量/能力"},
+            "is_external": {"type": "boolean", "description": "是否为外部边界节点"}
+          },
+          "required": ["node_category", "system_id"]
+        }
+      ]
+    },
+
+    "Space": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "Space"},
+            "space_level": {
+              "type": "string",
+              "enum": ["L0_Site", "L1_Building", "L2_Floor", "L3_Zone", "L4_Room", "L5_SubSpace"],
+              "description": "空间层级"
+            },
+            "space_code": {"type": "string", "description": "空间编码"},
+            "parent_space_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "zone_classification": {
+              "type": "string",
+              "enum": ["medical", "medical_technology", "logistics", "public", "administrative"],
+              "description": "区域分类"
+            },
+            "cleanliness_class": {
+              "type": "string",
+              "enum": ["ISO-5", "ISO-6", "ISO-7", "ISO-8", "standard", "minimal"],
+              "description": "洁净等级"
+            },
+            "environment": {
+              "type": "object",
+              "properties": {
+                "temperature_min": {"type": "number", "description": "最低设计温度 (°C)"},
+                "temperature_max": {"type": "number", "description": "最高设计温度 (°C)"},
+                "humidity_min": {"type": "number", "description": "最低相对湿度 (%RH)"},
+                "humidity_max": {"type": "number", "description": "最高相对湿度 (%RH)"},
+                "pressure_differential": {"type": "number", "description": "压差要求 (Pa)"},
+                "air_changes_per_hour_min": {"type": "number", "description": "最低换气次数 (ACH)"},
+                "air_changes_per_hour_max": {"type": "number", "description": "最高换气次数 (ACH)"},
+                "noise_level_max": {"type": "number", "description": "最高噪声 (dB)"},
+                "vibration_level_max": {"type": "number", "description": "最高振动 (mm/s)"},
+                "illuminance": {"type": "number", "description": "照度 (lx)"}
+              }
+            },
+            "infection_control_level": {
+              "type": "string",
+              "enum": ["strict", "critical", "enhanced", "standard", "minimal"],
+              "description": "感染控制等级"
+            },
+            "biohazard_level": {
+              "type": "string",
+              "enum": ["BSL-1", "BSL-2", "BSL-3", "BSL-4", "none"],
+              "description": "生物危害等级"
+            },
+            "area_sqm": {"type": "number", "description": "面积 (m²)"},
+            "ceiling_height_m": {"type": "number", "description": "层高 (m)"}
+          },
+          "required": ["space_level"]
+        }
+      ]
+    },
+
+    "Equipment": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "Equipment"},
+            "system_category": {
+              "type": "string",
+              "enum": ["HVAC", "PLUMBING", "ELECTRICAL", "MEDICAL_GAS", "FIRE_PROTECTION", "VERTICAL_TRANSPORT", "BUILDING_AUTOMATION"],
+              "description": "所属系统类别"
+            },
+            "equipment_family": {"type": "string", "description": "设备家族ID"},
+            "equipment_type": {"type": "string", "description": "设备类型ID"},
+            "reliability_level": {
+              "type": "string",
+              "enum": ["LIFE_SAFETY", "PATIENT_SAFETY", "CRITICAL", "IMPORTANT", "SECONDARY"],
+              "description": "可靠性等级"
+            },
+            "capacity": {"type": "string", "description": "额定容量"},
+            "location_space_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "served_space_ids": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/cim_id_pattern"},
+              "description": "服务空间列表"
+            },
+            "topology_node_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "has_local_control": {"type": "boolean"},
+            "external_control_system": {"type": "string"},
+            "is_uncontrolled_load": {"type": "boolean"}
+          },
+          "required": ["system_category", "equipment_type"]
+        }
+      ]
+    },
+
+    "FlowPath": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "FlowPath"},
+            "carrier_type": {
+              "type": "string",
+              "description": "载体类型 (物质流)"
+            },
+            "payload_type": {
+              "type": "string",
+              "description": "荷载类型 (能量流)"
+            },
+            "source_node_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "sink_node_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "intermediate_node_ids": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/cim_id_pattern"}
+            },
+            "served_space_ids": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/cim_id_pattern"}
+            },
+            "design_flow_rate": {"type": "string", "description": "设计流量"},
+            "design_temperature": {"type": "string", "description": "设计温度"},
+            "design_pressure": {"type": "string", "description": "设计压力"}
+          },
+          "required": ["carrier_type", "source_node_id", "sink_node_id"]
+        }
+      ]
+    },
+
+    "ControlObject": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "ControlObject"},
+            "control_category": {
+              "type": "string",
+              "enum": ["Sensor", "Actuator", "Controller", "ControlLoop"],
+              "description": "控制对象类别"
+            },
+            "criticality": {
+              "type": "string",
+              "enum": ["P0-LIFE_SAFETY", "P1-MISSION_CRITICAL", "P2-IMPORTANT", "P3-SECONDARY"],
+              "description": "关键性等级"
+            },
+            "target_node_ref": {"type": "string", "description": "对应拓扑节点引用"},
+            "equipment_ref": {"type": "string", "description": "对应设备引用"},
+            "space_ref": {"type": "string", "description": "对应空间引用"},
+            "signal_type": {
+              "type": "string",
+              "enum": ["4-20mA", "0-10V", "DI", "DO", "AI", "AO", "BACnet", "Modbus", "HART"],
+              "description": "信号类型"
+            },
+            "measurement_range": {"type": "string", "description": "量程范围"},
+            "accuracy": {"type": "string", "description": "精度"},
+            "unit": {"type": "string", "description": "工程单位"}
+          },
+          "required": ["control_category"]
+        }
+      ]
+    },
+
+    "MeteringPoint": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "MeteringPoint"},
+            "meter_type": {
+              "type": "string",
+              "enum": ["ElectricMeter", "ThermalMeter", "WaterMeter", "GasMeter", "VirtualMeter"],
+              "description": "计量表类型"
+            },
+            "metering_level": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4,
+              "description": "计量层级 (1=总表, 2=分区, 3=楼层, 4=末端)"
+            },
+            "energy_type": {
+              "type": "string",
+              "enum": ["electricity", "cooling", "heating", "steam", "water", "gas", "medical_gas"],
+              "description": "能源类型"
+            },
+            "parent_meter_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "equipment_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "space_id": {"$ref": "#/definitions/cim_id_pattern"},
+            "is_virtual": {"type": "boolean", "description": "是否为虚拟计量"},
+            "derived_from": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/cim_id_pattern"},
+              "description": "虚拟计量的数据来源"
+            }
+          },
+          "required": ["meter_type", "metering_level", "energy_type"]
+        }
+      ]
+    },
+
+    "OMObject": {
+      "allOf": [
+        {"$ref": "#/definitions/base_entity"},
+        {
+          "properties": {
+            "type": {"const": "OMObject"},
+            "om_category": {
+              "type": "string",
+              "enum": ["AlarmEvent", "WorkOrder", "MaintenanceStrategy", "AssetLifecycle", "SOP", "EmergencyPlan"],
+              "description": "运维对象类别"
+            },
+            "severity": {
+              "type": "string",
+              "enum": ["P0_Emergency", "P1_Critical", "P2_Major", "P3_Minor"],
+              "description": "严重程度/优先级"
+            },
+            "target_equipment_ids": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/cim_id_pattern"}
+            },
+            "target_space_ids": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/cim_id_pattern"}
+            },
+            "sla": {
+              "type": "object",
+              "properties": {
+                "response_time": {"type": "string"},
+                "arrival_time": {"type": "string"},
+                "resolution_time": {"type": "string"}
+              }
+            }
+          },
+          "required": ["om_category"]
+        }
+      ]
+    }
+  }
+}

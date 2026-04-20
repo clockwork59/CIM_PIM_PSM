@@ -1,0 +1,42 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_ORDERS,表全名,JHPDL:JH_OUT_ORDERS,,,,,,
+,表说明,门诊处方/医嘱,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,OOR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,OOR0001,String字符串（变长）,,OUT_ORDERS_SN,门诊处方编号,门诊处方编号，系统生成三级编码，如“MD0.000.000.001”,20,是,是
+,\x00\x02,OOR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,OOR0003,String字符串（变长）,,OUT_HOSP_SN,门诊就诊编号,门诊就诊编号，来源JH_OUT_HOSP的OHR0001,20,是,是
+,\x00\x04,OOR0004,String字符串（变长）,,ENTER_DEPT,开方科室,"开立处方医生所在的科室，科室编号＋名称，如“001#,#内科”",200,是,是
+,\x00\x15,OOR0021,String字符串（变长）,,SC_ENTER_DEPT,开方科室编码,,200,是,是
+,\x00\x16,OOR0022,String字符串（变长）,,ST_ENTER_DEPT,开方科室描述,,200,,
+,\x00\x05,OOR0005,String字符串（变长）,,ENTER_DOCTOR,开方医生,"处方开立的医生，医生编号＋名称，如“001#,#张三”",200,,
+,\x00\x17,OOR0023,String字符串（变长）,,SC_ENTER_DOCT,开方医生编码,,200,,
+,\x00\x18,OOR0024,String字符串（变长）,,ST_ENTER_DOCT,开方医生名称,,200,,
+,\x00\x06,OOR0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ENTER_TIME,开方时间,,19,是,是
+,\x00\x07,OOR0007,自定义字典类型，字符串（变长）,406,ORDER_TYPE,处方类型,"处方类型，如“1#,#002#,#普通处方”（普通处方、儿童处方、精麻处方、中药处方）",200,,
+,\x00\x0F,OOR0015,简化字典（Integer整型，4个字节）,406,SD_ORDER_TYPE,处方类型简码,处方类型，如普通处方、儿童处方、精麻处方、中药处方,20,,
+,\x00\x10,OOR0016,String字符串（变长）,,ST_ORDER_TYPE,处方类型描述,,500,,
+,\x00\x1A,OOR0026,String字符串（变长）,,SC_ORDER_TYPE,处方类型编码,源业务系统的处方类型编码,200,,
+,\x00\x08,OOR0008,自定义字典类型，字符串（变长）,407,ORDER_STATE,处方状态,"处方状态，如“1#,#002#,#正常”（正常、作废）",200,,
+,\x00\x11,OOR0017,简化字典（Integer整型，4个字节）,407,SD_ORDER_STATE,处方状态简码,,20,,
+,\x00\x12,OOR0018,String字符串（变长）,,ST_ORDER_STATE,处方状态描述,,200,,
+,\x00\x1B,OOR0027,String字符串（变长）,,SC_ORDER_STATE,处方状态编码,源业务系统的处方类型编码,200,,
+,\x00\x09,OOR0009,String字符串（变长）,,ORDER_NOTE,处方备注,,2000,,
+,\x00\x0A,OOR0010,自定义字典类型，字符串（变长）,391,BILLING_ATTR,计价属性,正常计价、自带药,200,,
+,\x00\x13,OOR0019,简化字典（Integer整型，4个字节）,391,SD_BILLING_ATTR,计价属性,,20,,
+,\x00\x1C,OOR0028,String字符串（变长）,,SC_BILLING_ATTR,计价属性编码,源业务系统的计价属性编码,200,,
+,\x00\x1D,OOR0029,String字符串（变长）,,ST_BILLING_ATTR,计价属性说明,源业务系统的计价属性描述,200,,
+,\x00\x0B,OOR0011,自定义字典类型，字符串（变长）,392,BILLING_DONE,计价状态,未计价、计价完成、已缴费、申请退费、已退费,200,,
+,\x00\x14,OOR0020,简化字典（Integer整型，4个字节）,392,SD_BILLING_DONE,计价状态,,20,,
+,\x00\x1E,OOR0030,String字符串（变长）,,SC_BILLING_DONE,计价状态编码,源业务系统的计价状态编码,200,,
+,\x00\x1F,OOR0031,String字符串（变长）,,ST_BILLING_DONE,计价状态说明,源业务系统的计价状态描述,200,,
+,\x00\x0C,OOR0012,Integer整型（4个字节）,,PRINT_NUM,打印次数,该申请单已经打印的次数,20,,
+,\x00\x19,OOR0025,String字符串（变长）,,PRESC_NO,处方号,处方号,200,是,是
+,\x00\x20,OOR0032,Double双精度浮点型（8个字节）,,TOTAL_PRICE,处方药品的总金额,整个处方药品的总金额，处方上有三个药品，是三个药品的总价之和,,,
+,\x00\x0D,OOR0013,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x0E,OOR0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x21,OOR0033,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x22,OOR0034,String字符串（变长）,,ORDER_NO,医嘱号,医嘱号,200,,

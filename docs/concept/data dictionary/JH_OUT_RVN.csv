@@ -1,0 +1,54 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_RVN,表全名,JHPDL:JH_OUT_RVN,,,,,,
+,表说明,门诊预约记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,ORR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,ORR0001,String字符串（变长）,,OUT_RVN_SN,门诊预约记录编号,门诊预约记录编号，系统生成三级编码，如“MR0.000.000.001”,20,是,是
+,\x00\x02,ORR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,ORR0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,,
+,\x00\x12,ORR0018,自定义字典类型，字符串（变长）,383,VISIT_TYPE,就诊类型,"就诊类型，如“3#,#4#,#门诊”（直接复制JH_PAT_VISIT）",200,是,是
+,\x00\x19,ORR0025,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,就诊类型的中台标准编码,20,是,是
+,\x00\x28,ORR0040,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,200,是,是
+,\x00\x29,ORR0041,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,200,,
+,\x00\x22,ORR0034,String字符串（变长）,,HIS_VIS_ID,就诊业务唯一号,院内来源业务系统业务流通的就诊唯一编号，基本与就诊的HIS_KEY一致，识别本次预约对应哪次就诊记录,200,是,是
+,\x00\x23,ORR0035,String字符串（变长）,,PATIENT_SN,患者信息唯一编号,来源JH_PAT_INFO的PAT0001,20,是,是
+,\x00\x20,ORR0032,String字符串（变长）,,ST_REG_CATEGORY_NAME,号别描述,如：普通号、专家号、特需号,200,,
+,\x00\x2A,ORR0042,String字符串（变长）,,SC_REG_CATEGORY_NAME,号别编码,如：普通号、专家号、特需号,50,,
+,\x00\x21,ORR0033,String字符串（变长）,,ST_REG_TYPE_NAME,号类描述,如：主任、副主任、教授,200,,
+,\x00\x2B,ORR0043,String字符串（变长）,,SC_REG_TYPE_NAME,号类编码,如：主任、副主任、教授,50,,
+,\x00\x0F,ORR0015,自定义字典类型，字符串（变长）,392,BILLING_DONE,计价状态,未计价、计价完成、已缴费、申请退费、已退费,200,,
+,\x00\x18,ORR0024,简化字典（Integer整型，4个字节）,392,SD_BILLING_DONE,计价状态,,20,,
+,\x00\x26,ORR0038,String字符串（变长）,,SC_BILLING_DONE,计价状态编码,源业务系统的计价状态编码,200,,
+,\x00\x27,ORR0039,String字符串（变长）,,ST_BILLING_DONE,计价状态说明,源业务系统的计价状态描述,200,,
+,\x00\x04,ORR0004,String字符串（变长）,,RVN_SRC_CODE,预约号源码,院内分配的号源编码,200,是,是
+,\x00\x05,ORR0005,Short短整型（2个字节）,,RVN_NUM,预约次数,预约的次数,6,,
+,\x00\x06,ORR0006,Date日期型（yyyy-mm-dd）（10个字节）,,RVN_OUT_DATE,预约就诊日期,患者拟门诊就诊日期,19,是,是
+,\x00\x07,ORR0007,String字符串（变长）,,RVN_OUT_TIME,预约就诊时段,患者拟门诊就诊时间段，如“上午、下午、8～10点”等,200,,
+,\x00\x08,ORR0008,String字符串（变长）,,RVN_OUT_DEPT,预约科室,"门诊就诊科室编码＋名称，如“001#,#内科”",200,,
+,\x00\x1A,ORR0026,String字符串（变长）,,SC_RVN_OUT_DEPT,预约科室编码,,200,是,是
+,\x00\x1B,ORR0027,String字符串（变长）,,ST_RVN_OUT_DEPT,预约科室名称,,200,,
+,\x00\x09,ORR0009,String字符串（变长）,,RVN_OUT_ROOM,预约诊间,"门诊就诊诊间编码＋名称，如“001#,#内科一室”",200,,
+,\x00\x1C,ORR0028,String字符串（变长）,,SC_RVN_OUT_ROOM,预约诊间编码,,200,,
+,\x00\x1D,ORR0029,String字符串（变长）,,ST_RVN_OUT_ROOM,预约诊间名称,,200,,
+,\x00\x0A,ORR0010,String字符串（变长）,,RVN_OUT_DOCTOR,预约医师,"就诊医师编码＋名称，如“1001#,#张三”",200,,
+,\x00\x1E,ORR0030,String字符串（变长）,,SC_RVN_OUT_DOCT,预约医师编码,,200,是,是
+,\x00\x1F,ORR0031,String字符串（变长）,,ST_RVN_OUT_DOCT,预约医师名称,,200,,
+,\x00\x0B,ORR0011,自定义字典类型，字符串（变长）,403,RVN_STATE,预约状态,"预约状态变化，如“1#,#002#,#预约”（预约、已确认、就诊、已取消）",200,,
+,\x00\x14,ORR0020,简化字典（Integer整型，4个字节）,403,SD_RVN_STATE,预约状态简码,预约状态变化，如预约、已确认、就诊、已取消,20,是,是
+,\x00\x15,ORR0021,String字符串（变长）,,ST_RVN_STATE,预约状态描述,源业务系统的预约状态描述,200,,
+,\x00\x24,ORR0036,String字符串（变长）,,SC_RVN_STATE,预约状态编码,源业务系统的预约状态编码,200,,
+,\x00\x0C,ORR0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RVN_TIME,预约操作时间,,19,,
+,\x00\x0D,ORR0013,自定义字典类型，字符串（变长）,404,RVN_TYPE,预约模式,预约类型，如现场、电话、短信、网上、APP,200,,
+,\x00\x16,ORR0022,简化字典（Integer整型，4个字节）,404,SD_RVN_TYPE,预约模式简码,预约类型，如现场、电话、短信、网上、APP,20,,
+,\x00\x17,ORR0023,String字符串（变长）,,ST_RVN_TYPE,预约模式描述,源业务系统的预约模式描述,200,,
+,\x00\x25,ORR0037,String字符串（变长）,,SC_RVN_TYPE,预约模式编码,源业务系统的预约模式编码,200,,
+,\x00\x0E,ORR0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,UN_RVN_TIME,取消预约时间,,19,,
+,\x00\x10,ORR0016,String字符串（变长）,,RVN_REMARK,备注,,4000,,
+,\x00\x2C,ORR0044,String字符串（变长）,,SC_RVN_SYS,预约系统ID,预约系统ID,200,,
+,\x00\x2D,ORR0045,String字符串（变长）,,ST_RVN_SYS,预约系统名称,预约系统名称,200,,
+,\x00\x11,ORR0017,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x13,ORR0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x2E,ORR0046,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

@@ -1,0 +1,79 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+
+<https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy>
+    a owl:Ontology ;
+    rdfs:label "CIM Equipment Module"@en ;
+    rdfs:comment "Equipment hierarchy and reliability classifications."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/core/base_entities> .
+
+cim-equip:Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim:PhysicalObject ;
+    rdfs:label "Equipment"@en ;
+    rdfs:label "设备"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    rdfs:comment "独立的功能装置（本模型核心）"@zh-CN .
+
+cim-equip:Component
+    a owl:Class ;
+    rdfs:subClassOf cim:PhysicalObject ;
+    rdfs:label "Component"@en ;
+    rdfs:label "组件"@zh-CN ;
+    rdfs:comment "设备的组成部分"@zh-CN .
+
+cim-equip:Part
+    a owl:Class ;
+    rdfs:subClassOf cim:PhysicalObject ;
+    rdfs:label "Part"@en ;
+    rdfs:label "零部件"@zh-CN ;
+    rdfs:comment "可更换的零部件"@zh-CN .
+
+cim-equip:reliabilityLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "reliability level"@en ;
+    rdfs:label "可靠性等级"@zh-CN ;
+    rdfs:comment "取值: LIFE_SAFETY, PATIENT_SAFETY, CRITICAL, IMPORTANT, SECONDARY"@zh-CN .
+
+cim-equip:hasLocalControl
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "has local control"@en ;
+    rdfs:label "有本地控制"@zh-CN ;
+    rdfs:comment "用于GAP-003：表示设备有本地控制但不纳入BAS"@zh-CN .
+
+cim-equip:externalControlSystem
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "external control system"@en ;
+    rdfs:label "外部控制系统"@zh-CN;
+    rdfs:comment "用于GAP-003：表示设备由外部系统控制（如KNX/DALI）"@zh-CN .
+
+cim-equip:isUncontrolledLoad
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is uncontrolled load"@en ;
+    rdfs:label "是否为非受控负荷"@zh-CN ;
+    rdfs:comment "用于GAP-003：明确表示该设备不需要控制"@zh-CN .
+
+cim:componentOf
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Component ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "component of"@en ;
+    rdfs:label "组件属于"@zh-CN .
+
+# ============================================================================
+# END OF EQUIPMENT HIERARCHY MODULE
+# ============================================================================

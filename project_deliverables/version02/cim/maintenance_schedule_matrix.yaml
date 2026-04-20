@@ -1,0 +1,146 @@
+# CIM 设备维护排程矩阵
+# 从 Agent-08 maintenance_strategies.yaml 结构化提取
+# 版本: 1.0.0 | 日期: 2026-04-05
+
+meta:
+  file_id: "MAINT-CIM-20260405"
+  source: "Agent-08 maintenance_strategies.yaml"
+  version: "1.0.0"
+
+# ===================================================================
+# 维护排程矩阵（日/周/月/季/年 × 4 大设备类别）
+# ===================================================================
+maintenance_matrix:
+
+  chiller_systems:
+    equipment_class: "cim-equip:Chiller"
+    criticality: P1-MISSION_CRITICAL
+    medical_special:
+      backup_capacity: "100%"
+      quick_restart: "<10min"
+      noise_control: true
+    schedule:
+      daily:
+        duration: "1h"
+        responsible: 运行值班员
+        tasks: [运行参数记录, 异常声音检查, 冷凝器目视, 油位目视]
+      weekly:
+        duration: "2h"
+        responsible: 技工
+        tasks: [冷凝器清洁检查, 制冷剂泄漏检查, 电气连接, 阀门状态]
+      monthly:
+        duration: "4h"
+        responsible: 专业技工
+        tasks: [油位油质检查, 过滤器检查, 性能记录, 振动测量]
+      quarterly:
+        duration: "8h"
+        responsible: 工程师
+        tasks: [性能测试, 绝缘测试, 安全装置校验, 制冷剂充注量]
+      annually:
+        duration: "3-7天"
+        responsible: 工程师+厂家
+        tasks: [全面大修, 性能标定, 轴承更换, 证书更新]
+    predictive_indicators:
+      - {indicator: vibration, target: "轴承和压缩机", method: 频谱分析}
+      - {indicator: temperature, target: "关键部位", method: 趋势分析}
+      - {indicator: pressure, target: "高低压侧", method: 趋势分析}
+      - {indicator: current, target: "电机", method: 电流分析}
+      - {indicator: COP, target: "整机", method: 效率趋势}
+      - {indicator: oil_debris, target: "润滑油", method: 磨损监测}
+
+  air_handling_units:
+    equipment_class: "cim-equip:AHU"
+    criticality: P0-LIFE_SAFETY  # 洁净AHU
+    medical_special:
+      hepa_integrity: "定期检漏"
+      airflow_pattern: "气流均匀性验证"
+      sterilization: "机组自身消毒能力"
+    schedule:
+      daily:
+        tasks: [风压风量检查, 异常声音, 送/回风温度, 压差显示]
+      weekly:
+        tasks: [过滤器压差, 皮带检查, 盘管表面检查]
+      monthly:
+        tasks: [过滤器清洗/更换, 盘管深度清洁, 轴承润滑, 电机温度]
+        medical_enhanced: [HEPA过滤器检漏, 压差梯度验证, 感染控制检查]
+      quarterly:
+        tasks: [风机平衡, 皮带/传动更换, 电机绝缘测试, 换气次数验证]
+      annually:
+        tasks: [大修, 性能标定, 传动部件更换, 洁净室性能验证]
+    predictive_indicators:
+      - {indicator: filter_dp, target: "每级过滤器", method: 压差趋势}
+      - {indicator: energy_per_m3, target: "单位风量能耗", method: 效率计算}
+      - {indicator: fan_vibration, target: "风机电机", method: 频谱分析}
+
+  pump_systems:
+    equipment_class: "cim-equip:Pump"
+    criticality: P1-MISSION_CRITICAL
+    medical_special:
+      water_quality: "水质连续监测"
+      legionella: "军团菌预防(60°C热水)"
+      backflow: "回流防护"
+    schedule:
+      daily:
+        tasks: [压力流量检查, 异常振动, 密封泄漏, 噪音]
+      weekly:
+        tasks: [轴承温度, 密封检查, 电流检查]
+      monthly:
+        tasks: [轴承润滑, 连接检查, 基础检查, 水质检查]
+      quarterly:
+        tasks: [泵性能测试, 电机绝缘, 叶轮检查, 联轴器对中]
+      annually:
+        tasks: [大修, 轴承更换, 密封更换, 叶轮更换, 性能恢复]
+    predictive_indicators:
+      - {indicator: flow_rate, method: 流量趋势分析}
+      - {indicator: head, method: 扬程性能趋势}
+      - {indicator: power, method: 功率消耗趋势}
+      - {indicator: vibration, method: 频谱分析}
+      - {indicator: cavitation, method: 汽蚀噪声检测}
+
+  control_systems:
+    equipment_class: "cim-ctrl:Controller"
+    criticality: P1-MISSION_CRITICAL
+    medical_special:
+      data_integrity: "生命安全数据完整性"
+      redundancy: "三重冗余配置"
+      audit_trail: "审计追踪完整性"
+    schedule:
+      daily:
+        tasks: [控制参数检查, 告警记录审查, 通信状态]
+      weekly:
+        tasks: [传感器校准检查, 执行器响应测试, 网络延迟]
+      monthly:
+        tasks: [控制回路测试, 软件备份, 数据库清理]
+      quarterly:
+        tasks: [仪表校准, 网络安全检查, 控制器固件更新评估]
+      annually:
+        tasks: [控制系统升级, 全面性能测试, 第三方验证, 合规审计]
+    predictive_indicators:
+      - {indicator: calibration_drift, method: 偏移检测}
+      - {indicator: control_stability, method: 稳定性趋势}
+      - {indicator: network_latency, method: 网络性能}
+      - {indicator: cybersecurity, method: 安全事件监测}
+
+# ===================================================================
+# 运行时间触发维护
+# ===================================================================
+usage_based_triggers:
+  - {hours: 2000, scope: [润滑系统, 过滤器, 密封件], tasks: [润滑油更换, 过滤器更换, 密封检查]}
+  - {hours: 8000, scope: [轴承, 传动, 电气], tasks: [轴承检查更换, 传动调整, 电气测试]}
+  - {hours: 20000, scope: [压缩机, 主体结构, 控制], tasks: [压缩机大修, 结构检查, 控制系统升级]}
+
+# ===================================================================
+# KPI 指标
+# ===================================================================
+performance_kpis:
+  - {kpi: MTBF, name_cn: 平均故障间隔, target: "设备类型相关"}
+  - {kpi: OEE, name_cn: 设备综合效率, target: "≥85%"}
+  - {kpi: MCR, name_cn: 维护成本比, target: "≤2.5% 资产重置值"}
+  - {kpi: SC, name_cn: 计划执行率, target: "≥95%"}
+  - {kpi: FTFR, name_cn: 首次修复率, target: "≥80%"}
+
+statistics:
+  equipment_categories: 4
+  total_preventive_tasks: 56
+  predictive_indicators: 19
+  usage_triggers: 3

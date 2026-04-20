@@ -1,0 +1,361 @@
+# ============================================================================
+# CIM SHACL Constraints - Medical Building Domain
+# Version: 2.0.0 | Generated: 2026-04-05
+# ============================================================================
+
+@prefix sh:         <http://www.w3.org/ns/shacl#> .
+@prefix xsd:        <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-space:  <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-ctrl:   <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-topo:   <https://cim.medical/ontology/v3.4/topology#> .
+
+# ============================================================================
+# 手术室 I 级 (Class_I) Shape - GB 50333-2013
+# ============================================================================
+
+cim:OperatingRoom_ClassI_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:OperatingRoom ;
+    rdfs:label "I级洁净手术室约束"@zh-CN ;
+    sh:message "I级洁净手术室不满足 GB 50333-2013 要求" ;
+
+    sh:property [
+        sh:path cim-space:cleanlinessClass ;
+        sh:hasValue "ISO-5" ;
+        sh:message "I级手术室洁净等级必须为 ISO-5"
+    ] ;
+    sh:property [
+        sh:path cim-space:temperature ;
+        sh:minInclusive 21 ;
+        sh:maxInclusive 25 ;
+        sh:datatype xsd:decimal ;
+        sh:message "温度必须在 21-25°C 范围内"
+    ] ;
+    sh:property [
+        sh:path cim-space:relativeHumidity ;
+        sh:minInclusive 30 ;
+        sh:maxInclusive 60 ;
+        sh:datatype xsd:decimal ;
+        sh:message "湿度必须在 30-60%RH 范围内"
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:minInclusive 15 ;
+        sh:datatype xsd:decimal ;
+        sh:message "压差必须≥15Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 36 ;
+        sh:maxInclusive 44 ;
+        sh:datatype xsd:decimal ;
+        sh:message "换气次数必须在 36-44 ACH 范围内"
+    ] ;
+    sh:property [
+        sh:path cim-space:noiseLevel ;
+        sh:maxInclusive 52 ;
+        sh:datatype xsd:decimal ;
+        sh:message "噪声不得超过 52 dB(A)"
+    ] .
+
+# ============================================================================
+# 手术室 II 级 Shape
+# ============================================================================
+
+cim:OperatingRoom_ClassII_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:OperatingRoom ;
+    rdfs:label "II级洁净手术室约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:cleanlinessClass ;
+        sh:hasValue "ISO-6" ;
+        sh:message "II级手术室洁净等级必须为 ISO-6"
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:minInclusive 12 ;
+        sh:message "压差必须≥12Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 24 ;
+        sh:maxInclusive 30
+    ] .
+
+# ============================================================================
+# 手术室 III 级 Shape
+# ============================================================================
+
+cim:OperatingRoom_ClassIII_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:OperatingRoom ;
+    rdfs:label "III级洁净手术室约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:cleanlinessClass ;
+        sh:hasValue "ISO-7"
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:minInclusive 10
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 18 ;
+        sh:maxInclusive 22
+    ] .
+
+# ============================================================================
+# 手术室 IV 级 Shape
+# ============================================================================
+
+cim:OperatingRoom_ClassIV_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:OperatingRoom ;
+    rdfs:label "准洁净手术室约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:cleanlinessClass ;
+        sh:hasValue "ISO-8"
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:minInclusive 8
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 12 ;
+        sh:maxInclusive 15
+    ] .
+
+# ============================================================================
+# ICU 通用 Shape
+# ============================================================================
+
+cim:ICU_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:ICU ;
+    rdfs:label "ICU约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:temperature ;
+        sh:minInclusive 22 ;
+        sh:maxInclusive 26 ;
+        sh:message "ICU温度必须在 22-26°C"
+    ] ;
+    sh:property [
+        sh:path cim-space:relativeHumidity ;
+        sh:minInclusive 30 ;
+        sh:maxInclusive 60
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:minInclusive 8 ;
+        sh:message "ICU压差必须≥8Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 6 ;
+        sh:maxInclusive 12
+    ] ;
+    sh:property [
+        sh:path cim-space:noiseLevel ;
+        sh:maxInclusive 45 ;
+        sh:message "ICU噪声不得超过 45 dB(A)"
+    ] .
+
+# ============================================================================
+# 负压隔离病房 Shape
+# ============================================================================
+
+cim:NegativePressureRoom_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:NegativePressureRoom ;
+    rdfs:label "负压隔离病房约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:maxInclusive -8 ;
+        sh:datatype xsd:decimal ;
+        sh:message "负压隔离病房压差必须≤-8Pa（负压）"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 12 ;
+        sh:message "换气次数必须≥12 ACH"
+    ] .
+
+# ============================================================================
+# 正压隔离病房 Shape
+# ============================================================================
+
+cim:PositivePressureRoom_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:PositivePressureRoom ;
+    rdfs:label "正压隔离病房约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:minInclusive 8 ;
+        sh:message "正压隔离病房压差必须≥+8Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 12
+    ] .
+
+# ============================================================================
+# BSL-2 实验室 Shape
+# ============================================================================
+
+cim:BSL2_Lab_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:CleanLaboratory ;
+    rdfs:label "BSL-2实验室约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:biohazardLevel ;
+        sh:hasValue "BSL-2"
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:maxInclusive -10 ;
+        sh:message "BSL-2负压≤-10Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 8 ;
+        sh:maxInclusive 12
+    ] .
+
+# ============================================================================
+# BSL-3 实验室 Shape
+# ============================================================================
+
+cim:BSL3_Lab_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:CleanLaboratory ;
+    rdfs:label "BSL-3实验室约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:biohazardLevel ;
+        sh:hasValue "BSL-3"
+    ] ;
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:maxInclusive -25 ;
+        sh:message "BSL-3负压≤-25Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 12 ;
+        sh:maxInclusive 15
+    ] .
+
+# ============================================================================
+# 设备必须有位置 Shape
+# ============================================================================
+
+cim:EquipmentLocation_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-equip:Equipment ;
+    rdfs:label "设备位置约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim:locatedIn ;
+        sh:minCount 1 ;
+        sh:message "每个设备必须有位置信息 (locatedIn)"
+    ] .
+
+# ============================================================================
+# 设备节点映射 Shape
+# ============================================================================
+
+cim:EquipmentNodeMapping_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-equip:Equipment ;
+    rdfs:label "设备-节点映射约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim:mapsToNode ;
+        sh:minCount 1 ;
+        sh:message "设备应有拓扑节点映射 (mapsToNode)"
+    ] .
+
+# ============================================================================
+# Phase 6C: 放射科影像机房 Shape - GBZ 130-2020
+# ============================================================================
+
+cim:RadiologyRoom_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:RadiologyRoom ;
+    rdfs:label "放射科影像机房约束"@zh-CN ;
+    sh:message "放射科影像机房不满足 GBZ 130-2020 要求" ;
+
+    sh:property [
+        sh:path cim-space:temperature ;
+        sh:minInclusive 18 ;
+        sh:maxInclusive 24 ;
+        sh:datatype xsd:decimal ;
+        sh:message "CT/DR等影像机房温度须在 18-24°C"
+    ] ;
+    sh:property [
+        sh:path cim-space:relativeHumidity ;
+        sh:minInclusive 40 ;
+        sh:maxInclusive 65
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 6 ;
+        sh:message "换气次数必须≥6 ACH"
+    ] ;
+    sh:property [
+        sh:path cim-space:floorLoading ;
+        sh:minInclusive 10 ;
+        sh:datatype xsd:decimal ;
+        sh:message "地面承重须≥10 kN/m²"
+    ] ;
+    sh:property [
+        sh:path cim-space:radiationShielding ;
+        sh:minCount 1 ;
+        sh:message "必须配置辐射屏蔽（铅当量标注）"
+    ] .
+
+# ============================================================================
+# Phase 6C: 核医学热室 Shape - GBZ 120-2020
+# ============================================================================
+
+cim:NuclearMedicine_Shape
+    a sh:NodeShape ;
+    sh:targetClass cim-space:NuclearMedicine_HotLab ;
+    rdfs:label "核医学热室约束"@zh-CN ;
+
+    sh:property [
+        sh:path cim-space:pressureDifferential ;
+        sh:maxInclusive -10 ;
+        sh:datatype xsd:decimal ;
+        sh:message "核医学热室必须负压≤-10Pa"
+    ] ;
+    sh:property [
+        sh:path cim-space:airChangesPerHour ;
+        sh:minInclusive 10 ;
+        sh:message "换气次数必须≥10 ACH"
+    ] ;
+    sh:property [
+        sh:path cim-space:radiationShielding ;
+        sh:minCount 1 ;
+        sh:message "必须配置辐射屏蔽"
+    ] ;
+    sh:property [
+        sh:path cim-space:exhaustRecirculation ;
+        sh:hasValue false ;
+        sh:message "核医学排风禁止回风循环"
+    ] .
+
+# ============================================================================
+# END OF SHACL CONSTRAINTS
+# ============================================================================

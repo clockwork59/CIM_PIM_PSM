@@ -1,0 +1,162 @@
+# Agent-06 控制策略模型
+# 从 docs/agents/06/Agent-06 控制系统建模师 - 全域控制系统实现模型.md §2.3, §3.2, §3.3 提取
+# 版本: v3.1 | 提取日期: 2026-04-05
+
+meta:
+  agent_id: Agent-06
+  agent_name: 控制系统建模师
+  version: v3.1
+  output_type: control_strategies
+  source_document: "Agent-06 控制系统建模师 - 全域控制系统实现模型.md"
+  source_sections: ["§2.3 平疫转换控制序列", "§3.2 全局联锁矩阵", "§3.3 降级策略表", "§R-A2 点位故障模式"]
+  extracted_at: "2026-04-05"
+
+# ===================================================================
+# 全局联锁矩阵 (§3.2)
+# ===================================================================
+global_interlock_matrix:
+
+  fire_interlock:
+    scenario_ref: SCN_FIRE_EMERGENCY
+    priority: "CRITICAL (Level 0)"
+    wiring: 硬接点联动优先
+    matrix:
+      - {id: FI-001, source: FIRE_ALARM_CONFIRMED, target_system: "HVAC-AHU", target_scope: "着火区域AHU", action: STOP, wiring: 硬接点, delay: "0s"}
+      - {id: FI-002, source: FIRE_ALARM_CONFIRMED, target_system: "HVAC-FCU", target_scope: "着火区域FCU", action: CLOSE_VALVE, wiring: DDC指令, delay: "0s"}
+      - {id: FI-003, source: FIRE_ALARM_CONFIRMED, target_system: "FIRE-EXH", target_device: 防火阀, action: CLOSE, wiring: 电磁释放, delay: "0s"}
+      - {id: FI-004, source: "FIRE_ALARM + 该区域排烟", target_system: "FIRE-EXH", target_device: 排烟阀, action: OPEN, wiring: 硬接点, delay: "0s"}
+      - {id: FI-005, source: 排烟阀开启确认, target_system: "FIRE-EXH", target_device: 排烟风机, action: START, wiring: 硬接点, delay: "10s"}
+      - {id: FI-006, source: FIRE_ALARM_CONFIRMED, target_system: "FIRE-EXH", target_device: 正压送风机, action: START, wiring: 硬接点, delay: "0s"}
+      - {id: FI-007, source: FIRE_ALARM_CONFIRMED, target_system: "ELEC-EL", target_device: 电梯, action: "FIRE_RECALL(迫降首层)", wiring: 硬接点, delay: "0s"}
+      - {id: FI-008, source: FIRE_ALARM_CONFIRMED, target_system: "ELEC-LV", target_device: 非消防电源, action: "CUT_OFF(分励脱扣)", wiring: 硬接点, delay: "30s", exception: 消防电源保留}
+      - {id: FI-009, source: FIRE_ALARM_CONFIRMED, target_system: "INT-SEC", target_device: 门禁, action: "RELEASE(紧急开启)", wiring: 硬接点, delay: "0s"}
+      - {id: FI-010, source: FIRE_ALARM_CONFIRMED, target_system: "MGAS-O2", target_scope: 全院, action: "ALARM_ONLY(仅报警)", wiring: 通信, note: "不自动切断，需人工确认"}
+      - {id: FI-011, source: 水流信号/压力开关, target_system: "FIRE-SPS", target_device: 消火栓泵, action: START, wiring: 硬接点, delay: "0s"}
+      - {id: FI-012, source: 报警阀压力开关, target_system: "FIRE-SPS", target_device: 喷淋泵, action: START, wiring: 硬接点, delay: "0s"}
+
+  operating_room_special:
+    fire_during_surgery:
+      scenario: 手术进行中发生火灾
+      priority: 医疗安全优先
+      logic:
+        fire_in_OR_zone:
+          decision: 由手术团队判断
+          options: [立即终止手术紧急撤离, 快速完成关键操作后撤离]
+          hvac_action: [关闭AHU, "关闭医气阀门（人工）"]
+        fire_not_in_OR_zone:
+          decision: 可继续手术
+          hvac_action: [维持正压, "切换100%循环风", "关闭新风阀（防烟气进入）", 继续温湿度控制]
+          notification: [手术室内显示火警信息, 护士站声光报警, 让手术团队知晓情况]
+
+# ===================================================================
+# Criticality-Based 降级策略 (§3.3)
+# ===================================================================
+degradation_strategies:
+
+  CRITICAL_Level:
+    applicable_CUs:
+      - CU-OR001-HVAC_CLN-PRESSURE
+      - CU-ICU-HVAC-PRESSURE
+      - CU-ISO-NEG-PRESSURE
+
+    sensor_failure:
+      response_chain:
+        - {level: 1, trigger: 主传感器故障, action: 自动切换备用传感器, time: "<5秒", alarm: HIGH}
+        - {level: 2, trigger: 备用传感器也故障, action: "启用软测量/物理模型估算", method: "基于Agent-04物理方程", duration: "15分钟", alarm: CRITICAL}
+        - {level: 3, trigger: "软测量不可用 或 超过15分钟", action: 切换到固定设定值模式, setpoints: {exhaust_damper: "30%", supply_speed: 保持当前值}, alarm: "CRITICAL + 现场核查"}
+        - {level: 4, trigger: DDC完全失效, action: L3硬件保护接管, mechanism: 机械恒温器控制}
+
+    network_failure:
+      response_chain:
+        - {level: 1, trigger: "与上位机通信中断30秒", action: [DDC切换本地模式, 使用本地默认设定值, 继续闭环控制], local_defaults: {OR_temp: "22°C", OR_humid: "50%RH", OR_press: "+15Pa"}}
+        - {level: 2, trigger: 网络中断持续, action: [DDC独立运行最长48小时, 本地存储趋势数据]}
+        - {level: 3, trigger: 网络恢复, action: [自动重连上位机, 同步时钟, 上传离线数据, 下载更新设定值]}
+
+    controller_failure:
+      actuator_behavior:
+        - "阀门保持最后位置(HOLD_LAST) 15分钟"
+        - "15分钟后切换到失效安全位置(FAIL_SAFE)"
+      fail_safe_positions:
+        CHW_valve: CLOSE
+        HW_valve: OPEN
+        OA_damper: "10% (最小新风)"
+        EA_damper: "30% (维持基本排风)"
+      L3_takeover: [机械恒温器接管温度, 防冻开关保护盘管]
+      notification: [中控室CRITICAL报警, 自动派发紧急工单, "备用控制器接管（如配置热备）"]
+
+    actuator_failure:
+      detection:
+        method: 指令-反馈偏差
+        criteria: "|Command - Feedback| > 10% 持续5分钟"
+      response_by_device:
+        CHW_valve_stuck_open:
+          impact: 持续供冷，可能过冷
+          action: [报警, 降低送风量补偿, 派维修]
+        CHW_valve_stuck_closed:
+          impact: 无法供冷，温度上升
+          action: [CRITICAL报警, "增加送风量（如可能）", 通知手术室评估是否继续手术, 紧急维修]
+        supply_fan_failure:
+          impact: 失去正压和洁净度
+          action: [EMERGENCY报警, 停止排风机, 关闭新风阀, 通知手术室, "启用备用风机（如有）"]
+
+  HIGH_Level:
+    applicable_CUs: [CU-OR001-HVAC_CLN-COOLING, CU-ICU-HVAC-COOLING, CU-WARD-HVAC]
+    sensor_failure:
+      response_chain:
+        - {level: 1, action: 切换备用传感器, alarm: HIGH}
+        - {level: 2, action: 使用物理模型估算, duration: "30分钟"}
+        - {level: 3, action: 固定输出模式, alarm: "HIGH + 维修派单"}
+    controller_failure:
+      response: [执行器保持最后位置, "其他DDC可代理部分功能（如配置）", L3保护有效]
+
+  MEDIUM_LOW_Level:
+    applicable_CUs: [CU-OFC-HVAC, CU-LOBBY-HVAC, CU-PARKING-HVAC]
+    any_failure:
+      response: [报警通知, 可接受临时停机, 按优先级排队维修, 不影响关键医疗区域]
+
+# ===================================================================
+# 点位故障模式标准 (§R-A2)
+# ===================================================================
+point_fault_modes:
+  analog_input_faults:
+    open_circuit:
+      detection: "读数恒定为0%或量程上限"
+      response: 切换备用/软测量
+      alarm_delay: "10s"
+    short_circuit:
+      detection: "读数恒定为量程下限"
+      response: 切换备用/软测量
+      alarm_delay: "10s"
+    drift:
+      detection: "与相邻传感器偏差超阈值"
+      threshold: "单点偏差>3σ"
+      response: 标记可疑，人工核查
+    noise:
+      detection: "标准差超过正常值3倍"
+      response: 增加滤波系数
+    out_of_range:
+      detection: "超出物理合理范围"
+      response: 忽略该读数，使用上一合理值
+
+  digital_input_faults:
+    chattering:
+      detection: "1秒内翻转>10次"
+      response: 延时确认，增加抖动滤波
+    stuck:
+      detection: "状态长时间不变（超出正常周期）"
+      response: 告警，现场检查
+
+  analog_output_faults:
+    feedback_deviation:
+      detection: "|Command - Feedback| > 10% 持续 300s"
+      response: 告警+自动重发指令1次
+      escalation: 维修派单
+
+# ===================================================================
+# 统计
+# ===================================================================
+statistics:
+  total_interlock_items: 12
+  total_degradation_levels: 3  # CRITICAL, HIGH, MEDIUM_LOW
+  total_fault_modes: 8
+  fail_safe_positions_defined: 4

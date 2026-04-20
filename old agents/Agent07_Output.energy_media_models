@@ -1,0 +1,417 @@
+# Agent-07: 能源介质模型（以电能为主示例）
+# Energy Media Models - Electric Energy as Primary Example
+
+electric_energy_model = {
+    "medium_name": "Electric Energy（电能）",
+    "model_type": "Primary Example",
+    "fundamental_characteristics": {
+        "measurement_principle": "基于电磁感应或电子采样技术，测量有功/无功电能",
+        "basic_parameters": {
+            "active_power": "单位时间内的实际功率消耗（kW）",
+            "reactive_power": "感性/容性负载的无功功率（kvar）",
+            "apparent_power": "视在功率，矢量合成的总功率（kVA）",
+            "power_factor": "功率因数，有功功率与视在功率之比"
+        },
+        "electrical_parameters": {
+            "voltage_levels": ["220V", "380V", "6kV", "10kV", "35kV"],
+            "current_ranges": ["1(10)A", "5(60)A", "10(100)A", "0.3(1.2)A-20(80)A"],
+            "frequency": "50Hz ±0.5Hz (符合GB/T 15945-2008)",
+            "waveform_quality": "满足GB/T 14549-1993电能质量标准"
+        }
+    },
+
+    "accuracy_grades": {
+        "0.2S_class": {
+            "active_energy_error": "±0.2%（负载电流0.01Ib-Imax）",
+            "application_scope": "院区总表、关口计量、贸易结算",
+            "temperature_range": "-25°C to +55°C",
+            "long_term_stability": "年误差变化率≤0.1%",
+            "startup_current": "0.001Ib"
+        },
+        "0.5S_class": {
+            "active_energy_error": "±0.5%（负载电流0.01Ib-Imax）",
+            "application_scope": "区域总表、重要用户",
+            "temperature_range": "-25°C to +55°C",
+            "long_term_stability": "年误差变化率≤0.2%",
+            "startup_current": "0.001Ib"
+        },
+        "1.0_class": {
+            "active_energy_error": "±1.0%（负载电流0.05Ib-Imax）",
+            "application_scope": "一般用户、分项计量",
+            "temperature_range": "-20°C to +55°C",
+            "long_term_stability": "年误差变化率≤0.4%",
+            "startup_current": "0.004Ib"
+        },
+        "2.0_class": {
+            "active_energy_error": "±2.0%（负载电流0.1Ib-Imax）",
+            "application_scope": "辅助计量、统计用途",
+            "temperature_range": "-10°C to +45°C",
+            "long_term_stability": "年误差变化率≤0.8%",
+            "startup_current": "0.008Ib"
+        }
+    },
+
+    "time_of_use_metering": {
+        "rate_periods": {
+            "peak_hours": {
+                "time_range": "08:30-11:30, 14:30-17:30, 19:00-21:00",
+                "seasonal_adjustment": "夏季高峰期适当延长",
+                "rate_multiplier": "1.5倍基准电价"
+            },
+            "valley_hours": {
+                "time_range": "23:00-07:00",
+                "seasonal_adjustment": "冬季低谷期可适当调整",
+                "rate_multiplier": "0.4倍基准电价"
+            },
+            "normal_hours": {
+                "time_range": "除峰谷时段外的其他时间",
+                "rate_multiplier": "1.0倍基准电价"
+            }
+        },
+        "seasonal_rates": {
+            "summer": "6月1日-8月31日",
+            "winter": "12月1日-2月28日",
+            "shoulder_seasons": "3月1日-5月31日, 9月1日-11月30日"
+        },
+        "billing_cycles": {
+            "monthly_billing": "每月1日0:00至月末24:00",
+            "data_retention": "存储24个月历史数据",
+            "peak_demand_tracking": "记录各时段最大需量"
+        }
+    },
+
+    "demand_metering": {
+        "demand_calculation_method": "滑差式需量计算",
+        "parameters": {
+            "demand_interval": "15分钟（根据GB/T 17215）",
+            "sub_interval": "1分钟（用于滑差计算）",
+            "sliding_window": "15分钟滑窗，步长1分钟",
+            "demand_accounting_period": "月结算周期"
+        },
+        "demand_types": {
+            "maximum_demand": "计费周期内的最大需量（15分钟平均）",
+            "contract_demand": "用户的合同需量或报装容量",
+            "excess_demand": "超过合同需量的部分需量",
+            "reactive_demand": "最大无功需量"
+        },
+        "billing_mechanisms": {
+            "basic_charge": "按合同需量收取基本电费",
+            "excess_penalty": "超出合同需量时收取惩罚性费用",
+            "demand_forecast": "提供需量预测和报警功能"
+        }
+    },
+
+    "power_quality_monitoring": {
+        "voltage_quality": {
+            "voltage_deviation": "±7%（220V）, ±10%（380V）, 符合GB/T 12325",
+            "voltage_fluctuation": "≤2%（频繁启动时）",
+            "voltage_unbalance": "≤2%（三相不平衡度）",
+            "frequency_deviation": "±0.2Hz（正常）, ±0.5Hz（事故）"
+        },
+        "harmonics": {
+            "thd_voltage": "≤5%（公共电网）, ≤8%（特殊用户）",
+            "thd_current": "符合GB/T 14549-1993标准限值",
+            "harmonic_spectrum": "分析1-50次谐波含量",
+            "harmonic_power": "计量谐波有功/无功功率"
+        },
+        "power_factor": {
+            "target_power_factor": "≥0.9（医院用户要求）",
+            "reactive_compensation": "自动投切无功补偿装置",
+            "pf_penalty_threshold": "<0.85（功率因数罚款）",
+            "pf_award_threshold": ">0.95（功率因数奖励）"
+        },
+        "events_and_disturbances": {
+            "voltage_sag": "电压暂降低于90%额定值",
+            "voltage_swell": "电压暂升高于110%额定值",
+            "short_interruption": "短时中断持续时间>3s",
+            "long_interruption": "长时间中断持续时间>3min"
+        }
+    },
+
+    "smart_metering_features": {
+        "advanced_functionality": {
+            "load_profiling": "96点/日负荷曲线记录",
+            "tamper_detection": "开盖检测、磁场干扰检测、反向窃电",
+            "remote_disconnect": "远程拉合闸功能",
+            "prepaid_functionality": "预付费和后付费模式",
+            "multi_tariff_support": "支持最多8个时段、4种费率"
+        },
+        "communication_capabilities": {
+            "local_communication": [
+                "RS485: 支持Modbus RTU、DL/T645协议",
+                "载波通信: 高速电力线载波",
+                "微功率无线: 470MHz频段",
+                "红外通信: 本地维护接口"
+            ],
+            "remote_communication": [
+                "GPRS/4G: 移动网络通信",
+                "NB-IoT: 窄带物联网",
+                "LoRaWAN: 远距离无线通信",
+                "以太网: 有线网络通信"
+            ]
+        },
+        "data_management": {
+            "local_storage": "12个月历史数据、24个月日数据",
+            "data_retention": "重要事件记录存储10年",
+            "backup_communication": "双信道冗余通信保障",
+            "time_sync_accuracy": "网络校时误差≤1秒"
+        }
+    },
+
+    "installation_requirements": {
+        "environmental_conditions": {
+            "operating_temperature": "-25°C to +55°C（工业级）",
+            "storage_temperature": "-40°C to +70°C",
+            "humidity": "5% to 95%（无凝露）",
+            "altitude": "≤2000m（超过时需修正）",
+            "ingress_protection": "IP54（室内）, IP65（室外）"
+        },
+        "electrical_installation": {
+            "metering_point_location": "产权分界点或合同约定点",
+            "ct_installation": "电流互感器精度≥0.5级",
+            "pt_installation": "电压互感器精度≥0.5级",
+            "wiring_requirements": "符合DL/T 825-2002电能计量装置安装规程",
+            "earthing": "保护接地和工作接地分离"
+        },
+        "verification_calibration": {
+            "initial_verification": "安装前必须进行的首次检定",
+            "mandatory_verification": "按JJG 596-2012规定周期检定",
+            "on_site_calibration": "现场校准用标准表精度≥0.1级",
+            "error_tolerance": "现场校准误差限值为基本误差的两倍"
+        }
+    },
+
+    "economic_analysis": {
+        "ltifecycle_costing": {
+            "initial_investment": "设备采购、安装、调试验收费用",
+            "operating_costs": "通信费用、维护费用、检定费用",
+            "replacement_costs": "更换周期8-10年",
+            "roi_calculation": "节能收益≥10%投资回收期"
+        },
+        "energy_savings_potential": {
+            "load_management": "需量管理节省基本电费",
+            "power_factor_improvement": "减少无功罚款",
+            "time_of_use_optimization": "时段优化降低电费",
+            "demand_response_incentives": "需求响应激励收益"
+        }
+    }
+}
+
+# 其他能源介质模型
+other_energy_media = {
+    "water_medium": {
+        "medium_name": "Water（水）",
+        "meter_types": {
+            "mechanical_water_meter": {
+                "principle": "容积式测量，利用水流推动叶轮旋转",
+                "accuracy_class": "2级（GB/T 778.1-2018）",
+                "diameter_range": "DN15-DN500",
+                "flow_range": "Q1=0.01Q3, Q2=0.1Q3, Q3=0.6-2500m³/h",
+                "temperature_range": "0.1°C-30°C（冷水表）",
+                "pressure_rating": "PN10-PN25",
+                "advantages": "结构简单、价格低、免维护",
+                "limitations": "易堵塞、精度受水质影响、机械磨损"
+            },
+            "electromagnetic_flowmeter": {
+                "principle": "法拉第电磁感应定律，测量导电液体",
+                "accuracy_class": "0.5级（高精度）, 1.0级（一般）",
+                "conductivity_requirement": "≥5μS/cm",
+                "diameter_range": "DN6-DN3000",
+                "flow_velocity": "0.3-12m/s",
+                "temperature_range": "-25°C to +180°C",
+                "pressure_rating": "PN6-PN100",
+                "advantages": "无压损、高精度、抗腐蚀、可双向测量",
+                "applications": "供水总管、热水系统、污水系统"
+            },
+            "ultrasonic_water_meter": {
+                "principle": "时差法超声波测量，体积计量",
+                "accuracy_class": "2级（住宅）, 1级（商业）",
+                "diameter_range": "DN15-DN200",
+                "flow_range": "Q3=1.6-1000m³/h",
+                "temperature_range": "0.1°C-50°C（冷热水通用）",
+                "output_options": [
+                    "脉冲输出（机械触点）",
+                    "M-Bus通信（EN13757）",
+                    "RS485/Modbus协议",
+                    "无线通信（LoRa/LoRaWAN）"
+                ],
+                "battery_life": "10年（锂电池，每天上报12次）",
+                "special_features": "漏水检测、倒流监测、空管检测"
+            }
+        },
+        "quality_requirements": {
+            "measuring_accuracy": "流量精度满足ISO 4064标准",
+            "installation_conditions": "前后直管段要求（前10D后5D）",
+            "water_quality": "TSS≤1000mg/L，pH值6-9",
+            "pressure_surge": "能承受1.5倍工作压力冲击"
+        }
+    },
+
+    "gas_medium": {
+        "medium_name": "Natural Gas（天然气）",
+        "physicochemical_properties": {
+            "composition": "CH4≥90%, C2H6+C3H8≤6%, N2≤4%, CO2≤3%",
+            "calorific_value": "低热值≥31.4MJ/m³，高热值≥34.9MJ/m³",
+            "density": "0.75-0.85kg/m³（标准状态）",
+            "compressibility": "0.985-0.995（标准状态）",
+            "relative_density": "0.58-0.62（空气=1）"
+        },
+        "meter_types": {
+            "diaphragm_gas_meter": {
+                "name": "膜式燃气表",
+                "principle": "容积式计量，利用气体推动隔膜运动",
+                "accuracy_class": "1.5级（Qmin≤Q<0.1Qmax）, 1.0级（0.1Qmax≤Q≤Qmax）",
+                "flow_range": "G1.6-G100（0.016-160m³/h）",
+                "working_pressure": "0.5-50kPa",
+                "temperature_range": "-20°C to +50°C",
+                "advantages": "计量准确、稳定性好、价格适中",
+                "applications": "民用和小型商业用户"
+            },
+            "rotary_gas_meter": {
+                "name": "腰轮（罗茨）流量计",
+                "principle": "容积式计量，利用腰轮转动排气体",
+                "accuracy_class": "0.2级（高精度）, 0.5级（一般）",
+                "flow_range": "2.5-10000m³/h",
+                "working_pressure": "0.1-1.6MPa",
+                "temperature_range": "-20°C to +60°C",
+                "advantages": "精度高、范围度宽、直读显示",
+                "applications": "工商业用户、调压计量站"
+            },
+            "turbine_gas_flowmeter": {
+                "name": "涡轮流量计",
+                "principle": "速度式计量，气体推动涡轮旋转",
+                "accuracy_class": "1.0级（±1.0%）, 1.5级（±1.5%）",
+                "flow_range": "6-16000m³/h",
+                "working_pressure": "0.1-10MPa",
+                "temperature_range": "-20°C to +80°C",
+                "advantages": "响应快、数字化输出、抗震性好",
+                "applications": "高压输气管线、大型工业用户"
+            },
+            "ultrasonic_gas_flowmeter": {
+                "name": "超声波气体流量计",
+                "principle": "时差法测量气体声速变化",
+                "accuracy_class": "0.5级（±0.5%）, 1.0级（±1.0%）",
+                "flow_range": "0.3-30000m³/h",
+                "working_pressure": "0.1-15MPa",
+                "temperature_range": "-40°C to +85°C",
+                "advantages": "无压损、双向计量、维护量小",
+                "applications": "长输管线、储气库、贸易结算"
+            }
+        },
+        "safety_requirements": {
+            "explosion_protection": "Ex d IIB T4防爆等级",
+            "overpressure_protection": "1.1倍工作压力安全阀",
+            "leak_detection": "内置泄漏报警功能",
+            "emergency_shutdown": "异常情况紧急切断功能",
+            "fire_resistance": "符合GB 3836防爆电气设备要求"
+        }
+    },
+
+    "thermal_medium": {
+        "medium_name": "Thermal Energy（冷热量）",
+        "measurement_principle": {
+            "basic_formula": "Q = ∫ṁ × (h_out - h_in) dt",
+            "legal_basis": "符合GB/T 32224-2015《热量表》国家标准",
+            "calculation_method": "焓差法（基于进出口焓差和流量积分）",
+            "temperature_difference": "ΔT = T_supply - T_return"
+        },
+        "system_composition": {
+            "flow_sensor": {
+                "types": ["电磁流量计", "超声波流量计", "机械式流量计"],
+                "accuracy_requirement": "±0.5%（配对校验）",
+                "diameter_range": "DN15-DN800",
+                "installation_requirement": "前后直管段严格按要求"
+            },
+            "temperature_sensors": {
+                "types": "Pt1000铂电阻（配对使用）",
+                "accuracy_class": "A级（±0.15°C@0°C, ±0.35°C@100°C）",
+                "response_time": "≤10秒（达到90%响应）",
+                "matching_precision": "配对温度传感器温差≤0.05°C",
+                "installation_method": "插入式或外贴式安装"
+            },
+            "calculator": {
+                "functions": [
+                    "流量和温度信号采集处理",
+                    "热量积算和存储",
+                    "通信协议转换",
+                    "故障自诊断功能"
+                ],
+                "calculation_accuracy": "≤±0.5%（理论计算误差）",
+                "data_storage": "24个月历史数据存储",
+                "communication_interfaces": ["M-Bus", "RS485", "无线通信"]
+            }
+        },
+        "accuracy_classes": {
+            "class_1": {
+                "combined_error": "≤±1%（包含流量、温度、计算误差）",
+                "application_scope": "贸易结算、建筑能耗分项计量",
+                "temperature_difference_range": "3K-80K",
+                "flow_range": "15:1量程比"
+            },
+            "class_2": {
+                "combined_error": "≤±2%（包含流量、温度、计算误差）",
+                "application_scope": "内部管理、能效监测",
+                "temperature_difference_range": "3K-60K",
+                "flow_range": "10:1量程比"
+            },
+            "class_3": {
+                "combined_error": "≤±3%（包含流量、温度、计算误差）",
+                "application_scope": "粗略能耗统计",
+                "temperature_difference_range": "2K-40K",
+                "flow_range": "5:1量程比"
+            }
+        },
+        "system_types": {
+            "cooling_energy_metering": {
+                "temperature_range": "4°C-15°C（空调冷水）",
+                "enthalpy_calculation": "基于液态水焓值表计算",
+                "seasonal_operation": "夏季制冷期使用",
+                "anti_freeze_solution": "乙二醇溶液浓度影响修正"
+            },
+            "heating_energy_metering": {
+                "temperature_range": "40°C-95°C（采暖热水）",
+                "enthalpy_calculation": "基于热水焓值表计算",
+                "seasonal_operation": "冬季采暖期使用",
+                "heat_loss_compensation": "管道热损失系数修正"
+            },
+            "domestic_hot_water": {
+                "temperature_range": "40°C-65°C（生活热水）",
+                "measurement_method": "非连续运行模式",
+                "temperature_control": "恒温混水阀控制",
+                "energy_efficiency_class": "太阳能热水系统效率计算"
+            }
+        }
+    }
+}
+
+# 能源介质关联关系定义
+energy_media_relationships = {
+    "electrical_hvac_system": {
+        "primary_energy": "电能",
+        "end_uses": ["制冷机电耗", "冷冻泵电耗", "冷却泵电耗", "冷却塔电耗", "空调风机电耗"],
+        "conversion_efficiency": "COP: 4.0-6.0（制冷工况）",
+        "energy_balance": "输入电功率 = 制冷量 / COP + 损耗"
+    },
+
+    "thermal_distribution": {
+        "primary_energy": "热能（蒸汽或热水）",
+        "end_uses": ["空间采暖", "生活热水", "吸收式制冷", "工艺用热"],
+        "distribution_losses": "管网热损失: 5-15%",
+        "conversion_efficiency": "换热效率: 80-95%"
+    },
+
+    "combined_energy_flows": {
+        "hospital_energy_portfolio": {
+            "electrical_demand": "医疗设备20-30%, HVAC系统35-45%, 照明15-20%, 其他15-25%",
+            "thermal_demand": "空间采暖40-50%, 生活热水20-30%, 空调再热15-25%, 工艺用热10-15%",
+            "water_demand": "生活用水40-50%, 空调补水20-30%, 医疗用水15-25%, 消防绿化10-15%",
+            "gas_demand": "厨房餐饮60-70%, 锅炉燃料20-25%, 消毒灭菌10-15%"
+        },
+        "energy_efficiency_synergies": [
+            "废热回收用于生活热水",
+            "空调冷凝水回收用于绿化",
+            "太阳能热水系统降低燃气消耗",
+            "高效LED照明降低空调冷负荷"
+        ]
+    }
+}

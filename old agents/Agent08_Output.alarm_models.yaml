@@ -1,0 +1,343 @@
+# 告警事件建模 - 医疗建筑智能运维管理
+
+# 1. 告警分类系统
+types_of_alarms:
+
+  # 阈值告警
+  THRESHOLD:
+    name: "阈值告警"
+    description: "监测参数超出设定阈值范围"
+    trigger_condition: "参数值 ≥ 上限 或 ≤ 下限"
+    priority: "基于参数重要性和超限程度"
+    typical_params:
+      - "温度告警"
+      - "湿度告警"
+      - "压力告警"
+      - "流量告警"
+      - "液位告警"
+      - "电气参数告警"
+      - "能耗超限告警"
+
+    severity_evaluation:
+      limit_exceeded_10: "一般告警(P2)"
+      limit_exceeded_20: "严重告警(P1)"
+      limit_exceeded_30: "紧急告警(P0)"
+      safety_related: "自动提升一级"
+
+  STATUS:
+    name: "状态告警"
+    description: "设备运行状态异常"
+    trigger_condition: "设备状态 != 期望状态"
+    priority: "基于设备重要性和状态偏差程度"
+    typical_status:
+      - "设备离线/通信中断"
+      - "设备故障/保护动作"
+      - "运行模式异常"
+      - "联锁状态异常"
+      - "安全保护触发"
+      - "设备过载/过热"
+      - "润滑系统故障"
+      - "振动异常"
+
+    equipment_categories:
+      life_safety: "P0级(生命安全保障设备)"
+      critical_equipment: "P0-P1级(关键设备)"
+      major_equipment: "P1-P2级(主要设备)"
+      general_equipment: "P2-P3级(一般设备)"
+
+  DIAGNOSTIC:
+    name: "诊断告警"
+    description: "基于智能分析的设备健康诊断"
+    trigger_condition: "AI算法检测到异常模式"
+    priority: "基于诊断置信度和潜在影响"
+    diagnostic_types:
+      performance_degradation: "性能下降预警"
+      efficiency_decline: "效率降低诊断"
+      vibration_analysis: "振动分析告警"
+      thermal_anomalies: "温度异常诊断"
+      electrical_analysis: "电气参数异常"
+      trend_analysis: "趋势异常告警"
+      pattern_recognition: "模式识别告警"
+      predictive_indicators: "预测性指标告警"
+
+    ai_driven_adjustment:
+      confidence_above_90: "按正常级别处理"
+      confidence_70_to_90: "降级处理或人工确认"
+      confidence_below_70: "仅记录，不主动告警"
+      continuous_learning: "基于反馈改进算法"
+
+  MAINTENANCE:
+    name: "维护提醒"
+    description: "基于时间和运行周期的维护提醒"
+    trigger_condition: "达到预设定维护时间/周期"
+    priority: "基于维护重要性和延期影响"
+    maintenance_categories:
+      preventive_maintenance: "预防性维护提醒"
+      predictive_maintenance: "预测性维护建议"
+      calibration_reminder: "校准到期提醒"
+      lubrication_reminder: "润滑保养提醒"
+      filter_replacement: "滤网更换提醒"
+      seasonal_preparation: "季节转换准备"
+      regulatory_compliance: "法规合规检查"
+
+    scheduling_options:
+      fixed_calendar: "固定日历维护"
+      usage_based: "基于使用量维护"
+      condition_based: "基于状态维护"
+      mixed_approach: "混合策略"
+
+  QUALITY:
+    name: "数据质量告警"
+    description: "监测数据的质量问题"
+    trigger_condition: "数据质量指标异常"
+    priority: "基于数据重要性和质量控制要求"
+    quality_issues:
+      data_missing: "数据缺失告警"
+      data_stale: "数据过时告警"
+      data_anomaly: "数据异常告警"
+      sensor_drift: "传感器漂移告警"
+      communication_error: "通信错误告警"
+      calibration_drift: "校准漂移告警"
+      range_violation: "量程超限告警"
+      sensor_failure: "传感器故障告警"
+
+# 2. 告警级别定义
+alarm_severity_levels:
+
+  P0_EMERGENCY:
+    level: "P0"
+    name: "紧急告警"
+    description: "生命安全威胁，需立即响应"
+    characteristics:
+      - "可能直接影响患者安全"
+      - "系统功能完全丧失"
+      - "环境失控风险"
+      - "严重安全事故隐患"
+
+    sla_requirements:
+      response_time: "≤ 5分钟"
+      on_site_time: "≤ 30分钟"
+      resolution_target: "≤ 2小时"
+      escalation: "立即通知管理层"
+
+    medical_scenarios:
+      - "手术室压差失效"
+      - "ICU电力中断"
+      - "氧气供应中断"
+      - "负压病房失压"
+      - "洁净空调停机"
+      - "生命支持系统故障"
+      - "消防系统触发"
+      - "严重水浸事故"
+
+  P1_CRITICAL:
+    level: "P1"
+    name: "严重告警"
+    description: "运营严重受影响，需快速响应"
+    characteristics:
+      - "主要系统性能严重下降"
+      - "运营效率大幅降低"
+      - "可能在短期内发展为P0"
+      - "符合法规要求的风险"
+
+    sla_requirements:
+      response_time: "≤ 15分钟"
+      on_site_time: "≤ 1小时"
+      resolution_target: "≤ 4小时"
+      escalation: "通知主管工程师"
+
+    medical_scenarios:
+      - "冷机COP偏低(比正常值下降20%)"
+      - "冷冻水温度超限(±3°C)"
+      - "病区温度异常(超出设定±3°C)"
+      - "关键设备冗余失效"
+      - "UPS电池容量低于50%"
+      - "主要管道泄漏"
+      - "多台设备同时故障"
+
+  P2_MAJOR:
+    level: "P2"
+    name: "一般告警"
+    description: "运营一般影响，需及时响应"
+    characteristics:
+      - "局部系统性能下降"
+      - "运营效率一定程度影响"
+      - "预防性维护需求"
+      - "质量指标轻微偏差"
+
+    sla_requirements:
+      response_time: "≤ 30分钟"
+      on_site_time: "≤ 4小时"
+      resolution_target: "≤ 24小时"
+      planning: "可安排在工作时间内"
+
+    medical_scenarios:
+      - "过滤器压差高(超过初阻2倍)"
+      - "水泵效率下降(低于80%)"
+      - "传感器漂移(超过允许误差)"
+      - "单台设备故障"
+      - "能耗偏高(超基准20%)"
+      - "维护到期提醒"
+      - "备份设备测试失败"
+
+  P3_MINOR:
+    level: "P3"
+    name: "提示告警"
+    description: "潜在问题，需关注"
+    characteristics:
+      - "轻微的性能偏差"
+      - "长期趋势的变化"
+      - "优化改进建议"
+      - "信息性告警"
+
+    sla_requirements:
+      response_time: "≤ 1小时"
+      on_site_time: "≤ 24小时"
+      resolution_target: "≤ 72小时"
+      approach: "可纳入计划性维护"
+
+    medical_scenarios:
+      - "能耗指标轻微偏高"
+      - "设备运行参数轻微偏移"
+      - "定期维护提醒"
+      - "数据缺失或延迟"
+      - "效率指标轻微下降"
+      - "趋势预警"
+      - "软件更新提醒"
+
+# 3. 告警规则设定准则
+alarm_rule_guidelines:
+
+  threshold_setting:
+    normal_operation: "正常运行的10-20%上下限"
+    design_margin: "考虑设计余量的85%作为预警线"
+    safety_margin: "安全限制的95%作为最高限"
+    comfort_margin: "舒适性需求±1°C，±10%RH"
+    efficiency_optimization: "最佳效率点±15%"
+
+  time_based_rules:
+    instantaneous: "瞬时超限立即告警"
+    persistence_3min: "持续3分钟超限告警"
+    persistence_15min: "持续15分钟超限告警"
+    rate_of_change: "变化率超过阈值告警"
+    trend_analysis: "趋势外推预测告警"
+    daily_average: "日均值偏离告警"
+
+  equipment_specific_rules:
+    chillers:
+      condenser_pressure: "1.2MPa警告，1.4MPa跳闸"
+      evaporator_pressure: "0.35MPa警告，0.3MPa跳闸"
+      oil_pressure: "0.15MPa警告，0.1MPa跳闸"
+      temperature_approach: "大于3°C告警"
+      efficiency_cop: "低于4.0告警"
+
+    pumps:
+      vibration_velocity: "4.5mm/s警告，7.1mm/s停机"
+      bearing_temperature: "70°C警告，80°C停机"
+      seal_leakage: "可见泄漏告警"
+
+    air_handling_units:
+      filter_pressure: "初阻力的1.5倍清洗，2倍更换"
+      coil_condensation: "有冷凝水告警"
+      energy_consumption: ">设计值的120%告警"
+
+  medical_space_requirements:
+    operating_rooms:
+      temperature: "22-25°C (±1°C)"
+      humidity: "40-60% RH (±3%)"
+      pressure: ">+15Pa (±2Pa)"
+      air_changes: "15-20次/h"
+
+    icu:
+      temperature: "24±1.5°C"
+      humidity: "50±10% RH"
+      pressure: "+5Pa"
+      noise: "≤45dB(昼)/40dB(夜)"
+
+    negative_isolation:
+      pressure: "-30Pa(相对走廊)"
+      airflow_pattern: "定向气流"
+      air_changes: "12次/h(全排风)"
+      filtration: "HEPA排风"
+
+# 4. 告警升级机制
+escalation_mechanisms:
+
+  automatic_escalation:
+    time_based:
+      p0_unacknowledged_10min: "升级到主任工程师+部门经理"
+      p1_unacknowledged_30min: "升级到主管工程师"
+      p2_unacknowledged_2h: "升级到值班工程师"
+      p3_unacknowledged_24h: "纳入周例会讨论"
+
+    severity_based:
+      consecutive_failures: "升级处理"
+      multiple_devices: "升级处理"
+      safety_related: "直接升级到最高级别"
+      regulatory_impact: "通知合规部门"
+
+  manual_escalation:
+    demand_triggered: "用户主动升级"
+    skill_requirement: "需要专家技能时升级"
+    resource_constraint: "资源不足时升级"
+    external_support: "需要供应商支持时"
+
+  escalation_procedures:
+    first_line: "24小时值班工程师"
+    second_line: "专业工程师(暖通/电气/自动化)"
+    third_line: "设备供应商技术支持"
+    management: "工程技术部经理"
+    emergency_management: "医院总值班+安全管理"
+
+# 5. 告警处理程序
+alarm_handling_procedures:
+
+  immediate_response:
+    - "接收告警信息"
+    - "确认告警内容"
+    - "评估安全风险"
+    - "决定应急措施"
+    - "通知相关人员"
+    - "开始故障排查"
+
+  diagnosis_and_resolution:
+    - "远程诊断(如适用)"
+    - "现场检查确认"
+    - "确定根本原因"
+    - "制定解决方案"
+    - "执行修复措施"
+    - "验证修复效果"
+
+  follow_up_actions:
+    - "记录处理过程"
+    - "更新设备档案"
+    - "分析事件教训"
+    - "改进预防措施"
+    - "总结最佳实践"
+    - "更新知识库"
+
+# 6. 告警知识库
+alarm_knowledge_base:
+
+  symptom_cause_solution:
+    common_patterns:
+      frequent_chiller_trip: "检查冷凝器清洁度、制冷剂充注、电气连接"
+      pump_low_flow: "检查阀门开度、过滤器堵塞、叶轮磨损、吸入口堵塞"
+      damper_not_ responding: "检查执行器电源、限位开关、机械卡滞、控制信号"
+      sensor_drift: "检查校准状态、环境影响、电气干扰、传感器老化"
+
+  root_cause_analysis:
+    systematic_approach:
+      - "收集相关信息"
+      - "建立时间线"
+      - "确定影响范围"
+      - "分析因果关系"
+      - "验证假设"
+      - "确定根本原因"
+
+  best_practices:
+    documentation: "详细记录处理过程"
+    history_review: "查阅历史类似事件"
+    expert_consultation: "必要时咨询专家"
+    continuous_improvement: "持续改进处理流程"
+    knowledge_sharing: "分享经验给团队"

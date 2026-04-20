@@ -1,0 +1,506 @@
+# 维护策略模型 - 医疗建筑智能运维管理
+
+# 1. 预防性维护策略（PM）
+preventive_maintenance_strategies:
+
+  # 基于时间的预防性维护
+  time_based_pm:
+    daily_maintenance:
+      description: "日常运行检查和监控"
+      schedule: "每班次或每日"
+      duration: "1-2小时"
+      responsible: "运行值班员"
+      focus_area: "安全运行和参数监控"
+
+      tasks_performed:
+        equipment_operation_check: "设备运行参数检查"
+        alarm_status_review: "告警状态确认"
+        parameter_recording: "关键参数记录"
+        visual_inspection: "目视检查异常"
+        cleaning_surface: "表面清洁除尘"
+        lubrication_daily: "日润滑部位检查"
+
+      medical_facilities_requirements:
+        operating_room_inspection: "手术室环境参数每2小时检查"
+        icu_monitoring: "ICU系统连续监控"
+        isolation_room_check: "负压病房压差每小时检查"
+        emergency_systems: "应急设备状态检查"
+
+    weekly_maintenance:
+      description: "周度例行检查保养"
+      schedule: "每周固定时间"
+      duration: "2-4小时"
+      responsible: "多技能技工"
+      focus_area: "性能检查和基础保养"
+
+      tasks_performed:
+        belt_tension_check: "皮带张紧度检查调整"
+        bolt_connection_check: "螺栓连接紧固检查"
+        filter_inspection: "过滤器检查，必要时清洁"
+        electrical_connection: "电气连接检查"
+        bearing_lubrication: "轴承润滑检查补充"
+        operation_test: "功能测试验证"
+        minor_adjustments: "轻微调整校正"
+
+      medical_specific_tasks:
+        air_filter_examination: "医疗环境过滤器检查"
+        sterilization_equipment: "消毒设备功能测试"
+        medical_gas_systems: "医用气体系统检查"
+        cleanroom_integrity: "洁净室完整性检查"
+
+    monthly_maintenance:
+      description: "月度深度保养"
+      schedule: "每月执行"
+      duration: "4-8小时"
+      responsible: "专业技工"
+      focus_area: "深度清洁和性能优化"
+
+      tasks_performed:
+        comprehensive_filter_replacement: "全面过滤器更换"
+        coil_cleaning: "盘管深度清洁"
+        belt_replacement: "皮带检查更换"
+        electrical_testing: "电气安全测试"
+        calibration_check: "校准状态检查"
+        vibration_check: "振动水平测量"
+        leak_detection: "泄漏检测"
+        performance_assessment: "性能评估"
+
+      medical_enhancements:
+        hepa_filter_validation: "HEPA过滤器检漏"
+        pressure_cascade_check: "压差梯度验证"
+        infection_control: "感染控制措施检查"
+        environmental_monitoring: "环境监测设备校准"
+
+    quarterly_maintenance:
+      description: "季度深度保养"
+      schedule: "每季度执行"
+      duration: "8-16小时"
+      responsible: "专业工程师+技工"
+      focus_area: "系统性检查和精密维护"
+
+      tasks_performed:
+        heat_exchanger_cleaning: "换热器化学清洗"
+        motor_insulation_test: "电机绝缘测试"
+        control_calibration: "控制回路校准"
+        safety_interlock_test: "安全联锁测试"
+        comprehensive_efficiency: "综合效率测试"
+        wear_assessment: "磨损状况评估"
+        belt_drive_overhaul: "皮带传动系统大修"
+        electrical_panel_maintenance: "电气柜深度维护"
+
+      medical_systems_focus:
+        medical_device_calibration: "医疗设备校准"
+        cleanroom_performance: "洁净室性能验证"
+        biological_decontamination: "生物去污处理"
+        air_changes_verification: "换气次数验证"
+
+    annual_maintenance:
+      description: "年度大修"
+      schedule: "每年执行或根据制造商建议"
+      duration: "1-7天"
+      responsible: "专业工程师+厂家技术"
+      focus_area: "全面大修和性能恢复"
+
+      tasks_performed:
+        major_overhaul: "全面解体大修"
+        component_replacement: "关键部件更换"
+        performance_restoration: "性能恢复标定"
+        safety_system_upgrade: "安全系统升级"
+        comprehensive_testing: "综合性能测试"
+        documentation_update: "文档记录更新"
+        spare_parts_planning: "备件计划制定"
+        regulatory_compliance: "合规性检查"
+
+      medical_compliance:
+        regulatory_inspection: "法规检查准备"
+        certification_renewal: "证书续期"
+        third_party_validation: "第三方验证"
+        quality_assurance: "质量保证审查"
+
+  # 基于运行周期的预防性维护
+  usage_based_pm:
+    operating_hours_based:
+      2000_hours_service:
+        components_affected: ["润滑系统", "过滤器", "密封件"]
+        maintenance_tasks: ["润滑油更换", "过滤器更换", "密封检查"]
+        duration: "4-8小时"
+        skill_level: "技工"
+
+      8000_hours_service:
+        components_affected: ["轴承系统", "传动系统", "电气系统"]
+        maintenance_tasks: ["轴承检查更换", "传动系统调整", "电气测试"]
+        duration: "8-16小时"
+        skill_level: "工程师"
+
+      20000_hours_service:
+        components_affected: ["压缩机", "主要结构", "控制系统"]
+        maintenance_tasks: ["压缩机大修", "主体结构检查", "控制系统升级"]
+        duration: "3-7天"
+        skill_level: "专业工程师+厂家"
+
+    cycle_based_maintenance:
+      startup_cycles: "启停频繁设备按启动次数"
+      load_cycles: "循环载荷设备按载荷循环"
+      operation_modes: "不同运行模式差异化维护"
+      environmental_factors: "环境恶劣程度调整维护频率"
+
+    condition_adjusted_pm:
+      vibration_based: "振动监测调整维护时机"
+      temperature_based: "温度水平调整维护间隔"
+      corrosion_based: "腐蚀监测调整防腐维护"
+      contamination_based: "污染程度调整清洁维护"
+
+# 2. 预测性维护策略（PdM）
+predictive_maintenance_strategies:
+
+  # 基于状态监测的预测
+  condition_based_pd:
+    vibration_analysis:
+      monitoring_objects:
+        - "旋转机械(水泵、风机、冷机等)"
+        - "轴承系统"
+        - "传动系统"
+      diagnostic_technology:
+        - "频谱分析"
+        - "包络分析"
+        - "时域分析"
+        - "趋势分析"
+      fault_detection:
+        - "不平衡"
+        - "不对中"
+        - "轴承故障"
+        - "齿轮故障"
+        - "松动"
+      predictive_indicators:
+        - "振动烈度趋势"
+        - "特征频率幅值"
+        - "峭度因子"
+        - "峰值因子"
+
+      medical_applications:
+        hvac_rotating_equipment: "暖通空调旋转设备"
+        medical_gas_compressors: "医用气体压缩机"
+        vacuum_pumps: "真空泵"
+        sterilization_equipment: "消毒设备"
+
+    thermal_analysis:
+      monitoring_objects:
+        - "电气设备"
+        - "机械设备"
+        - "热能系统"
+        - "管道系统"
+      diagnostic_technology:
+        - "红外热像"
+        - "温度趋势"
+        - "热点检测"
+        - "温差分析"
+      fault_detection:
+        - "电气故障"
+        - "机械磨损"
+        - "绝缘老化"
+        - "接触不良"
+        - "过载运行"
+      predictive_indicators:
+        - "温度梯度"
+        - "热点温度"
+        - "温升趋势"
+        - "相对温差"
+
+      medical_critical_points:
+        electrical_distribution: "配电系统热点"
+        medical_equipment_cabinet: "医疗设备配电柜"
+        ups_transformers: "UPS和变压器"
+        control_panels: "控制柜"
+
+    electrical_analysis:
+      monitoring_objects:
+        - "电机系统"
+        - "电气绝缘"
+        - "电能质量"
+        - "控制回路"
+      diagnostic_technology:
+        - "电机电流分析"
+        - "绝缘阻抗测试"
+        - "局部放电检测"
+        - "电能质量分析"
+        - "谐波分析"
+      fault_detection:
+        - "电机故障"
+        - "绝缘老化"
+        - "连接松动"
+        - "电能质量问题"
+        - "谐波污染"
+      predictive_indicators:
+        - "电流不平衡"
+        - "绝缘阻抗"
+        - "功率因数"
+        - "谐波含量"
+
+      medical_power_criticality:
+        medical_grade_power: "医疗级供电"
+        life_support_motors: "生命支持电机"
+        hvac_motors: "暖通电机"
+        backup_power: "备用电源"
+
+    performance_trending:
+      monitoring_objects:
+        - "整体系统效率"
+        - "设备性能参数"
+        - "能耗水平"
+        - "输出质量"
+      diagnostic_technology:
+        - "效率计算"
+        - "趋势分析"
+        - "基准对比"
+        - "退化模型"
+      performance_tracking:
+        - "能源效率"
+        - "制冷效率"
+        - "风机效率"
+        - "泵送效率"
+        - "系统整体效率"
+      predictive_indicators:
+        - "效率下降率"
+        - "性能退化指数"
+        - "能耗增加率"
+        - "基准偏离度"
+
+      medical_efficiency_focus:
+        energy_per_patient_bed: "每床位能耗"
+        hvac_energy_budget: "暖通空调能效"
+        medical_equipment_efficiency: "医疗设备效率"
+        cleanroom_energy: "洁净室能耗"
+
+  # 基于AI的智能预测
+  ai_driven_prediction:
+    machine_learning_models:
+      failure_prediction:
+        training_data: "历史故障数据和状态数据"
+        model_types: ["随机森林", "支持向量机", "神经网络"]
+        feature_selection: "自动特征选择和提取"
+        model_validation: "交叉验证和A/B测试"
+        accuracy_target: "预测准确率>90%"
+
+      remainder_useful_life:
+        time_to_failure: "失效时间预测"
+        confidence_interval: "预测置信区间"
+        degradation_modeling: "劣化过程建模"
+        real_time_update: "实时模型更新"
+
+      anomaly_detection:
+        unsupervised_learning: "无监督异常检测"
+        supervised_detection: "监督异常探测"
+        semi_supervised_approach: "半监督学习"
+        online_adaptation: "在线自适应"
+
+    predictive_output:
+      risk_priority_number:
+        calculation_method: "RPN = 严重度×发生频度×检测度"
+        risk_levels: ["低风险", "中风险", "高风险", "极高风险"]
+        action_priorities: ["监控", "计划维护", "紧急处理", "立即停机"]
+
+      recommended_actions:
+        immediate_actions: "立即采取措施"
+        near_term_actions: "近期维护建议"
+        long_term_actions: "长期规划建议"
+        resource_requirements: "资源需求预估"
+        cost_benefit_analysis: "成本效益分析"
+
+    implementation_process:
+      data_collection: "传感器数据和维护历史"
+      data_preprocessing: "数据清洗和特征工程"
+      model_development: "模型训练和验证"
+      model_deployment: "模型部署和监控"
+      continuous_improvement: "持续改进和优化"
+
+# 3. 基于设备类型的维护策略
+maintenance_by_equipment_type:
+
+  # 冷水机组维护策略
+  chiller_systems:
+    preventive_schedule:
+      daily: "运行参数记录，异常声音检查"
+      weekly: "冷凝器清洁检查，制冷剂泄漏检查"
+      monthly: "油位油质检查，过滤器检查，性能记录"
+      quarterly: "性能测试，绝缘测试，安全装置校验"
+      annually: "全面大修，性能标定，证书更新"
+
+    predictive_monitoring:
+      vibration: "轴承和压缩机振动监测"
+      temperature: "各关键部位温度趋势"
+      pressure: "高低压侧压力趋势分析"
+      current: "电机运行电流分析"
+      efficiency: "COP效率趋势监控"
+      wear_debris: "润滑油磨损监测"
+
+    medical_special_requirements:
+      critical_backup: "100%备用容量配置"
+      quick_restart: "快速重启能力（<10分钟）"
+      infection_control: "防感染设计"
+      noise_control: "低噪声运行"
+      environmental_monitoring: "环境影响实时监测"
+
+  # AHU维护策略
+  air_handling_units:
+    preventive_schedule:
+      daily: "风压风量检查，异常声音检查"
+      weekly: "过滤器压差检查，皮带检查"
+      monthly: "过滤器清洗更换，盘管清洁，轴承润滑"
+      quarterly: "风机平衡检查，皮带更换，电机测试"
+      annually: "大修，性能标定，传动部件更换"
+
+    predictive_monitoring:
+      energy_consumption: "单位风量能耗趋势"
+      filter_differential: "过滤器压差趋势"
+      fan_efficiency: "风机效率趋势分析"
+      vibration_analysis: "风机电机振动监测"
+      temperature_profile: "温度分布均匀性"
+      noise_level: "噪声水平趋势"
+
+    medical_enhancements:
+      hepa_filter_integrity: "HEPA过滤器完整性测试"
+      airflow_pattern: "气流模式和均匀性"
+      contamination_prevention: "污染预防措施"
+      sterilization_capability: "机组自身消毒能力"
+      monitoring_redundancy: "监测冗余配置"
+
+  # 水泵维护策略
+  pump_systems:
+    preventive_schedule:
+      daily: "压力流量检查，异常振动检查"
+      weekly: "轴承温度检查，密封检查"
+      monthly: "轴承润滑，连接检查，基础检查"
+      quarterly: "泵性能测试，电机测试，绝缘测试"
+      annually: "大修，轴承更换，密封更换"
+
+    predictive_monitoring:
+      flow_rate_trending: "流量趋势分析"
+      pressure_development: "扬程性能趋势"
+      power_consumption: "功率消耗趋势"
+      vibration_analysis: "振动频谱分析"
+      bearing_condition: "轴承状态监测"
+      cavitation_detection: "汽蚀检测"
+
+    medical_water_systems:
+      water_quality_monitoring: "水质连续监测"
+      cross_connection_control: "交叉连接控制"
+      backflow_prevention: "回流防护"
+      pathogen_control: "致病菌控制"
+      legionella_prevention: "军团菌预防"
+
+  # 自控系统维护策略
+  control_systems:
+    preventive_schedule:
+      daily: "控制参数检查，告警记录检查"
+      weekly: "传感器校准检查，执行器响应测试"
+      monthly: "控制回路测试，软件备份"
+      quarterly: "流量计等仪表校准，网络安全检查"
+      annually: "控制系统升级，全面性能测试"
+
+    predictive_monitoring:
+      calibration_drift: "传感器校准漂移检测"
+      control_stability: "控制稳定性趋势分析"
+      network_performance: "网络性能监控"
+      software_health: "软件健康状况监测"
+      cybersecurity_events: "网络安全事件监测"
+      user_access_patterns: "用户访问模式分析"
+
+    medical_special_focus:
+      data_integrity: "生命安全和环境质量数据完整性"
+      backup_redundancy: "三重冗余配置"
+      audit_trail: "审计追踪完整性"
+      change_control: "变更控制程序"
+      validation_documentation: "验证文档完整性"
+
+# 4. 维护策略优化
+maintenance_strategy_optimization:
+
+  cost_benefit_analysis:
+    maintenance_cost_categories:
+      direct_labor: "直接人工成本"
+      material_costs: "材料成本"
+      outsourcing_fees: "外包费用"
+      downtime_costs: "停机损失成本"
+      equipment_degradation: "设备劣化成本"
+
+    benefit_quantification:
+      failure_prevention: "故障预防收益"
+      life_extension: "设备延寿收益"
+      efficiency_improvement: "效率提升收益"
+      compliance_avoidance: "合规避免成本"
+      safety_improvement: "安全改进收益"
+
+  risk_based_optimization:
+    risk_assessment_matrix:
+      likelihood_levels: ["极低", "低", "中", "高", "极高"]
+      consequence_levels: ["可忽略", "轻微", "重大", "严重", "灾难性"]
+      risk_scores: "Likelihood × Consequence"
+      risk_tolerance: "ALARP原则(尽可能低)"
+
+    maintenance_priority:
+      high_risk_high_consequence: "优先维护，缩短周期"
+      low_risk_low_consequence: "延后维护或取消"
+      risk_based_adjustment: "基于风险动态调整"
+
+  continuous_improvement:
+    performance_metrics:
+      mean_time_between_failures: "平均故障间隔时间"
+      overall_equipment_effectiveness: "设备综合效率"
+      maintenance_cost_ratio: "维护成本比"
+      schedule_compliance: "计划执行率"
+      first_time_fix_rate: "首次修复率"
+
+    improvement_opportunities:
+      pareto_analysis: "帕累托分析识别关键问题"
+      root_cause_analysis: "根本原因分析"
+      best_practice_sharing: "最佳实践分享"
+      technology_adoption: "新技术应用"
+      training_effectiveness: "培训效果评估"
+
+# 5. 医疗设备特殊维护要求
+medical_equipment_specialmaintenance:
+
+  medical_gas_systems:
+      special_requirements:
+        continuous_supply: "不允许中断供气"
+        cross_contamination_prevention: "交叉感染防控"
+        purity_standards: "医用气体纯度标准"
+        pressure_stability: "压力稳定要求"
+        flow_reliability: "流量可靠性保障"
+
+      maintenance_protocols:
+        no_interruption_procedures: "不中断维护程序"
+        backup_gas_supply: "备用气源切换"
+        isolation_procedures: "隔离操作程序"
+        validation_testing: "验证测试要求"
+        contamination_monitoring: "污染监测"
+
+  medical_electrical_systems:
+      special_requirements:
+        uninterrupted_power: "不间断供电"
+        electrical_isolation: "电气隔离"
+        ground_fault_protection: "接地故障保护"
+        leakage_current_limits: "漏电电流限制"
+        grounding_standards: "接地标准"
+
+      maintenance_protocols:
+        live_work_procedures: "带电作业程序"
+          isolated_work_procedures: "隔离作业程序"
+          electrical_safety_checks: "电气安全检查"
+          it_system_monitoring: "IT系统绝缘监视"
+          backup_power_testing: "备用电源测试"
+
+  life_support_equipment:
+      special_requirements:
+        zero_failure_tolerance: "零故障容忍"
+        redundant_systems: "冗余系统要求"
+        continuous_monitoring: "连续监测"
+        immediate_response: "立即响应能力"
+        regulatory_compliance: "严格法规合规"
+
+      maintenance_protocols:
+        preventive_condition_based: "基于状态的预防"
+        predictive_continuous: "连续预测性维护"
+        hot_swap_capability: "热插拔更换能力"
+        maintenance_without_shutdown: "不关机维护"
+        continuous_verification: "连续验证确认"

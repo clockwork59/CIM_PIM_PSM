@@ -1,0 +1,38 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_BLD_STOCK,表全名,JHPDL:JH_BLD_STOCK,,,,,,
+,表说明,血液入出库记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,BLE,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,BLE0001,String字符串（变长）,,BLD_STOCK_SN,血液入出库记录编号,血液入出库记录编号，系统生成三级编码，如“BD0.000.000.001”,20,是,是
+,\x00\x02,BLE0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x04,BLE0004,String字符串（变长）,,BLD_PACKAGE_CODE,血袋条码号,血袋唯一号,200,,
+,\x00\x05,BLE0005,String字符串（变长）,,BLD_DONATION_NO,献血码,,200,,
+,\x00\x06,BLE0006,String字符串（变长）,,PROC_NO,产品码,,200,是,
+,\x00\x07,BLE0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,IN_STORE_DATE,入库时间,,,,
+,\x00\x08,BLE0008,String字符串（变长）,,SC_INSTORE_USER,入库人员工号,,200,,
+,\x00\x09,BLE0009,String字符串（变长）,,ST_INSTORE_USER,入库人员姓名,,200,,
+,\x00\x0A,BLE0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BLD_RECHECK_DATE,血液复检时间,,,,
+,\x00\x0B,BLE0011,String字符串（变长）,,SC_RECHECK_USER,血液复检人员工号,,200,,
+,\x00\x0C,BLE0012,String字符串（变长）,,ST_RECHECK_USER,血液复检人员姓名,,200,,
+,\x00\x0D,BLE0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CAIJI_DATE,采集时间,,,,
+,\x00\x0E,BLE0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,MAKE_DATE,制备时间,,,,
+,\x00\x0F,BLE0015,String字符串（变长）,,DISABLED_NO,失效码,,200,,
+,\x00\x10,BLE0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DISABLED_DATE,失效日期,,,,
+,\x00\x1B,BLE0027,String字符串（变长）,,APPLY_NO,申请单号,自体采血用,200,,
+,\x00\x11,BLE0017,String字符串（变长）,,BLD_ABO,ABO血型,,200,,
+,\x00\x12,BLE0018,String字符串（变长）,,BLD_RH,RH血型,,200,是,是
+,\x00\x13,BLE0019,String字符串（变长）,,BLD_CONTENT,血液成分,,200,,
+,\x00\x14,BLE0020,Double双精度浮点型（8个字节）,,BLD_AMOUNT,数量值,,200,,
+,\x00\x15,BLE0021,String字符串（变长）,,UNIT,单位,,200,,
+,\x00\x16,BLE0022,String字符串（变长）,,BLD_STATION,血站名称,,200,,
+,\x00\x17,BLE0023,String字符串（变长）,,HOSPITAL_NAME,医院名称,,200,,
+,\x00\x18,BLE0024,String字符串（变长）,,SC_INOUT_TYPE,入出库类型,,200,,
+,\x00\x19,BLE0025,String字符串（变长）,,ST_INOUT_TYPE,入出库类型,如：血站入库、自体输血入库、发血出库,200,,
+,\x00\x1A,BLE0026,String字符串（变长）,,BLD_ORD_NO,订血申请号,,200,,
+,\x00\x1C,BLE0028,String字符串（变长）,,COMMENT,备注,,200,,
+,\x00\x1D,BLE0029,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统最后更新时间,,,是,是
+,\x00\x03,BLE0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x1E,BLE0030,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

@@ -1,0 +1,49 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_IN_OPER,表全名,JHPDL:JH_IN_OPER,,,,,,
+,表说明,住院临床手术记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,IPR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,IPR0001,String字符串（变长）,,IN_OPER_SN,住院临床手术编号,住院临床手术编号，系统生成三级编码，如“ZP0.000.000.001”,20,是,是
+,\x00\x02,IPR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,IPR0003,String字符串（变长）,,IN_HOSP_SN,住院就诊编号,住院就诊编号，来源JH_IN_HOSP的IHR0001,20,是,是
+,\x00\x04,IPR0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPERATION_TIME,临床手术下达时间,临床医生下达手术的时间,19,,
+,\x00\x07,IPR0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPERATION_START_TIME,手术开始时间,,19,,
+,\x00\x08,IPR0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPERATION_END_TIME,手术结束时间,,19,,
+,\x00\x11,IPR0017,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x12,IPR0018,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x13,IPR0019,简化字典（Integer整型，4个字节）,421,SD_OPER_SCALE,手术级别简码,,20,是,是
+,\x00\x14,IPR0020,String字符串（变长）,,ST_OPER_SCALE,手术级别描述,,500,是,是
+,\x00\x1F,IPR0031,String字符串（变长）,,SC_OPER_SCALE,手术级别编码,源业务系统的手术级别编码,200,是,是
+,\x00\x15,IPR0021,String字符串（变长）,,SC_OPER_DOCT,手术医师编码,,200,,
+,\x00\x16,IPR0022,String字符串（变长）,,ST_OPER_DOCT,手术医师名称,,200,,
+,\x00\x17,IPR0023,简化字典（Integer整型，4个字节）,422,SD_WOUND_GRADE,切口等级简码,,20,,
+,\x00\x18,IPR0024,String字符串（变长）,,ST_WOUND_GRADE,切口等级描述,,500,,
+,\x00\x20,IPR0032,String字符串（变长）,,SC_WOUND_GRADE,切口等级编码,源业务系统的切口等级编码,200,,
+,\x00\x19,IPR0025,简化字典（Integer整型，4个字节）,423,SD_WOUND_HEAL,愈合情况简码,,20,,
+,\x00\x1A,IPR0026,String字符串（变长）,,ST_WOUND_HEAL,愈合情况描述,,4000,,
+,\x00\x21,IPR0033,String字符串（变长）,,SC_WOUND_HEAL,愈合情况编码,源业务系统的愈合情况编码,200,,
+,\x00\x1B,IPR0027,简化字典（Integer整型，4个字节）,233,SD_ANES_METHOD,麻醉方式简码,,20,,
+,\x00\x1C,IPR0028,String字符串（变长）,,ST_ANES_METHOD,麻醉方式描述,,500,,
+,\x00\x22,IPR0034,String字符串（变长）,,SC_ANES_METHOD,麻醉方式编码,源业务系统的麻醉方式编码,200,,
+,\x00\x1D,IPR0029,String字符串（变长）,,SC_ANES_DOCT,麻醉医师编码,,200,,
+,\x00\x1E,IPR0030,String字符串（变长）,,ST_ANES_DOCT,麻醉医师名称,,200,,
+,\x00\x23,IPR0035,String字符串（变长）,,SC_OPERATION,临床手术编码,,200,,是
+,\x00\x24,IPR0036,String字符串（变长）,,ST_OPERATION,临床手术名称,,300,,
+,\x00\x25,IPR0037,String字符串（变长）,,SC_FIRST_ASSISTANT,一助编码,,200,,
+,\x00\x26,IPR0038,String字符串（变长）,,ST_FIRST_ASSISTANT,一助姓名,,200,,
+,\x00\x27,IPR0039,String字符串（变长）,,SC_SECOND_ASSISTANT,二助编码,,200,,
+,\x00\x28,IPR0040,String字符串（变长）,,ST_SECOND_ASSISTANT,二助姓名,,200,,
+,\x00\x29,IPR0041,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x05,IPR0005,String字符串（变长）,,OPERATION_CODE,临床手术编码,临床医生下达手术的编码,200,,
+,\x00\x06,IPR0006,String字符串（变长）,,OPERATION_NAME,临床手术名称,临床医生下达手术的名称,200,,
+,\x00\x09,IPR0009,自定义字典类型，字符串（变长）,421,OPERATION_SCALE,手术级别,,200,是,是
+,\x00\x0A,IPR0010,String字符串（变长）,,OPERATION_DOCTOR,手术医师,,200,,
+,\x00\x0B,IPR0011,String字符串（变长）,,FIRST_ASSISTANT,一助,,200,,
+,\x00\x0C,IPR0012,String字符串（变长）,,SECOND_ASSISTANT,二助,,200,,
+,\x00\x0D,IPR0013,自定义字典类型，字符串（变长）,422,WOUND_GRADE,切口等级,,200,,
+,\x00\x0E,IPR0014,自定义字典类型，字符串（变长）,423,WOUND_HEAL,愈合情况,,200,,
+,\x00\x0F,IPR0015,自定义字典类型，字符串（变长）,233,ANESTHESIA_METHOD,麻醉方式,,200,,
+,\x00\x10,IPR0016,String字符串（变长）,,ANESTHESIA_DOCTOR,麻醉医师,,200,,

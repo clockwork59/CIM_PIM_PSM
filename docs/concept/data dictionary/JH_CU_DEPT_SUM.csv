@@ -1,0 +1,32 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CU_DEPT_SUM,表全名,JHPDL:JH_CU_DEPT_SUM,,,,,,
+,表说明,体检科室检查记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CHE,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CHE0001,String字符串（变长）,,CHECK_DEPT_SUM_SN,体检科室检查编号,体检科室检查编号，系统生成三级编码，如“CE0.000.000.001”,20,是,是
+,\x00\x02,CHE0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,CHE0003,String字符串（变长）,,CHECK_UP_SN,体检记录编号,体检记录编号，来源JH_CU_HOSP的CHR0001,20,是,是
+,\x00\x04,CHE0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x06,CHE0006,String字符串（变长）,,SC_CHECK_DEPT,科室代码,,100,,是
+,\x00\x07,CHE0007,String字符串（变长）,,ST_CHECK_DEPT,科室描述,,200,,
+,\x00\x08,CHE0008,String字符串（变长）,,SC_CHECK_USER,检查人员代码,,100,,
+,\x00\x09,CHE0009,String字符串（变长）,,ST_CHECK_USER,检查人员姓名,,200,,
+,\x00\x0A,CHE0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CHECK_UP_TIME,检查时间,,,,是
+,\x00\x0E,CHE0014,String字符串（变长）,,SC_CHK_STATUS,检查状态代码,,50,,
+,\x00\x0F,CHE0015,String字符串（变长）,,ST_CHK_STATUS,检查状态描述,,100,,
+,\x00\x10,CHE0016,String字符串（变长）,,DEPT_SUMMARY,科室总结,科室检查总结结论,4000,,
+,\x00\x11,CHE0017,String字符串（变长）,,DEPT_DIAG_ADVICE,科室总诊断建议,科室检查后的总结性建议结论,4000,,
+,\x00\x0B,CHE0011,String字符串（变长）,,SC_CHECK_CON_USER,审核人代码,,100,,
+,\x00\x0C,CHE0012,String字符串（变长）,,ST_CHECK_CON_USER,审核人姓名,,200,,
+,\x00\x0D,CHE0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CHK_CONFIRM_USER,审核时间,,,,
+,\x00\x13,CHE0019,String字符串（变长）,,CHECK_PAT_ID,体检系统内部患者ID,,50,,是
+,\x00\x12,CHE0018,String字符串（变长）,,DEPT_REMARKS,备注,,500,,
+,\x00\x05,CHE0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,19,是,
+,\x00\x14,CHE0020,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x15,CHE0021,String字符串（变长）,,SC_CHECK_TYPE,检查类型编码,检查类型：一般检查、眼科检查等,200,,
+,\x00\x16,CHE0022,String字符串（变长）,,ST_CHECK_TYPE,检查类型描述,检查类型描述：一般检查，眼科检查等,200,,
+,\x00\x17,CHE0023,简化字典（Integer整型，4个字节）,484,SD_CHECK_TYPE,标化检查类型,标化检查类型,,,
+,\x00\x18,CHE0024,String字符串（变长）,,CHECK_NO,检查号,检查号,200,,

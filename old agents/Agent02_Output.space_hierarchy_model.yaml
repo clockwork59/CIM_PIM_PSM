@@ -1,0 +1,257 @@
+# 医疗建筑空间层级模型（Medical Building Space Hierarchy Model）
+# CIMS ISA-95 扩展模型 - 医疗建筑专用版本
+
+healthcare_space_hierarchy:
+
+  # L0: Site 层级 - 院区
+  site:
+    id: "site_level"
+    name: "院区"
+    description: "医疗机构完整用地范围，包含所有建筑和设施"
+    code_prefix: "ST"
+    properties:
+      boundary_area: "integer"  # 用地面积 (㎡)
+      floor_area_ratio: "float"  # 容积率
+      green_coverage_rate: "float"  # 绿化率
+      total_buildings: "integer"  # 建筑总数
+      site_elevation: "float"  # 场地标高 (m)
+      site_climate_zone: "enum"  # 气候分区 (严寒/寒冷/夏热冬冷/夏热冬暖/温和)
+      wind_rose_dominant: "enum"  # 主导风向
+      site_type: "enum"  # 院区类型 (综合性医院/专科医院/社区医院/医疗中心)
+      beds_capacity: "integer"  # 总床位数
+      daily_patients_capacity: "integer"  # 日门诊量预测
+      emergency_access_paths: "integer"  # 急救通道数量
+      energy_transformer_capacity: "float"  # 变压器总容量 (kVA)
+      medical_gas_total_consumption: "float"  # 医疗气体总耗量 (Nm³/h)
+      hvac_system_type: "enum"  # HVAC系统类型 (集中/分散/混合)
+    children_types: ["building"]
+
+  # L1: Building 层级 - 建筑
+  building:
+    id: "building_level"
+    name: "建筑"
+    description: "医疗建筑单体，按功能分为不同类型"
+    code_prefix: "BD"
+    properties:
+      building_type: "enum"  # 建筑类型 (门诊楼/住院楼/医技楼/行政楼/后勤楼)
+      building_height: "float"  # 建筑高度 (m)
+      building_elevation: "float"  # 建筑标高 (m)
+      floor_number: "integer"  # 总楼层数 (地上)
+      basement_floor_number: "integer"  # 地下层数
+      main_entrance_orientation: "enum"  # 主入口朝向
+      structure_type: "enum"  # 结构类型 (框架/框架剪力墙/钢结构/混合)
+      seismic_fortification_intensity: "float"  # 抗震设防烈度
+      fire_resistance_rating: "enum"  # 耐火等级 (一级/二级/三级/四级)
+      building_area: "integer"  # 建筑面积 (㎡)
+      building_volume: "integer"  # 建筑体积 (m³)
+      envelope_thermal_performance: "float"  # 围护结构传热系数 (W/㎡·K)
+      window_wall_ratio: "float"  # 窗墙比
+      shading_coefficient: "float"  # 遮阳系数
+      natural_ventilation_potential: "float"  # 自然通风潜力系数
+      day_lighting_potential: "float"  # 天然采光潜力系数
+      access_control_level: "enum"  # 门禁等级 (一级/二级/三级)
+      security_clearance_level: "enum"  # 安保等级 (高级/中级/标准)
+    children_types: ["floor"]
+    subtype_properties:
+      # 门诊楼特殊属性
+      outpatient_building:
+        department_categorization: "string"  # 科室分区
+        daily_flow_capacity: "integer"  # 日客流量
+        waiting_area_capacity: "integer"  # 候诊区容量
+      # 住院楼特殊属性
+      inpatient_building:
+        ward_categorization: "string"  # 病房分区
+        total_beds: "integer"  # 床位数
+        nurse_station_count: "integer"  # 护士站数量
+      # 医技楼特殊属性
+      medical_technology_building:
+        equipment_rooms_count: "integer"  # 设备机房数量
+        radiation_shielding_level: "enum"  # 辐射防护等级
+        magnetic_shielding_level: "enum"  # 电磁屏蔽等级
+
+  # L2: Floor 层级 - 楼层
+  floor:
+    id: "floor_level"
+    name: "楼层"
+    description: "建筑垂直分层，包含地面相对于信息"
+    code_prefix: "FL"
+    properties:
+      floor_number: "integer"  # 楼层编号 (-2,-1,1,2,3,...)
+      floor_level: "enum"  # 楼层类型 (地下/地面/地上/夹层/屋顶)
+      floor_height: "float"  # 楼层高度 (m)
+      floor_elevation: "float"  # 楼层标高 (m)
+      usable_area: "integer"  # 使用面积 (㎡)
+      rentable_area: "integer"  # 可出租面积 (㎡)
+      common_area: "integer"  # 公摊面积 (㎡)
+      corridor_network_topology: "string"  # 走廊网络拓扑
+      emergency_exit_count: "integer"  # 安全出口数量
+      vertical_transport_points: "integer"  # 垂直交通点数量
+      horizontal_transport_efficiency: "float"  # 水平交通效率系数
+      floor_accessibility_level: "enum"  # 可达性等级 (高/中/低)
+      floor_load_capacity: "float"  # 楼面荷载 (kN/㎡)
+      floor_fire_compartment: "string"  # 防火分区
+      floor_smoke_compartment: "string"  # 防烟分区
+      hvac_terminal_units: "integer"  # HVAC末端数量
+      fresh_air_rate_per_unit: "float"  # 新风量指标 (m³/h·人)
+      lighting_power_density: "float"  # 照明功率密度 (W/㎡)
+      plug_load_density: "float"  # 插座功率密度 (W/㎡)
+    children_types: ["zone"]
+
+  # L3: Zone 层级 - 功能区域
+  zone:
+    id: "zone_level"
+    name: "功能区域"
+    description: "按功能划分的建筑区域，包含特定医疗功能"
+    code_prefix: "ZN"
+    properties:
+      zone_classification: "enum"  # 区域分类 (医疗/医技/后勤/公共/行政)
+      zone_function: "enum"  # 功能类型 (门诊/住院/急诊/手术/ICU/检验等)
+      operational_capacity: "integer"  # 运营容量
+      operating_hours: "string"  # 运营时间
+      staff_count: "integer"  # 员工数
+      patient_flow_capacity: "integer"  # 患者流量 (人/日)
+      visitor_flow_capacity: "integer"  # 访客流量 (人/日)
+      cleanliness_level: "enum"  # 洁净等级 (I级/II级/III级/IV级/普通)
+      infection_control_level: "enum"  # 感染控制等级 (严格/标准/一般)
+      pressure_differential_required: "float"  # 压差要求 (Pa)
+      temperature_range_heating: "range"  # 供暖温度范围 (°C)
+      temperature_range_cooling: "range"  # 制冷温度范围 (°C)
+      humidity_range: "range"  # 湿度范围 (%)
+      air_changes_per_hour: "float"  # 换气次数 (次/h)
+      filtration_efficiency: "enum"  # 过滤效率 (H13/H12/H11/其他)
+      noise_level_limit: "float"  # 噪声限值 (dB)
+      vibration_level_limit: "float"  # 振动限值 (mm/s)
+      medical_gas_systems: "array"  # 医疗气体系统 (氧气/压缩空气/真空/氮气/氧化亚氮)
+      electrical_systems: "array"  # 电气系统 (低压/UPS/应急/医疗IT/隔离电源)
+      hvac_systems: "array"  # 暖通系统 (全空气/风机盘管/VRV/辐射/地板送风)
+      special_equipment_count: "integer"  # 特殊设备数量
+      radiation_exposure_risk: "boolean"  # 辐射暴露风险
+      biohazard_level: "enum"  # 生物危害等级 (BSL-1/BSL-2/BSL-3/BSL-4)
+      fire_resistance_required: "float"  # 耐火极限要求 (h)
+      security_access_level: "enum"  # 门禁等级 (公开/受限/严格/禁止)
+      privacy_level_required: "enum"  # 隐私等级 (公开/内部/机密/绝密)
+    children_types: ["room"]
+
+  # L4: Room 层级 - 房间
+  room:
+    id: "room_level"
+    name: "房间"
+    description: "医疗建筑中的具体房间或空间"
+    code_prefix: "RM"
+    properties:
+      room_classification: "enum"  # 房间分类 (见分类体系)
+      room_function: "string"  # 房间功能描述
+      room_area: "float"  # 房间面积 (㎡)
+      room_volume: "float"  # 房间容积 (m³)
+      ceiling_height: "float"  # 天花板高度 (m)
+      occupancy_capacity: "integer"  # 容纳人数
+      occupancy_pattern: "string"  # 使用模式 (连续/间歇/不定时)
+      door_count: "integer"  # 门的数量
+      window_count: "integer"  # 窗的数量
+      access_control_required: "boolean"  # 是否需要门禁控制
+      barrier_free_accessible: "boolean"  # 是否无障碍
+      natural_lighting_available: "boolean"  # 是否有自然采光
+      natural_ventilation_available: "boolean"  # 是否有自然通风
+      orientation: "enum"  # 朝向 (东/南/西/北/东北/东南/西北/西南)
+      position_in_building: "enum"  # 建筑位置 (外墙/内墙/核心筒/夹层)
+      temperature_setpoint_heating: "float"  # 供暖温度设定点 (°C)
+      temperature_setpoint_cooling: "float"  # 制冷温度设定点 (°C)
+      humidity_setpoint: "float"  # 湿度设定点 (%)
+      pressure_setpoint: "float"  # 压力设定点 (Pa, 相对于走廊)
+      noise_level_standard: "float"  # 噪声标准 (dB)
+      lighting_illuminance: "float"  # 照度标准 (lx)
+      power_load_density: "float"  # 用电功率密度 (W/㎡)
+      equipment_heat_gain: "float"  # 设备散热 (W/㎡)
+      lighting_heat_gain: "float"  # 照明散热 (W/㎡)
+      occupancy_heat_gain: "float"  # 人员散热 (W/人)
+      infiltration_rate: "float"  # 渗透风量 (m³/h)
+      fresh_air_requirement: "float"  # 新风需求 (m³/h·人)
+      minimum_air_changes: "float"  # 最小换气次数 (次/h)
+      exhaust_air_requirement: "float"  # 排风需求 (m³/h)
+      hvac_zoning_id: "string"  # 暖通分区编号
+      lighting_control_zone: "string"  # 照明控制分区
+      fire_protection_zone: "string"  # 消防分区
+      security_zone: "string"  # 安保分区
+      utility_connection_points: "integer"  # 公用设施连接点数
+      medical_equipment_count: "integer"  # 医疗设备数量
+      furniture_allocation_id: "string"  # 家具配置编号
+      renovation_history: "array"  # 改造历史
+      maintenance_schedule: "string"  # 维护计划
+    children_types: ["subspace"]
+
+  # L5: SubSpace 层级 - 子空间
+  subspace:
+    id: "subspace_level"
+    name: "子空间"
+    description: "房间内的功能子区域"
+    code_prefix: "SS"
+    properties:
+      subspace_type: "enum"  # 子空间类型 (工作区/休息区/储物区/清洁区/污染区)
+      subspace_function: "string"  # 子空间功能描述
+      subspace_area: "float"  # 子空间面积 (㎡)
+      positional_relationship: "string"  # 与主体房间的位置关系
+      temperature_gradient: "float"  # 与主体房间的温度梯度 (°C)
+      airflow_pattern: "enum"  # 气流组织形式 (上送下回/侧送侧回/下送上回/单向流)
+      contamination_risk: "enum"  # 污染风险等级 (清洁/一般/污染/高污染)
+      special_environmental_requirement: "string"  # 特殊环境要求
+      cross_contamination_prevention: "boolean"  # 是否需要防止交叉污染
+      dedicated_ventilation_system: "boolean"  # 是否专用通风系统
+      utility_connection_type: "array"  # 公用设施连接类型
+      ergonomic_requirements: "string"  # 人体工学要求
+      visibility_requirement: "enum"  # 可见性要求 (完全可见/部分可见/无需可见)
+      sound_isolation_level: "float"  # 隔声等级 (dB)
+      chemical_storage_capacity: "float"  # 化学品储存容量 (L)
+      bio_sample_storage: "boolean"  # 是否储存生物样本
+      radiation_shielding: "boolean"  # 是否需要辐射防护
+      electromagnetic_compatibility: "boolean"  # EMC要求
+    children_types: []  # 叶子节点
+
+# 空间编码规则
+space_coding_rules:
+  general_format: "{Level}{Building}-{Floor}-{Zone}-{Room}-{SubSpace}"
+  examples:
+    - code: "ST-01"
+      description: "第1院区"
+    - code: "BD-01-OP"
+      description: "第1建筑-门诊楼"
+    - code: "FL-01-03"
+      description: "建筑01第3层"
+    - code: "ZN-SURGERY-01"
+      description: "手术室区域01"
+    - code: "RM-ICU-PATIENT-01"
+      description: "ICU病房01"
+    - code: "SS-ICU-CLEAN-01"
+      description: "ICU清洁子区01"
+
+# 空间关联关系定义
+spatial_relationships:
+  containment:
+    description: "包含关系"
+    rules:
+      - "Site contains Building"
+      - "Building contains Floor"
+      - "Floor contains Zone"
+      - "Zone contains Room"
+      - "Room contains SubSpace"
+  adjacency:
+    description: "相邻关系"
+    properties:
+      - distance: "horizontal distance between spaces (m)"
+      - shared_wall: "length of shared wall (m)"
+      - shared_floor: "area of shared floor (㎡)"
+  connectivity:
+    description: "连接关系"
+    properties:
+      - connection_type: "door/corridor/elevator/stair/airlock"
+      - flow_capacity: "maximum people per minute"
+      - accessibility_level: "accessibility level"
+
+  # 特殊医疗空间关系
+  medical_workflow:
+    description: "医疗工作流程关系"
+    types:
+      - pre_operation_path: "术前路径"
+      - post_operation_path: "术后路径"
+      - contamination_control_flow: "污染控制流"
+      - emergency_access: "急救通道"
+      - sterile_supply_chain: "无菌供应链"

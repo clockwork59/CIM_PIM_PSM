@@ -1,0 +1,27 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_TREAT_REC_DETAIL,表全名,JHPDL:JH_TREAT_REC_DETAIL,,,,,,
+,表说明,高压氧/康复治疗记录(结构化),,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,RAG,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,RAG0001,String字符串（变长）,,TREAT_SUB_SN,治疗记录唯一号,内部三级编码RG0.000.000.001,20,是,是
+,\x00\x02,RAG0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,RAG0003,String字符串（变长）,,TREAT_PRI_SN,治疗记录唯一号,来源JH_TREAT_REC的PAV0001，无则空,100,,
+,\x00\x04,RAG0004,String字符串（变长）,,SC_OP_TYPE,治疗操作类型,治疗操作类型,20,,
+,\x00\x05,RAG0005,String字符串（变长）,,ST_OP_TYPE,治疗操作类型,治疗操作类型,40,,
+,\x00\x06,RAG0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OP_DATE,操作日期,操作日期,31,,
+,\x00\x07,RAG0007,String字符串（变长）,,TREAT_MESSURE,治疗措施,治疗措施,500,,
+,\x00\x08,RAG0008,String字符串（变长）,,TREAT_RESULT,治疗效果,治疗效果,500,,
+,\x00\x09,RAG0009,String字符串（变长）,,TREAT_SUM,治疗小结,治疗小结,1000,,
+,\x00\x0A,RAG0010,String字符串（变长）,,SC_OPERA,治疗人,治疗人,40,,
+,\x00\x0B,RAG0011,String字符串（变长）,,ST_OPERA,治疗人,治疗人,40,,
+,\x00\x0C,RAG0012,String字符串（变长）,,COMMENT,备注,备注,500,,
+,\x00\x0D,RAG0013,String字符串（变长）,,TREAT_SN,治疗序号,治疗序号,20,,
+,\x00\x0E,RAG0014,String字符串（变长）,,HIS_PAT_ID,HIS患者ID,HIS患者ID,100,,
+,\x00\x0F,RAG0015,String字符串（变长）,,HIS_VIS_ID,HIS就诊流水号,HIS就诊流水号,20,,
+,\x00\x10,RAG0016,String字符串（变长）,,TREAT_COMMENT,备注,备注,500,,
+,\x00\x11,RAG0017,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x12,RAG0018,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x13,RAG0019,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

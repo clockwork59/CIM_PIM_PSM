@@ -1,0 +1,449 @@
+# Agent-06 控制回路模型
+# 从 docs/agents/06/Agent-06 控制系统建模师 - 全域控制系统实现模型.md §2.1-2.2 提取
+# 版本: v3.1 | 提取日期: 2026-04-05
+
+meta:
+  agent_id: Agent-06
+  agent_name: 控制系统建模师
+  version: v3.1
+  output_type: control_loop_models
+  source_document: "Agent-06 控制系统建模师 - 全域控制系统实现模型.md"
+  source_sections: ["§2.1 手术室环境控制状态机", "§2.2 冷站群控状态机"]
+  extracted_at: "2026-04-05"
+
+# ===================================================================
+# 控制回路清单
+# ===================================================================
+control_loops:
+
+  # -------------------------------------------------------------------
+  # 手术室温度串级控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-OR001-TEMP
+    name: 手术室温度控制
+    type: Cascade PID
+    active_in: [MODE_PREP, MODE_SURGERY]
+    criticality: P0-LIFE_SAFETY
+    space_ref: OR-001
+    standard_ref: GB50333-2013
+
+    master_loop:
+      name: 室温主回路
+      PV:
+        source: "CO-HVAC-ROOM-OR-001.AI_ROOM_TEMP_A"
+        backup: "CO-HVAC-ROOM-OR-001.AI_ROOM_TEMP_B"
+        selection: "Primary, switch on fault"
+      SP:
+        default: 22.0
+        unit: "°C"
+        adjustable: true
+        range: [21, 27]
+        authority: 手术室面板
+      output:
+        name: 送风温度设定值
+        range: [14, 22]
+        unit: "°C"
+      algorithm: PI
+      parameters:
+        Kp: 2.0
+        Ti: 600  # seconds
+        anti_windup: true
+        output_limits: [14, 22]
+
+    slave_loop:
+      name: 送风温度从回路
+      PV:
+        source: "CO-HVAC-AHU-OR-001.AI_SA_TEMP"
+      SP:
+        source: "Master Output"
+      output:
+        name: 冷水阀开度
+        target: "CO-HVAC-AHU-OR-001.AO_CHW_VALVE"
+        range: [0, 100]
+        unit: "%"
+      algorithm: PI
+      parameters:
+        Kp: 1.5
+        Ti: 180
+
+    feedforward:
+      enabled: true
+      equation_ref: "EQ-HX-COIL-001"
+      calculation: |
+        Q_load = ρ × V_air × Cp × (T_return - T_supply_sp)
+        Valve_FF = f(Q_load, T_chw, Flow_chw)
+      benefit: 提高响应速度，减少超调
+
+    fallback:
+      trigger: "传感器故障 OR 网络中断"
+      action: "送风温度固定16°C"
+
+  # -------------------------------------------------------------------
+  # 手术室湿度控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-OR001-HUMID
+    name: 手术室湿度控制
+    type: Single PID with Limits
+    active_in: [MODE_PREP, MODE_SURGERY]
+    criticality: P0-LIFE_SAFETY
+
+    PV:
+      source: "CO-HVAC-ROOM-OR-001.AI_ROOM_HUMID"
+    SP:
+      value: 50
+      unit: "%RH"
+      range: [40, 60]
+    output:
+      name: 加湿器控制
+      target: "CO-HVAC-AHU-OR-001.AO_HUMIDIFIER"
+      range: [0, 100]
+    algorithm: PI
+    parameters:
+      Kp: 1.0
+      Ti: 300
+
+    constraints:
+      - {name: 防结露, condition: "送风相对湿度 < 90%"}
+      - {name: 露点限制, condition: "露点温度 < 送风温度 - 2°C"}
+
+    dehumidification:
+      method: "表冷器除湿 + 再热"
+      control: "当需要除湿时降低表冷器出口温度"
+
+  # -------------------------------------------------------------------
+  # 手术室压差控制（最关键回路）
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-OR001-PRESS
+    name: 手术室压差控制
+    type: Fast PI Control
+    active_in: [MODE_STANDBY, MODE_PREP, MODE_SURGERY]
+    criticality: P0-LIFE_SAFETY
+    critical: true
+
+    PV:
+      source: "CO-HVAC-ROOM-OR-001.AI_ROOM_PRESS_A"
+      backup: "CO-HVAC-ROOM-OR-001.AI_ROOM_PRESS_B"
+      selection: "Primary, switch on deviation"
+      deviation_threshold: "3Pa"
+    SP:
+      by_mode:
+        MODE_STANDBY: 8
+        MODE_PREP: 15
+        MODE_SURGERY: 15
+      unit: Pa
+    output:
+      name: 排风阀开度/排风机变频
+      target: "CO-HVAC-AHU-OR-001.AO_RF_SPEED"
+      range: [0, 100]
+    algorithm: PI
+    parameters:
+      Kp: 1.0
+      Ti: 30  # 快速响应
+
+    door_compensation:
+      trigger: "CO-HVAC-ROOM-OR-001.DI_DOOR_MAIN = OPEN"
+      action: "临时增加送风量5%"
+      recovery: "门关后恢复"
+
+    fallback:
+      trigger: 双传感器故障
+      action: "排风阀固定30%开度"
+      alarm: CRITICAL
+
+  # -------------------------------------------------------------------
+  # 冷站供水温度控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-CHP-CHWS-TEMP
+    name: 冷冻水供水温度控制
+    type: Single PID
+    active_in: [STATE_1CH, STATE_2CH, STATE_3CH, STATE_4CH]
+    criticality: P1-MISSION_CRITICAL
+
+    PV:
+      source: "CO-HVAC-CHP-CH-001.AI_CHWS_TEMP"
+      averaging: "所有运行冷机的供水温度加权平均"
+    SP:
+      default: 7.0
+      unit: "°C"
+      optimization: "可由L1优化引擎动态调整 (7-10°C)"
+    output:
+      name: 冷机负荷限制
+      target: "CO-HVAC-CHP-CH-{N}.AO_LOAD_LIMIT"
+      range: [0, 100]
+
+  # -------------------------------------------------------------------
+  # 冷冻水泵差压控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-CHP-DP
+    name: 冷冻水管网差压控制
+    type: Single PID
+    criticality: P1-MISSION_CRITICAL
+
+    PV:
+      source: "最不利环路差压传感器"
+    SP:
+      default: 100
+      unit: kPa
+      optimization: "可由L1动态调整 (60-120 kPa)"
+    output:
+      name: 水泵变频指令
+      target: "CO-HVAC-CHP-CHWP-{N}.AO_VFD_SPEED_CMD"
+      range: [15, 50]
+      unit: Hz
+
+  # -------------------------------------------------------------------
+  # 冷却塔出水温度控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-CHP-CW-TEMP
+    name: 冷却塔出水温度控制
+    type: Single PID with Reset
+    criticality: P2-IMPORTANT
+
+    PV:
+      source: "冷却水回水温度传感器"
+    SP:
+      default: 32
+      unit: "°C"
+      reset_based_on: "室外湿球温度 + 3°C"
+    output:
+      name: 冷却塔风机频率
+      target: "冷却塔VFD"
+      range: [0, 50]
+      unit: Hz
+
+# ===================================================================
+# 状态机定义
+# ===================================================================
+state_machines:
+
+  # -------------------------------------------------------------------
+  # 手术室环境控制状态机
+  # -------------------------------------------------------------------
+  - fsm_id: FSM-OR001-HVAC
+    name: 1#手术室环境控制状态机
+    target_cu: CU-OR001-HVAC_CLN-COOLING
+    target_space_ref: OR-001
+    controller_ref: CO-INT-BA-DDC-OR-001
+    criticality: P0-LIFE_SAFETY
+
+    states:
+      - {id: MODE_OFF,       name: 关闭模式, hvac: OFF, pressure: null, ach: 0}
+      - {id: MODE_STANDBY,   name: 值班模式, temp: "26±2°C", pressure: "8Pa", ach: 6, energy_saving: "~40%"}
+      - {id: MODE_PREP,      name: 准备模式, temp: "22±1°C", humidity: "50±5%RH", pressure: "15Pa", ach: 36, duration: "30min"}
+      - {id: MODE_SURGERY,   name: 手术模式, temp: "22±1°C (可调21-27)", humidity: "50±5%RH", pressure: "15±3Pa", ach: 36}
+      - {id: MODE_DECON,     name: 消毒模式, phases: [自净20min, 消毒30min, 排放10min]}
+      - {id: MODE_EMERGENCY, name: 应急模式, sub_modes: [EMERG_FIRE, EMERG_SENSOR_FAIL, EMERG_POWER]}
+
+    transitions:
+      - {from: MODE_OFF, to: MODE_STANDBY, trigger: "Manual Operator Command", duration: "15min"}
+      - {from: MODE_STANDBY, to: MODE_PREP, trigger: "Schedule-30min OR Manual", duration: "30min"}
+      - {from: MODE_PREP, to: MODE_SURGERY, trigger: "环境达标 AND 团队就位"}
+      - {from: MODE_SURGERY, to: MODE_DECON, trigger: "Surgery_End_Signal", delay: "5min"}
+      - {from: MODE_DECON, to: MODE_STANDBY, trigger: "消毒程序完成"}
+      - {from: "*", to: MODE_EMERGENCY, trigger: "Emergency_Signal", priority: HIGHEST}
+      - {from: MODE_EMERGENCY, to: "MODE_SURGERY|MODE_STANDBY", trigger: "Emergency Cleared + Manual Confirmation"}
+
+  # -------------------------------------------------------------------
+  # 冷站群控状态机
+  # -------------------------------------------------------------------
+  - fsm_id: FSM-CHP-STAGING
+    name: 冷站群控状态机
+    target_system: HVAC-CHP
+    controller_ref: CO-INT-BA-DDC-CHP-001
+    criticality: P1-MISSION_CRITICAL
+
+    load_calculation:
+      equation_ref: EQ-CARRIER-PAYLOAD-WATER
+      formula: "Q_load = ρ × V × Cp × ΔT"
+      inputs: [系统总流量, 系统回水温度, 系统供水温度]
+      update_rate: "10s"
+
+    states:
+      - {id: STATE_ALL_OFF, name: 全停状态, capacity: "0kW"}
+      - {id: STATE_1CH, name: 1台冷机运行, capacity: "2000kW"}
+      - {id: STATE_2CH, name: 2台冷机运行, capacity: "4000kW"}
+      - {id: STATE_3CH, name: 3台冷机运行, capacity: "6000kW"}
+      - {id: STATE_4CH, name: 4台冷机运行满载, capacity: "8000kW"}
+
+    staging_logic:
+      add_chiller:
+        condition: "当前负荷 > 运行容量 × 85% 持续15分钟"
+        minimum_interval: "20min"
+        startup_sequence: "依据累计运行时间最短优先"
+      remove_chiller:
+        condition: "当前负荷 < 运行容量 × 50% 持续20分钟"
+        minimum_interval: "30min"
+        keep_minimum: 1  # 制冷季至少1台
+
+# ===================================================================
+# 顺序控制
+# ===================================================================
+sequences:
+  - sequence_id: SEQ-OR001-STARTUP
+    name: 手术室AHU启动序列
+    trigger: "MODE_OFF → MODE_STANDBY"
+    flow_sequence_ref: "FlowSequence-HVAC-OR-001"
+    principle: "按流体序列启动：冷热源 → 输配系统 → 末端设备"
+    steps:
+      - {step: 1,  action: "确认冷冻水系统就绪", timeout: "30s"}
+      - {step: 2,  action: "打开新风阀至10%", wait: "5s"}
+      - {step: 3,  action: "预定位冷水阀30%", wait: "3s"}
+      - {step: 4,  action: "启动送风机", verify: "DI_SF_RUN=TRUE", timeout: "30s"}
+      - {step: 5,  action: "确认风机稳定", wait: "10s"}
+      - {step: 6,  action: "启动排风机", verify: "DI_RF_RUN=TRUE"}
+      - {step: 7,  action: "使能压差控制"}
+      - {step: 8,  action: "逐步开大新风阀", duration: "60s"}
+      - {step: 9,  action: "使能温湿度控制"}
+      - {step: 10, action: "等待环境稳定", condition: "压差>+5Pa持续60s", timeout: "10min"}
+      - {step: 11, action: "设置状态为STANDBY"}
+
+  - sequence_id: SEQ-OR001-SHUTDOWN
+    name: 手术室AHU停机序列
+    trigger: "MODE_STANDBY → MODE_OFF"
+    steps:
+      - {step: 1, action: "禁用温湿度控制"}
+      - {step: 2, action: "关小新风阀至10%", duration: "30s"}
+      - {step: 3, action: "关闭冷水阀"}
+      - {step: 4, action: "关闭热水阀"}
+      - {step: 5, action: "停止排风机", wait: "5s"}
+      - {step: 6, action: "停止送风机", wait: "5s"}
+      - {step: 7, action: "关闭新风阀"}
+      - {step: 8, action: "设置状态为OFF"}
+
+  - sequence_id: SEQ-OR001-DECON
+    name: 手术室消毒序列
+    trigger: "MODE_SURGERY → MODE_DECON"
+    phases:
+      - {phase: SELF_CLEAN, duration: "20min", action: "全新风换气，稀释污染物"}
+      - {phase: DISINFECTION, duration: "30min", action: "封闭空间紫外/臭氧消毒"}
+      - {phase: EXHAUST, duration: "10min", action: "排出消毒气体，恢复正常"}
+
+# ===================================================================
+# Phase 6B: 给排水/消防控制回路
+# ===================================================================
+
+  # -------------------------------------------------------------------
+  # 生活给水变频泵恒压控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-PLU-WSS-PRESS
+    name: 生活给水恒压变流量控制
+    type: Single PID
+    active_in: [CONTINUOUS]
+    criticality: P2-IMPORTANT
+    system_ref: PLUMB-WSS
+
+    PV:
+      source: "CO-PLU-WSS-PUMP-001.AI_PIPE_PRESS"
+      location: "远端最不利点"
+    SP:
+      default: 0.25
+      unit: MPa
+      range: [0.15, 0.35]
+      adjustment: "按楼层分区压力要求自动调整"
+    output:
+      name: 变频泵运行频率
+      target: "CO-PLU-WSS-PUMP-001.AO_VFD_FREQ"
+      range: [15, 50]
+      unit: Hz
+    algorithm: PI
+    parameters:
+      Kp: 1.2
+      Ti: 120
+      deadband: 0.01  # MPa
+
+    pump_staging:
+      total_pumps: 3
+      duty_pumps: 2
+      standby_pumps: 1
+      rotation: "基于运行小时数轮换"
+      add_pump_condition: "运行泵频率 > 48Hz 持续3分钟"
+      remove_pump_condition: "运行泵频率 < 25Hz 持续5分钟"
+
+    safety:
+      low_level_protection: "水箱液位低于20%停泵报警"
+      dry_run_protection: "流量传感器低于阈值2分钟停泵"
+
+  # -------------------------------------------------------------------
+  # 消火栓泵多源触发控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-FIRE-HYDRANT-PUMP
+    name: 消火栓泵启动控制序列
+    type: Sequential Interlock
+    active_in: [ON_DEMAND]
+    criticality: P0-LIFE_SAFETY
+    system_ref: FIRE-HYDRANT
+    standard_ref: ["GB50016-2014", "GB50084-2017"]
+
+    trigger_sources:
+      - {source: "消防按钮", signal: "CO-FIRE-FAS-001.DI_MANUAL_HYDRANT", priority: 1}
+      - {source: "消防控制室确认", signal: "CO-FIRE-FAS-001.DI_FAS_CMD_HYDRANT", priority: 2}
+      - {source: "管网压力开关", signal: "CO-FIRE-HYDRANT-001.DI_PRESS_SW_LOW", priority: 3}
+    trigger_logic: "ANY source = ACTIVE"
+
+    startup_sequence:
+      - {step: 1, action: "启动1号主泵", verify: "DI_PUMP1_RUN=TRUE", timeout: "30s"}
+      - {step: 2, action: "确认管网压力达标", condition: "AI_PIPE_PRESS > 0.7MPa", timeout: "15s"}
+      - {step: 3, action: "IF 压力不达标 → 启动2号备用泵", verify: "DI_PUMP2_RUN=TRUE", timeout: "30s"}
+      - {step: 4, action: "记录启动时间和状态"}
+    
+    design_parameters:
+      flow_rate: "40 L/s"
+      head: "100m"
+      startup_time: "≤30s"
+      run_duration: "至消防确认信号解除"
+
+    fallback:
+      trigger: "主泵+备泵均启动失败"
+      action: "启动柴油泵组"
+      alarm: "P0-EMERGENCY 上报消防控制室"
+
+  # -------------------------------------------------------------------
+  # 排烟风机火灾联动控制
+  # -------------------------------------------------------------------
+  - loop_id: LOOP-FIRE-SMOKE-EXHAUST
+    name: 排烟风机联动控制序列
+    type: Sequential Interlock
+    active_in: [ON_FIRE_SIGNAL]
+    criticality: P0-LIFE_SAFETY
+    system_ref: FIRE-SMOKE
+    standard_ref: "GB51251-2017"
+
+    trigger:
+      source: "火灾报警系统联动信号"
+      signal: "CO-FIRE-FAS-001.DO_SMOKE_EXHAUST_CMD"
+      condition: "对应防烟分区内2个及以上烟感报警"
+
+    interlock_sequence:
+      - {step: 1, action: "关闭火灾区域空调系统", targets: ["CO-HVAC-AHU-{N}.DO_FIRE_STOP"]}
+      - {step: 2, action: "关闭该区域常开防火阀", targets: ["CO-FIRE-DAMPER-{N}.DO_CLOSE"]}
+      - {step: 3, action: "打开排烟防火阀", targets: ["CO-FIRE-SMOKE-DAMPER-{N}.DO_OPEN"], verify: "反馈到位", timeout: "15s"}
+      - {step: 4, action: "启动排烟风机", targets: ["CO-FIRE-SEF-001.DO_START"], verify: "DI_SEF_RUN", timeout: "30s"}
+      - {step: 5, action: "启动正压送风机（楼梯间）", targets: ["CO-FIRE-PRESS-FAN-001.DO_START"]}
+      - {step: 6, action: "反馈联动状态至消防中心"}
+
+    design_parameters:
+      exhaust_volume: "≥60000 m³/h per zone"
+      temperature_rating: "280°C / 0.5h"
+      exhaust_velocity: "≥15 m/s at vent"
+
+    fallback:
+      trigger: "排烟风机启动失败"
+      action: "启动备用排烟风机 + 自动开窗排烟"
+      alarm: "P0-EMERGENCY"
+
+# ===================================================================
+# 统计（Phase 6B 更新）
+# ===================================================================
+statistics:
+  total_control_loops: 9
+  total_state_machines: 2
+  total_sequences: 3
+  loops_by_criticality:
+    P0-LIFE_SAFETY: 5
+    P1-MISSION_CRITICAL: 2
+    P2-IMPORTANT: 2
+  phase6b_additions:
+    - LOOP-PLU-WSS-PRESS
+    - LOOP-FIRE-HYDRANT-PUMP
+    - LOOP-FIRE-SMOKE-EXHAUST
+

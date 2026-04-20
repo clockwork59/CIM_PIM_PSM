@@ -1,0 +1,29 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_BLD_BACK,表全名,JHPDL:JH_BLD_BACK,,,,,,
+,表说明,血袋回收,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,BLD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,BLD0001,String字符串（变长）,,BLD_BACK_SN,血袋回收记录编号,血袋回收记录编号，系统生成三级编码，如“BE0.000.000.001”,20,是,是
+,\x00\x02,BLD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,BLD0003,String字符串（变长）,,BLD_ISSUING_RECORD_SN,发血记录编号,发血记录编号，来源JH_BLD_ISSUING_RECORD的BLB0001,20,,
+,\x00\x05,BLD0005,String字符串（变长）,,BLD_BACK_NO,血袋回收编号,,200,,
+,\x00\x06,BLD0006,String字符串（变长）,,APPLY_NO,申请单号,,200,是,
+,\x00\x07,BLD0007,String字符串（变长）,,BLD_PACKAGE_CODE,血袋条码号,,200,,
+,\x00\x08,BLD0008,String字符串（变长）,,BLD_DONATION_NO,献血码,,200,,
+,\x00\x09,BLD0009,String字符串（变长）,,BLD_NO,血液标识,,200,是,是
+,\x00\x0A,BLD0010,String字符串（变长）,,SC_OPERAR,操作人编码,,200,,
+,\x00\x0B,BLD0011,String字符串（变长）,,ST_OPERAR,操作人姓名,,200,,
+,\x00\x0C,BLD0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPER_DATE,操作时间,,200,,
+,\x00\x0D,BLD0013,String字符串（变长）,,BLD_ABO,ABO血型,,200,,
+,\x00\x0E,BLD0014,String字符串（变长）,,BLD_RH,RH血型,,200,,
+,\x00\x0F,BLD0015,String字符串（变长）,,COMMENT,备注,,200,,
+,\x00\x10,BLD0016,String字符串（变长）,,METHOD,处理方法,,200,,
+,\x00\x11,BLD0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SEND_BLD_DATE,发血时间,,200,,
+,\x00\x12,BLD0018,String字符串（变长）,,PROC_NO,产品码,,200,,
+,\x00\x13,BLD0019,String字符串（变长）,,BLD_CONTENT,血液成分,,200,,
+,\x00\x14,BLD0020,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统最后更新时间,,,是,是
+,\x00\x04,BLD0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x15,BLD0021,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

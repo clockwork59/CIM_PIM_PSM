@@ -1,0 +1,148 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-space:  <https://cim.medical/ontology/v3.4/space#> .
+
+<https://cim.medical/ontology/v3.4/spaces/medical_special_spaces>
+    a owl:Ontology ;
+    rdfs:label "CIM Medical Special Spaces Module"@en ;
+    rdfs:comment "Medical special spaces with environmental properties."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/spaces/spatial_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/core/base_entities> .
+
+cim-space:CleanSpace
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Clean Space"@en ;
+    rdfs:label "洁净空间"@zh-CN ;
+    rdfs:comment "所有需要洁净度控制的空间的抽象基类"@zh-CN ;
+    cim:sourceAgent "Agent-02" .
+
+cim-space:OperatingRoom
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "Operating Room"@en ;
+    rdfs:label "手术室"@zh-CN ;
+    cim:sourceAgent "Agent-02" ;
+    skos:note "Standard: GB 50333-2013" .
+
+cim-space:ICU
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "ICU"@en ;
+    rdfs:label "重症监护室"@zh-CN ;
+    cim:sourceAgent "Agent-02" .
+
+cim-space:IsolationWard
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Isolation Ward"@en ;
+    rdfs:label "隔离病房"@zh-CN ;
+    cim:sourceAgent "Agent-02" ;
+    skos:note "Standard: WS/T 311-2009" .
+
+cim-space:CleanLab
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "Clean Laboratory"@en ;
+    rdfs:label "洁净实验室"@zh-CN ;
+    cim:sourceAgent "Agent-02" ;
+    skos:note "Standard: GB 19489-2008" .
+
+cim-space:surgeryGrade
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:OperatingRoom ;
+    rdfs:range xsd:string ;
+    rdfs:label "surgery grade"@en ;
+    rdfs:label "手术室等级"@zh-CN ;
+    rdfs:comment "取值: Class_I, Class_II, Class_III, Class_IV"@zh-CN .
+
+cim-space:cleanlinessClass
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:CleanSpace ;
+    rdfs:range xsd:string ;
+    rdfs:label "cleanliness class"@en ;
+    rdfs:label "洁净等级"@zh-CN ;
+    rdfs:comment "取值: ISO-1 至 ISO-9"@zh-CN .
+
+cim-space:temperature
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "design temperature"@en ;
+    rdfs:label "设计温度"@zh-CN ;
+    cim:unit "°C" .
+
+cim-space:relativeHumidity
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "relative humidity"@en ;
+    rdfs:label "相对湿度"@zh-CN ;
+    cim:unit "%RH" .
+
+cim-space:pressureDifferential
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "pressure differential"@en ;
+    rdfs:label "压差"@zh-CN ;
+    cim:unit "Pa" ;
+    rdfs:comment "正值为正压，负值为负压"@zh-CN .
+
+cim-space:airChangesPerHour
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "air changes per hour"@en ;
+    rdfs:label "换气次数"@zh-CN ;
+    cim:unit "ACH" .
+
+cim-space:freshAirRatio
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "fresh air ratio"@en ;
+    rdfs:label "新风比"@zh-CN ;
+    cim:unit "%" .
+
+cim-space:noiseLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "noise level"@en ;
+    rdfs:label "噪声等级"@zh-CN ;
+    cim:unit "dB(A)" .
+
+cim-space:illuminance
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "illuminance"@en ;
+    rdfs:label "照度"@zh-CN ;
+    cim:unit "lux" .
+
+cim-space:biosafetyLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:CleanLab ;
+    rdfs:range xsd:string ;
+    rdfs:label "biosafety level"@en ;
+    rdfs:label "生物安全等级"@zh-CN ;
+    rdfs:comment "取值: BSL-1, BSL-2, BSL-3, BSL-4"@zh-CN .
+
+cim-space:isolationType
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:IsolationWard ;
+    rdfs:range xsd:string ;
+    rdfs:label "isolation type"@en ;
+    rdfs:label "隔离类型"@zh-CN ;
+    rdfs:comment "取值: Positive_Pressure, Negative_Pressure"@zh-CN .
+
+# ============================================================================
+# END OF MEDICAL SPECIAL SPACES MODULE
+# ============================================================================

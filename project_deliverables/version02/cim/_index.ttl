@@ -1,0 +1,36 @@
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix cim:  <https://cim.medical/ontology/v3.4#> .
+
+<https://cim.medical/ontology/v3.4>
+    a owl:Ontology ;
+    rdfs:label "CIM Medical Building Master Index"@en ;
+    rdfs:label "医疗建筑CIM主索引"@zh-CN ;
+    owl:versionInfo "2.0.0-Final" ;
+
+    # Core
+    owl:imports <https://cim.medical/ontology/v3.4/core/base_entities> ;
+
+    # Topology
+    owl:imports <https://cim.medical/ontology/v3.4/topology/node_types> ;
+
+    # Space
+    owl:imports <https://cim.medical/ontology/v3.4/spaces/spatial_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/spaces/medical_special_spaces> ;
+
+    # Equipment
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/mechanical> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/electrical> ;
+
+    # Coupling
+    owl:imports <https://cim.medical/ontology/v3.4/coupling/equipment_location> ;
+
+    # Control
+    owl:imports <https://cim.medical/ontology/v3.4/control/sensors> ;
+
+    # Metering
+    owl:imports <https://cim.medical/ontology/v3.4/metering/metering_hierarchy> ;
+
+    # Validation
+    owl:imports <https://cim.medical/ontology/v3.4/rules/shacl_constraints> .

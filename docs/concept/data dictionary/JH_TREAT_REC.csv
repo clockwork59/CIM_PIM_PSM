@@ -1,0 +1,32 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_TREAT_REC,表全名,JHPDL:JH_TREAT_REC,,,,,,
+,表说明,高压氧/康复治疗主记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,RAE,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,RAE0001,String字符串（变长）,,TREAT_PRI_SN,治疗记录唯一号,内部三级编码RE0.000.000.001,20,是,是
+,\x00\x02,RAE0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,RAE0003,String字符串（变长）,,TREAT_APY_SN,治疗申请单号,来源JH_TREAT_APY的PAV0001，无则空,100,,
+,\x00\x04,RAE0004,String字符串（变长）,,ID_CARD_NO,身份证号,身份证号,40,是,
+,\x00\x05,RAE0005,String字符串（变长）,,TREAT_PAT_ID,治疗系统患者ID,治疗系统患者ID,100,,
+,\x00\x06,RAE0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,TREAT_DATE,治疗日期,治疗日期,31,,
+,\x00\x07,RAE0007,String字符串（变长）,,SC_DIALYSIS_WAY,治疗方式编码,治疗方式编码,20,,
+,\x00\x08,RAE0008,String字符串（变长）,,ST_DIALYSIS_WAY,治疗方式名称,治疗方式名称,20,,
+,\x00\x09,RAE0009,String字符串（变长）,,TREAT_COM_SN,记录文书唯一码,记录文书唯一码,20,,
+,\x00\x0A,RAE0010,String字符串（变长）,,TREAT_COM_TITLE,记录文书标题,记录文书标题,40,,
+,\x00\x0B,RAE0011,String字符串（变长）,,SC_DEPT,科室,科室,40,,
+,\x00\x0C,RAE0012,String字符串（变长）,,ST_DEPT,科室,科室,40,,
+,\x00\x0D,RAE0013,String字符串（变长）,,SC_DOCTOR,医师编码,医师编码,40,,
+,\x00\x0E,RAE0014,String字符串（变长）,,ST_DOCTOR,医师姓名,医师姓名,40,,
+,\x00\x0F,RAE0015,String字符串（变长）,,SC_PRO_DOC,主治医师编码,主治医师编码,40,,
+,\x00\x10,RAE0016,String字符串（变长）,,ST_PRO_DOC,主治医师姓名,主治医师姓名,40,,
+,\x00\x11,RAE0017,String字符串（变长）,,SC_NURSE,护士编码,护士编码,40,,
+,\x00\x12,RAE0018,String字符串（变长）,,ST_NURSE,护士姓名,护士姓名,40,,
+,\x00\x13,RAE0019,String字符串（变长）,,HIS_PAT_ID,HIS患者ID,HIS患者ID,100,,
+,\x00\x14,RAE0020,String字符串（变长）,,HIS_VIS_ID,HIS就诊流水号,HIS就诊流水号,100,,
+,\x00\x15,RAE0021,String字符串（变长）,,TREAT_COMMENT,备注,备注,500,,
+,\x00\x16,RAE0022,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x17,RAE0023,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x18,RAE0024,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

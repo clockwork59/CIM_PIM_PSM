@@ -1,0 +1,32 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_JOB_NURSE,表全名,JHPDL:JH_JOB_NURSE,,,,,,
+,表说明,临床护士就职记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,JNR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,JNR0001,String字符串（变长）,,JOB_NURSE_SN,护士就职编号,临床护士就职记录编号，系统生成二级编码，如“N00.000.001”,20,是,是
+,\x00\x02,JNR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,JNR0003,String字符串（变长）,,JOB_LOG_SN,任职编号,任职编号，来源JH_PAT_VISIT的JLR0001,20,是,是
+,\x00\x04,JNR0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,JNR0005,String字符串（变长）,,HIS_JOB_ID,任职业务唯一号,院内来源业务系统业务流通的本次任职唯一编号，如工号,100,是,是
+,\x00\x06,JNR0006,Short短整型（2个字节）,,JOB_NUM,就职计数,临床护士就职的本系统累计任职次数（自增顺序累计数值）,6,,
+,\x00\x07,JNR0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,JOB_START_TIME,就职开始时间,,19,是,是
+,\x00\x08,JNR0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,JOB_END_TIME,就职结束时间,在职时可以为空,19,是,是
+,\x00\x15,JNR0021,String字符串（变长）,,JOB_CLASS,就职岗位,,500,,
+,\x00\x16,JNR0022,String字符串（变长）,,ARCHIVE_CODE,档案号,个人就职档案编号,200,是,是
+,\x00\x09,JNR0009,String字符串（变长）,,MED_ORG_SN,医疗机构编号,本次任职的医疗机构唯一编号；来源JH_MED_ORG的ORG0001,100,是,是
+,\x00\x0A,JNR0010,简化字典（Integer整型，4个字节）,458,JOB_STATE,任职状态,任职状态说明；字典项：在任，任期结束（任满终止），满期未离（任期已满未终止），终止（未满终止）,20,是,是
+,\x00\x17,JNR0023,String字符串（变长）,,SC_JOB_STATE,任职状态编码,源业务系统的任职状态编码,200,,
+,\x00\x18,JNR0024,String字符串（变长）,,ST_JOB_STATE,任职状态描述,源业务系统的任职状态描述,200,,
+,\x00\x0C,JNR0012,String字符串（变长）,,SC_FIRST_DEPT,入职科室编码,最开始的入职科室编码；内部源业务系统的编码,200,,
+,\x00\x0D,JNR0013,String字符串（变长）,,ST_FIRST_DEPT,入职科室名称,最开始的入职科室名称；内部源业务系统的名称描述,200,,
+,\x00\x0E,JNR0014,String字符串（变长）,,SC_FIRST_WARD,入职病区编码,最开始的入职病区编码；内部源业务系统的编码,200,,
+,\x00\x0F,JNR0015,String字符串（变长）,,ST_FIRST_WARD,入职病区名称,最开始的入职病区名称；内部源业务系统的名称描述,200,,
+,\x00\x10,JNR0016,String字符串（变长）,,SC_CURRENT_DEPT,当前科室编码,当前在职的科室编码；内部源业务系统的编码,200,,
+,\x00\x11,JNR0017,String字符串（变长）,,ST_CURRENT_DEPT,当前科室名称,当前在职的科室名称；内部源业务系统的名称描述,200,,
+,\x00\x12,JNR0018,String字符串（变长）,,SC_CURRENT_WARD,当前病区编码,当前在职的病区编码；内部源业务系统的编码,200,,
+,\x00\x13,JNR0019,String字符串（变长）,,ST_CURRENT_WARD,当前病区名称,当前在职的病区名称；内部源业务系统的名称描述,200,,
+,\x00\x14,JNR0020,String字符串（变长）,,TITLE_CODE,职称证编号,,100,,
+,\x00\x0B,JNR0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是

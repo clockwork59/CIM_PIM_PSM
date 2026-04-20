@@ -1,0 +1,286 @@
+# Agent-07: 四级计量体系结构模型
+# Four-Level Metering Hierarchy Model
+
+metering_hierarchy = {
+    "L0_total_level": {
+        "level_name": "总表层（院区总表）",
+        "code": "L0",
+        "description": "院区整体能源消耗的计量点，作为整个计量体系的总入口",
+        "measurement_points": {
+            "electricity_total": {
+                "name": "院区总用电表",
+                "location": "变电站总进线",
+                "meter_type": "三相多功能电表",
+                "accuracy_class": "0.2S",
+                "functions": [
+                    "有功/无功电能计量",
+                    "最大需量计量",
+                    "功率因数测量",
+                    "谐波分析",
+                    "分时计费"
+                ],
+                "communication": "RS485/Modbus + 4G/NB-IoT",
+                "measurement_paramters": {
+                    "voltage": "3×220/380V ±20%",
+                    "current": "3×1.5(6)A - 3×20(80)A",
+                    "frequency": "50Hz ±5%",
+                    "power_factor": "0.5C - 1 - 0.5L",
+                    "active_energy_accuracy": "±0.2%",
+                    "reactive_energy_accuracy": "±2.0%"
+                }
+            },
+            "water_total": {
+                "name": "院区总用水表",
+                "location": "市政进水总管",
+                "meter_type": "超声波水表",
+                "accuracy_class": "2级",
+                "diameter": "DN100-DN300",
+                "measurement_range": "Q1=0.01Q3, Q2=0.1Q3, Q3=2.5m³/h-1000m³/h",
+                "communication": "M-Bus/RS485 + 无线传输"
+            },
+            "gas_total": {
+                "name": "院区总燃气表",
+                "location": "市政燃气进气管",
+                "meter_type": "涡轮流量计",
+                "accuracy_class": "1.0级",
+                "diameter": "DN50-DN200",
+                "flow_range": "6-1600 m³/h",
+                "pressure_range": "0.1-1.6 MPa",
+                "communication": "RS485/Modbus + 无线传输"
+            },
+            "thermal_total": {
+                "name": "院区总热量表（空调系统）",
+                "location": "冷热源总出入口",
+                "meter_type": "热量表（焓差法）",
+                "accuracy_class": "2级",
+                "components": [
+                    "电磁流量计（精度0.5级）",
+                    "配对温度传感器（±0.1℃）",
+                    "热量积算仪"
+                ],
+                "measurement_range": {
+                    "flow": "0.6-600 m³/h",
+                    "temperature": "4-95℃",
+                    "temperature_difference": "3-70K",
+                    "thermal_power": "6-6000 kW"
+                }
+            }
+        }
+    },
+
+    "L1_area_level": {
+        "level_name": "区域表层（楼栋）",
+        "code": "L1",
+        "description": "各楼栋或功能分区的能源计量，实现分区能耗监测",
+        "coverage_zones": [
+            "门诊综合楼", "住院楼A", "住院楼B", "医技楼",
+            "行政楼", "后勤保障楼", "传染病房楼", "地下车库"
+        ],
+        "measurement_points": {
+            "electricity_zone": {
+                "name": "分区用电总表",
+                "meter_type": "三相多功能电表",
+                "accuracy_class": "0.5S",
+                "functions": [
+                    "有功/无功电能计量",
+                    "负载曲线记录",
+                    "事件记录",
+                    "负荷控制"
+                ],
+                "installation_location": "楼层配电间/区域总配电箱",
+                "communication": "RS485 + 以太网/无线"
+            },
+            "water_zone": {
+                "name": "分区用水总表",
+                "meter_type": "电磁水表",
+                "accuracy_class": "2级",
+                "installation_location": "竖向分区给水总管",
+                "communication": "M-Bus + RS485"
+            },
+            "hvac_thermal_zone": {
+                "name": "空调分区热计量",
+                "meter_type": "超声波热量表",
+                "accuracy_class": "3级",
+                "installation_location": "空调水系统分集水器",
+                "measurement_method": "时间面积通断法/热量表法",
+                "communication": "M-Bus + 无线"
+            }
+        }
+    },
+
+    "L2_subscriber_level": {
+        "level_name": "分户表层（科室/病区）",
+        "code": "L2",
+        "description": "各科室、病区或独立单位的精细化能源计量",
+        "subscriber_types": {
+            "clinical_departments": [
+                "内科", "外科", "妇产科", "儿科", "急诊科",
+                "ICU", "手术室", "放射科", "检验科", "病理科"
+            ],
+            "administrative_offices": [
+                "院长办公室", "医务科", "护理部", "财务科",
+                "人事科", "信息科", "设备科", "总务科"
+            ],
+            "support_facilities": [
+                "药房", "病案室", "图书室", "会议室",
+                "食堂", "超市", "咖啡厅"
+            ]
+        },
+        "measurement_points": {
+            "electricity_subscriber": {
+                "name": "科室用电分表",
+                "meter_type": "单相/三相电子式电表",
+                "accuracy_class": "1.0级",
+                "functions": [
+                    "有功电能计量",
+                    "防窃电功能",
+                    "负荷识别"
+                ],
+                "installation_location": "科室分配电箱进线端",
+                "current_range": "5(20)A - 20(80)A",
+                "communication": "RS485/载波通信"
+            },
+            "sub_special_meters": {
+                "medical_equipment_meter": {
+                    "name": "大型医疗设备专用电表",
+                    "applicable_equipment": [
+                        "CT机", "MRI", "DSA", "直线加速器",
+                        "X光机", "超声诊断仪", "生化分析仪"
+                    ],
+                    "accuracy_class": "0.5S级",
+                    "special_functions": [
+                        "设备功率分析",
+                        "谐波监测",
+                        "电压质量记录",
+                        "故障录波"
+                    ]
+                },
+                "precision_air_conditioning": {
+                    "name": "机房精密空调电表",
+                    "location": "信息中心机房", "医疗设备机房",
+                    "accuracy_class": "1.0级",
+                    "monitoring_paramters": [
+                        "功率曲线", "温度关联", "压缩机效率"
+                    ]
+                }
+            }
+        }
+    },
+
+    "L3_itemized_level": {
+        "level_name": "分项表层（能源用途）",
+        "code": "L3",
+        "description": "按能源最终用途进行分项计量，支持能效分析和节能管理",
+        "energy_use_categories": {
+            "HVAC": {
+                "full_name": "暖通空调系统",
+                "subsystems": [
+                    "冷热源主机", "空调水泵", "冷却塔", "新风机组",
+                    "空调末端", "通风系统", "防排烟系统"
+                ],
+                "metering_requirements": {
+                    "chiller_metering": {
+                        "压缩机功耗": "独立计量，精度0.5S级",
+                        "冷却水泵功耗": "分组计量，精度1.0级",
+                        "冷冻水泵功耗": "分组计量，精度1.0级",
+                        "冷却塔功耗": "独立计量或分区计量"
+                    },
+                    "air_handling_metering": {
+                        "ahu_fan_power": "风机功率分段计量",
+                        "ahu_control_power": "控制系统功耗",
+                        "reheat_coil_energy": "再热能耗计量"
+                    }
+                }
+            },
+            "LIGHTING": {
+                "full_name": "照明系统",
+                "zones": [
+                    "门诊照明", "病房照明", "手术室照明", "走廊照明",
+                    "办公室照明", "地下车库照明", "室外照明"
+                ],
+                "metering_strategy": {
+                    "zonal_lighting_meters": "按区域设置分项电表",
+                    "emergency_lighting": "应急照明独立计量",
+                    "outdoor_lighting": "室外照明单独计量",
+                    "decorative_lighting": "景观照明独立计量"
+                }
+            },
+            "POWER": {
+                "full_name": "动力系统",
+                "equipment_categories": [
+                    "电梯", "扶梯", "水泵", "风机", "空压机",
+                    "医疗设备", "洗衣设备", "厨房设备"
+                ],
+                "metering_approach": {
+                    "large_equipment": "大型设备独立计量",
+                    "equipment_groups": "同类设备分组计量",
+                    "motor_control_centers": "通过MCC柜回路计量"
+                }
+            },
+            "SPECIAL": {
+                "full_name": "特殊用电",
+                "systems": [
+                    "数据中心", "安防系统", "通信系统", "信息发布",
+                    "楼宇自控", "消防系统", "停车场管理"
+                ],
+                "characteristics": "24小时连续运行，对供电可靠性要求高",
+                "metering_accuracy": "0.5S级或更高精度"
+            },
+            "LIFE_SAFETY": {
+                "full_name": "生命安全系统",
+                "critical_systems": [
+                    "ICU电源", "手术室电源", "急诊科电源",
+                    "消防设备电源", "应急照明电源", "安保系统电源"
+                ],
+                "metering_requirements": {
+                    "dual_power_supply_metering": "双路供电分别计量",
+                    "ups_system_metering": "UPS系统输入输出功率",
+                    "emergency_generator_metering": "应急发电机计量"
+                }
+            }
+        }
+    },
+
+    "hierarchy_relationships": {
+        "upstream_downstream_flow": {
+            "L0_aggregates_L1": "院区总表数据 = 各分区表数据之和 + 线路损耗",
+            "L1_aggregates_L2": "分区总表数据 = 各分户表数据之和 + 区域公共部分",
+            "L2_aggregates_L3": "分户总数据 = 各分项数据之和 + 户内公共部分"
+        },
+        "data_consistency_rules": {
+            "hierarchy_balance_check": "上级表数据应≥下级表数据之和",
+            "anomaly_detection": "差异率超过5%时触发报警",
+            "missing_data_handling": "缺失数据时采用同环比插值法估算"
+        },
+        "communication_protocol": {
+            "subordinate_reporting": "下级表定时向上级系统报告数据",
+            "real_time_synchronization": "重要计量点实时数据同步",
+            "event_notification": "异常事件即时上报机制"
+        }
+    }
+}
+
+# 四级计量体系编码规则
+metering_code_system = {
+    "encoding_principle": "层次化编码，共12位字符",
+    "code_structure": "L-X-YYY-ZZZZ-NN",
+    "code_meaning": {
+        "L": "层级代码（1位：0/1/2/3）",
+        "X": "能源类型代码（1位：E/W/G/T）",
+        "YYY": "区域代码（3位：建筑/分区）",
+        "ZZZZ": "用户/系统代码（4位：科室/系统）",
+        "NN": "序号（2位：同类设备序号）"
+    },
+    "energy_type_codes": {
+        "E": "Electricity（电能）",
+        "W": "Water（水）",
+        "G": "Gas（燃气）",
+        "T": "Thermal（冷热量）"
+    },
+    "examples": {
+        "0-E-001-0000-01": "院区总用电表1号",
+        "1-E-101-0000-01": "门诊楼总用电表1号",
+        "2-E-101-2001-01": "门诊楼内科用电表1号",
+        "3-E-101-2001-01": "门诊楼内科HVAC用电表1号"
+    }
+}

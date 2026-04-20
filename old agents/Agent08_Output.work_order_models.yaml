@@ -1,0 +1,448 @@
+# 工单管理模型 - 医疗建筑智能运维管理
+
+# 1. 工单类型定义
+work_order_types:
+
+  # 报修工单
+  CORRECTIVE:
+    name: "报修工单"
+    description: "设备故障后修复性工单"
+    trigger_condition: "设备故障或异常告警"
+    priority_source: "对应告警级别"
+    sla_category: "基于故障影响程度"
+
+    subcategories:
+      emergency_repair:
+        name: "紧急抢修"
+        description: "紧急故障，影响运营安全"
+        response_time: "立即响应"
+        characteristic: "停机率50%以上、影响患者安全"
+      urgent_repair:
+        name: "紧急维修"
+        description: "重要故障，影响正常运营"
+        response_time: "2小时内"
+        characteristic: "停机率20-50%、降额运行"
+      general_repair:
+        name: "一般维修"
+        description: "一般故障，可降额运行"
+        response_time: "8小时内"
+        characteristic: "可降级运行、无安全影响"
+      planned_repair:
+        name: "计划维修"
+        description: "轻微故障，不影响运行"
+        response_time: "24小时内"
+        characteristic: "仅影响美观、噪音、效率"
+
+    process_flow:
+      - "故障发生→报修登记→故障诊断→维修方案→维修实施→功能测试→验收交付"
+      - "特殊情况可跳过某些环节，但必须有诊断和验收"
+
+  # 预防性维护
+  PREVENTIVE:
+    name: "预防性维护工单"
+    description: "定期预防性维护工单"
+    trigger_condition: "基于时间或运行周期的维护计划"
+    priority_source: "维护计划等级"
+    sla_category: "维护级别"
+
+    scheduling_options:
+      fixed_calendar: "固定日历维护"
+      usage_based: "基于使用量维护"
+      season_based: "季节性维护"
+      mixed_approach: "混合策略维护"
+
+    maintenance_items:
+      daily_maintenance: "日检、清洁、润滑"
+      weekly_inspection: "周检、调整、紧固"
+      monthly_maintenance: "月保养、更换易损件"
+      quarterly_service: "季度保养、功能测试"
+      annual_overhaul: "年大修、性能标定"
+      special_service: "特殊维护、改造升级"
+
+    planning_process:
+      generate_plan: "年度维护计划生成"
+      schedule_optimization: "考虑设备状态、运营需求"
+      resource_allocation: "人员、材料、工具准备"
+      notify_stakeholders: "提前通知相关部门"
+      work_preparation: "工作票、隔离措施"
+
+  # 预测性维护
+  PREDICTIVE:
+    name: "预测性维护工单"
+    description: "基于状态监测的预测性维护"
+    trigger_condition: "AI预测算法识别到潜在故障"
+    priority_source: "预测置信度和故障影响"
+    sla_category: "预测风险等级"
+
+    prediction_sources:
+      vibration_analysis: "振动分析诊断"
+      thermal_trending: "温度趋势分析"
+      electrical_analysis: "电气参数漂移"
+      performance_trending: "性能下降评估"
+      efficiency_monitoring: "效率监测告警"
+      wear_debris_analysis: "磨损微粒分析"
+      acoustic_emission: "声发射监测"
+
+    work_characteristics:
+      condition_validation: "需要现场确认状态"
+      flexible_timing: "可在适当时间执行"
+      root_cause_focus: "注重根本原因处理"
+      trend_monitoring: "持续趋势监控"
+      evidence_based: "基于数据证据决策"
+      cost_optimized: "成本优化的最佳时机"
+
+  # 巡检工单
+  INSPECTION:
+    name: "巡检工单"
+    description: "按计划巡检测试"
+    trigger_condition: "巡检计划时间到达"
+    priority_source: "巡检类型和区域"
+    sla_category: "巡检级别"
+
+    inspection_types:
+      daily_patrol: "日巡检"
+      weekly_round: "周巡检"
+      monthly_check: "月检查"
+      quarterly_audit: "季审核"
+      annual_survey: "年评估"
+      safety_check: "安全检查"
+      seasonal_inspection: "季节性检查"
+
+    inspection_scope:
+      visual_inspection: "目视检查外观、连接、泄漏"
+      operational_test: "功能测试、参数验证"
+      measurement_check: "仪表读数、参数记录"
+      safety_verification: "安全装置、联锁测试"
+      cleanliness_check: "清洁度、堵塞检查"
+      performance_assessment: "性能指标评估"
+
+    reporting_requirements:
+      inspection_form: "标准化检查表格"
+      photo_documentation: "关键部位照片记录"
+      data_analysis: "数据趋势分析"
+      exception_reporting: "异常情况报告"
+      improvement_suggestions: "改进建议"
+
+  # 应急工单
+  EMERGENCY:
+    name: "应急工单"
+    description: "紧急事件应急处理"
+    trigger_condition: "紧急事件或应急预案启动"
+    priority_source: "应急预案级别"
+    sla_category: "紧急事件级别"
+
+    emergency_categories:
+      power_outage: "电力中断"
+      fire_incident: "火灾事故"
+      water_incident: "水系统事故"
+      equipment_burst: "设备爆裂"
+      gas_leak: "气体泄漏"
+      infectious_outbreak: "感染事件"
+      natural_disaster: "自然灾害"
+      security_incident: "安全事件"
+
+    response_characteristics:
+      immediate_response: "立即响应，15分钟内到位"
+      no_approval_needed: "可不经过正常审批"
+      external_support: "可申请外部救援"
+      backup_activation: "启动备用系统"
+      patient_safety: "患者安全优先"
+      coordination_required: "多部门协调联动"
+
+    post_emergency:
+      incident_report: "事件详细报告"
+      damage_assessment: "损失评估报告"
+      recovery_plan: "恢复工作计划"
+      improvement_measures: "改进措施"
+      lessons_learned: "经验教训总结"
+
+# 2. 工单状态流转模型
+work_order_status_lifecycle:
+
+  # 状态定义
+  statuses:
+    CREATED:
+      name: "创建"
+      description: "工单已创建，待派发"
+      allowed_transitions: ["ASSIGNED", "CANCELLED"]
+      permissions:
+        create: "系统/报修人"
+        view: "所有授权用户"
+        edit: "工单创建人"
+      time_constraints: "无特定要求"
+
+    ASSIGNED:
+      name: "派单"
+      description: "工单已派发给执行人员"
+      allowed_transitions: ["ACCEPTED", "REJECTED", "REASSIGNED"]
+      permissions:
+        assign: "调度员/班组长"
+        view: "被指派人及相关人员"
+        edit: "调度员"
+      time_constraints: "通常在创建后30分钟内"
+
+    ACCEPTED:
+      name: "接单"
+      description: "执行人员已接受工单"
+      allowed_transitions: ["IN_PROGRESS", "DEFERRED"]
+      permissions:
+        accept: "被指派人"
+        view: "所有授权用户"
+      time_constraints: "派单后2小时内"
+
+    REJECTED:
+      name: "拒单"
+      description: "执行人员拒绝接单，需要重新派发"
+      allowed_transitions: ["ASSIGNED", "CANCELLED"]
+      permissions:
+        reject: "被指派人"
+        reassign: "调度员"
+      time_constraints: "需要及时处理，通常2小时内"
+
+    IN_PROGRESS:
+      name: "执行中"
+      description: "执行人员正在处理工单"
+      allowed_transitions: ["COMPLETED", "DEFERRED", "ESCALATED"]
+      permissions:
+        start_work: "执行人员"
+        update_progress: "执行人员"
+        view: "所有相关人员"
+      time_constraints: "根据SLA要求"
+
+    DEFERRED:
+      name: "暂缓"
+      description: "工单暂缓执行，等待适当时间或条件"
+      allowed_transitions: ["IN_PROGRESS", "ASSIGNED", "CANCELLED"]
+      permissions:
+        defer: "执行人员+审批"
+        resume: "执行人员/调度员"
+      time_constraints: "需要说明理由和预估恢复时间"
+
+    COMPLETED:
+      name: "完成"
+      description: "工单工作已完成，等待验收"
+      allowed_transitions: ["VERIFIED", "REOPENED"]
+      permissions:
+        complete: "执行人员"
+        view_result: "相关人员"
+      time_constraints: "实际工作完成后及时更新"
+
+    VERIFIED:
+      name: "验收"
+      description: "工单工作已通过验收"
+      allowed_transitions: ["CLOSED", "REOPENED"]
+      permissions:
+        verify: "验收人员"
+        view_report: "相关人员"
+      time_constraints: "完成后24小时内"
+
+    REOPENED:
+      name: "重新打开"
+      description: "验收未通过或后续发现问题，需重新处理"
+      allowed_transitions: ["IN_PROGRESS", "ASSIGNED"]
+      permissions:
+        reopen: "验收人员/质量管理员"
+        reassign: "调度员"
+      time_constraints: "需要说明重开原因"
+
+    CANCELLED:
+      name: "取消"
+      description: "工单被取消"
+      allowed_transitions: []  # 终态
+      permissions:
+        cancel: "具有相应权限的人员"
+      time_constraints: "需要取消原因"
+
+    CLOSED:
+      name: "关闭"
+      description: "工单流程完结"
+      allowed_transitions: []  # 终态
+      permissions:
+        close: "验收人员"
+      time_constraints: "验收通过后及时关闭"
+
+    ESCALATED:
+      name: "升级"
+      description: "工单升级处理"
+      allowed_transitions: ["IN_PROGRESS", "ASSIGNED"]
+      permissions:
+        escalate: "执行人员/管理人员"
+      time_constraints: "按升级程序"
+
+# 3. SLA响应时间模型
+service_level_agreements:
+
+  # 基于告警级别的SLA
+  emergency_response_sla:
+    p0_emergency:
+      response_time: "≤ 5分钟"
+      on_site_time: "≤ 30分钟"
+      resolution_target: "≤ 2小时"
+      escalation_time: "10分钟未响应自动升级"
+      backup_activated: "立即启动备用"
+      management_notification: "立即通知管理层"
+      follow_up_frequency: "每30分钟汇报"
+
+    p1_critical:
+      response_time: "≤ 15分钟"
+      on_site_time: "≤ 1小时"
+      resolution_target: "≤ 4小时"
+      escalation_time: "30分钟未响应自动升级"
+      backup_activated: "必要时启动备用"
+      management_notification: "通知主管工程师"
+      follow_up_frequency: "每1小时汇报"
+
+    p2_major:
+      response_time: "≤ 30分钟"
+      on_site_time: "≤ 4小时"
+      resolution_target: "≤ 24小时"
+      escalation_time: "2小时未响应自动升级"
+      backup_activated: "必要时启动备用"
+      management_notification: "通知部门负责人"
+      follow_up_frequency: "每4小时汇报"
+
+    p3_minor:
+      response_time: "≤ 1小时"
+      on_site_time: "≤ 24小时"
+      resolution_target: "≤ 72小时"
+      escalation_time: "24小时未响应自动升级"
+      backup_activated: "无特别要求"
+      management_notification: "正常工作安排"
+      follow_up_frequency: "每班次检查"
+
+  # 医疗特殊场景SLA
+  medical_critical_sla:
+    operating_room_systems:
+      any_alarm: "立即响应（≤2分钟）"
+      critical_alarm: "P0级处理"
+      environment_deviation: "5分钟内恢复"
+      equipment_failure: "备用设备立即启动"
+      power_interruption: "UPS+发电机15秒切换"
+
+    icu_systems:
+      life_support_failure: "P0级处理"
+      environment_alarm: "10分钟内现场"
+      equipment_offline: "备用设备启用"
+      monitoring_failure: "人工监护立即接管"
+
+    isolation_rooms:
+      pressure_loss: "P0级处理"
+      hvac_failure: "立即启动备用系统"
+      filtration_alarm: "立即更换或隔离"
+
+  # 工作类型SLA
+  work_type_sla:
+    corrective_maintenance:
+      emergency_repair: "按故障级别SLA"
+      urgent_repair: "2小时内现场"
+      general_repair: "8小时内现场"
+      planned_repair: "24小时内安排"
+
+    preventive_maintenance:
+      daily_tasks: "按计划执行"
+      weekly_tasks: "当周完成"
+      monthly_tasks: "当月完成"
+      quarterly_tasks: "季度内完成"
+      annual_tasks: "年度内完成"
+      seasonal_tasks: "季节转换前完成"
+
+    predictive_maintenance:
+      urgent_prediction: "1周内处理"
+      important_prediction: "2周内处理"
+      routine_prediction: "适当时间安排"
+
+    inspection_tasks:
+      daily_patrol: "按班执行"
+      periodic_inspection: "周期内完成"
+      safety_inspection: "法定期限前完成"
+
+    emergency_response:
+      immediate: "立即到场"
+      urgent: "15分钟内到场"
+      standard: "按预案时间"
+
+# 4. 工单优先级矩阵
+priority_matrix:
+
+  medical_impact_assessment:
+    patient_safety_direct: "影响患者生命安全的系统"
+    patient_safety_indirect: "可能影响患者安全的系统"
+    medical_operation_major: "严重影响医疗操作"
+    medical_operation_minor: "轻微影响医疗操作"
+    patient_comfort: "影响患者舒适性"
+    no_medical_impact: "无医疗影响"
+
+  business_impact_assessment:
+    operation_shutdown: "导致运营停止"
+    operation_degraded: "运营能力降级"
+    efficiency_reduced: "效率降低"
+    cost_increase: "运营成本增加"
+    compliance_risk: "合规性风险"
+    reputation_risk: "声誉风险"
+
+  priority_criteria:
+    high_priority:
+      - "影响患者生命安全"
+      - "违反法规要求"
+      - "主要系统故障"
+      - "多个系统受到影响"
+      - "可能导致P0告警"
+
+    medium_priority:
+      - "影响运营效率"
+      - "单系统故障"
+      - "预防性维护"
+      - "可能导致P1-P2告警"
+
+    low_priority:
+      - "轻微影响"
+      - "单个设备故障"
+      - "改善性建议"
+      - "后台系统优化"
+
+# 5. 工单资源配置
+resource_allocation:
+
+  # 人员配置
+  staff_allocation:
+    emergency_team:
+      composition: "高级技师+技术员"
+      availability: "24小时×365天"
+      skill_requirement: "跨专业综合技能"
+      response_capability: "复杂故障处理"
+
+    technical_team:
+      hve_specialist: "暖通工程师"
+      electrical_specialist: "电气工程师"
+      control_specialist: "自控工程师"
+      medical_specialist: "医疗设备工程师"
+      safety_specialist: "安全工程师"
+
+    general_maintenance:
+      multi_skill_technicians: "多技能技工"
+      specialist_ratio: "1:5(专家:技工)"
+      outsourcing_support: "外包服务商"
+      vendor_support: "厂家技术支持"
+
+  # 物料管理
+  material_management:
+    critical_spares:
+      - "生命保障设备备件"
+      - "关键设备易损件"
+      - "应急抢修材料"
+      inventory_level: "100%备份"
+      lead_time: "24小时可用"
+
+    standard_spares:
+      - "一般设备备件"
+      - "常用消耗材料"
+      - "工具仪器"
+      inventory_level: "20-50%备份"
+      procurement_cycle: "月度采购"
+
+  resource_optimization:
+    workload_balancing: "工作量平衡分配"
+    skill_matching: "技能与任务匹配"
+    travel_optimization: "行程最短化"
+    emergency_reserve: "应急资源预留"
+    external_coordination: "外部资源协调"

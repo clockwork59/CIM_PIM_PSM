@@ -1,0 +1,40 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FEE_BILL,表全名,JHPDL:JH_FEE_BILL,,,,,,
+,表说明,费用账单,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PFB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PFB0001,String字符串（变长）,,FEE_BILL_SN,费用账单编号,费用账单编号，系统生成三级编码，如“PB0.000.000.001”,20,是,是
+,\x00\x02,PFB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,PFB0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,PFB0004,String字符串（变长）,,BILL_CODE,账单条码号,,200,是,是
+,\x00\x05,PFB0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,BILL_CREATE_TIME,账单创建时间,,19,,
+,\x00\x06,PFB0006,Double双精度浮点型（8个字节）,,TOTAL_COST,总费用金额,,38,,
+,\x00\x07,PFB0007,Double双精度浮点型（8个字节）,,SELF_COST,自费金额,,38,,
+,\x00\x08,PFB0008,Double双精度浮点型（8个字节）,,SOC_INS_COST,医保金额,,38,,
+,\x00\x09,PFB0009,Double双精度浮点型（8个字节）,,BUS_INS_COST,商业保险金额,,38,,
+,\x00\x0A,PFB0010,Double双精度浮点型（8个字节）,,OTHER_INS_COST,其它付费金额,,38,,
+,\x00\x0B,PFB0011,Double双精度浮点型（8个字节）,,REDUCED_COST,减免金额,,38,,
+,\x00\x0C,PFB0012,String字符串（变长）,,REDUCED_CAUSE,减免原因,,200,,
+,\x00\x0E,PFB0014,Double双精度浮点型（8个字节）,,PAY_TOTAL,实际结算总额,,38,,
+,\x00\x0F,PFB0015,Double双精度浮点型（8个字节）,,PAY_SELF,实际自费金额,,38,,
+,\x00\x10,PFB0016,Double双精度浮点型（8个字节）,,PAY_SOC_INS,实际医保金额,,38,,
+,\x00\x11,PFB0017,Double双精度浮点型（8个字节）,,PAY_BUS_INS,实际商保金额,,38,,
+,\x00\x12,PFB0018,Double双精度浮点型（8个字节）,,PAY_OTHER_INS,实际其它支付金额,,38,,
+,\x00\x13,PFB0019,String字符串（变长）,,OPERATOR_NAME,操作人员,编码＋名称,200,,
+,\x00\x15,PFB0021,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,是,是
+,\x00\x17,PFB0023,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x18,PFB0024,简化字典（Integer整型，4个字节）,379,SD_IS_PAY,是否结算,,20,,
+,\x00\x19,PFB0025,简化字典（Integer整型，4个字节）,383,SD_COST_TYPE,账单类型简码,与就诊类型一致，表示是什么类型的费用，如门诊、住院,20,,
+,\x00\x1A,PFB0026,String字符串（变长）,,ST_COST_TYPE,账单类型描述,,500,,
+,\x00\x1C,PFB0028,String字符串（变长）,,SC_COST_TYPE,账单类型编码,源业务系统的就诊类型编码,200,,
+,\x00\x1B,PFB0027,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型简码,就诊类型的中台标准编码,20,是,是
+,\x00\x1D,PFB0029,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,200,是,是
+,\x00\x1E,PFB0030,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,200,,
+,\x00\x1F,PFB0031,String字符串（变长）,,POSTRANS_NO,结算交易号,,200,是,是
+,\x00\x20,PFB0032,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x0D,PFB0013,自定义字典类型，字符串（变长）,379,PLAY_FLAG,结算标记,,200,,
+,\x00\x14,PFB0020,自定义字典类型，字符串（变长）,383,COST_TYPE,账单类型,与就诊类型一致，表示是什么类型的费用，如门诊、住院,200,,
+,\x00\x16,PFB0022,自定义字典类型，字符串（变长）,383,VISIT_TYPE,就诊类型,"就诊类型，如“3#,#4#,#门诊”（直接复制JH_PAT_VISIT）",200,是,是

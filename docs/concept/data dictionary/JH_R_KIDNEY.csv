@@ -1,0 +1,24 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_R_KIDNEY,表全名,JHPDL:JH_R_KIDNEY,,,,,,
+,表说明,肾病专业统计表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,ME,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,ME0001,String字符串（变长）,,R_KIDNEY_SN,统计数据唯一号,内部三级编码ME0.000.000.001,20,是,是
+,\x00\x02,ME0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,ME0003,String字符串（变长）,,SC_HOSPITAL,院区编码,院区编码,40,,
+,\x00\x04,ME0004,String字符串（变长）,,ST_HOSPITAL,院区名称,院区名称,40,,
+,\x00\x05,ME0005,String字符串（变长）,,SC_DEPT,科室编码,科室编码,40,,
+,\x00\x06,ME0006,String字符串（变长）,,ST_DEPT,科室名称,科室名称,100,,
+,\x00\x07,ME0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,R_DATE,统计时间,统计时间,31,,
+,\x00\x08,ME0008,String字符串（变长）,,XYTXZLSXDHGYF_NUM,血液透析治疗室消毒合格月度总数,血液透析治疗室消毒合格月度总数,100,,
+,\x00\x09,ME0009,String字符串（变长）,,TXYSSWWRJYHGJD_NUM,透析用水生物污染检验合格季度总数,透析用水生物污染检验合格季度总数,100,,
+,\x00\x0A,ME0010,String字符串（变长）,,TCHZFMTXBRY_NUM,退出患者腹膜透析病人月总和,退出患者腹膜透析病人月总和,100,,
+,\x00\x0B,ME0011,String字符串（变长）,,KIDNEY_COMMENT,备注,备注,200,,
+,\x00\x0C,ME0012,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x0D,ME0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x0E,ME0014,String字符串（变长）,,FMTXZLSXDHGYF_NUM,腹膜透析治疗室消毒合格月度总数,腹膜透析治疗室消毒合格月度总数,100,,
+,\x00\x0F,ME0015,String字符串（变长）,,TXYSSWWRJYHGYF_NUM,透析用水生物污染检验合格月度总数,透析用水生物污染检验合格月度总数,100,,
+,\x00\x10,ME0016,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

@@ -1,0 +1,152 @@
+# CIM 告警规则实例库
+# 从 Agent-08 alarm_models.yaml 结构化提取
+# 版本: 1.0.0 | 日期: 2026-04-05
+
+meta:
+  file_id: "ALARM-CIM-20260405"
+  source: "Agent-08 alarm_models.yaml"
+  version: "1.0.0"
+
+# ===================================================================
+# 1. 告警类型定义
+# ===================================================================
+alarm_types:
+  - type_id: THRESHOLD
+    name_cn: 阈值告警
+    trigger: "参数值 ≥ 上限 或 ≤ 下限"
+    subtypes: [温度, 湿度, 压力, 流量, 液位, 电气参数, 能耗超限]
+
+  - type_id: STATUS
+    name_cn: 状态告警
+    trigger: "设备状态 != 期望状态"
+    subtypes: [设备离线, 设备故障, 运行模式异常, 联锁异常, 安全保护触发, 过载过热, 润滑故障, 振动异常]
+
+  - type_id: DIAGNOSTIC
+    name_cn: 诊断告警
+    trigger: "AI算法检测到异常模式"
+    subtypes: [性能下降, 效率降低, 振动分析, 温度异常, 电气异常, 趋势异常, 模式识别, 预测性指标]
+    confidence_rules:
+      - {range: "≥90%", action: "按正常级别处理"}
+      - {range: "70-90%", action: "降级处理或人工确认"}
+      - {range: "<70%", action: "仅记录不主动告警"}
+
+  - type_id: MAINTENANCE
+    name_cn: 维护提醒
+    trigger: "达到预设维护时间/周期"
+    subtypes: [预防性维护, 预测性维护, 校准到期, 润滑保养, 滤网更换, 季节转换, 法规合规]
+
+  - type_id: QUALITY
+    name_cn: 数据质量告警
+    trigger: "数据质量指标异常"
+    subtypes: [数据缺失, 数据过时, 数据异常, 传感器漂移, 通信错误, 校准漂移, 量程超限, 传感器故障]
+
+# ===================================================================
+# 2. 告警 SLA 矩阵
+# ===================================================================
+severity_sla:
+  - level: P0-EMERGENCY
+    name_cn: 紧急告警
+    description: 生命安全威胁
+    response_time: "≤ 5min"
+    on_site_time: "≤ 30min"
+    resolution_target: "≤ 2h"
+    escalation: 立即通知管理层
+    medical_scenarios:
+      - 手术室压差失效
+      - ICU电力中断
+      - 氧气供应中断
+      - 负压病房失压
+      - 洁净空调停机
+      - 生命支持系统故障
+      - 消防系统触发
+
+  - level: P1-CRITICAL
+    name_cn: 严重告警
+    description: 运营严重受影响
+    response_time: "≤ 15min"
+    on_site_time: "≤ 1h"
+    resolution_target: "≤ 4h"
+    escalation: 通知主管工程师
+    medical_scenarios:
+      - 冷机COP偏低>20%
+      - 冷冻水温度超限±3°C
+      - 病区温度异常±3°C
+      - 关键设备冗余失效
+      - UPS电池容量<50%
+
+  - level: P2-MAJOR
+    name_cn: 一般告警
+    response_time: "≤ 30min"
+    on_site_time: "≤ 4h"
+    resolution_target: "≤ 24h"
+    medical_scenarios:
+      - 过滤器压差高>2倍初阻
+      - 水泵效率<80%
+      - 传感器漂移超限
+      - 单台设备故障
+      - 能耗偏高>20%
+
+  - level: P3-MINOR
+    name_cn: 提示告警
+    response_time: "≤ 1h"
+    on_site_time: "≤ 24h"
+    resolution_target: "≤ 72h"
+
+# ===================================================================
+# 3. 设备级告警阈值
+# ===================================================================
+equipment_alarm_rules:
+
+  chiller_alarms:
+    - {param: condenser_pressure, warn: "1.2MPa", trip: "1.4MPa"}
+    - {param: evaporator_pressure, warn: "0.35MPa", trip: "0.3MPa"}
+    - {param: oil_pressure, warn: "0.15MPa", trip: "0.1MPa"}
+    - {param: temperature_approach, warn: ">3°C"}
+    - {param: COP, warn: "<4.0"}
+
+  pump_alarms:
+    - {param: vibration_velocity, warn: "4.5mm/s", trip: "7.1mm/s"}
+    - {param: bearing_temperature, warn: "70°C", trip: "80°C"}
+    - {param: seal_leakage, warn: "可见泄漏"}
+
+  ahu_alarms:
+    - {param: filter_pressure, clean: "1.5×初阻", replace: "2×初阻"}
+    - {param: energy_consumption, warn: ">120% 设计值"}
+
+  medical_space_alarms:
+    operating_rooms:
+      - {param: temperature, range: "22-25°C", tolerance: "±1°C"}
+      - {param: humidity, range: "40-60%RH", tolerance: "±3%"}
+      - {param: pressure, min: "+15Pa", tolerance: "±2Pa"}
+    icu:
+      - {param: temperature, range: "24±1.5°C"}
+      - {param: humidity, range: "50±10%RH"}
+      - {param: noise_day, max: "45dB(A)"}
+      - {param: noise_night, max: "40dB(A)"}
+    negative_isolation:
+      - {param: pressure, max: "-30Pa"}
+      - {param: air_changes, min: "12 ACH"}
+
+# ===================================================================
+# 4. 升级机制
+# ===================================================================
+escalation_rules:
+  automatic:
+    - {condition: "P0 未确认 10min", action: "升级至主任工程师+部门经理"}
+    - {condition: "P1 未确认 30min", action: "升级至主管工程师"}
+    - {condition: "P2 未确认 2h", action: "升级至值班工程师"}
+    - {condition: "P3 未确认 24h", action: "纳入周例会"}
+    - {condition: "连续故障 OR 多设备同时故障", action: "自动升级处理级别"}
+    - {condition: "涉及安全", action: "直接升级至最高级别"}
+  manual:
+    first_line: "24h值班工程师"
+    second_line: "专业工程师(暖通/电气/自动化)"
+    third_line: "设备供应商技术支持"
+    management: "工程技术部经理"
+    emergency: "医院总值班+安全管理"
+
+statistics:
+  total_alarm_types: 5
+  total_severity_levels: 4
+  total_equipment_rules: 18
+  total_escalation_rules: 6

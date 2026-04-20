@@ -1,0 +1,31 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_JOB_LOG,表全名,JHPDL:JH_JOB_LOG,,,,,,
+,表说明,通用任职记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,JLR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,JLR0001,String字符串（变长）,,JOB_LOG_SN,任职编号,任职编号，系统生成二级编码，如“J00.000.001”,20,是,是
+,\x00\x02,JLR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,JLR0003,String字符串（变长）,,STAFF_SN,人员编号,人员编号，关联JH_STAFF_INFO的EMP0001,20,是,是
+,\x00\x0D,JLR0013,简化字典（Integer整型，4个字节）,261,SD_POSITION,职务类别,专业职务类别代码，如：正高，副高,20,,
+,\x00\x06,JLR0006,简化字典（Integer整型，4个字节）,457,JOB_TYPE,任职类型,任职类型简码；字典项：临床医生，临床护士，职能部门，临床医生兼职能，临床护士兼职能，其他部门,20,是,是
+,\x00\x10,JLR0016,String字符串（变长）,,SC_JOB_TYPE,任职类型编码,源业务系统的任职类型编码,200,,
+,\x00\x11,JLR0017,String字符串（变长）,,ST_JOB_TYPE,任职类型描述,源业务系统的任职类型描述,200,,
+,\x00\x0B,JLR0011,简化字典（Integer整型，4个字节）,458,JOB_STATE,任职状态,任职状态说明；字典项：在任，任期结束（任满终止），满期未离（任期已满未终止），终止（未满终止）,20,是,是
+,\x00\x12,JLR0018,String字符串（变长）,,SC_JOB_STATE,任职状态编码,源业务系统的任职状态编码,200,,
+,\x00\x13,JLR0019,String字符串（变长）,,ST_JOB_STATE,任职状态描述,源业务系统的任职状态描述,200,,
+,\x00\x05,JLR0005,String字符串（变长）,,HIS_JOB_ID,任职业务唯一号,院内来源业务系统业务流通的本次任职唯一编号，如工号,100,是,是
+,\x00\x07,JLR0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,JOB_START_TIME,任职开始时间,,19,是,是
+,\x00\x08,JLR0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,JOB_END_TIME,任职结束时间,在任期间可以为空,19,是,是
+,\x00\x09,JLR0009,String字符串（变长）,,MED_ORG_SN,医疗机构编号,本次任职的医疗机构唯一编号；来源JH_MED_ORG的ORG0001,100,是,是
+,\x00\x0A,JLR0010,Short短整型（2个字节）,,JOB_NUM,任职计数,本系统任职次数累计（自增顺序累计数值）,6,,
+,\x00\x0E,JLR0014,String字符串（变长）,,SC_POSITION,职务编码,业务系统职务编码,200,,
+,\x00\x0F,JLR0015,String字符串（变长）,,ST_POSITION,业务系统职务名称,职务名称,200,,
+,\x00\x14,JLR0020,String字符串（变长）,,EMPLOYER_ADDRESS,工作地址,,200,,
+,\x00\x15,JLR0021,String字符串（变长）,,EMPLOYER_PHONE,工作联系方式：电话,,200,,
+,\x00\x16,JLR0022,String字符串（变长）,,SC_NATURE,职工性质编码,,200,,
+,\x00\x17,JLR0023,String字符串（变长）,,ST_NATURE,职工性质名称,,200,,
+,\x00\x0C,JLR0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x04,JLR0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,

@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=\"$CLAUDE_TOOL_INPUT_FILE_PATH\"; if [[ \"$file\" == *.md ]]; then chars=$(wc -c < \"$file\" 2>/dev/null || echo 0); echo \"[hooks] 写入完成: $(basename \"$file\") — ${chars} 字节\"; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=\"$CLAUDE_TOOL_INPUT_FILE_PATH\"; if [[ \"$file\" == *.json ]] || [[ \"$file\" == *.ttl ]] || [[ \"$file\" == *.owl ]]; then echo \"[hooks] 本体/数据文件已更新: $(basename \"$file\")\"; fi"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "echo \"[hooks] 会话结束 - 统一领域模型(CIM)写作项目\""
+      }
+    ]
+  }
+}

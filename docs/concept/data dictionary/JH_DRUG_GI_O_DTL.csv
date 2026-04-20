@@ -1,0 +1,70 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_GI_O_DTL,表全名,JHPDL:JH_DRUG_GI_O_DTL,,,,,,
+,表说明,门诊发药明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x02,MGD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x27,MGD0039,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,,200,,
+,\x00\x01,MGD0001,String字符串（变长）,,GI_O_DTL_SN,门诊发药明细唯一号,内部三级编码DK0.000.000.001,20,是,是
+,\x00\x03,MGD0003,String字符串（变长）,,DRUG_GIVE_O_SN,门诊药房发药唯一号,来源JH_DRUG_GIVE_OUT的MGO0001,20,是,是
+,\x00\x13,MGD0019,String字符串（变长）,,PRESC_NO,处方号,,200,是,是
+,\x00\x1A,MGD0026,String字符串（变长）,,PHA_SEND_NO,发药单号,,200,是,是
+,\x00\x1B,MGD0027,String字符串（变长）,,PHA_SEND_SN,发药子序号,,200,是,是
+,\x00\x14,MGD0020,String字符串（变长）,,HIS_PAT_ID,关联患者ID,,100,是,是
+,\x00\x15,MGD0021,String字符串（变长）,,HIS_VIS_ID,关联就诊ID,,100,是,是
+,\x00\x10,MGD0016,String字符串（变长）,,ORDER_LINK,关联医嘱ID,,500,是,是
+,\x00\x11,MGD0017,String字符串（变长）,,ORDER_CODE,关联医嘱代码,,200,,
+,\x00\x12,MGD0018,String字符串（变长）,,ORDER_NAME,关联医嘱描述,,500,,
+,\x00\x16,MGD0022,String字符串（变长）,,SC_ORDER_STATUS,医嘱状态代码,,200,,
+,\x00\x17,MGD0023,String字符串（变长）,,ST_ORDER_STATUS,医嘱状态描述,,500,,
+,\x00\x09,MGD0009,String字符串（变长）,,SC_INVENTORY_ITM,库存项编码,,200,,
+,\x00\x0A,MGD0010,String字符串（变长）,,ST_INVENTORY_ITM,库存项名称,,200,,
+,\x00\x06,MGD0006,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x04,MGD0004,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x05,MGD0005,String字符串（变长）,,DRUG_BATCH_SN,批次SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x07,MGD0007,String字符串（变长）,,BATCH_NO,批次号,,200,是,是
+,\x00\x0B,MGD0011,Double双精度浮点型（8个字节）,,PHA_QTY,发药数量,,38,,
+,\x00\x0C,MGD0012,String字符串（变长）,,SC_PHA_UNIT,单位编码,,200,,
+,\x00\x0D,MGD0013,String字符串（变长）,,ST_PHA_UNIT,单位描述,,500,,
+,\x00\x0E,MGD0014,Double双精度浮点型（8个字节）,,PRICE,单价,,38,,
+,\x00\x0F,MGD0015,Double双精度浮点型（8个字节）,,PHA_TOT_AMOUNT,总金额,,38,,
+,\x00\x21,MGD0033,Double双精度浮点型（8个字节）,,PHA_DOSAGE_NUM,用药单次剂量,,38,,
+,\x00\x25,MGD0037,String字符串（变长）,,SC_DOSAGE_UNIT,单次剂量单位编码,单次剂量单位编码,200,,
+,\x00\x26,MGD0038,String字符串（变长）,,ST_DOSAGE_UNIT,单次剂量单位描述,单次剂量单位描述,200,,
+,\x00\x20,MGD0032,String字符串（变长）,,PHA_FREQ,用药频次,,200,,
+,\x00\x1F,MGD0031,String字符串（变长）,,ST_PHA_WAY,用药途径方法描述,,500,,
+,\x00\x1E,MGD0030,String字符串（变长）,,SC_PHA_WAY,用药途径方法代码,,200,,
+,\x00\x22,MGD0034,String字符串（变长）,,PHA_COURSE,疗程,,200,,
+,\x00\x23,MGD0035,String字符串（变长）,,SPEC,规格,,200,,
+,\x00\x24,MGD0036,String字符串（变长）,,REMARKS,备注,,200,,
+,\x00\x31,MGD0049,String字符串（变长）,,SC_DRUG_DISPENSER,静配药配药人编号,,200,,
+,\x00\x32,MGD0050,String字符串（变长）,,ST_DRUG_DISPENSER,静配药配药人姓名,,200,,
+,\x00\x33,MGD0051,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_DISPE_TIME,静脉药配药时间,,31,,
+,\x00\x28,MGD0040,String字符串（变长）,,SC_DRUG_REVIEWER,静配药品审核人编号,,200,是,是
+,\x00\x29,MGD0041,String字符串（变长）,,ST_DRUG_REVIEWER,静配药品审核人姓名,,200,是,是
+,\x00\x2C,MGD0044,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_REV_TIME,静配药品审核时间,,31,是,是
+,\x00\x34,MGD0052,String字符串（变长）,,SC_REVIE_SECOND,静配药复核人编号,,200,,
+,\x00\x35,MGD0053,String字符串（变长）,,ST_REVIE_SECOND,静配药复核人姓名,,200,,
+,\x00\x36,MGD0054,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,REVIE_SECOND_TIME,静配药复核时间,,31,,
+,\x00\x2A,MGD0042,String字符串（变长）,,SC_DRUG_CHECKER,静配药品核对人编号,,200,是,是
+,\x00\x2B,MGD0043,String字符串（变长）,,ST_DRUG_CHECKER,静配药品核对人姓名,,200,是,是
+,\x00\x2D,MGD0045,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_CHECK_TIME,静配药品核对时间,,31,是,是
+,\x00\x2E,MGD0046,String字符串（变长）,,SC_LABEL_PRINTER,静配标签打印人编号,,200,是,是
+,\x00\x2F,MGD0047,String字符串（变长）,,ST_LABEL_PRINTER,静配标签打印人姓名,,200,是,
+,\x00\x30,MGD0048,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_LAB_PRINTTIME,静配标签打印时间,,31,,
+,\x00\x37,MGD0055,String字符串（变长）,,SC_DRUG_LABEL,静配药贴签人编号,,200,,
+,\x00\x38,MGD0056,String字符串（变长）,,ST_DRUG_LABEL,静配药贴签人姓名,,200,,
+,\x00\x39,MGD0057,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DRUG_LAB_TIME,静配药贴签时间,,,,
+,\x00\x18,MGD0024,String字符串（变长）,,SC_PHA_SEND_STAT,发药状态代码,待发、已发、申请退、已退，部分退、拒绝发药等,200,是,是
+,\x00\x19,MGD0025,String字符串（变长）,,ST_PHA_SEND_STAT,发药状态描述,,500,,
+,\x00\x1D,MGD0029,String字符串（变长）,,REFUSE_REASON,药房拒绝发药原因,,500,,
+,\x00\x1C,MGD0028,简化字典（Integer整型，4个字节）,379,SD_PHA_GET,是否取药,,20,,
+,\x00\x08,MGD0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x3A,MGD0058,String字符串（变长）,,GRP,组套医嘱,,5,,
+,\x00\x3B,MGD0059,String字符串（变长）,,ORDERGUBUN,医嘱区分,长、临、出院带药、术前医嘱、会诊、追加等,200,,
+,\x00\x3C,MGD0060,String字符串（变长）,,POWDER,医嘱标志,抗菌药的治疗、还是预防标志,20,,
+,\x00\x3D,MGD0061,简化字典（Integer整型，4个字节）,379,SD_SELF,是否保险,医嘱项目是否在医保内，是否可报销,4,,
+,\x00\x3E,MGD0062,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

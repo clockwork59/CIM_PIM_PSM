@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0-alpha",
+  "namespaces": {
+    "cim": "https://cim.medical/ontology/v3.4#",
+    "cim-topo": "https://cim.medical/ontology/v3.4/topology#",
+    "cim-space": "https://cim.medical/ontology/v3.4/space#",
+    "cim-equip": "https://cim.medical/ontology/v3.4/equipment#",
+    "cim-flow": "https://cim.medical/ontology/v3.4/flow#",
+    "cim-couple": "https://cim.medical/ontology/v3.4/coupling#",
+    "cim-ctrl": "https://cim.medical/ontology/v3.4/control#",
+    "cim-meter": "https://cim.medical/ontology/v3.4/metering#",
+    "cim-om": "https://cim.medical/ontology/v3.4/operations#",
+    "cim-svc": "https://cim.medical/ontology/v3.4/services#",
+    "cim-med": "https://cim.medical/ontology/v3.4/medical#"
+  },
+  "file_encoding": "UTF-8",
+  "default_format": "TTL",
+  "validation": {
+    "sparql_rules_enabled": true,
+    "shacl_constraints_enabled": true
+  }
+}

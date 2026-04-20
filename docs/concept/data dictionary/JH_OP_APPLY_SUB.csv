@@ -1,0 +1,27 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OP_APPLY_SUB,表全名,JHPDL:JH_OP_APPLY_SUB,,,,,,
+,表说明,手术申请附表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,OAB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,OAB0001,String字符串（变长）,,OP_APPLY_DTL_SN,手术申请对应手术明细唯一号,内部三级编码PH0.000.000.001,20,是,是
+,\x00\x02,OAB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,OAB0003,String字符串（变长）,,OPER_APPLY_SN,手术申请号,来源JH_OP_APPLY的OAP0001,20,是,是
+,\x00\x04,OAB0004,String字符串（变长）,,OPS_ORDER,手术顺序,手术顺序号,200,,
+,\x00\x05,OAB0005,String字符串（变长）,,SC_OPS,手术编码,手术编码,200,,
+,\x00\x06,OAB0006,String字符串（变长）,,ST_OPS,手术名称,手术名称,200,,
+,\x00\x07,OAB0007,String字符串（变长）,,SC_OPS_SITE,手术部位编码,源业务系统手术部位编码,200,,
+,\x00\x08,OAB0008,String字符串（变长）,,ST_OPS_SITE,手术部位名称,源业务系统手术部位名称,200,,
+,\x00\x09,OAB0009,String字符串（变长）,,SC_OPS_POSTURE,手术体位编码,源业务系统手术体位编码,200,,
+,\x00\x0A,OAB0010,String字符串（变长）,,ST_OPS_POSTURE,手术体位名称,源业务系统手术体位名称,200,,
+,\x00\x0B,OAB0011,String字符串（变长）,421,SD_OPS_SCALE,手术级别,数据中台标准编码,200,,
+,\x00\x0C,OAB0012,String字符串（变长）,,SC_OPS_SCALE,手术级别编码,源业务系统申请手术的级别编码,200,,
+,\x00\x0D,OAB0013,String字符串（变长）,,ST_OPS_SCALE,手术级别名称,源业务系统申请手术的级别名称,200,,
+,\x00\x0E,OAB0014,String字符串（变长）,422,SD_INCISION_CLASS,切口分类,数据中台标准编码,200,,
+,\x00\x0F,OAB0015,String字符串（变长）,,SC_INCISION_CLASS,切口分类编码,源业务系统申请手术的切口分类编码,200,,
+,\x00\x10,OAB0016,String字符串（变长）,,ST_INCISION_CLASS,切口分类名称,源业务系统申请手术的切口分类名称,200,,
+,\x00\x11,OAB0017,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x12,OAB0018,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x13,OAB0019,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

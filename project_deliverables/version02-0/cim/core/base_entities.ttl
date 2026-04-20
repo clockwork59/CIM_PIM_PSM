@@ -1,0 +1,19 @@
+@prefix cim: <https://cim.medical/ontology/v3.4#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+cim:Entity a owl:Class ;
+  rdfs:label "实体"@zh ;
+  rdfs:comment "CIM 基础实体类型"@zh .
+
+cim:System a owl:Class ;
+  rdfs:subClassOf cim:Entity ;
+  rdfs:label "系统"@zh .
+
+cim:Space a owl:Class ;
+  rdfs:subClassOf cim:Entity ;
+  rdfs:label "空间"@zh .
+
+cim:Equipment a owl:Class ;
+  rdfs:subClassOf cim:Entity ;
+  rdfs:label "设备"@zh .

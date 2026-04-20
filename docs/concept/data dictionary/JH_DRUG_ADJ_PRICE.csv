@@ -1,0 +1,45 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_ADJ_PRICE,表全名,JHPDL:JH_DRUG_ADJ_PRICE,,,,,,
+,表说明,调价记录表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGL,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGL0001,String字符串（变长）,,DRUG_ADJ_PI_SN,调价明细唯一号,内部三级编码DT0.000.000.001,20,是,是
+,\x00\x02,MGL0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x07,MGL0007,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x12,MGL0018,String字符串（变长）,,SC_PHARMACY,药房药库编码,,200,是,是
+,\x00\x13,MGL0019,String字符串（变长）,,ST_PHARMACY,药房药库名称,,200,,
+,\x00\x10,MGL0016,String字符串（变长）,,SC_INVENTORY_ITM,药品编码,,200,,
+,\x00\x11,MGL0017,String字符串（变长）,,ST_INVENTORY_ITM,药品名称,,200,,
+,\x00\x06,MGL0006,String字符串（变长）,,BATCH_NO,批次号,,200,是,是
+,\x00\x04,MGL0004,String字符串（变长）,,DRUG_BATCH_SN,批次SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x05,MGL0005,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x03,MGL0003,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,20,,
+,\x00\x0C,MGL0012,简化字典（Integer整型，4个字节）,379,SD_ADJ_BATCH,是否按批次调价,,20,,
+,\x00\x0F,MGL0015,String字符串（变长）,,DRUG_ADJ_NO,调价单号,,200,是,是
+,\x00\x0D,MGL0013,String字符串（变长）,,SC_ADJ_METHOD,调价方式编码,手工调价、定时调价等,200,,
+,\x00\x0E,MGL0014,String字符串（变长）,,ST_ADJ_METHOD,调价方式描述,,500,,
+,\x00\x0A,MGL0010,Double双精度浮点型（8个字节）,,DRUG_ADJ_PRI_BEF,调价前价格,,38,,
+,\x00\x0B,MGL0011,Double双精度浮点型（8个字节）,,DRUG_ADJ_PRI_AFT,调价后价格,,38,,
+,\x00\x14,MGL0020,Double双精度浮点型（8个字节）,,DRUG_ADJ_QUAN,调价数量,按批次时，当前调价变动的库存数量,38,,
+,\x00\x24,MGL0036,String字符串（变长）,,SC_DRUG_ADJ_UNIT,调价单位编码,,50,,
+,\x00\x21,MGL0033,String字符串（变长）,,ST_DRUG_ADJ_UNIT,调价单位名称,调价数量对应的单位名称,50,,
+,\x00\x09,MGL0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ADJ_START_TIME,调价开始生效时间,,31,,
+,\x00\x22,MGL0034,Double双精度浮点型（8个字节）,,CURR_DRUG_COUNT,当前库存剩余量,调价影响的库存剩余总量，合计各个库,,,
+,\x00\x23,MGL0035,String字符串（变长）,,CURR_DRUG_COUNT_UNIT,剩余库存总量单位,当前剩余库存总量单位,50,,
+,\x00\x18,MGL0024,Double双精度浮点型（8个字节）,,DRUG_WHO_PRI,原批发价,基本单位,38,,
+,\x00\x1E,MGL0030,Double双精度浮点型（8个字节）,,DRUG_PURCH_PRI,原进货价,,38,,
+,\x00\x17,MGL0023,Double双精度浮点型（8个字节）,,DRUG_RET_PRI,原零售价,基本单位,38,,
+,\x00\x19,MGL0025,Double双精度浮点型（8个字节）,,DRUG_WHOLE_AMO,原批发金额,,38,,
+,\x00\x1F,MGL0031,Double双精度浮点型（8个字节）,,DRUG_PURCH_AMO,原进货金额,,38,,
+,\x00\x1A,MGL0026,Double双精度浮点型（8个字节）,,DRUG_RETAIL_AMO,原零售金额,,38,,
+,\x00\x16,MGL0022,Double双精度浮点型（8个字节）,,DRUG_WHO_PRI_NEW,新批发价,基本单位,38,,
+,\x00\x1D,MGL0029,Double双精度浮点型（8个字节）,,DRUG_PUR_PRI_NEW,新进货价,,38,,
+,\x00\x15,MGL0021,Double双精度浮点型（8个字节）,,DRUG_RET_PRI_NEW,新零售价,基本单位,38,,
+,\x00\x1B,MGL0027,Double双精度浮点型（8个字节）,,DRUG_WHO_AMO_NEW,新批发金额,,38,,
+,\x00\x20,MGL0032,Double双精度浮点型（8个字节）,,DRUG_PUR_AMO_NEW,新进货金额,,38,,
+,\x00\x1C,MGL0028,Double双精度浮点型（8个字节）,,DRUG_RET_AMO_NEW,新零售金额,,38,,
+,\x00\x08,MGL0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x25,MGL0037,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

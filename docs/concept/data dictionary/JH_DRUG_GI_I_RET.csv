@@ -1,0 +1,47 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_GI_I_RET,表全名,JHPDL:JH_DRUG_GI_I_RET,,,,,,
+,表说明,住院退药主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGG,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGG0001,String字符串（变长）,,GIVE_I_RET_SN,住院药房退药唯一号,内部产生的三级编码DQ0.000.000.001,20,是,是
+,\x00\x02,MGG0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MGG0003,String字符串（变长）,,GI_IN_DTL_SN,发药明细表的SN,来源JH_DRUG_GI_IN_DTL的MGX0001,20,是,是
+,\x00\x04,MGG0004,String字符串（变长）,,DRUG_INFO_SN,库存项SN,,200,是,是
+,\x00\x05,MGG0005,String字符串（变长）,,DRUG_BATCH_SN,批次SN,,200,是,是
+,\x00\x06,MGG0006,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x07,MGG0007,String字符串（变长）,,BATCH_NO,批次号,,200,是,是
+,\x00\x08,MGG0008,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x09,MGG0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x0A,MGG0010,String字符串（变长）,,PHA_RET_APP_NO,退药申请单号,业务退药申请单号,200,是,是
+,\x00\x0B,MGG0011,String字符串（变长）,,HIS_PAT_ID,患者ID,,100,是,是
+,\x00\x0C,MGG0012,String字符串（变长）,,HIS_VIS_ID,就诊ID,,100,是,是
+,\x00\x0D,MGG0013,String字符串（变长）,,SC_RET_APP_DEPT,申请科室代码,,200,,
+,\x00\x0E,MGG0014,String字符串（变长）,,ST_RET_APP_DEPT,申请科室名称,,200,,
+,\x00\x0F,MGG0015,String字符串（变长）,,SC_RET_APP_WARD,申请病区代码,,200,,
+,\x00\x10,MGG0016,String字符串（变长）,,ST_RET_APP_WARD,申请病区名称,,200,,
+,\x00\x1A,MGG0026,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_APP_TIME,申请时间,,31,是,是
+,\x00\x1B,MGG0027,String字符串（变长）,,SC_APPLY_USER,申请人编码,,200,,
+,\x00\x1C,MGG0028,String字符串（变长）,,ST_APPLY_USER,申请人姓名,,200,,
+,\x00\x23,MGG0035,String字符串（变长）,,APPLY_REASON,申请原因,,4000,,
+,\x00\x11,MGG0017,String字符串（变长）,,ORDER_LINK,关联医嘱ID,,500,是,是
+,\x00\x12,MGG0018,String字符串（变长）,,PRESC_NO,处方号,,200,是,是
+,\x00\x13,MGG0019,Double双精度浮点型（8个字节）,,PHA_RET_APP_QTY,数量,申请的退药数量,38,,
+,\x00\x14,MGG0020,String字符串（变长）,,SC_PHA_UNIT,单位编码,,200,,
+,\x00\x15,MGG0021,String字符串（变长）,,ST_PHA_UNIT,单位名称,,200,,
+,\x00\x16,MGG0022,Double双精度浮点型（8个字节）,,PHA_UNIT_PRICE,单价,,38,,
+,\x00\x17,MGG0023,Double双精度浮点型（8个字节）,,APP_TOT_AMOUNT,总金额,申请退药总金额,38,,
+,\x00\x18,MGG0024,String字符串（变长）,,SC_RET_STATUS,状态编码,申请、部分退、已退、拒绝等,200,,
+,\x00\x19,MGG0025,String字符串（变长）,,ST_RET_STATUS,状态描述,,500,,
+,\x00\x1D,MGG0029,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_UPDATE_TIME,最后更新时间,,31,,
+,\x00\x1E,MGG0030,String字符串（变长）,,SC_UPDATE_USER,最后变更人编码,,200,,
+,\x00\x1F,MGG0031,String字符串（变长）,,ST_UPDATE_USER,最后变更人姓名,,200,,
+,\x00\x20,MGG0032,String字符串（变长）,,SC_PAT_DEPT,患者所在科室代码,,200,,
+,\x00\x21,MGG0033,String字符串（变长）,,ST_PAT_DEPT,患者所在科室名称,,200,,
+,\x00\x22,MGG0034,String字符串（变长）,,PAT_CURR_BED,患者所在床位,,200,,
+,\x00\x24,MGG0036,String字符串（变长）,,SC_PHARMACY,药房ID,,200,是,是
+,\x00\x25,MGG0037,String字符串（变长）,,ST_PHARMACY,药房名称,,200,,
+,\x00\x26,MGG0038,String字符串（变长）,,REMARKS,备注,,4000,,
+,\x00\x27,MGG0039,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

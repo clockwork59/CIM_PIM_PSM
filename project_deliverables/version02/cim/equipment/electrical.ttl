@@ -1,0 +1,71 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+
+<https://cim.medical/ontology/v3.4/equipment/electrical>
+    a owl:Ontology ;
+    rdfs:label "CIM Electrical Equipment Module"@en ;
+    rdfs:comment "Electrical distribution and power equipment."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> .
+
+cim-equip:Electrical_Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Electrical Equipment"@en ;
+    rdfs:label "电气设备"@zh-CN ;
+    rdfs:comment "电力系统和电气设备的基类"@zh-CN ;
+    cim:sourceAgent "Agent-03" .
+
+cim-equip:Transformer
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Transformer"@en ;
+    rdfs:label "电力变压器"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "建筑用高低压变压器"@zh-CN .
+
+cim-equip:Circuit_Breaker
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Circuit Breaker"@en ;
+    rdfs:label "断路器"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "用于电路保护，可在故障时自动切断电流"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-equip:Distribution_Panel
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Distribution Panel"@en ;
+    rdfs:label "配电盘"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "用于电能分配和控制"@zh-CN ;
+    cim:reliabilityLevel "CRITICAL"^^xsd:string .
+
+cim-equip:UPS
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Uninterruptible Power Supply"@en ;
+    rdfs:label "不间断电源"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "为关键负荷提供备用电源"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-equip:Generator
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Emergency Generator"@en ;
+    rdfs:label "应急发电机"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "柴油应急发电机，用于一级负荷备用"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+# ============================================================================
+# END OF ELECTRICAL EQUIPMENT MODULE
+# ============================================================================

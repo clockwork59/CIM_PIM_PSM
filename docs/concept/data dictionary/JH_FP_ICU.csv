@@ -1,0 +1,28 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_FP_ICU,表全名,JHPDL:JH_FP_ICU,,,,,,
+,表说明,首页重症监护记录（编目后）,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,IFI,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,IFI0001,String字符串（变长）,,ICU_RECORD_SN,重症记录唯一号,首页重症监护记录（编目后），系统生成二级编码，如“FI0.000.000.001”,20,是,是
+,\x00\x02,IFI0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,IFI0003,String字符串（变长）,,FIRST_PAGE_SN,住院病案首页编号,住院病案首页编号，来源JH_FIRST_PAGE的IFP0001,20,是,是
+,\x00\x04,IFI0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x06,IFI0006,String字符串（变长）,,ICU_PAT_NO,病人ID,,200,,
+,\x00\x07,IFI0007,String字符串（变长）,,ICU_PAT_NAME,病人姓名,,200,,
+,\x00\x0C,IFI0012,简化字典（Integer整型，4个字节）,379,SD_ICU_DEPT_FLAG,是否进入重症室,,10,,
+,\x00\x0A,IFI0010,String字符串（变长）,,SC_ICU_DEPT,重症监护科室编码,,200,,
+,\x00\x0B,IFI0011,String字符串（变长）,,ST_ICU_DEPT,重症监护科室名称,,200,,
+,\x00\x08,IFI0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ICU_ADMISSION_TIME,进入重症时间,,30,,
+,\x00\x09,IFI0009,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ICU_DISCHARGE_TIME,出重症时间,,30,,
+,\x00\x0D,IFI0013,Short短整型（2个字节）,,ICU_DAYS,ICU天数,,6,,
+,\x00\x0E,IFI0014,Short短整型（2个字节）,,CCU_DAYS,CCU天数,,6,,
+,\x00\x05,IFI0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x0F,IFI0015,String字符串（变长）,,SC_NURSE_LV,护理级别编码,护理级别编码,200,,
+,\x00\x10,IFI0016,String字符串（变长）,,ST_NURSE_LV,护理级别名称,护理级别名称,200,,
+,\x00\x11,IFI0017,简化字典（Integer整型，4个字节）,419,SD_NURSE_LV,中台护理级别标准编码,中台护理级别标准编码,,,
+,\x00\x12,IFI0018,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x13,IFI0019,String字符串（变长）,,CATALOG_MARK,编目标识,编目标识,200,,
+,\x00\x14,IFI0020,String字符串（变长）,,MEDICAL_STATE,病案状态,病案状态,200,,

@@ -1,0 +1,262 @@
+# 医疗建筑技术系统拓扑建模规范
+# Agent-01: 系统拓扑建模规范定义
+
+# 通用拓扑建模规范
+topology_modeling_specifications:
+  # 节点类型定义
+  node_types:
+    SOURCE:
+      description: "源节点 - 系统的能量/介质产生源"
+      characteristics:
+        - "有输入无输出，或输入为外部主供能"
+        - "通常是主要能耗设备"
+        - "决定系统容量规格"
+      examples:
+        - "冷水机组源节点"
+        - "锅炉源节点"
+        - "变压器源节点"
+        - "发电机源节点"
+      properties:
+        capacity: "额定容量参数"
+        efficiency: "源效率"
+        input_type: "输入能量/介质类型"
+        output_type: "输出能量/介质类型"
+
+    DISTRIBUTION:
+      description: "分配节点 - 能量/介质的分配与传输"
+      characteristics:
+        - "有输入也有输出"
+        - "负责能量/介质的分配调节"
+        - "承担输配功能"
+      examples:
+        - "冷冻水分水器"
+        - "配电柜"
+        - "气体分气缸"
+        - "水管分支点"
+      properties:
+        distribution_ratio: "分流比例"
+        pressure_loss: "输送阻力"
+        flow_rate: "分配流量"
+        efficiency: "输配效率"
+
+    SINK:
+      description: "汇节点 - 能量/介质的最终使用点"
+      characteristics:
+        - "有输入无输出，或输出为返程循环"
+        - "是系统的服务终端"
+        - "表征负荷特性"
+      examples:
+        - "空调末端"
+        - "照明灯具"
+        - "医疗设备终端"
+        - "用水终端"
+      properties:
+        load_type: "负荷类型"
+        demand_profile: "需求规律"
+        utilization_rate: "使用率"
+        comfort/requirement: "舒适度/需求标准"
+
+  # 边类型定义
+  edge_types:
+    TRUNK:
+      description: "主干边 - 主要输配路径，大容量高压"
+      characteristics:
+        - "连接源节点和分配节点"
+        - "承载主要输配流量"
+        - "冗余设计，可靠性高"
+      properties:
+        capacity: "传输容量"
+        pressure: "工作压力/电压等级"
+        material: "传输介质/导体材质"
+        redundancy: "冗余配置"
+        isolation: "隔离阀门/开关配置"
+
+    BRANCH:
+      description: "分支边 - 次级输配路径，中等容量中等压力"
+      characteristics:
+        - "连接分配节点之间"
+        - "实现分区供配"
+        - "可带调节控制功能"
+      properties:
+        capacity: "分支容量"
+        pressure: "分支压力/电压等级"
+        control_type: "调节控制类型"
+        measurement: "监测方式"
+        valve_type: "阀门/开关类型"
+
+    TERMINAL:
+      description: "终端边 - 最终连接用能终端"
+      characteristics:
+        - "连接分配节点到汇节点"
+        - "表征末端使用特性"
+        - "包含用户调节界面"
+      properties:
+        terminal_type: "终端连接类型"
+        user_interface: "用户调节界面类型"
+        flow_control: "流量/功率调节方式"
+        measurement: "用能计量"
+        access: "维护接口"
+
+  # 系统边界定义
+  system_boundary_definition:
+    input_boundary:
+      description: "系统输入边界"
+      types:
+        - "外部能源供应接口"
+        - "上级输配接口"
+        - "邻接系统接口"
+      characteristics:
+        - "定义系统对外部环境的依赖"
+        - "确定输入参数规格"
+        - "设置测量监控点"
+
+    output_boundary:
+      description: "系统输出边界"
+      types:
+        - "向用户侧供能接口"
+        - "向邻接系统供能接口"
+        - "上级返网接口"
+      characteristics:
+        - "定义系统服务能力"
+        - "确定服务质量标准"
+        - "设置计量监控点"
+
+    control_boundary:
+      description: "控制系统边界"
+      characteristics:
+        - "确定自动控制范围"
+        - "定义对外接口关系"
+        - "设置数据交换点"
+
+  # 流动路径定义
+  flow_path_definitions:
+    supply_path:
+      description: "供能/介质路径"
+      direction: "源节点 → 分配节点 → 汇节点"
+      characteristics:
+        - "正向能量/介质传输"
+        - "从高温/高压向低温/低压"
+        - "包含主要控制节点"
+
+    return_path:
+      description: "返流/循环路径"
+      direction: "汇节点 → 分配节点 → 源节点"
+      characteristics:
+        - "逆方向或循环"
+        - "表征系统闭环特性"
+        - "包含回程调节控制"
+
+    bypass_path:
+      description: "旁通路径"
+      direction: "分配节点 → 分配节点"
+      characteristics:
+        - "应急工况下的输配"
+        - "平衡调节功能"
+        - "节能运行模式"
+
+  # 系统间依赖关系定义
+  dependency_types:
+    POWER_SUPPLY:
+      description: "电能供应依赖"
+      criticality: "CRITICAL"
+      characteristics:
+        - "供电可靠性直接影响依赖系统运行"
+        - "电压质量和功率大小要求严格"
+        - "需要备用电源保障"
+
+    MEDIUM_SUPPLY:
+      description: "介质供应依赖"
+      criticality: "HIGH"
+      characteristics:
+        - "冷热水、蒸汽、气体等介质供应"
+        - "压力、温度、纯净度要求严格"
+        - "连续性供应要求。"
+
+    ENVIRONMENTAL_CONDITION:
+      description: "环境条件依赖"
+      criticality: "MEDIUM"
+      characteristics:
+        - "温湿度、洁净度等环境参数"
+        - "影响设备性能和寿命"
+        - "可通过其他技术手段保障"
+
+    CONTROL_SIGNAL:
+      description: "控制信号依赖"
+      criticality: "LOW"
+      characteristics:
+        - "自动化控制信号和数据"
+        - "通讯协议和网络依赖"
+        - "可降级运行"
+
+  # 建模约束和假设
+  modeling_constraints:
+    modeling_resolution:
+      description: "模型分辨率选择"
+      rules:
+        - "源设备：单机到部件级精度"
+        - "分配节点：主要分支接口"
+        - "汇节点：区域/功能分区分精度"
+        - "连接边：重点关注主设备接口"
+
+    parameter_aggregation:
+      description: "参数聚合规则"
+      rules:
+        - "同类设备可聚合为等效节点"
+        - "终端负荷按区域聚合求和"
+        - "控制模型关注主要调节性"
+        - "计量点设置在边界"
+
+    operational_state_representation:
+      description: "运行状态表示"
+      modelling_approaches:
+        - "典型工况点建模(设计工况+部分负荷工况)"
+        - "变工况参数化建模"
+        - "控制策略表法表示"
+        - "故障状态保守处理"
+
+  healthcare_specific_modeling_extensions:
+    patient_safety_layers:
+      - "生命安全系统 (Life Safety System)"
+      - "患者安全系统 (Patient Safety System)"
+      - "医疗程序保障系统 (Medical Procedure Support)"
+
+    reliability_redundancy_requirements:
+      - "医疗级可靠性要求定义"
+      - "N+1、2N等冗余配置模型"
+      - "无缝切换的备用系统设计"
+
+    infection_control_modeling:
+      - "洁净度分级模型"
+      - "气流组织建模"
+      - "交叉污染防护模型"
+
+    regulatory_compliance_checkpoints:
+      - "GB 50751 医用气体技术规范"
+      - "IEC 60364-7-710 医疗场所电气安全"
+      - "GB 50016 建筑设计防火规范"
+      - "GB/T 50314 智能建筑设计标准" 等
+
+validation_requirements:
+  model_completeness_check:
+    - "覆盖全部8大系统类别"
+    - "包含所有关键医疗特性"
+    - "识别所有系统间依赖关系"
+    - "验证各类安全等级系统"
+
+  model_consistency_check:
+    - "节点类型定义一致性"
+    - "边类型属性一致性"
+    - "拓扑结构互连正确性"
+    - "参数规格与标准符合性"
+
+  model_usability_check:
+    - "手工可读的ASCII拓扑图"
+    - "参数化的模型文件"
+    - "可自动化的验证工具"
+    - "符合MDA架构转换要求"
+
+modeling_scope_declaration:
+  included_systems: "全部8大类别26个子系统"
+  resolution_level: "设备级到部件级精度"
+  regulatory_scope: "中国医疗建筑相关规范"
+  design_stage: "CIM阶段，计算无关建模"

@@ -1,0 +1,83 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-loc:    <https://cim.medical/ontology/v3.4/location#> .
+@prefix cim-space:  <https://cim.medical/ontology/v3.4/space#> .
+
+<https://cim.medical/ontology/v3.4/coupling/equipment_location>
+    a owl:Ontology ;
+    rdfs:label "CIM Equipment-Location Coupling Module"@en ;
+    rdfs:comment "Defines relationships between equipment and spaces."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/spaces/spatial_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> .
+
+cim-loc:MEP_Room
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "MEP Room"@en ;
+    rdfs:label "机电设备用房"@zh-CN ;
+    cim:sourceAgent "Agent-05" ;
+    rdfs:comment "专门用于放置机电设备的房间"@zh-CN ;
+    skos:note "Examples: 冷冻站、热力站、变配电室、水泵房、空调机房."@zh-CN .
+
+cim-loc:Shaft
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Shaft"@en ;
+    rdfs:label "竖井"@zh-CN ;
+    cim:sourceAgent "Agent-05" ;
+    rdfs:comment "垂直方向的管线通道"@zh-CN ;
+    skos:note "Subtypes: 电气竖井、水暖竖井、通风竖井"@zh-CN .
+
+cim-loc:Ceiling_Void
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Ceiling Void"@en ;
+    rdfs:label "吊顶内"@zh-CN ;
+    cim:sourceAgent "Agent-05" ;
+    rdfs:comment "吊顶与楼板之间的空间"@zh-CN ;
+    skos:note "Typical equipment: FCU、小型AHU、管线"@zh-CN .
+
+cim-loc:Served_Space
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Served Space"@en ;
+    rdfs:label "服务空间内"@zh-CN ;
+    cim:sourceAgent "Agent-05" ;
+    rdfs:comment "直接安装在被服务空间内的设备"@zh-CN ;
+    skos:note "Typical equipment: 明装FCU、室内机、末端设备"@zh-CN .
+
+cim:locatedIn
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "located in"@en ;
+    rdfs:label "位于"@zh-CN ;
+    cim:sourceAgent "Agent-05" ;
+    rdfs:comment "设备所处空间位置"@zh-CN .
+
+cim:locationStatus
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "location status"@en ;
+    rdfs:label "位置状态"@zh-CN ;
+    cim:sourceAgent "Agent-05" ;
+    rdfs:comment "取值: Defined, TBD (用于GAP-002)"@zh-CN .
+
+cim:serves
+    a owl:ObjectProperty ;
+    rdfs:domain cim:Entity ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "serves"@en ;
+    rdfs:label "服务于"@zh-CN ;
+    rdfs:comment "功能性的服务关系"@zh-CN .
+
+# ============================================================================
+# END OF EQUIPMENT LOCATION COUPLING MODULE
+# ============================================================================

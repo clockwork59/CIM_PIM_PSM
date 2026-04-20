@@ -1,0 +1,34 @@
+{
+  "terms": [
+    {
+      "term": "源节点 (Source Node)",
+      "namespace": "cim-topo",
+      "definition": "系统能量/介质的输入端，用于表示流动的起点",
+      "source": "Agent-01 Node Types"
+    },
+    {
+      "term": "末端节点 (Sink Node)",
+      "namespace": "cim-topo",
+      "definition": "系统能量/介质的消耗端，用于表示流动的终点",
+      "source": "Agent-01 Node Types"
+    },
+    {
+      "term": "分配节点 (Distribution Node)",
+      "namespace": "cim-topo",
+      "definition": "用于分配、汇集、调节或转换的中间节点",
+      "source": "Agent-01 Node Types"
+    },
+    {
+      "term": "洁净手术室 (Clean OR)",
+      "namespace": "cim-space",
+      "definition": "具有特定洁净度等级的手术空间，用于外科手术操作",
+      "source": "Agent-02 Medical Special Spaces"
+    },
+    {
+      "term": "HEPA过滤器",
+      "namespace": "cim-equip",
+      "definition": "用于去除空气中微小颗粒的高效过滤装置，效率≥99.97%@0.3μm",
+      "source": "Agent-03 + Agent-02"
+    }
+  ]
+}

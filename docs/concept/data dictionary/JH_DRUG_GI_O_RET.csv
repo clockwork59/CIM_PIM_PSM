@@ -1,0 +1,31 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_GI_O_RET,表全名,JHPDL:JH_DRUG_GI_O_RET,,,,,,
+,表说明,门诊退药主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGE,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGE0001,String字符串（变长）,,DRUG_GIVE_O_RET_SN,门诊药房退药唯一号,DN0.000.000.001,20,是,是
+,\x00\x02,MGE0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MGE0003,String字符串（变长）,,DRUG_GIVE_O_SN,门诊药房发药唯一号,,20,是,是
+,\x00\x05,MGE0005,String字符串（变长）,,PHA_RET_NO,门诊药房退药单号,,200,是,是
+,\x00\x06,MGE0006,String字符串（变长）,,PHA_RET_NO_PRE,门诊药房退药父单号,一个退药单只退其中一部分产生新的退药单号,200,是,是
+,\x00\x09,MGE0009,String字符串（变长）,,PHA_SEND_NO,关联业务发药单号,,200,是,是
+,\x00\x0A,MGE0010,String字符串（变长）,,RECEIPT_SN_OLD,原交易流水号,,200,,
+,\x00\x0B,MGE0011,String字符串（变长）,,RECEIPT_SN_NEW,新交易流水号,,200,,
+,\x00\x0C,MGE0012,String字符串（变长）,,INVOICE_CODE_OLD,原发票号,,200,,
+,\x00\x0D,MGE0013,String字符串（变长）,,INVOICE_CODE_NEW,新发票号,,200,,
+,\x00\x07,MGE0007,String字符串（变长）,,HIS_PAT_ID,患者ID,,200,是,是
+,\x00\x08,MGE0008,String字符串（变长）,,HIS_VIS_ID,就诊ID,,200,是,是
+,\x00\x0E,MGE0014,String字符串（变长）,,SC_RET_OPERA,退药人编号,,200,,
+,\x00\x0F,MGE0015,String字符串（变长）,,ST_RET_NAME,退药人姓名,,200,,
+,\x00\x14,MGE0020,String字符串（变长）,,SC_RET_TYPE,退药类型编码,,200,是,是
+,\x00\x15,MGE0021,String字符串（变长）,,ST_RET_TYPE,退药类型描述,全退、部分退,500,,
+,\x00\x10,MGE0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_TIME,退药时间,,31,是,是
+,\x00\x11,MGE0017,String字符串（变长）,,SC_GROUP,药房编码,,200,是,是
+,\x00\x12,MGE0018,String字符串（变长）,,ST_GROUP,药房名称,,200,,
+,\x00\x13,MGE0019,String字符串（变长）,,WINDOWS_SN,窗口,,200,,
+,\x00\x04,MGE0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x16,MGE0022,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x17,MGE0023,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

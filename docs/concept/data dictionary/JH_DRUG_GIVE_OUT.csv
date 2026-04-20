@@ -1,0 +1,43 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_GIVE_OUT,表全名,JHPDL:JH_DRUG_GIVE_OUT,,,,,,
+,表说明,门诊发药主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGO,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGO0001,String字符串（变长）,,DRUG_GIVE_O_SN,门诊药房发药唯一号,内部三级编码DJ0.000.000.001,20,是,是
+,\x00\x02,MGO0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x06,MGO0006,String字符串（变长）,,PHA_SEND_NO_PAR,门诊药房发药父单号,一个药单只发其中一部分药品，剩余未发药品自动生成新的药单号,200,是,是
+,\x00\x05,MGO0005,String字符串（变长）,,PHA_SEND_NO,门诊药房发药单号,,200,是,是
+,\x00\x09,MGO0009,String字符串（变长）,,PRESCRIPTION_SN,处方号,,200,是,是
+,\x00\x17,MGO0023,String字符串（变长）,,RECEIPT_SN,交易流水号,,200,,
+,\x00\x18,MGO0024,String字符串（变长）,,INVOICE_CODE,发票编号,,200,,
+,\x00\x07,MGO0007,String字符串（变长）,,HIS_PAT_ID,患者ID,,100,是,是
+,\x00\x08,MGO0008,String字符串（变长）,,HIS_VIS_ID,就诊ID,,100,是,是
+,\x00\x0A,MGO0010,String字符串（变长）,,SC_DOCTOR,开单医生编号,,200,,
+,\x00\x0B,MGO0011,String字符串（变长）,,ST_DOCTOR,开单医生姓名,,200,,
+,\x00\x0C,MGO0012,String字符串（变长）,,SC_APPLY_DEPT,开单科室编码,,200,,
+,\x00\x0D,MGO0013,String字符串（变长）,,ST_APPLY_DEPT,开单科室名称,,200,,
+,\x00\x0E,MGO0014,String字符串（变长）,,SC_DISPENSINF,配药人编号,,200,,
+,\x00\x0F,MGO0015,String字符串（变长）,,ST_DISPENSINF,配药人姓名,,200,,
+,\x00\x10,MGO0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DISPENSINF_TIME,配药时间,,31,,
+,\x00\x11,MGO0017,String字符串（变长）,,SC_CONFIRM,发药人编号,,200,,
+,\x00\x12,MGO0018,String字符串（变长）,,ST_CONFIRM,发药人姓名,,200,,
+,\x00\x13,MGO0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CONFIRM_TIME,发药时间,,31,是,是
+,\x00\x19,MGO0025,String字符串（变长）,,SC_STATUS,发药状态编码,,200,,
+,\x00\x1A,MGO0026,String字符串（变长）,,ST_STATUS,发药状态描述,,500,,
+,\x00\x1B,MGO0027,String字符串（变长）,,SC_SEND_CHK_USER,审核药师编码,药房发药之前需要先进行审核,100,,
+,\x00\x1C,MGO0028,String字符串（变长）,,ST_SEND_CHK_USER,审核药师姓名,,100,,
+,\x00\x1D,MGO0029,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PHA_SEND_CHK_TIME,审核时间,药师审核时间,,,
+,\x00\x14,MGO0020,String字符串（变长）,,SC_GROUP,药房编码,,200,是,是
+,\x00\x15,MGO0021,String字符串（变长）,,ST_GROUP,药房名称,,200,,
+,\x00\x16,MGO0022,String字符串（变长）,,WINDOWS_SN,窗口,,200,,
+,\x00\x04,MGO0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x03,MGO0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x20,MGO0032,String字符串（变长）,,BED_NO,床号,,20,,
+,\x00\x21,MGO0033,String字符串（变长）,,SC_SEND_DEPT,发往科室编码,,200,,
+,\x00\x22,MGO0034,String字符串（变长）,,ST_SEND_DEPT,发往科室名称,,200,,
+,\x00\x23,MGO0035,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x1E,MGO0030,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DISPENSINF_START,配药开始时间,配药开始时间,,,
+,\x00\x1F,MGO0031,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DISPENSINF_END,配药结束时间,配药结束时间,,,

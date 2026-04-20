@@ -1,0 +1,455 @@
+# Agent-07: 分户分项建模体系详
+# Sub-metering and Itemized Modeling System
+
+organizational_hierarchy = {
+    "hospital_campus_level": {
+        "level_name": "院区级",
+        "code_prefix": "HCP",
+        "campus_structure": {
+            "campus_01_main": {
+                "code": "HCP01",
+                "name": "总医院院区主园区",
+                "campus_id": "CAMPUS_001",
+                "total_area": "185000㎡",
+                "building_count": 12,
+                "energy_characteristics": {
+                    "peak_electrical_load": "8500kW",
+                    "annual_electricity_consumption": "42GWh",
+                    "water_consumption": "850,000m³/year",
+                    "thermal_energy": "18000GJ/year"
+                }
+            },
+            "campus_02_north": {
+                "code": "HCP02",
+                "name": "北院区（传染病房区）",
+                "campus_id": "CAMPUS_002",
+                "total_area": "28000㎡",
+                "building_count": 4,
+                "isolation_requirements": "负压病房独立空调系统",
+                "energy_characteristics": {
+                    "24h_continuous_operation": True,
+                    "high_fresh_air_ratio": "8-12 ACH",
+                    "special_ventilation_energy": "+45%额外能耗"
+                }
+            },
+            "campus_03_emergency": {
+                "code": "HCP03",
+                "name": "应急医疗中心院区",
+                "campus_id": "CAMPUS_003",
+                "total_area": "15000㎡",
+                "building_count": 2,
+                "redundancy_requirements": "N+1备用电源配置"
+            }
+        }
+    },
+
+    "building_level": {
+        "level_name": "建筑级",
+        "code_prefix": "BLD",
+        "building_categories": {
+            "outpatient_comprehensive_building": {
+                "code": "BLD_01",
+                "name": "门诊综合楼",
+                "building_id": "BUILDING_001",
+                "floors": 15,
+                "total_area": "45000㎡",
+                "functional_zones": {
+                    "basement_levels": {
+                        "B1": "停车场 + 设备用房",
+                        "B2": "战时人防 + 医疗库房"
+                    },
+                    "low_zones": {
+                        "L1-L3": "门诊大厅 + 急诊科 + 药房",
+                        "L4-L7": "专科门诊区 + 检验科"
+                    },
+                    "high_zones": {
+                        "L8-L12": "行政办公 + 会议中心",
+                        "L13-L15": "信息中心 + 档案室"
+                    },
+                    "roof_level": "空调设备 + 电梯机房 + 太阳能板"
+                },
+                "energy_systems": {
+                    "hvac_zones": 8,
+                    "elevator_groups": 6,
+                    "lighting_control_zones": 24,
+                    "medical_equipment_feeders": 18
+                }
+            },
+
+            "inpatient_building_A": {
+                "code": "BLD_02",
+                "name": "住院楼A座",
+                "building_id": "BUILDING_002",
+                "floors": 22,
+                "total_area": "52000㎡",
+                "ward_structure": {
+                    "standard_wards": {
+                        "floors_3_to_20": "每层2个护理单元",
+                        "beds_per_unit": 45,
+                        "private_vs_multi_rooms": "30%单间 + 70%双/三人间"
+                    },
+                    "special_wards": {
+                        "floor_21": "ICU重症监护（30床位）",
+                        "floor_22": "CCU心脏监护（24床位）",
+                        "isolation_wards": "负压隔离病房（8间）"
+                    }
+                },
+                "critical_systems": {
+                    "medical_gas_systems": "氧气+压缩空气+真空吸引",
+                    "emergency_power_system": "三级负荷分级供电",
+                    "nurse_call_system": "医护对讲系统24小时监控",
+                    "patient_monitoring": "楼宇设备监控系统"
+                }
+            },
+
+            "medical_technology_building": {
+                "code": "BLD_03",
+                "name": "医技楼",
+                "building_id": "BUILDING_003",
+                "floors": 8,
+                "total_area": "28000㎡",
+                "high_energy_equipment": {
+                    "radiology_department": {
+                        "CT_scanners": 4, "MRI_machines": 2, "DSA_systems": 2,
+                        "digital_X_ray": 6, "mammography": 2, "PACS_system": 1
+                    },
+                    "nuclear_medicine": {
+                        "PET_CT": 1, "SPECT_CT": 1, "radiopharmacy_lab": 1
+                    },
+                    "radiation_therapy": {
+                        "linear_accelerator": 2, "treatment_planning": 1
+                    }
+                }
+            },
+
+            "supporting_facilities": {
+                "cogeneration_plant": {
+                    "code": "BLD_09",
+                    "name": "能源中心（冷热电三联供）",
+                    "capacity": "4×2MW天然气发电机组 + 3×2800kW离心式制冷机",
+                    "efficiency": "85%综合能源利用效率",
+                    "waste_heat_recovery": "烟气余热+缸套冷却水余热"
+                },
+                "central_sterile_supply": {
+                    "code": "BLD_10",
+                    "name": "消毒供应中心",
+                    "large_equipment": "4台大型蒸汽灭菌器 + 2台环氧乙烷灭菌器",
+                    "energy_consumption": "高压蒸汽2.5t/h + 压缩空气120m³/h"
+                }
+            }
+        }
+    },
+
+    "department_ward_level": {
+        "level_name": "科室/病区级",
+        "code_prefix": "DEPT",
+        "departmental_structure": {
+            "clinical_departments": {
+                "internal_medicine_cluster": {
+                    "cardiology": {
+                        "code": "DEPT_0101", "area": "1200㎡", "beds": 45, "staff": 85,
+                        "energy_intensity": "450kWh/㎡·年", "lighting_level": "300lux",
+                        "special_requirements": "心电监护设备24小时运行、除颤设备不间断电源"
+                    },
+                    "respiratory": {
+                        "code": "DEPT_0102", "area": "800㎡", "beds": 35, "staff": 65,
+                        "energy_intensity": "380kWh/㎡·年", "ventilation_rate": "8ACH",
+                        "special_requirements": "隔离病房负压控制、氧气管道集中供应"
+                    },
+                    "neurology": {
+                        "code": "DEPT_0103", "area": "900㎡", "beds": 40, "staff": 72,
+                        "energy_intensity": "420kWh/㎡·年", "equipment_power": "EEG脑电图+EMG肌电图设备"
+                    }
+                },
+
+                "surgical_clusters": {
+                    "general_surgery": {
+                        "code": "DEPT_0201", "area": "1500㎡", "OR_rooms": 8, "staff": 120,
+                        "energy_intensity": "550kWh/㎡·年", "lighting_level": "1000lux（手术室）",
+                        "HVAC_requirements": "层流净化空调系统、正压控制"
+                    },
+                    "orthopedics": {
+                        "code": "DEPT_0202", "area": "600㎡", "OR_rooms": 3, "staff": 45,
+                        "energy_intensity": "480kWh/㎡·年", "special_equipment": "C臂X光机动力系统"
+                    },
+                    "cardiovascular_surgery": {
+                        "code": "DEPT_0203", "area": "800㎡", "OR_rooms": 2, "staff": 65,
+                        "energy_intensity": "600kWh/㎡·年", "critical_systems": "体外循环机+主动脉球囊反搏装置"
+                    }
+                },
+
+                "emergency_and_critical_care": {
+                    "emergency_department": {
+                        "code": "DEPT_0301", "area": "2000㎡", "treatment_rooms": 24, "staff": 180,
+                        "energy_intensity": "520kWh/㎡·年", "24_7_operation": True,
+                        "redundant_systems": "双路供电+UPS+柴油发电机"
+                    },
+                    "ICU": {
+                        "code": "DEPT_0302", "area": "1800㎡", "ICU_beds": 24, "staff": 150,
+                        "energy_intensity": "680kWh/㎡·年", "equipment_density": "床均设备功率8kW",
+                        "environmental_control": "恒温恒湿（22±1°C, 55±5%RH）"
+                    },
+                    "NICU_pediatric": {
+                        "code": "DEPT_0303", "area": "600㎡", "NICU_beds": 12, "staff": 48,
+                        "energy_intensity": "720kWh/㎡·年", "special_equipment": "婴儿培养箱+监护设备"
+                    }
+                }
+            },
+
+            "medical_technology_departments": {
+                "radiology": {
+                    "code": "DEPT_1001", "area": "2500㎡", "staff": 45,
+                    "high_power_equipment": {
+                        "CT_scanners": {"quantity": 4, "power_per_unit": "150kW", "duty_cycle": "0.15"},
+                        "MRI_systems": {"quantity": 2, "power_per_unit": "200kW", "cooling_load": "80kW"},
+                        "DSA_rooms": {"quantity": 2, "power_per_unit": "120kW", "instantaneous_power": "80kW"}
+                    },
+                    "HVAC_special": "机房专用精密空调系统",
+                    "energy_intensity": "750kWh/㎡·年"
+                },
+
+                "laboratory_medicine": {
+                    "code": "DEPT_1002", "area": "1200㎡", "staff": 85,
+                    "equipment_categories": {
+                        "biochemical_analyzers": {"quantity": 8, "power_range": "2-8kW", "24h_operation": True},
+                        "hematology_analyzers": {"quantity": 6, "power_range": "1-3kW", "continuous": True},
+                        "microbiology_equipment": {"quantity": 12, "power_range": "0.5-2kW", "incubation_periods": "24-48h"}
+                    },
+                    "energy_intensity": "590kWh/㎡·年",
+                    "environmental_requirements": "温度20±2°C, 湿度50±10%RH"
+                },
+
+                "pharmacy": {
+                    "code": "DEPT_1003", "area": "800㎡", "staff": 35,
+                    "special_storage": {
+                        "cold_chain": {"temperature": "2-8°C", "monitored_capacity": "500m³", "backup_power": "24h"},
+                        "controlled_drugs": {"controlled_environment": True, "security_systems": "双路供电"},
+                        "IV_compounding": {"clean_room_grade": "B+A级", "ISO_classification": "ISO 7+ISO 5"}
+                    },
+                    "energy_intensity": "470kWh/㎡·年"
+                }
+            },
+
+            "administrative_support_departments": {
+                "administration": {
+                    "code": "DEPT_2001", "area": "2500㎡", "staff": 180,
+                    "functional_zones": {
+                        "executive_offices": {"area": "400㎡", "lighting_level": "300lux", "occupancy_hours": "8h×5d"},
+                        "departmental_offices": {"area": "1800㎡", "lighting_level": "200lux", "occupancy_hours": "8h×5d"},
+                        "meeting_rooms": {"area": "300㎡", "lighting_level": "500lux", "usage_pattern": "按需开启"}
+                    },
+                    "energy_intensity": "180kWh/㎡·年"
+                },
+
+                "information_technology": {
+                    "code": "DEPT_2002", "area": "800㎡", "staff": 45,
+                    "critical_infrastructure": {
+                        "data_center": {"area": "400㎡", "power_density": "2kW/m²", "tier_level": "Tier III"},
+                        "UPS_systems": {"capacity": "500kVA", "redundancy": "N+1", "autonomy_time": "15min"},
+                        "server_rooms": {"cooling_load": "320kW", "precision_air_conditioning": True},
+                        "network_equipment": {"continuous_power": "45kW", "backup_autonomy": "4h"}
+                    },
+                    "energy_intensity": "890kWh/㎡·年"
+                },
+
+                "facilities_management": {
+                    "code": "DEPT_2003", "area": "2000㎡", "staff": 120,
+                    "maintenance_workshops": {
+                        "mechanical_workshop": {"power_requirement": "45kW", "3_phase_supply": "380V"},
+                        "electrical_workshop": {"testing_equipment": "25kW", "calibration_tools": "10kW"},
+                        "biomedical_engineering": {"medical_device_testing": "35kW", "quality_assurance": "15kW"}
+                    },
+                    "energy_intensity": "320kWh/㎡·年"
+                }
+            }
+        }
+    },
+
+    "energy_use_categories": {
+        "HVAC_SYSTEM": {
+            "category_code": "HVAC",
+            "category_name": "暖通空调系统",
+            "system_breakdown": {
+                "central_cooling_plant": {
+                    "code": "HVAC_CC", "equipment_list": [
+                        "离心式冷水机组1800RT×3台",
+                        "螺杆式冷水机组500RT×2台",
+                        "冷冻水泵（75kW×6台）",
+                        "冷却水泵（90kW×6台）",
+                        "冷却塔（22kW×8组）"
+                    ],
+                    "metering_points": {
+                        "chiller_power": "每台主机独立计量",
+                        "pump_power": "冷冻泵、冷却泵分组计量",
+                        "cooling_tower": "冷却塔总功率和分组计量",
+                        "auxiliary_equipment": "配套设备集中计量"
+                    },
+                    "energy_allocation_rules": {
+                        "primary_chiller_allocation": "按各区域冷量表读数比例分摊",
+                        "auxiliary_equipment_allocation": "按建筑面积或设计负荷分配",
+                        "efficiency_monitoring": "COP=制冷量/总能耗"
+                    }
+                },
+
+                "air_distribution_systems": {
+                    "code": "HVAC_AH", "zones": {
+                        "zone_1_clinical": {"area_served": "门诊区", "ahu_count": 8, "total_fan_power": "240kW"},
+                        "zone_2_inpatient": {"area_served": "住院区", "ahu_count": 12, "total_fan_power": "180kW"},
+                        "zone_3_medical_tech": {"area_served": "医技区", "ahu_count": 6, "total_fan_power": "95kW"},
+                        "zone_4_administration": {"area_served": "行政区", "ahu_count": 4, "total_fan_power": "45kW"}
+                    },
+                    "metering_strategy": {
+                        "major_ahu_meters": "每栋主楼AHU总功率计量",
+                        "zone_submeters": "各分区AHU分组计量",
+                        "floor_level_meters": "楼层新风机组分项计量"
+                    }
+                },
+
+                "terminal_units": {
+                    "code": "HVAC_TE", "categories": [
+                        "风机盘管机组（3200台）",
+                        "新风处理机组（120台）",
+                        "变风量末端（450套）",
+                        "辐射吊顶系统（病房屋顶）"
+                    ],
+                    "metering_approach": "抽样计量+估算模型"
+                }
+            }
+        },
+
+        "LIGHTING_SYSTEM": {
+            "category_code": "LIGHT",
+            "category_name": "照明系统",
+            "lighting_categories": {
+                "general_lighting": {
+                    "application_areas": [
+                        "门诊大厅", "候诊区", "走廊通道", "楼梯间",
+                        "普通办公室", "会议室", "休息区"
+                    ],
+                    "lighting_standards": {"illuminance": "200-300lux", "uniformity": "≥0.4", "glare_rating": "UGR≤22"},
+                    "control_strategies": ["自然光感应控制", "时间段控制", "人体感应控制"]
+                },
+
+                "medical_lighting": {
+                    "critical_areas": [
+                        "手术室（150,000lux）", "ICU（750lux）", "急诊科（500lux）",
+                        "检验科（500lux）", "病理科（1000lux）", "放射科（300lux）"
+                    ],
+                    "special_requirements": ["无影照明", "可调光控制", "应急照明备份", "特殊色温要求"],
+                    "metering_points": ["手术照明专用回路", "医疗检查专用照明", "一般照明分别计量"]
+                },
+
+                "exterior_lighting": {
+                    "areas": ["院区道路", "停车场", "景观照明", "建筑外立面", "安全照明"],
+                    "control_methods": ["光控+时控", "远程集中控制", "分区独立控制"],
+                    "operating_schedule": "日落后自动开启，日落后延30min自动关闭"
+                }
+            },
+            "metering_hierarchy": {
+                "building_level_metering": "每栋建筑照明总表",
+                "floor_level_metering": "楼层照明分配电箱",
+                "zone_level_metering": "功能区照明独立计量",
+                "special_circuit_metering": "特殊照明回路单独计量"
+            }
+        },
+
+        "POWER_SYSTEM": {
+            "category_code": "POWER",
+            "category_name": "动力系统",
+            "system_classifications": {
+                "vertical_transportation": {
+                    "elevators_systems": {
+                        "passenger_elevators": {"quantity": 16, "power_per_unit": "22kW", "duty_cycle": "0.3"},
+                        "service_elevators": {"quantity": 6, "power_per_unit": "18kW", "duty_cycle": "0.2"},
+                        "bed_elevators": {"quantity": 6, "power_per_unit": "15kW", "duty_cycle": "0.4"},
+                        "freight_elevators": {"quantity": 4, "power_per_unit": "30kW", "duty_cycle": "0.15"}
+                    },
+                    "escalators": {"quantity": 4, "power_per_unit": "11kW", "operating_hours": "14h/day"},
+                    "metering_strategy": "每台设备独立计量 + 群组总计量"
+                },
+
+                "water_supply_systems": {
+                    "domestic_water_pumps": {
+                        "variable_frequency_pumps": {"power": "15kW×4台", "control_method": "恒压变频"},
+                        "constant_pressure_tanks": {"capacity": "50m³×3个", "pressure_range": "0.35-0.45MPa"}
+                    },
+                    "hot_water_circulation": {
+                        "heat_pump_water_heaters": {"power": "20kW×6台", "cop": "4.2"},
+                        "circulation_pumps": {"power": "4kW×8台", "24h_operation": True}
+                    },
+                    "medical_gas_systems": {
+                        "medical_air_compressors": {"power": "30kW×3台", "capacity": "6m³/min"},
+                        "vacuum_pumps": {"power": "15kW×3台", "vacuum_level": "-0.07MPa"}
+                    },
+                    "metering_method": "按系统分组计量"
+                },
+
+                "fire_protection_systems": {
+                    "fire_pumps": {"sprinkler_pumps": "75kW×3台", "fire_hydrant_pumps": "55kW×3台"},
+                    "smoke_control_systems": {
+                        "smoke_exhaust_fans": {"power": "11kW×12台", "runtime": "火灾时运行"},
+                        "pressurization_fans": {"power": "7.5kW×8台", "stairwell_pressurization": True}
+                    },
+                    "metering_considerations": "火灾时功率不计入能耗分摊，平时巡检功率需计量"
+                }
+            }
+        },
+
+        "SPECIAL_SYSTEM": {
+            "category_code": "SPECIAL",
+            "category_name": "特殊用电",
+            "specialized_systems": {
+                "data_center_infrastructure": {
+                    "server_equipment": {"power_density": "2kW/m²", "redundancy_level": "N+1"},
+                    "cooling_systems": {
+                        "precision_air_conditioning": {"power": "320kW", "redundancy": "2N"},
+                        "UPS_systems": {"capacity": "500kVA", "efficiency": "96%", "battery_backup": "15min"}
+                    },
+                    "metering_comprehensive": "设备功率、制冷功率、UPS损耗分别计量"
+                },
+
+                "medical_research_facilities": {
+                    "laboratory_equipment": {
+                        "fume_hoods": {"power": "5kW×24台", "24h_exhaust": "是"},
+                        "autoclaves": {"power": "18kW×8台", "duty_cycle": "0.2"},
+                        "centrifuges": {"power": "3kW×12台", "intermittent_operation": True}
+                    },
+                    "environmental_control": {
+                        "clean_room_systems": {"classification": "ISO7+ISO8", "power": "180kW"},
+                        "specialized_storage": {"ultra_low_freezers": "-86°C", "power": "4kW×6台"}
+                    }
+                },
+
+                "security_and_communication": {
+                    "security_cameras": {"quantity": 450, "power_per_unit": "25W", "24h_operation": True},
+                    "access_control_systems": {"power": "15kW", "coverage": "全院门禁系统"},
+                    "public_address_systems": {"power": "8kW", "emergency_operation": True}
+                }
+            }
+        },
+
+        "LIFE_SAFETY_SYSTEM": {
+            "category_code": "LIFESAFE",
+            "category_name": "生命安全系统",
+            "critical_systems": {
+                "emergency_power_systems": {
+                    "diesel_generators": {"capacity": "1600kW×3台", "startup_time": "≤15s", "fuel_capacity": "8h"},
+                    "emergency_distribution": {"power": "自动切换ATS", "legal_requirements": "符合JGJ16-2008"},
+                    "emergency_lighting": {"power": "35kW", "duration": "≥90min", "coverage": "全部疏散通道"}
+                },
+
+                "critical_life_support": {
+                    "ICU_power_systems": {"redundancy": "双路+UPS+柴油发电机", "isolation": "医疗IT系统"},
+                    "operating_room_power": {"isolated_power_systems": "IPS系统", "leakage_protection": "剩余电流≤10mA"},
+                    "blood_bank_refrigeration": {"backup_power": "72h不间断", "temperature_monitoring": "连续监控"}
+                },
+
+                "fire_and_rescue": {
+                    "fire_alarm_systems": {"power": "12kW", "24h_monitoring": True},
+                    "emergency_communication": {"power": "8kW", "redundant_paths": True},
+                    "elevator_emergency_operation": {"power": "45kW", "fire_service_mode": True}
+                }
+            }
+        }
+    }
+}

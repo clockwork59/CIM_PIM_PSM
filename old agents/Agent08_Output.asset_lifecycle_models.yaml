@@ -1,0 +1,464 @@
+# 资产生命周期模型 - 医疗建筑智能运维管理
+
+# 1. 资产生命周期状态模型
+asset_lifecycle_states:
+
+  PLANNING:
+    state_code: "PLN"
+    name: "规划中"
+    description: "资产处于需求规划和技术选型阶段"
+    trigger_criteria: "提出新需求或替换需求"
+    decision_points: ["需求确认", "可行性研究", "预算批准"]
+    time_horizon: "12-36个月"
+
+    planning_activities:
+      needs_assessment: "现状评估和差距分析"
+      technical_specification: "技术规格制定"
+      cost_benefit_analysis: "成本效益分析"
+      life_cycle_cost_analysis: "全生命周期成本分析"
+      regulatory_compliance_check: "法规合规性检查"
+      risk_assessment: "风险评估"
+      supplier_prequalification: "供应商资格预审"
+
+    medical_special_considerations:
+      patient_care_impact: "对病患护理的影响评估"
+      clinical_workflow_integration: "临床工作流程集成分析"
+      safety_culture_considerations: "安全文化考量"
+      infection_control_impacts: "感染控制影响分析"
+      regulatory_approval_paths: "法规审批路径确定"
+      clinical_engineering_input: "临床工程意见"
+
+  PROCUREMENT:
+    state_code: "PCR"
+    name: "采购中"
+    description: "资产处于采购、合同、制造阶段"
+    trigger_criteria: "规划和预算批准完成"
+    decision_points: ["供应商选择", "合同签订", "技术确认"]
+    time_horizon: "6-24个月"
+
+    procurement_activities:
+      tendering_process: "招标采购程序"
+      vendor_selection: "供应商选择"
+      contract_negotiation: "合同谈判"
+      technical_clarifications: "技术澄清"
+      manufacturing_oversight: "制造监督"
+      quality_assurance: "质量保证"
+      certification_obtainment: "证书获得"
+      delivery_scheduling: "交付安排"
+
+    medical_procurement_specials:
+      clinical_validation_requirements: "临床验证要求"
+      medical_device_regulations: "医疗器械法规"
+      supplier_gmp_compliance: "供应商GMP合规"
+      clinical_trial_requirements: "临床试用要求"
+      regulatory_submission_timeline: "法规提交时间线"
+      medical_affairs_involvement: "医学事务参与"
+
+  INSTALLATION:
+    state_code: "INS"
+    name: "安装中"
+    description: "资产处于现场安装和调试阶段"
+    trigger_criteria: "设备交付到现场"
+    decision_points: ["安装完成", "测试合格", "试运行成功"]
+    time_horizon: "1-6个月"
+
+    installation_activities:
+      site_preparation: "现场准备工作"
+      physical_installation: "设备实体安装"
+      utility_connections: "公用工程连接"
+      system_integration: "系统集成"
+      initial_testing: "初步测试"
+      commissioning: "调试投运"
+      documentation_handover: "文档移渍"
+
+    medical_installation_requirements:
+      infection_control_during_installation: "安装期间感染控制"
+      patient_safety_during_installation: "安装期病人安全"
+      clinical_staff_training: "临床人员培训"
+      infection_prevention_protocols: "感染预防规程"
+      facility_readiness_verification: "设施就绪验证"
+      regulatory_pre_inspection: "法规预检查"
+
+  COMMISSIONING:
+    state_code: "COM"
+    name: "调试中"
+    description: "资产处于性能验证和最终调试阶段"
+    trigger_criteria: "安装工作基本完成"
+    decision_points: ["性能验证通过", "安全验收", "商业化运行批准"]
+    time_horizon: "2-8周"
+
+    commissioning_activities:
+      functional_testing: "功能性测试"
+      performance_testing: "性能测试"
+      safety_integrity_verification: "安全完整性验证"
+      integration_testing: "集成测试"
+      operator_training: "操作员培训"
+      procedure_finalization: "程序最终确定"
+      handover_documentation: "移交文档"
+
+    medical_commissioning_essentials:
+      clinical_validation: "临床验证"
+      patient_safety_verification: "病人安全验证"
+      infection_control_verification: "感染控制验证"
+      human_factors_evaluation: "人因工程评估"
+      regulatory_acceptance_testing: "法规验收测试"
+      healthcare_information_integration: "医疗保健信息集成"
+
+  OPERATIONAL:
+    state_code: "OPS"
+    name: "运行中"
+    description: "资产正常运行，性能满足要求"
+    trigger_criteria: "调试完成，投入商业运行"
+    decision_points: ["性能衰退", "技术落后", "维护成本过高"]
+    time_horizon: "5-25年(依设备类型而定)"
+
+    operational_activities:
+      routine_maintenance: "日常维护"
+      performance_monitoring: "性能监测"
+      efficiency_optimization: "效率优化"
+      reliability_improvement: "可靠性改进"
+      technology_upgrades: "技术升级"
+      compliance_monitoring: "合规性监控"
+
+    medical_operational_requirements:
+      continuous_patient_safety_monitoring: "连续的病人安全监测"
+      round_the_clock_operation: "24x7运行保障"
+      clinical_effectiveness_tracking: "临床有效性跟踪"
+      infection_control_maintenance: "感染控制维护"
+      medical_device_periodic_hecks: "医疗器械定期检查"
+      regulatory_audit_readiness: "法规审核准备"
+
+  MAINTENANCE:
+    state_code: "MNT"
+    name: "维护中"
+    description: "资产处于计划或非计划维护状态"
+    trigger_criteria: "进入计划维护期或发生故障"
+    decision_points: ["维护完成", "需要大修", "建议退役"]
+    time_horizon: "几小时到几个月"
+
+    maintenance_substates:
+      planned_maintenance:
+        description: "计划性维护"
+        planning_horizon: "提前数周到数月"
+        impact_management: "对运营的影哏最小化"
+
+      unplanned_maintenance:
+        description: "非计划维护"
+        response_time: "紧急响应"
+        priority_level: "根据严重程度"
+
+      overhaul_maintenance:
+        description: "大修"
+        comprehensiveness: "深度检修"
+        duration: "数周到数月"
+
+
+    medical_maintenance_specials:
+      infection_control_during_maintenance: "维护期间感染控制"
+      alternative_patient_care_capacity: "替代病人护理能力"
+      medical_device_service_standards: "医疗设备维修标准"
+      regulatory_maintenance_documentation: "法规维护文件"
+      critical_spare_parts_management: "关键备件管理"
+      maintenance_skill_competency_verification: "维护技能验证"
+
+  DEGRADED:
+    state_code: "DEG"
+    name: "性能下降"
+    description: "资产性能开始下降但仍可运行"
+    trigger_criteria: "性能指标跌破最低可接受水平"
+    decision_points: ["恢复性维护", "升级改造", "加速更换计划"]
+    time_horizon: "6个月到2年"
+
+    degradation_indicators:
+      performance_decline: "性能下降超过15%"
+      efficiency_reduction: "效率降低超过20%"
+      reliability_issues: "可靠性问题频繁"
+      maintenance_cost_increase: "维护成本显著增加"
+      unobtainable_obsolete_parts: "备件获得困难"
+
+    degraded_state_management:
+      enhanced_monitoring: "加强监测"
+      risk_mitigation: "风险缓解措施"
+      alternative_planning: "替代方案规划"
+      shortened_planning_horizon: "缩短规划周期"
+
+    medical_degradation_ramifications:
+      clinical_quality_degradation: "临床质量下降"
+      patient_safety_margin_reduction: "病人安全边界降低"
+      regulatory_compliance_challenges: "法规合规挑战"
+      infection_control_gap_emergence: "感染控制缺口显现"
+      life_cycle_extension_obstacles: "使用寿命延长障碍"
+
+  DECOMMISSIONING:
+    state_code: "DCO"
+    name: "退役中"
+    description: "资产进入退役程序"
+    trigger_criteria: "决定退役，启动退役程序"
+    decision_points: ["安全拆除", "环境清理", "更换设备投运"]
+    time_horizon: "1-12个月"
+
+    decommissioning_activities:
+      operational_transition: "运行过渡"
+      safe_shutdown: "安全停机"
+      hazardous_material_removal: "危险物质清除"
+      environmental_restoration: "环境修复"
+      documentation_finalization: "文档最终完善"
+      asset_disposal: "资产处理"
+
+    medical_decommissioning_requirements:
+      patient_care_continuity_assurance: "病人护理连续性保障"
+      infection_control_during_transition: "过渡期感染控制"
+      medical_device_mandatory_退役ocation: "医疗器械强制性退役通知"
+      regulatory_documentation_amendment: "法规文件修订"
+      healthcare_数据分析_roaming: "医疗数据迁移"
+
+  RETIRED:
+    state_code: "RET"
+    name: "已退役"
+    description: "资产完成退役，不再用于运行"
+    trigger_criteria: "退役程序完成"
+
+    retirement_completion:
+      final_documentation: "最终文档齐全"
+      asset_removal: "资产完全清除"
+      site_restoration: "现场环境恢复"
+      records_removal: "记录清除"
+      lessons_learned_captured: "经验教训总结"
+
+# 2. 关键时间节点与里程碑
+key_milestones_timeline:
+
+  planning_milestones:
+    business_case_approval: "立项批准"
+    funding_approval: "资金批准"
+    regulatory_pre_approval: "法规预批"
+    board_approval: "董事会批准"
+
+  procurement_milestones:
+    rfp_issuance: "招标文件发布"
+    vendor_selection_completion: "供应商选择完成"
+    contract_signing: "合同签订"
+    manufacturing_completion: "制造完成"
+    delivery_confirmation: "交付确认"
+
+  installation_milestones:
+    site_readiness: "现场就绪"
+    equipment_arrival: "设备到场"
+    installation_completion: "安装完成"
+    systems_connection: "系统连接完成"
+    initial_power_up: "首次上电成功"
+
+  commissioning_milestones:
+    functional_performance_verified: "功能性性能验证"
+    safety_integrity_verified: "安全完整性验证"
+    regulatory_acceptance: "法规验收通过"
+    operator_readiness: "操作员就绪"
+    commercial_operation_approval: "商业运营批准"
+
+  operational_milestones:
+    performance_acceptance_tests_passed: "性能验收测试通过"
+    first_insurance_renewal: "首次保险续期"
+    first_comprehensive_inspection: "首次全面检测"
+    mid_life_assessment: "寿命中期评估"
+    regulatory_re_certification: "法规重新认证"
+
+  maintenance_milestones:
+    first_planned_maintenance: "首次计划维护"
+    first_major_overhaul: "首次大修"
+    life_extension_decision_point: "延寿决策点"
+    technology_refresh_point: "技术刷新点"
+
+  endof_life_milestones:
+    replacement_decision: "更换决策"
+    decommissioning_approval: "退役批准"
+    replacement_project_initiation: "替代项目启动"
+    final_shutdown: "最终停机"
+    asset_removal_completion: "资产清除完成"
+
+# 3. 生命周期成本（LCC）模型
+lifecycle_cost_analysis:
+
+  cost_categories:
+    initial_investment:
+      equipment_cost: "设备成本"
+      installation_cost: "安装成本"
+      commissioning_cost: "调试成本"
+      training_cost: "培训成本"
+      documentation_cost: "文档成本"
+
+    operating_costs:
+      energy_costs: "能源成本"
+      operator_labor_costs: "操作人工劳动成本"
+      consumables_costs: "消耗品成本"
+      regulatory_costs: "法规成本"
+      insurance_costs: "保险成本"
+
+    maintenance_costs:
+      preventive_maintenance_costs: "预防性维护成本"
+      predictive_maintenance_costs: "预测性维护成本"
+      corrective_maintenance_costs: "矫正性维护成本"
+      overhaul_maintenance_costs: "大修成本"
+      spare_parts_costs: "备件成本"
+
+    decommissioning_costs:
+      dismantling_costs: "拆除成本"
+      hazardous_material_disposal_costs: "危险废物处理成本"
+      site_restoration_costs: "环境修复成本"
+      lost_production_costs: "停产损失成本"
+      regulatory_closure_costs: "法规关闭成本"
+
+  lcc_calculation_methodology:
+    net_present_value_calculation: "净现值计算"
+    discount_rate_consideration: "贴现率考虑"
+    inflation_rate_adjustment: "通胀率调整"
+    salvage_value_consideration: "残值考虑"
+    risk_adjustment: "风险调整"
+    uncertainty_quantification: "不确定性量化"
+
+  medical_facility_lcc_specials:
+    patient_care_impact_costs: "病人护理影响成本"
+    infection_control_costs: "感染控制成本"
+    regulatory_compliance_costs: "法规合规成本"
+    clinical_efficiency_impacts: "临床效率影响"
+    safety_margin_costs: "安全边界成本"
+    technology_obsolescence_risks: "技术过时风险"
+
+# 4. 资产性能评估与监控
+asset_performance_monitoring:
+
+  performance_indicators:
+    reliability_indicators:
+      mean_time_between_failures: "平均故障间隔时间"
+      availability: "可用性"
+      failure_frequency: "故障频率"
+      repair_time: "维修时间"
+      emergency_shutdowns: "紧急停机"
+
+    efficiency_indicators:
+      energy_efficiency: "能源效率"
+      thermal_efficiency: "热效率"
+      operational_efficiency: "运营效率"
+      specific_energy_consumption: "单位能耗"
+      performance_degradation_rate: "性能衰减率"
+
+    maintenance_indicators:
+      maintenance_cost_ratio: "维护成本比例"
+      planned_maintenance_completion_rate: "计划维护完成率"
+      maintenance_effectiveness: "维护有效性"
+      spare_parts_consumption: "备件消耗"
+
+    safety_indicators:
+      safety_incidents: "安全事件"
+      near_misses: "未遂事故"
+      regulatory_non_conformances: "法规不符合"
+      environmental_impacts: "环境影响"
+
+  performance_monitoring_systems:
+    real_time_monitoring: "实时监测"
+    periodic_inspections: "定期检查"
+    trend_analysis: "趋势分析"
+    benchmarking: "基准对比"
+    predictive_analytics: "预测分析"
+    diagnostic_工具: "诊断工具"
+
+  medical_performance_essentials:
+    clinical_impact_metrics: "临床影响指标"
+    patient_safety_key_performance_indicators: "病人安全关键绩效指标"
+    infection_control_performance: "感染控制绩效"
+    regulatory_compliance_tracking: "法规合规跟踪"
+    healthcare_quality_indicators: "医疗保健质量指标"
+
+# 5. 资产替换决策模型
+asset_replacement_decision_model:
+
+  replacement_triggers:
+    performance_based_triggers:
+      performance_threshold_breach: "性能阈值跌破"
+      efficiency_degradation_limit: "效率衰减限制"
+      reliability_unacceptable: "可靠性降低到不可接受"
+      maintenance_cost_unreasonable: "维护成本不合理"
+
+    technology_based_triggers:
+      technological_obsolescence: "技术过时"
+      regulatory_standard_changes: "法规标准变化"
+      incompatibility_with_new_systems: "与系统不兼容"
+      business_requirement_changes: "业务需求变化"
+
+    economic_triggers:
+      negative_lifecycle_cost_trend: "负的生命周期成本趋势"
+      high_maintenance_cost_trend: "高维护成本趋势"
+      diminishing_salvage_value: "残值递减"
+      financing_opportunity: "融资机会"
+
+    risk_based_triggers:
+      unacceptable_failure_risk: "不可接受的失效风险"
+      safety_risk_escalation: "安全风险升级"
+      environmental_risk_increase: "环境风险增加"
+      regulatory_compliance_risk: "法规合规风险"
+
+  decision_analysis_framework:
+    comparative_analysis:
+      maintain_vs_replace: "维护vs更换比较"
+      repair_vs_replace: "修复vs更换比较"
+      upgrade_vs_replace: "升级vs更换比较"
+      retrofit_vs_replace: "改造vs更换比较"
+
+    economic_evaluation:
+      net_present_value_comparison: "净现值对比"
+      internal_rate_of_return: "内部收益率"
+      payback_period_calculation: "回收期计算"
+      total_cost_of_ownership: "总拥有成本"
+
+    multi_criteria_decision_analysis:
+      analytic_hierarchy_process: "层次分析法"
+      technique_for_order_preference: "偏好顺序技术"
+      decision_matrix_analysis: "决策矩阵分析"
+      value_engineering_analysis: "价值工程分析"
+
+  medical_replacement_specifics:
+    patient_care_continuity_imperative: "病人护理连续性至关重要"
+    infection_control_transition_requirements: "感染控制转换要求"
+    regulatory_replacement_notifications: "法规更换通知"
+    clinical_validation_of_replacement: "更换的临床验证"
+    healthcare_information_system_integration: "医疗保健信息系统集成"
+    business_continuity_plan_during_replacement: "更换期间业务连续性计划"""
+
+# 6. 资产信息管理
+asset_information_management:
+
+  asset_data_structure:
+    master_data:
+      asset_identification: "资产标识"
+      asset_classification: "资产分类"
+      technical_specifications: "技术规格"
+      installation_details: "安装详情"
+      manufacturer_information: "制造商信息"
+
+    lifecycle_data:
+      specification_data: "规格数据"
+      procurement_data: "采购数据"
+      installation_data: "安装数据"
+      operational_data: "运营数据"
+      maintenance_history: "维护历史"
+      performance_data: "性能数据"
+
+    contextual_data:
+      location_data: "位置数据"
+      environmental_conditions: "环境条件"
+      utilization_data: "使用数据"
+      ownership_data: "拥有权数据"
+
+  data_模型_relationships:
+      coordinates_with_equipment_models: "与设备模型协调"
+      integrates_with_control_system_models: "与控制系统模型集成"
+      maps_to_space_models: "映射到空间模型"
+      adheres_to_regulatory_classifications: "遵循法规分类"
+      maintains_lifecycle_continuity: "保持生命周期连续性"
+
+  medical_asset_information:
+      medical_device_identification: "医疗器械识别"
+      risk_classifications: "风险分类"
+      clinical_purpose_specifications: "临床目的规格"
+      safety_critical_attributes: "安全关键属性"
+      regulatory_clearances: "法规许可"
+      quality_system_requirements: "质量管理体系要求"

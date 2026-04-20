@@ -1,0 +1,58 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CU_HOSP,表全名,JHPDL:JH_CU_HOSP,,,,,,
+,表说明,体检记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CHR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CHR0001,String字符串（变长）,,CHECK_UP_SN,体检就诊编号,体检就诊编号，系统生成二级编码，如“C00.000.001”,20,是,是
+,\x00\x02,CHR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,CHR0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,CHR0004,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,20,,
+,\x00\x05,CHR0005,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x06,CHR0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,19,是,
+,\x00\x08,CHR0008,String字符串（变长）,,CHECK_PAT_ID,体检系统内部患者ID,,50,,是
+,\x00\x27,CHR0039,String字符串（变长）,,ST_CHECK_TYPE,体检类型描述,如入职体检、员工年检等,200,,
+,\x00\x26,CHR0038,String字符串（变长）,,SC_CHECK_TYPE,体检类型编码,,50,,是
+,\x00\x2D,CHR0045,简化字典（Integer整型，4个字节）,,SD_CHECK_TYPE,体检类型编码,中台标准体检类型编码,4,,
+,\x00\x09,CHR0009,String字符串（变长）,,CHECK_UP_NO,体检号,,20,,是
+,\x00\x1C,CHR0028,String字符串（变长）,,ST_FEE_STATUS,收费状态描述,,50,,
+,\x00\x1B,CHR0027,String字符串（变长）,,SC_FEE_STATUS,收费状态编码,,20,,
+,\x00\x2E,CHR0046,简化字典（Integer整型，4个字节）,,SD_FEE_STATUS,收费状态编码,中台标准收费状态编码,4,,
+,\x00\x1A,CHR0026,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ACT_VIS_TIME,实际到检时间,,19,,是
+,\x00\x21,CHR0033,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RPT_CHECK_TIME,审核时间,,19,,
+,\x00\x23,CHR0035,String字符串（变长）,,ST_CHK_USER,审核人姓名,,100,,
+,\x00\x22,CHR0034,String字符串（变长）,,SC_CHK_USER,审核人编码,,50,,
+,\x00\x07,CHR0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CHECK_UP_DATE,拟体检时间,,19,是,是
+,\x00\x0F,CHR0015,String字符串（变长）,,ST_TEAM,隶属团体名称,,200,,是
+,\x00\x0E,CHR0014,String字符串（变长）,,SC_TEAM,隶属团体编码,团体单位，为空时表示个人体检,50,,是
+,\x00\x0D,CHR0013,String字符串（变长）,,ST_VIS_STATUS,就诊状态描述,,50,,
+,\x00\x0C,CHR0012,String字符串（变长）,,SC_VIS_STATUS,就诊状态编码,,20,,是
+,\x00\x30,CHR0048,简化字典（Integer整型，4个字节）,,SD_VIS_STATUS,就诊状态编码,中台标准收费状态编码,4,,
+,\x00\x11,CHR0017,String字符串（变长）,,ST_PAY_METHOD,结算方式描述,,50,,
+,\x00\x10,CHR0016,String字符串（变长）,,SC_PAY_METHOD,结算方式编码,团体总结算、个人支付等,20,,
+,\x00\x2C,CHR0044,String字符串（变长）,,REPORT_URL,结果外部链接地址,调用外部结果报告等链接地址,500,,
+,\x00\x0B,CHR0011,String字符串（变长）,,TEM_PRE_VIS_ID,关联团体预约ID,,50,,是
+,\x00\x0A,CHR0010,String字符串（变长）,,PER_PRE_VIS_ID,关联个人预约ID,,50,,是
+,\x00\x18,CHR0024,String字符串（变长）,,RPT_TEXT,个人总结报告文本内容,文本报告格式,16000,,
+,\x00\x20,CHR0032,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RPT_PRINT_TIME,打印报告时间,,19,,
+,\x00\x2B,CHR0043,Double双精度浮点型（8个字节）,,CHK_DIS_FEE,本次优惠费用,,,,
+,\x00\x29,CHR0041,Double双精度浮点型（8个字节）,,CHK_TOT_FEE,本次应收费用,,,,
+,\x00\x2A,CHR0042,Double双精度浮点型（8个字节）,,CHK_PAY_FEE,本次实收费用,,,,
+,\x00\x25,CHR0037,String字符串（变长）,,ST_PAT_ROLE,本次患者身份描述,,100,,
+,\x00\x24,CHR0036,String字符串（变长）,,SC_PAT_ROLE,本次患者身份编码,白金会员，黑金会员等,30,,
+,\x00\x28,CHR0040,String字符串（变长）,,REMARKS,备注,,500,,
+,\x00\x19,CHR0025,String字符串（变长）,,RPT_ADVICE_TEXT,报告总结结论建议,,8000,,
+,\x00\x1D,CHR0029,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RPT_TIME,报告完成时间,,19,,
+,\x00\x1F,CHR0031,String字符串（变长）,,ST_RPT_USER,报告人姓名,,100,,
+,\x00\x1E,CHR0030,String字符串（变长）,,SC_RPT_USER,报告人编码,,50,,
+,\x00\x13,CHR0019,String字符串（变长）,,ST_SEND_RPT_WAY,报告获取方式描述,,50,,
+,\x00\x12,CHR0018,String字符串（变长）,,SC_SEND_RPT_WAY,报告获取方式编码,,20,,
+,\x00\x2F,CHR0047,简化字典（Integer整型，4个字节）,,SD_SEND_RPT_WAY,报告获取方式编码,中台标准报告获取方式编码,4,,
+,\x00\x17,CHR0023,String字符串（变长）,,FILE_CONTENT_SN_4,报告关联链接4,关联FILE_CONTENT使用,20,,是
+,\x00\x16,CHR0022,String字符串（变长）,,FILE_CONTENT_SN_3,报告关联链接3,关联FILE_CONTENT使用,20,,是
+,\x00\x15,CHR0021,String字符串（变长）,,FILE_CONTENT_SN_2,报告关联链接2,关联FILE_CONTENT使用,20,,是
+,\x00\x14,CHR0020,String字符串（变长）,,FILE_CONTENT_SN_1,报告关联链接1,关联FILE_CONTENT使用,20,,是
+,\x00\x31,CHR0049,String字符串（变长）,,SC_RPT_STATUS,体检报告状态编码,体检报告状态编码,200,,
+,\x00\x32,CHR0050,String字符串（变长）,,ST_RPT_STATUS,体检报告状态描述,体检报告状态描述,200,,

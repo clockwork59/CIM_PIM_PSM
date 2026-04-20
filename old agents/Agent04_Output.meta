@@ -1,0 +1,43 @@
+# Agent-04 流动模型建模输出文件
+# 流动模型建筑师 (Flow Model Architect)
+
+agent_info:
+  id: "Agent-04"
+  name: "流动模型建筑师"
+  description: "构建物质流、能量流和信息流的完整模型"
+  phase: "Phase 4"
+
+model_scope:
+  description: "基于Agent-01系统拓扑的流动建模"
+  system_coverage:
+    - "HVAC系统（冷源、热源、空气处理）"
+    - "电气系统（配电、照明、弱电）"
+    - "医疗系统（医疗气体、真空、氧气）"
+    - "给排水系统（生活水、消防水）"
+
+  flow_categories:
+    - "物质流（Mass Flow）- 能量载体"
+    - "能量流（Energy Flow）- 被传递的荷载"
+    - "信息流（Information Flow）- 控制与监测"
+
+modeling_principles:
+  conservation: "严格遵循质量守恒、能量守恒、动量守恒"
+  coupling: "建立载体-荷载耦合关系，支持能效计算"
+  hierarchy: "分层建模，从宏观流动到微观耦合"
+  accuracy: "基于工程手册和实际运行数据校准"
+
+output_structure:
+  flow_classification: "三层流动分类体系"
+  medium_models: "主要介质物理属性模型"
+  flow_path_models: "各系统流动路径建模"
+  conservation_models: "守恒方程模型"
+  carrier_payload_models: "载体-荷载耦合方程"
+
+validation_status:
+  based_on: "Agent-01完整系统拓扑"
+  thermodynamic_compliance: "符合工程热力学和流体力学原理"
+  hydraulic_compliance: "符合水力和空气动力学规律"
+  electrodynamic_compliance: "符合电路和电磁学基本定律"
+
+created_at: "2025-12-02"
+version: "V1.0"

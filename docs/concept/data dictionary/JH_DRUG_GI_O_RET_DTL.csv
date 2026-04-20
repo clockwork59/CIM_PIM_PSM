@@ -1,0 +1,31 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_GI_O_RET_DTL,表全名,JHPDL:JH_DRUG_GI_O_RET_DTL,,,,,,
+,表说明,门诊退药明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGF,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGF0001,String字符串（变长）,,GI_O_RET_DTL_SN,门诊退药明细唯一号,内部三级编码DI0.000.000.001,20,是,是
+,\x00\x02,MGF0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MGF0003,String字符串（变长）,,DRUG_GIVE_O_RET_SN,门诊药房退药唯一号,来源JH_DRUG_GI_O_RET的MGE0001,20,是,是
+,\x00\x11,MGF0017,String字符串（变长）,,RET_SEND_NO,退单号,,200,是,是
+,\x00\x12,MGF0018,String字符串（变长）,,RET_SEND_SN,退药子序号,,200,,
+,\x00\x0C,MGF0012,Double双精度浮点型（8个字节）,,RET_QTY,退药数量,,38,,
+,\x00\x0D,MGF0013,String字符串（变长）,,SC_RET_UNIT,单位编码,,200,,
+,\x00\x0E,MGF0014,String字符串（变长）,,ST_RET_UNIT,单位描述,,500,,
+,\x00\x0F,MGF0015,Double双精度浮点型（8个字节）,,PRICE,单价,,38,,
+,\x00\x10,MGF0016,Double双精度浮点型（8个字节）,,RET_TOT_AMOUNT,总金额,,38,,
+,\x00\x14,MGF0020,String字符串（变长）,,SPEC,药品规格,,200,,
+,\x00\x04,MGF0004,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x06,MGF0006,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x0A,MGF0010,String字符串（变长）,,SC_INVENTORY_ITM,库存项编码,,200,,
+,\x00\x0B,MGF0011,String字符串（变长）,,ST_INVENTORY_ITM,库存项名称,,200,,
+,\x00\x05,MGF0005,String字符串（变长）,,DRUG_BATCH_SN,批次SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x07,MGF0007,String字符串（变长）,,BATCH_NO,批次号,,200,是,是
+,\x00\x09,MGF0009,String字符串（变长）,,DRUG_GIVE_O_SN,关联发药明细的PDL,,200,是,是
+,\x00\x13,MGF0019,String字符串（变长）,,COMMENT,药房拒绝退药原因,,4000,,
+,\x00\x15,MGF0021,String字符串（变长）,,REMARKS,备注,,4000,,
+,\x00\x08,MGF0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x16,MGF0022,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x17,MGF0023,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

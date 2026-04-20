@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CIM Validation Rule Schema",
+  "description": "统一的验证规则格式定义",
+  "definitions": {
+    "shacl_shape": {
+      "type": "object",
+      "required": ["shape_uri", "turtle"],
+      "properties": {
+        "shape_uri": {"type": "string", "pattern": "^cim-shape:[A-Za-z0-9_]+Shape$"},
+        "turtle": {"type": "string"}
+      }
+    }
+  },
+  "type": "object",
+  "required": ["constraint_id", "rule_description", "type"],
+  "properties": {
+    "constraint_id": {"type": "string", "pattern": "^CST-[A-Z]+-\\d{3}$"},
+    "rule_description": {"type": "string"},
+    "type": {"type": "string", "enum": ["Completeness", "Connectivity", "Cross-Agent Consistency", "Domain Constraint", "Topology"]},
+    "shacl_shape": {"$ref": "#/definitions/shacl_shape"}
+  }
+}

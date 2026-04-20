@@ -1,0 +1,87 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_HOSP,表全名,JHPDL:JH_OUT_HOSP,,,,,,
+,表说明,门诊就诊记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,OHR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,OHR0001,String字符串（变长）,,OUT_HOSP_SN,门诊就诊编号,门诊就诊编号，系统生成二级编码，如“M00.000.001”,20,是,是
+,\x00\x02,OHR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,OHR0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,OHR0004,String字符串（变长）,,OUT_CODE,门诊业务号,门诊业务系统发放的编号,200,,
+,\x00\x05,OHR0005,Integer整型（4个字节）,,OUT_NUM,门诊次数,前往门诊的次数，继承“JH_PAT_VISIT”的“PAV0009”,6,是,是
+,\x00\x06,OHR0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OUT_TIME,门诊就诊时间,患者实际门诊就诊日期与时间,19,是,是
+,\x00\x07,OHR0007,自定义字典类型，字符串（变长）,379,OUT_FIRST_FLAG,首次门诊,第一门诊标记，是否,200,,
+,\x00\x18,OHR0024,简化字典（Integer整型，4个字节）,379,SD_OUT_FIRST,是否首次门诊,第一门诊标记，是否,20,,
+,\x00\x08,OHR0008,String字符串（变长）,,OUT_DEPT,就诊科室,"门诊就诊科室编码＋名称，如“001#,#内科”",200,是,是
+,\x00\x20,OHR0032,String字符串（变长）,,SC_OUT_DEPT,就诊科室编码,,200,,
+,\x00\x21,OHR0033,String字符串（变长）,,ST_OUT_DEPT,就诊科室名称,,200,,
+,\x00\x09,OHR0009,String字符串（变长）,,OUT_ROOM,就诊诊间,"门诊就诊诊间编码＋名称，如“001#,#内科一室”",200,,
+,\x00\x22,OHR0034,String字符串（变长）,,SC_OUT_ROOM,就诊诊间编码,,200,,
+,\x00\x23,OHR0035,String字符串（变长）,,ST_OUT_ROOM,就诊诊间名称,,200,,
+,\x00\x0A,OHR0010,String字符串（变长）,,OUT_DOCTOR,就诊医师,"就诊医师编码＋名称，如“1001#,#张三”",200,,
+,\x00\x24,OHR0036,String字符串（变长）,,SC_OUT_DOCT,就诊医师编码,,200,,
+,\x00\x25,OHR0037,String字符串（变长）,,ST_OUT_DOCT,就诊医师名称,,200,,
+,\x00\x0B,OHR0011,自定义字典类型，字符串（变长）,403,REG_STATE,挂号状态,"反映从预约到就诊的状态变化，如“1#,#002#,#预约”（预约、已确认、就诊、已取消）",200,,
+,\x00\x19,OHR0025,简化字典（Integer整型，4个字节）,403,SD_REG_STATE,挂号状态简码,"反映从预约到就诊的状态变化，如“1#,#002#,#预约”（预约、已确认、就诊、已取消）",20,,
+,\x00\x1A,OHR0026,String字符串（变长）,,ST_REG_STATE,挂号状态描述,,200,,
+,\x00\x30,OHR0048,String字符串（变长）,,SC_REG_STATE,挂号状态编码,源业务系统的挂号状态编码,200,,
+,\x00\x0C,OHR0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,REG_TIME,挂号时间,,19,,
+,\x00\x0D,OHR0013,自定义字典类型，字符串（变长）,405,REG_MODE,挂号方式,挂号方式，如现场、预约、特诊,200,,
+,\x00\x1B,OHR0027,简化字典（Integer整型，4个字节）,405,SD_REG_MODE,挂号方式简码,挂号方式，如现场、预约、特诊,20,,
+,\x00\x1C,OHR0028,String字符串（变长）,,ST_REG_MODE,挂号方式描述,,200,,
+,\x00\x31,OHR0049,String字符串（变长）,,SC_REG_MODE,挂号方式编码,源业务系统的挂号方式编码,200,,
+,\x00\x0E,OHR0014,自定义字典类型，字符串（变长）,404,RESERVE_TYPE,预约类型,预约类型，如现场、电话、短信、网上、APP,200,,
+,\x00\x1D,OHR0029,简化字典（Integer整型，4个字节）,404,SD_RESERVE_TYPE,预约类型简码,预约类型，如现场、电话、短信、网上、APP,20,,
+,\x00\x1E,OHR0030,String字符串（变长）,,ST_RESERVE_TYPE,预约类型描述,,200,,
+,\x00\x32,OHR0050,String字符串（变长）,,SC_RESERVE_TYPE,预约类型编码,源业务系统的预约类型编码,200,,
+,\x00\x0F,OHR0015,String字符串（变长）,,REG_OPERATOR,挂号员,"窗口挂号操作员编码＋名称，如“001#,#张三”",200,,
+,\x00\x26,OHR0038,String字符串（变长）,,SC_REG_OPERATOR,挂号员编码,,200,,
+,\x00\x27,OHR0039,String字符串（变长）,,ST_REG_OPERATOR,挂号员名称,,200,,
+,\x00\x10,OHR0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,UNREG_TIME,退号时间,,19,,
+,\x00\x11,OHR0017,String字符串（变长）,,UNREG_OPERATOR,退号员,"窗口挂号操作员编码＋名称，如“001#,#张三”",200,,
+,\x00\x28,OHR0040,String字符串（变长）,,SC_UNREG_OPERATOR,退号员编码,,200,,
+,\x00\x29,OHR0041,String字符串（变长）,,ST_UNREG_OPERATOR,退号员名称,,200,,
+,\x00\x12,OHR0018,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x13,OHR0019,自定义字典类型，字符串（变长）,383,VISIT_TYPE,就诊类型,"就诊类型，如“3#,#4#,#门诊”（直接复制JH_PAT_VISIT）",200,是,是
+,\x00\x1F,OHR0031,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,就诊类型的中台标准编码,20,是,是
+,\x00\x33,OHR0051,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,200,是,是
+,\x00\x34,OHR0052,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,200,,
+,\x00\x14,OHR0020,String字符串（变长）,,INSURANCE_TYPE,医保类型,医保类型,50,,
+,\x00\x15,OHR0021,String字符串（变长）,,CURRENT_AGE_UNIT,年龄单位,年龄单位,20,,
+,\x00\x16,OHR0022,Short短整型（2个字节）,,CURRENT_AGE,入院年龄,入院年龄,6,,
+,\x00\x2A,OHR0042,String字符串（变长）,,ST_REG_CATEGORY_NAME,号别,如：普通号、专家号、特需号,200,,
+,\x00\x35,OHR0053,String字符串（变长）,,SC_REG_CATEGORY_NAME,号别编码,如：普通号、专家号、特需号,50,,
+,\x00\x36,OHR0054,String字符串（变长）,,SC_REG_TYPE_NAME,号类编码,如：主任、副主任、教授,50,,
+,\x00\x2B,OHR0043,String字符串（变长）,,ST_REG_TYPE_NAME,号类,如：主任、副主任、教授,200,,
+,\x00\x2C,OHR0044,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,REC_TREAT_TIME,门诊实际接诊时间,医生实际对患者的接诊时间，不同于就诊时间，就诊时间为计划就诊就诊,31,是,是
+,\x00\x2D,OHR0045,简化字典（Integer整型，4个字节）,379,CONVENIENT_FLAG,是否便民号,是否便民号,20,是,是
+,\x00\x2E,OHR0046,简化字典（Integer整型，4个字节）,379,ACT_VISIT_FLAG,是否真实已看诊,打实际看诊的标记,20,是,是
+,\x00\x2F,OHR0047,简化字典（Integer整型，4个字节）,379,CHARGED_FLAG,是否收挂号费,是否收挂号费,20,是,是
+,\x00\x37,OHR0055,String字符串（变长）,,SC_CHARGE_TYPE,费别编码,,100,,
+,\x00\x38,OHR0056,String字符串（变长）,,ST_CHARGE_TYPE,费别说明,,100,,
+,\x00\x39,OHR0057,String字符串（变长）,,SC_VISIT_STATE,门诊就诊状态编码,,200,,
+,\x00\x3A,OHR0058,String字符串（变长）,,ST_VISIT_STATE,门诊就诊状态说明,,200,,
+,\x00\x3B,OHR0059,简化字典（Integer整型，4个字节）,452,SD_VISIT_STATE,门诊就诊状态简码,,4,,
+,\x00\x3C,OHR0060,简化字典（Integer整型，4个字节）,379,SD_SECOND_FLAG,是否复诊,,10,,
+,\x00\x3D,OHR0061,简化字典（Integer整型，4个字节）,,SD_MARK_FLAG,是否补号,,10,,
+,\x00\x3E,OHR0062,String字符串（变长）,,ADVISE_VISIT_TYPE,分诊时段就诊情况,患者实际就诊时间是否在预约时段内，或者是提前了还是滞后了,100,,
+,\x00\x17,OHR0023,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x3F,OHR0063,String字符串（变长）,,CURRENT_AGE_DESC,年龄描述,年龄描述，用于存储不规则的年龄数据,,,
+,\x00\x40,OHR0064,String字符串（变长）,,SC_OUT_WARD,门诊病区编码,门诊病区编码,200,,
+,\x00\x41,OHR0065,String字符串（变长）,,ST_OUT_WARD,门诊病区名称,门诊病区名称,200,,
+,\x00\x42,OHR0066,String字符串（变长）,,SC_OUT_BED,门诊病区床位编码,门诊病区床位编码,200,,
+,\x00\x43,OHR0067,String字符串（变长）,,ST_OUT_BED,门诊病区床位名称,门诊病区床位名称,200,,
+,\x00\x44,OHR0068,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DIS_OUT_TIME,出科时间,出科时间,,,
+,\x00\x45,OHR0069,Double双精度浮点型（8个字节）,,TREATMENT_COST,诊疗费价格,,20,是,是
+,\x00\x46,OHR0070,Double双精度浮点型（8个字节）,,REGISTER_COST,挂号费价格,,,,
+,\x00\x47,OHR0071,Double双精度浮点型（8个字节）,,REGISTER_TOTAL_COST,总挂号费价格,,,,
+,\x00\x48,OHR0072,Double双精度浮点型（8个字节）,,WECHAT_COST,新微信预约支付价格,,,,
+,\x00\x49,OHR0073,Double双精度浮点型（8个字节）,,ACCOUNT_COST,京医通账户支付价格,,,,
+,\x00\x4A,OHR0074,Double双精度浮点型（8个字节）,,CASH_COST,现金/POS/合同记账,,,,
+,\x00\x4B,OHR0075,Double双精度浮点型（8个字节）,,FUND_COST,基金支付金额,,,,
+,\x00\x4C,OHR0076,Double双精度浮点型（8个字节）,,PERSON_COST,个人账户支付,,,,
+,\x00\x4D,OHR0077,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x4E,OHR0078,String字符串（变长）,,SC_CLINIC_DIAG,门诊临床诊断,门诊临床诊断,200,,
+,\x00\x4F,OHR0079,String字符串（变长）,,ST_CLINIC_DIAG,门诊诊断名称,门诊诊断名称,200,,

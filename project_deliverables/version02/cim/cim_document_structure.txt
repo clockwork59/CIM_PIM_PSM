@@ -1,0 +1,20 @@
+# CIM 统一领域模型 - 目录结构定义
+## 版本信息
+- **版本**: 2.0.0-Final
+- **生成日期**: 2025-01-17
+- **目标路径**: `/project_deliverables/version02/cim/`
+
+```
+cim/
+├── 📁 core/                          # 核心元模型定义
+├── 📁 topology/                       # 拓扑模型 (Agent-01)
+├── 📁 spaces/                         # 空间模型 (Agent-02)
+├── 📁 equipment/                      # 设备本体 (Agent-03)
+├── 📁 flow/                           # 流动模型 (Agent-04)
+├── 📁 coupling/                       # 耦合模型 (Agent-05)
+├── 📁 control/                        # 控制模型 (Agent-06)
+├── 📁 metering/                       # 计量模型 (Agent-07)
+├── 📁 operations/                     # 运维模型 (Agent-08)
+├── 📁 rules/                          # 推理与验证规则
+└── 📁 medical_constraints/            # 医疗领域约束
+```

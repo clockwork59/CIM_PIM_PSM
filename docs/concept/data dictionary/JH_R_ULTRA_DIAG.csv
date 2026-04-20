@@ -1,0 +1,20 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_R_ULTRA_DIAG,表全名,JHPDL:JH_R_ULTRA_DIAG,,,,,,
+,表说明,超声诊断专业设备统计表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MAJ,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MAJ0001,String字符串（变长）,,R_ULTRA_SN,诊断专业设备唯一号,内部三级编码MJ0.000.000.001,20,是,是
+,\x00\x02,MAJ0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MAJ0003,String字符串（变长）,,HOSPITAL_CODE,院区编码,,255,,
+,\x00\x04,MAJ0004,String字符串（变长）,,SC_DEPT_CODE,科室编码,,255,,
+,\x00\x05,MAJ0005,String字符串（变长）,,ST_DEPT_NAME,科室名称,,255,,
+,\x00\x06,MAJ0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,STAT_DATATIME,统计日期,,20,,
+,\x00\x07,MAJ0007,Integer整型（4个字节）,,COM_ULTRAINSTRU_NUM,完成质检的超声仪器数,,200,,
+,\x00\x08,MAJ0008,Integer整型（4个字节）,,ORG_ULTRAINSTRU_NUM,本机构在用超声仪器总数,,200,,
+,\x00\x09,MAJ0009,Integer整型（4个字节）,,QUA_ULTRAREPORT_NUM,超声检查报告书写合格的数量,,200,,
+,\x00\x0A,MAJ0010,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,,200,,
+,\x00\x0B,MAJ0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,,,
+,\x00\x0C,MAJ0012,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

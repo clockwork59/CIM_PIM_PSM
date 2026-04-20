@@ -1,0 +1,7 @@
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+cim-space:Campus a rdfs:Class ; rdfs:label "园区"@zh .
+cim-space:Building a rdfs:Class ; rdfs:label "建筑"@zh .
+cim-space:Floor a rdfs:Class ; rdfs:label "楼层"@zh .
+cim-space:Room a rdfs:Class ; rdfs:label "房间"@zh .

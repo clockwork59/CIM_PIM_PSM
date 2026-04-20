@@ -1,0 +1,248 @@
+# 守恒方程模型 - 应用于各流动系统的物理守恒定律
+
+conservation_models:
+  meta:
+    physical_foundations: "基于流体力学、热力学、传热学和物质衡算的基本定律"
+    governing_equations: ["连续性方程(质量守恒)", "伯努利方程(能量守恒)", "傅里叶定律(导热)", "菲克定律(扩散)"]
+    standards_refs: ["ISO 5167", "ASHRAE Fundamentals", "EN 442", "NIST fluid properties"]
+
+  # 质量守恒定律 - 连续方程(COV)
+  mass_conservation:
+    section_title: "工程质量衡算方程"
+    description: "基础物质衡算应用于工程流动系统"
+
+    mass_banche_equation:
+      general_form: "Σṁ_in - Σṁ_out = ṁ_accumulation"
+      vector_form: "∂ρ/∂t + ∇·(ρῠ) = 0"
+      steady_state: "Σṁ_in = Σṁ_out"
+
+    application_conditions:
+      incompressible_flow: "ρ = constant (适用于水系统)"
+      compressible_flow: "ρ = f(P,T)	 (适用于空气、蒸汽)"
+     _convergin_node: "Σ(flows_in) = Σ(flows_out)"
+      source_sink: "add_generation_terms_&loads"
+
+    computational_forms:
+      # 水系统
+      water_systems:
+        conservation_equation: "Q₁ρ₁ = Q₂ρ₂ + Q₃ρ₃ (流量×密度守恒)"
+        density_variation_correction: "ρᵢ = f(Tᵢ, Pᵢ)"
+        accumulated_correction: "ṁᵢ = ρᵢQᵢ = m̅ᵢ + Δṁᵢ_dyn [10⁻³kg/m³]"
+
+      # 空气系统
+      air_systems:
+        humid_air_balance: "ṁ_da + ṁ_v = constant (干空气质量+水蒸气质量)"
+        dry_air_balance: "ṁ_da₁ + ṁ_da₂ = ṁ_da₃"
+        volume_flow_variation: \n
+          at_supply: "ṁ = 1.204ρ(standard)·V̇" # 20°C
+          at_return: "ṁ = ρ_return(T,Φ)·V̇" # 变温变湿
+
+      # 空气混合
+      air_mixing:
+        description: "混合不同状态气体的质量与能量守恒"
+        dry_air_fraction: "m_a₁ + m_a₂ = m_a₃"
+        water_vapor_fraction: "m_w₁ + m_w₂ = m_w₃"
+        mixture_calculations: "T₃ = (m_a₁T₁ + m_a₂T₂)/(m_a₁ + m_a₂)"
+
+  # 能量守恒定律 - 热力学第一定律
+  energy_conservation:
+    general_physics: "热力学第一定律在工程中的实现"
+    engineering_form: "ΔE = Q - W + Σ(ṁ_in·e_in) - Σ(ṁ_out·e_out)"
+    enthalpy_form: "ṁ_out·h_out = ṁ_in·h_in + Q + W_pump"
+
+    thermodynamic_state_functions:
+      specific_internal_energy: "u = c_v T (理想气体)"
+      specific_enthalpy: "h = u + Pv = c_p T (理想气体)"
+      specific_technical_work: "w_tech = Ẇ/ṁ"
+      specific_useful_energy: "ε = h + (V²/2) + gz"
+
+    component_applications:
+      # 热交换器守恒
+      heat_exchangers:
+        description: "表冷器、冷凝器、暖气散热器等"
+        heat_balance: "Q_source = Q_sink + Q_losses"
+        counterflow_effectiveness: "ε = 1 - exp[-NTU(1-C_r)]/(1-C_r·exp[-NTU(1-C_r)])"
+
+        energy_exchanges_basic:
+          side_1: "ṁ₁Δh₁ = ṁ₁c_p₁(T₁_out - T₁_in)"
+          side_2: "ṁ₂Δh₂ = ṁ₁ or ṁ₂, ΔT based on exchanger"
+
+      # 泵和风机的能量输入
+      pumps_fans:
+        energy_input: "W_p = ṁ·ΔP/ρ + ṁ·g·Δz + W_losses"
+        isentropic_efficiency: "η_p = W_isentropic/W_actual"
+        temperature_rise: "ΔT = W_losses/(ṁ·c_p)"
+
+      # 制冷机能量守恒
+      refrigeration_cycles:
+        energy_coupling: "Q_evaporating + W_compressor = Q_condensing + Q_losses"
+        coefficient_of_performance: "COP = Q_evaporating/W_compressor"
+        theoretical_ideal: "COP_Carnot = T_cold/(T_hot - T_cold)"
+
+      # 蒸汽系统
+      steam_systems:
+        two_phase_flow: "ṁ_steam·h_steam + ṁ_water·h_water = ṁ_condensate·h_condensate + Q_condensed"
+        latent_heat_absorption: "Q = ṁ·γ (γ 为汽化潜热)"
+        condensation_return: "ṁ_supply_steam = ṁ_return_condensate (近似)"
+
+      # 空气处理过程
+      air_conditioning:
+        cooling_process: "Q_cooling = ṁ_air(h₁ - h₂) = ṁ_air[c_p(T₁ - T₂) + h_fg(w₁ - w₂)]"
+        heating_process: "Q_heating = ṁ_air·c_p(T₂ - T₁)"
+        humidification: "Q_humidification = ṁ_water·h_g = ṁ_air·(w₂ - w₁)·h_g"
+        dehumidification: "Q_dehumidification = ṁ_air·(w₁ - w₂)·h_fg"
+
+        steps_analysis:
+          sensible_heat_ratio: "SHR = Q_sensible/Q_total"
+          coil_approach: "T_coil_minimum = T_cooling_medium + Δt_approach"
+          bypass_factor: "BPF = (T_air_out - T_coil)/(T_air_in - T_coil)"
+
+  # 动量守恒定律 - 流体动力学基本方程
+  momentum_conservation:
+    newton_fluid_flow: "直接引用流体力学基本定律"
+
+    navier_stokes_simplified:
+      scope: "不可压缩流体一维简化形式"
+      equation: "ρ[∂u/∂t + u(∂u/∂x)] = -∂P/∂x + μ(∂²u/∂x²) + ρg·dD/dx"
+
+    practical_forms:
+      bernoulli_extended: "P₁/ρ + V₁²/2 + gz₁ = P₂/ρ + V₂²/2 + gz₂ + h_L - W_pump + Q_to_flow"
+      darcy_weisbach: "h_f = f(L/d)(V²/2g)"  # 直管摩阻损失
+      local_losses: "h_L = Σ(K_iV_i²/2g)"  # 局部阻力损失
+
+    pump_characteristics:
+      head_provided: "H_pump = (P₂ - P₁)/(ρg) + (z₂ - z₁) + (V₂² - V₁²)/(2g) + h_f,total"
+      system_curves: "H_total = H_static + kQ² (Q单位: L/s)"
+      operating_point: "Intersection of pump curve system curve"
+
+    fan_similarity:
+      fan_laws_verification: "Q_new = Q_old·(speed_new/speed_old)"
+      pressure_law: "ΔP_new = ΔP_old·(speed_new/speed_old)²"
+      power_requirement: "W_new = W_old·(speed_new/speed_old)³"
+
+  # 系统节点守恒分析
+  node_balance_equations:
+    component_node_analysis:
+
+      # 冷冻水制冷机节点
+      chiller_node:
+        node_type: "转换节点：蒸发器界面
+        boundary_conditions: "一侧为制冷剂蒸发，另一侧为冷冻水冷却"
+        heat_transfer_resistance: "Q = UAΔT塡"
+        mass_banche: "ṁ_WPř = ṁ_R⚡ (质量衡算)"
+
+        energy_conversion:
+          refrigerant_side: "Q_L = ṁ_ref·(h₁_sat_vapor - h₄_sat_liquid)"
+          water_side: "Q_L = ṁ_water·c_p·(T_return - T_supply)"
+          efficiency_metric: "COP = Q_L/W_compressor"
+
+      # 冷冻泵节点
+      pump_node:
+        node_type: "机械能转换节点：电能→机械能→流体压能"
+        power_conservation: "W_electric = ṁ·ΔP/ρ·η_motor·η_pump"
+        efficiency_composition: "η_overall = η_motor × η_pump × η_driving"
+        temperature_side_effect: "P_loss = W_electric(1-η_overall) = ṁ·c_p·ΔT_rise"
+
+      # 空气混合节点  echo node(AHU)
+      air_mixing_node:
+        node_type: "汇聚节点：不同状态空气混合"
+
+        mass_conservation_applications:
+          dry_air_conservation: "ṁ_fresh + ṁ_return = ṁ_mixed"
+          mass_flow_calculation: "ṁ = ρV̇ → 使用试验状态计算"
+
+        energy_conservation:
+          enthalpy_balance_equation: "ṁ_fresh_AF·h_fresh + ṁ_return_AF·h_return + Q_add = ṁ_mixed_AF·h_mixed"
+          temperature_response: "T_mixed = (ṁ_fresh_A·T_fresh_AF + ṁ_return_A·T_return_AF) / (ṁ_fresh_A + ṁ_return_A)"
+
+        humidity_balance:
+          water_vapor_conservation: "ṁ_fresh·w_fresh + ṁ_return·w_return = ṁ_mixed·w_mixed"
+          relative_humidity_adjustment: "Use psychrometric functions"
+
+      # 热交换器汇合节点(表冷器)
+      heat_exchanger_node:
+        node_type: "双介质耦合节点"
+        coupling_modes: ["对流换热", "混合换热", "热辐射(可忽略)"]
+
+        energy_banche_interfaces:
+          air_side: "ṁ_air(h₁ - h₂) = Q_transfer"
+          water_side: "ṁ_water·c_p·(T₂ - T₁) = Q_transfer"
+          transfer_rate: "Q = UA·F·ΔT_lm (F为逆流因子)"
+
+        secondary_calculations:
+          approach_temperature: "ΔT_approach = min(T_air_out - T_water_in)"
+          effectiveness_ntumethod: "ε - NTU method equations"
+
+  # 系统级守恒平衡分析
+  system_balance_analysis:
+
+    hvac_balance:
+      title: "建筑暖通系统级守恒"
+
+      thermal_balance:
+        zone_thermal_equation: "Q_heating_cooling = Q_internal + Q_solar - Q_conduction - Q_ventilation"
+        building_envelope: "Q = UA(T_in - T_out) + ṁ_air·c_p_air(T_supply - T_return)"
+        energy_efficiency_metric: "Energy consumption per floor area:. kWh/(m²·y)."
+
+      air_flow_balance:
+        building_pressure: "ṁ_supply = ṁ_return + ṁ_exhaust + ṁ_infiltration"
+        infiltration_model: "ṁ_infiltration = C_factor · A_crack · ΔP^n"
+        comfort_range: "Pressure difference +5 to +15 Pa"
+
+    electrical_system_balance:
+      title: "电气系统守恒"
+      power_balance: "Total_Powersenin = Total_Power_installed × Load_Factor + Power_Losses"
+      energy_conversion: "E_consumed = Σ(P_device_i × time_i) + E_losses_transformer + E_losses_cable"
+      power_factor: "Power_Factor = P[W] / S[VA] ... aim ≥0.95"
+
+    water_system_balance:
+      title: "给排水系统流量和水量守恒"
+      supply_demand_match: "Q_supply_available ≥ Q_demand_peak × Safety_Factor"
+      consumption_breakdown: "Q_domestic = Q_drinking + Q_toilet + Q_utility"
+      annual_production: "V_annual = Average_Daily_Consumption × 365 + Losses"
+
+  # 特殊守恒注意事项
+  special_considerations:
+
+    transient_conservation:
+      thermal_inertia: "dE/dt = ṁc'_thermal · dT/dt - <((T_in - T_out)/R_total)"
+      storage_systems: "dM/dt = Σṁ_in - Σṁ_out"
+      dynamic_node_responses: "T_node(t) = T_steady - (T_steady - T_initial)·exp(-t/τ)"
+      time_constants:
+        thermal_capacitance: "τ = C_thermal/R_thermal"
+        flow_inertia: "τ = V_system / Q_system"
+
+    phase_change_conservation:
+      steam_systems:
+        conservation_with_condensation: "ṁ_steam·h_fresh_steam = ṁ_steam(liquid)·(h_liq + Q_latent)"
+        mass_fraction_condensed: "Quality x = (h_superheated - 2501)/1800"
+
+      refrigeration:
+        evaporator_balance: "Q_evaporation = ṁ_ref·(h_evap_out - h_evap_in)"
+        compressor_power: "W_comp = ṁ_ref·(h_comp_out - h_comp_in)"
+        condenser_rejection: "Q_condensing = ṁ_ref·(h_cond_out - h_cond_in)"
+
+    control_system_implications:
+      feedback_conservation: "Sensors verify that conservation is maintained"
+      setpoint_adjustment: "PID controllers maintain conservation setpoints"
+      safety_conservation: "Safety triggers when conservation violated"
+      failure_detection: "mass/energy imbalances indicate component problems"
+
+  # 守恒模型验证
+  model_validation:
+    theoretical_consistency:
+      conservation_requirements: "必须符合连续方程、能量方程和状态方程"
+      thermodynamic_laws: "温熵分析可行"
+      functionality_check: "计算结果应满足工程感知"
+
+    practical_verification:
+      measurement_calibration: "仪表精度影响守恒方程准确性"
+      uncertainty_analysis: "中水池±2-5%，小系统±5-10%"
+      dynamic_range: "必须检验在全工况范围内的有效性"
+      extension_to_unsteady: "准稳态近似用于动态分析"
+
+    computational_considerations:
+      convergence_criteria: "连续方程残差≤10⁻⁶ kg/s"
+      initialization: "初始应满足粗略全局守恒"
+      numerical_conservative: "选择守恒的数值方案"
+      adaptive_refine: "电网关键节点处加细时间空间网格"

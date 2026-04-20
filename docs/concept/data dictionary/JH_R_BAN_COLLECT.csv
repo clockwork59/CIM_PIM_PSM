@@ -1,0 +1,20 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_R_BAN_COLLECT,表全名,JHPDL:JH_R_BAN_COLLECT,,,,,,
+,表说明,病案专业医疗质量控制统计表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MAN,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MAN0001,String字符串（变长）,,BAN_COLLECT_SN,病案专业医疗质量控制统计表唯一号,内部三级编码MN0.000.000.001,20,是,是
+,\x00\x02,MAN0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MAN0003,Date日期型（yyyy-mm-dd）（10个字节）,,REPORT_DATE,统计日期（年月）,统计日期（年月）,200,,
+,\x00\x04,MAN0004,String字符串（变长）,,HOSPITAL_CODE,院区,院区,200,,
+,\x00\x05,MAN0005,String字符串（变长）,,DEPT_CODE,科室,科室,20,,
+,\x00\x06,MAN0006,Integer整型（4个字节）,,INP_MANAGER_NUM,住院病案管理人员总数,住院病案管理人员总数,20,,
+,\x00\x07,MAN0007,Integer整型（4个字节）,,INP_CATALOGER_NUM,住院病案编码人员总数,住院病案编码人员总数,20,,
+,\x00\x08,MAN0008,Integer整型（4个字节）,,VISIT_MANAGER_NUM,门诊病案编码人员总数,门诊病案编码人员总数,20,,
+,\x00\x09,MAN0009,Integer整型（4个字节）,,VISIT_REPORT_NUM,门诊病历总数,门诊病历总数,20,,
+,\x00\x0A,MAN0010,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,,,,
+,\x00\x0B,MAN0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,,,
+,\x00\x0C,MAN0012,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

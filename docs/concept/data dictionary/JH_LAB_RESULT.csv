@@ -1,0 +1,72 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_LAB_RESULT,表全名,JHPDL:JH_LAB_RESULT,,,,,,
+,表说明,检验结果,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,LRS,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,LRS0001,String字符串（变长）,,LAB_RESULT_SN,检验结果编号,检验结果编号，系统生成三级编码，如“LR0.000.000.001”,20,是,是
+,\x00\x02,LRS0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,LRS0003,String字符串（变长）,,LAB_APPLY_SN,检验申请单编号,检验申请单编号，来源JH_LAB_APPLY的LAP0001,20,是,是
+,\x00\x04,LRS0004,String字符串（变长）,,LAB_RESULT_CODE,检验报告单号,业务系统使用的检验报告单号,200,是,是
+,\x00\x05,LRS0005,String字符串（变长）,,LAB_APPLY_CODE,检验申请单号,业务系统使用的检验申请单号,200,是,是
+,\x00\x06,LRS0006,String字符串（变长）,,SPECIMEN,标本,使用标准描述，如血、尿等,200,,
+,\x00\x07,LRS0007,String字符串（变长）,,SPECIMEN_DESC,标本说明,标本采集的条件说明，如饭前、饭后一小时等，自由输入,200,,
+,\x00\x0D,LRS0013,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPCM_SAM_TIME,标本采样时间,标本实际采样日期及时间,19,,
+,\x00\x0E,LRS0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPCM_REC_TIME,标本收到时间,标本实际收到日期及时间,19,是,是
+,\x00\x19,LRS0025,String字符串（变长）,,SPECIMEN_NO,标本号,送检标本编号,200,,
+,\x00\x14,LRS0020,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ACCEPT_TIME,核收时间,核收时间,19,,
+,\x00\x08,LRS0008,String字符串（变长）,,LIS_METHOD,检验方法,,200,,
+,\x00\x09,LRS0009,String字符串（变长）,,LAB_INSTRUMENT_NAME,仪器名称,,200,,
+,\x00\x0F,LRS0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPERATER_TIME,检验时间,,19,是,是
+,\x00\x1D,LRS0029,String字符串（变长）,,LAB_DEPT,检验执行科室,,500,,
+,\x00\x1E,LRS0030,String字符串（变长）,,LAB_TEST_ORG,检验机构,区分本院或者外院,200,,
+,\x00\x21,LRS0033,String字符串（变长）,,LAB_ITEM_CODE,检验项目编码,检验项目编码,200,,
+,\x00\x22,LRS0034,String字符串（变长）,,LAB_ITEM_NAME,检验项目名称,检验项目名称,700,,
+,\x00\x0C,LRS0012,String字符串（变长）,,RESULTS_CHECK,报告审核者,"报告结果审核人，人员编号＋名称，如“001#,#张三”",200,,
+,\x00\x26,LRS0038,String字符串（变长）,,SC_RES_CHECK,报告审核者编码,,200,,
+,\x00\x27,LRS0039,String字符串（变长）,,ST_RES_CHECK,报告审核者名称,,200,,
+,\x00\x10,LRS0016,自定义字典类型，字符串（变长）,395,REPORT_STATUS,报告状态,"报告状态，如“1#,#002#,#发布”（检验中、结果未审核、已发布、召回、再发布）",200,是,是
+,\x00\x28,LRS0040,简化字典（Integer整型，4个字节）,395,SD_REPORT_STA,报告状态,,20,,
+,\x00\x2C,LRS0044,String字符串（变长）,,SC_REPORT_STA,报告状态编码,源业务系统的报告状态编码,200,是,是
+,\x00\x2D,LRS0045,String字符串（变长）,,ST_REPORT_STA,报告状态说明,源业务系统的报告状态描述,200,,
+,\x00\x1A,LRS0026,自定义字典类型，字符串（变长）,379,CANCEL_FLAG,是否作废,此报告是否被作废,200,,
+,\x00\x2A,LRS0042,简化字典（Integer整型，4个字节）,379,SD_CANCEL,是否作废,此报告是否被作废,20,,
+,\x00\x31,LRS0049,String字符串（变长）,,SC_CANCEL,是否作废编码,源业务系统是否作废编码,20,,
+,\x00\x2E,LRS0046,String字符串（变长）,,ST_CANCEL,是否作废说明,源业务系统是否作废说明,20,,
+,\x00\x1B,LRS0027,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CANCEL_TIME,作废时间,,19,,
+,\x00\x1C,LRS0028,String字符串（变长）,,CANCEL_EMP,作废医生,,200,,
+,\x00\x11,LRS0017,String字符串（变长）,,REPORT_NOTE,备注,,200,,
+,\x00\x15,LRS0021,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ENTRY_TIME,初审时间,初审时间,19,,
+,\x00\x16,LRS0022,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,AUTH_TIME,审核时间,审核时间,19,,
+,\x00\x0A,LRS0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RESULTS_TIME,出报告时间,报告结果发布日期及时间,19,是,是
+,\x00\x0B,LRS0011,String字符串（变长）,,RESULTS_DOCTOR,报告者,"报告结果发布人，人员编号＋名称，如“001#,#张三”",200,,
+,\x00\x24,LRS0036,String字符串（变长）,,SC_RES_DOCT,报告者编码,,200,,
+,\x00\x25,LRS0037,String字符串（变长）,,ST_RES_DOCT,报告者名称,,200,,
+,\x00\x34,LRS0052,String字符串（变长）,,ST_RES_DEPT,出报告的检验科室,出报告的检验科室,100,,
+,\x00\x35,LRS0053,String字符串（变长）,,SC_RES_DEPT,出报告的检验科室编码,出报告的检验科室编码,,,
+,\x00\x12,LRS0018,自定义字典类型，字符串（变长）,379,PRINTED,是否已打印,是否已打印,200,是,是
+,\x00\x13,LRS0019,自定义字典类型，字符串（变长）,379,SELF_PRINTED,是否自助打印,是否自助打印,200,,
+,\x00\x29,LRS0041,简化字典（Integer整型，4个字节）,379,SD_SELF_PRINTED,是否自助打印,是否自助打印,20,,
+,\x00\x33,LRS0051,String字符串（变长）,,SC_SELF_PRINTED,是否自助打印编码,源业务系统是否自助打印编码,20,,
+,\x00\x30,LRS0048,String字符串（变长）,,ST_SELF_PRINTED,是否自助打印说明,源业务系统是否自助打印说明,20,,
+,\x00\x17,LRS0023,Integer整型（4个字节）,,PRINT_NUM,打印次数,结果单已经打印的次数,20,,
+,\x00\x18,LRS0024,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PRINT_LAST_TIME,最后打印时间,该结果单最后一次打印时间,19,,
+,\x00\x1F,LRS0031,自定义字典类型，字符串（变长）,379,CRISIS_FLAG,是否危急值,是否有危急值项目,200,,
+,\x00\x2B,LRS0043,简化字典（Integer整型，4个字节）,379,SD_CRISIS,是否危急值,是否有危急值项目,20,,
+,\x00\x32,LRS0050,String字符串（变长）,,SC_CRISIS,是否危急值编码,源业务系统是否危急值编码,20,,
+,\x00\x2F,LRS0047,String字符串（变长）,,ST_CRISIS,是否危急值说明,源业务系统是否危急值说明,20,,
+,\x00\x20,LRS0032,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x23,LRS0035,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x36,LRS0054,简化字典（Integer整型，4个字节）,379,SD_REPORT_WRONG,检验报告不正确标识,,20,,
+,\x00\x37,LRS0055,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x38,LRS0056,String字符串（变长）,,SC_LAB_EXE,检验执行人工号,检验执行人工号,200,,
+,\x00\x39,LRS0057,String字符串（变长）,,ST_LAB_EXE,检验执行人姓名,检验执行人姓名,200,,
+,\x00\x3A,LRS0058,String字符串（变长）,,PDF_REPORT_URL,检验报告文件地址链接,,,,
+,\x00\x3B,LRS0059,String字符串（变长）,,PDF_REPORT_NO,检验报告文件编号,,,,
+,\x00\x3C,LRS0060,String字符串（变长）,,SC_MICROBE,微生物细菌编码,微生物细菌编码,200,,
+,\x00\x3D,LRS0061,String字符串（变长）,,ST_MICROBE,微生物细菌名称,微生物细菌名称,200,,
+,\x00\x3E,LRS0062,String字符串（变长）,,PATIENT_NAME,患者姓名,患者姓名,100,,
+,\x00\x3F,LRS0063,String字符串（变长）,,ID_CARD_NO,身份证号,身份证件号码,50,,
+,\x00\x40,LRS0064,String字符串（变长）,,PERIOD_DESC,生理周期,生理周期描述,500,,

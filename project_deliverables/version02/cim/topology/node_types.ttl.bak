@@ -1,0 +1,88 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-topo:   <https://cim.medical/ontology/v3.4/topology#> .
+
+<https://cim.medical/ontology/v3.4/topology>
+    a owl:Ontology ;
+    rdfs:label "CIM Topology Module"@en ;
+    rdfs:comment "Topology node and edge types for building systems."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/core> .
+
+cim-topo:Node
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Topology Node"@en ;
+    rdfs:label "拓扑节点"@zh-CN ;
+    cim:sourceAgent "Agent-01" ;
+    rdfs:comment "Abstract base class for all topology nodes."@en .
+
+cim-topo:Source_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Source Node"@en ;
+    rdfs:label "源节点"@zh-CN ;
+    rdfs:comment "系统的能量/介质输入端，流动的起点"@zh-CN ;
+    cim:sourceAgent "Agent-01" .
+
+cim-topo:Sink_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Sink Node"@en ;
+    rdfs:label "末端节点"@zh-CN ;
+    rdfs:comment "系统的能量/介质消耗端，流动的终点"@zh-CN ;
+    cim:sourceAgent "Agent-01" .
+
+cim-topo:Distribution_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Distribution Node"@en ;
+    rdfs:label "分配节点"@zh-CN ;
+    rdfs:comment "进行分配、汇集、调节的中间节点"@zh-CN ;
+    cim:sourceAgent "Agent-01" .
+
+cim-topo:LogicalNode
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Logical Node"@en ;
+    rdfs:label "逻辑节点"@zh-CN ;
+    rdfs:comment "纯逻辑节点，无需物理设备映射。用于解决GAP-001。"@zh-CN ;
+    cim:sourceAgent "Agent-01" ;
+    skos:note "Added to resolve GAP-001: nodes that don't require equipment mapping."@en .
+    
+cim-topo:Junction
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:LogicalNode ;
+    rdfs:label "Junction"@en ;
+    rdfs:label "汇集点"@zh-CN ;
+    rdfs:comment "多路输入汇聚为一路输出"@zh-CN ;
+    owl:disjointWith cim-topo:Splitter .
+
+cim-topo:Splitter
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:LogicalNode ;
+    rdfs:label "Splitter"@en ;
+    rdfs:label "分配点"@zh-CN ;
+    rdfs:comment "一路输入分配为多路输出"@zh-CN .
+
+cim-topo:Regulator
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Distribution_Node ;
+    rdfs:label "Regulator"@en ;
+    rdfs:label "调节点"@zh-CN ;
+    rdfs:comment "对流量/压力/电压等进行调节"@zh-CN .
+
+cim-topo:Transformer_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Distribution_Node ;
+    rdfs:label "Transformer Node"@en ;
+    rdfs:label "转换点"@zh-CN ;
+    rdfs:comment "改变介质形态或能量品位"@zh-CN .
+
+# ============================================================================
+# END OF TOPOLOGY NODE_TYPES MODULE
+# ============================================================================

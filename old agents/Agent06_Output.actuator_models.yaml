@@ -1,0 +1,164 @@
+# 执行器模型库 - 医疗建筑控制系统
+
+actuator_classification:
+  main_categories:
+    ACTUATOR-VALVE:
+      name: "阀门执行器"
+      description: "驱动阀门动作的执行机构"
+      actuation_types: ["电动", "气动", "液压"]
+      valve_types: ["二通阀", "三通阀", "螺阀", "闸阀", "截止阀"]
+      control_signaux: ["比例", "浮点", "开关"]
+
+    ACTUATOR-DAMPER:
+      name: "风阀执行器"
+      description: "驱动风阀动作的执行机构"
+      diameter_range: "0.1m - 4.0m"
+      torque_requirement: "5-5000 Nm"
+      working_temperature: "-20°C to +70°C"
+
+    ACTUATOR-PUMP:
+      name: "水泵驱动器"
+      description: "驱动水泵的执行机构"
+      types: ["变频驱动器(VSD)", "软启动器", "直接启动器"]
+      power_range: "0.75kW - 500kW"
+      control_level: ["速度", "流量", "压力", "功率"]
+
+    ACTUATOR-FAN:
+      name: "风机驱动器"
+      description: "驱动风机的执行机构"
+      types: ["变频驱动器(VSD)", "EC风机", "多速电机"]
+      control_parameters: ["转速", "风量", "压力", "功率"]
+
+    ACTUATOR-CHILLER:
+      name: "冷机控制器"
+      description: "控制冷机组运行的执行机构"
+      control_scope: ["启停", "容量", "温度", "能放"]
+      capacity_control: ["滑阀", "气象", "变速", "台数"]
+
+    ACTUATOR-RELAY:
+      name: "继电器/接触器"
+      description: "电气开关类执行器件"
+      types: ["电磁继电器", "固态继电器", "接触器"]
+      load_types: ["阻性", "感性", "灯负载", "电机负载"]
+
+# 详细执行器模型
+detailed_actuator_models:
+
+  # 电动调节阀执行器
+  actuator_valve_motorized:
+    actuator_id: "ACTUATOR-VALVE-MOTOR-001"
+    name: "电动调节阀执行器"
+    type: "ACTUATOR-VALVE"
+    subtype: "MIXING-MOTORIZED"
+    description: "用于冷热媒调节的电动阀门执行器"
+
+    technical_specs:
+      valve_type: "二通或三通调节阀"
+      nominal_diameter: "DN15 to DN150"
+      flow_characteristic: "等百分比或线性"
+      leakage_rate: "≤0.01% of Kvs"
+
+    actuation:
+      type: "电动ROTARY或LINEAR"
+      time_nominal: "30-120秒 (全行程)"
+      torque: "5-200 Nm"
+      positioning_accuracy: "±1%"
+      repeatability: "±0.5%"
+
+    control_signal:
+      input_signal: ["4-20mA", "0-10V", "BACnet", "Modbus"]
+      input_impedance: "250Ω (4-20mA), 100kΩ (0-10V)"
+      action: "正向或反向 (可选)"
+      dead_band: "< 1.0%"
+
+    feedback_signal:
+      position_feedback: "4-20mA两线制"
+      limit_switches: "上下限位开关"
+      auxiliary_switch: "可选"
+      failure_indication: "继电器输出"
+
+    safety_features:
+      spring_return: "可选 (故障时关闭或开启)"
+      manual_override: "手动操作位置"
+      stall_protection: "电机过热保护"
+      mechanical_stops: "行程末端机械限位"
+
+    environmental:
+      operating_temperature: "-10°C to +55°C"
+      protection_class: "IP54 (标准), IP65 (可选)"
+      humidity: "95% RH 无凝露"
+      vibration: "< 10m/s²"
+
+    power_requirements:
+      supply_voltage: "24V AC/DC or 230V AC"
+      power_consumption: "5-50W (运行), <2W (待机)"
+      electrical_connection: "螺纹端子或接插件"
+
+  actuator_valve_pneumatic:
+    actuator_id: "ACTUATOR-VALVE-PNEU-001"
+    name: "气动阀门执行器"
+    type: "ACTUATOR-VALVE"
+    subtype: "MIXING-PNEUMATIC"
+    description: "气动调节阀门执行器"
+
+    actuator_specs:
+      actuation: "双作用或单作用(弹簧)"
+      air_supply: "400-800 kPa (4-8 bar)"
+      air_consumption: "0.5-5 Nm³/h"
+
+    positioning:
+      time_base: "1-10秒 (基于体积)"
+      thrust: "500-20000 N"
+      travel: "6-100mm"
+
+    air_quality:
+      filtration: "40μm"
+      lubrication: "无油干燥空气"
+      dew_point: "比环境温度超低10°C"
+
+    control:
+      positioner: "智能式或传统式"
+      signal: "4-20mA或0.2-1.0 bar"
+      characteristic: "可调"
+
+  # 风阀执行器
+  actuator_damper_belimo:
+    actuator_id: "ACTUATOR-DAMPER-BELIMO-001"
+    name: "风量调节风阀执行器"
+    type: "ACTUATOR-DAMPER"
+    subtype: "MODULATING-DAMPER"
+    description: "圆形或矩形风阀的执行器"
+
+    technical_specs:
+      damper_size: "0.1m to 2.0m 直径"
+      torque_range: "5-500 Nm"
+      rotation_angle: "0-90°"
+      operating_time: "60-150秒 (90°)"
+
+    torque_requirements:
+      static_torque: "最小开启力矩"
+      dynamic_torque: "运行过程中的力矩"
+      wind_load_torque: "考虑风压影响"
+      safety_factor: "1.5倍安全系数"
+
+    mounting:
+      damper_shaft: "方轴 or 圆轴"
+      max_shaft_diameter: "20-50mm"
+      coupling_type: "夹紧式或键槽式"
+      bracket_options: "通用型或直接安装"
+
+    control_configuration:
+      control_signal: ["ON/OFF", "浮点", "调制4-20mA/0-10V"]
+      feedback: ["机械位置指示", "电位计", "4-20mA"]
+      auxiliary_switches: "2-6个独立触点"
+      fail_safe_options: ["保持原位", "弹簧返回"]
+
+    environmental_ratings:
+      operating_temperature: "-30°C to +50°C"
+      protection_class: "IP54 minimum"
+      storage_temperature: "-40°C to +80°C"
+      humidity_range: "95% RH 无凝露"
+
+    bearings_and_mechanism:
+      bearing_type: "终身润滑球轴承"
+      gear_material: "硬化钢"

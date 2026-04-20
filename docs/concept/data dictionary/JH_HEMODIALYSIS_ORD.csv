@@ -1,0 +1,38 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_HEMODIALYSIS_ORD,表全名,JHPDL:JH_HEMODIALYSIS_ORD,,,,,,
+,表说明,血透医嘱,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,HMB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,HMB0001,String字符串（变长）,,ITEMS_OUT_DTL_SN,医嘱唯一号,内部三级编码HB0.000.000.001,20,是,是
+,\x00\x02,HMB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,HMB0003,String字符串（变长）,,HEMODIALYSIS_APY_SN,血透申请单唯一号,"来源JH_HEMODIALYSIS_APY的HMA0001,弱关联",20,是,是
+,\x00\x1A,HMB0026,String字符串（变长）,,HIS_PAT_ID,患者业务唯一号,患者业务唯一号,200,是,是
+,\x00\x1B,HMB0027,String字符串（变长）,,HIS_VIS_ID,就诊业务唯一号,就诊业务唯一号,200,是,是
+,\x00\x04,HMB0004,String字符串（变长）,,SC_ORDER_TYPE,医嘱类型,,20,,
+,\x00\x05,HMB0005,String字符串（变长）,,ST_ORDER_TYPE,医嘱类型,,40,,
+,\x00\x06,HMB0006,String字符串（变长）,,ORDER_TIME,开立时间,,31,,
+,\x00\x07,HMB0007,String字符串（变长）,,SC_ORDER_DOC,开立医生,,40,,
+,\x00\x08,HMB0008,String字符串（变长）,,ST_ORDER_DOC,开立医生,,40,,
+,\x00\x09,HMB0009,String字符串（变长）,,YPID,药品ID,,40,,
+,\x00\x0A,HMB0010,String字符串（变长）,,YP_TYPE,药品类型,,40,,
+,\x00\x0B,HMB0011,String字符串（变长）,,YP_NAME,药品名称,,40,,
+,\x00\x0C,HMB0012,String字符串（变长）,,DOSEAGE,单次剂量,,20,,
+,\x00\x0D,HMB0013,String字符串（变长）,,DOSEAGE_UNIT,剂量单位,,20,,
+,\x00\x0E,HMB0014,String字符串（变长）,,DOSEAGE_AMOUNT,单次数量,,20,,
+,\x00\x0F,HMB0015,String字符串（变长）,,ADMINISTRATION,给药方式,,20,,
+,\x00\x10,HMB0016,String字符串（变长）,,SELF_FLAG,自备标识,,40,,
+,\x00\x11,HMB0017,String字符串（变长）,,ORDER_NAME,医嘱内容,,200,,
+,\x00\x12,HMB0018,String字符串（变长）,,AUDIT_NURSE,核对护士,,40,,
+,\x00\x13,HMB0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,AUDIT_TIME,核对时间,,31,,
+,\x00\x14,HMB0020,String字符串（变长）,,EXEC_NURSE,执行护士,,40,,
+,\x00\x15,HMB0021,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,EXEC_TIME,执行时间,,31,,
+,\x00\x16,HMB0022,String字符串（变长）,,EXEC_RESULT,执行结果,,40,,
+,\x00\x17,HMB0023,String字符串（变长）,,EXEC_STATUS,执行状态,,40,,
+,\x00\x18,HMB0024,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x19,HMB0025,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x1C,HMB0028,String字符串（变长）,,SC_DIALYSIS_WAY,治疗方式编码,与血透记录的SC_DIALYSIS_WAY保持一致,100,,
+,\x00\x1D,HMB0029,String字符串（变长）,,ST_DIALYSIS_WAY,治疗方式描述,对应电子病历评级的治疗项目，需要和血透记录表ST_DIALYSIS_WAY保持一致,100,,
+,\x00\x1E,HMB0030,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

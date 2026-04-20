@@ -1,0 +1,15 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_RHHV_REPORT_INFO,表全名,JHPDL:JH_RHHV_REPORT_INFO,,,,,,
+,表说明,填报数据,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,VCS,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,VCS0001,String字符串（变长）,,KPI_CODE,指标编码,,16,,
+,\x00\x02,VCS0002,String字符串（变长）,,HIS_KEY,业务主键,,200,,
+,\x00\x03,VCS0003,String字符串（变长）,,KPI_NAME,指标名称,,64,,
+,\x00\x04,VCS0004,String字符串（变长）,,VALUE,指标数值,,64,,
+,\x00\x05,VCS0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DATE,填报日期,,,,
+,\x00\x06,VCS0006,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,业务主键结构,200,,
+,\x00\x07,VCS0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最,,,

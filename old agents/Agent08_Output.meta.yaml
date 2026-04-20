@@ -1,0 +1,110 @@
+# Agent-08 运维管理建模师 输出文件元数据
+
+meta:
+  agent_id: "Agent-08"
+  agent_role: "运维管理建模师 (O&M Management Architect)"
+  mission: "基于Agent-03、Agent-06、Agent-07的输出，构建告警、工单、维护、资产生命周期等运维管理模型"
+
+  inputs:
+    - "Agent-03: 设备本体模型（告警规则、维护要求）"
+    - "Agent-06: 控制系统模型（传感器、控制回路）"
+    - "Agent-07: 计量体系模型（能耗数据、计量异常）"
+    - "Agent-02: 医疗特殊空间模型（手术室、ICU、负压病房）"
+
+  modeling_scope:
+    - "告警事件建模（分类、级别、响应机制）"
+    - "工单流程建模（类型、状态流转、SLA）"
+    - "维护策略建模（预防性、预测性维护）"
+    - "资产生命周期建模（状态、关键节点、LCC）"
+    - "运维组织建模（结构、班组、技能管理）"
+    - "运维流程与制度（SOP、应急预案）"
+    - "医疗场景特殊运维要求"
+
+  output_files:
+    - "Agent08_Output.meta"
+    - "Agent08_Output.alarm_models"
+    - "Agent08_Output.work_order_models"
+    - "Agent08_Output.maintenance_strategies"
+    - "Agent08_Output.asset_lifecycle_models"
+    - "Agent08_Output.operation_organization_models"
+
+  modeling_date: "2025-12-02"
+  model_version: "v1.0"
+  project_scope: "医疗建筑机电系统运维管理模型设计"
+
+# 运维管理设计标准
+standards:
+  medical_buildings: "GB 51039-2014 综合医院建筑设计规范"
+  cleanroom: "GB 50333-2013 医院洁净手术部建筑技术规范"
+  isolation: "WS/T 311-2009 医院隔离技术规范"
+  biosafety: "GB 19489-2008 实验室生物安全通用要求"
+  electrical: "JGJ 16-2008 民用建筑电气设计规范"
+  hvac: "GB 50736-2012 民用建筑供暖通风与空气调节设计规范"
+  maintenance: "GB/T 50378-2019 绿色建筑运行管理标准"
+  emergency: "GB 50045-95 高层民用建筑设计防火规范"
+  energy: "GB/T 17981-2007 节能效果测定与验证技术通则"
+
+# 医疗场景运维特殊要求
+medical_special_requirements:
+  operating_room:
+    critical_systems: ["手术环境", "医疗设备", "电力供应", "医用气体"]
+    zero_tolerance: ["压差失效", "温湿度超限", "洁净度下降", "电力中断"]
+    response_time: "P0级(5分钟内)"
+    backup_requirements: ["UPS", "柴油发电机", "应急冷源"]
+    compliance_monitoring: "24小时连续监测"
+
+  icu:
+    critical_systems: ["生命支持", "环境控制", "监测设备", "通讯系统"]
+    patient_safety: "以人为本，生命优先"
+    response_time: "P0-P1级(5-30分钟)"
+    backup_requirements: ["医疗设备UPS", "应急电力", "独立空调"]
+    monitoring_frequency: "分钟级数据采集"
+
+  negative_pressure_isolation:
+    critical_systems: ["压差维持", "定向气流", "HEPA过滤", "排风消毒"]
+    biosafety_compliance: "严格遵循隔离规范"
+    response_time: "P0级(2分钟内)"
+    backup_requirements: ["备用风机", "自动切换", "应急电源"]
+    infection_control: "零泄漏要求"
+
+# 运维建模基础原则
+modeling_principles:
+  systematic_approach: "基于设备本体、控制系统、计量体系的综合运维建模"
+  lifecycle_perspective: "覆盖规划、采购、运行、维护、退役的全生命周期"
+  risk_based: "基于风险评估的分级管理"
+  compliance_driven: "严格遵循医疗行业监管要求"
+  patient_centric: "以患者安全和医疗质量为核心"
+  preventive_focus: "预防为主，预测为辅的维护策略"
+  data_driven: "基于实时数据和历史趋势的智能决策"
+
+# 计算基准
+calculation_bases:
+  sla_response_time:
+    p0_emergency: "5分钟响应，30分钟到场，2小时解决"
+    p1_critical: "15分钟响应，1小时到场，4小时解决"
+    p2_major: "30分钟响应，4小时到场，24小时解决"
+    p3_minor: "1小时响应，24小时到场，72小时解决"
+
+  maintenance_frequency:
+    daily: "运行值守，巡检记录"
+    weekly: "主要设备检查，滤网清洁"
+    monthly: "预防性维护，性能测试"
+    quarterly: "深度保养，部件更换"
+    annually: "大修，校验，性能评估"
+
+  asset_lifecycle:
+    planning_phase: "需求分析，技术选型"
+    procurement_phase: "招标采购，设备制造"
+    installation_phase: "安装调试，验收测试"
+    operational_phase: "运行维护，性能优化"
+    degradation_phase: "效率下降，故障增加"
+    replacement_planning: "更新评估，替换决策"
+
+# 质量与安全要求
+quality_safety:
+  zero_harm_goal: "零伤害、零事故、零感染"
+  regulatory_compliance: "100%符合法规要求"
+  uptime_target: "关键系统99.9%可用性"
+  energy_efficiency: "能效指标持续改进"
+  cost_effectiveness: "全生命周期成本最优"
+  staff_competency: "人员资质能力达标率100%"

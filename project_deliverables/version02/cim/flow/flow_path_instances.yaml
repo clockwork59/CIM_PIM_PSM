@@ -1,0 +1,272 @@
+# CIM 流动路径实例定义
+# 基于 Agent-04 流动模型的机器可读路径实例化
+# 版本: 1.0.0 | 生成日期: 2026-04-05
+
+meta:
+  file_id: "FLOW-INST-CIM-20260405"
+  description: "主要流动路径实例，连接拓扑节点与空间"
+  source_agents: ["Agent-01", "Agent-04"]
+
+flow_paths:
+
+  # ===================================================================
+  # 冷冻水系统流路
+  # ===================================================================
+  - path_id: FLOW-CHW-MAIN
+    label_cn: 冷冻水主循环路径
+    label_en: Chilled Water Main Loop
+    carrier_type: chilled_water
+    payload_type: cooling_energy
+    flow_category: mass_flow
+    source_node: "HVAC-CHP_SRC_CHILLER_1"
+    sink_nodes:
+      - "HVAC-AHU_SNK_AHU_OR_01"
+      - "HVAC-AHU_SNK_AHU_ICU_01"
+      - "HVAC-AHU_SNK_AHU_WARD_A01"
+      - "HVAC-FCU_SNK_WARD_A_3F"
+    intermediate_nodes:
+      - "HVAC-CHP_DST_CHWP_1"
+      - "HVAC-CHP_DST_SEPARATOR"
+      - "HVAC-CHP_DST_HEADER_S"
+    served_spaces: [OR-001, ICU-001, WARD-A-3F, WARD-A-4F, WARD-A-5F]
+    design_parameters:
+      supply_temperature: "7°C"
+      return_temperature: "12°C"
+      delta_t: "5°C"
+      total_flow_rate: "500 m³/h"
+      operating_pressure: "0.8 MPa"
+
+  # ===================================================================
+  # 冷却水系统流路
+  # ===================================================================
+  - path_id: FLOW-CW-MAIN
+    label_cn: 冷却水循环路径
+    label_en: Condenser Water Loop
+    carrier_type: cooling_water
+    payload_type: heat_rejection
+    flow_category: mass_flow
+    source_node: "HVAC-CHP_DST_CT_1"
+    sink_nodes: ["HVAC-CHP_SRC_CHILLER_1", "HVAC-CHP_SRC_CHILLER_2"]
+    intermediate_nodes: ["HVAC-CHP_DST_CWP_1"]
+    design_parameters:
+      supply_temperature: "32°C"
+      return_temperature: "37°C"
+      delta_t: "5°C"
+      total_flow_rate: "650 m³/h"
+
+  # ===================================================================
+  # 手术室送风路径
+  # ===================================================================
+  - path_id: FLOW-SA-OR
+    label_cn: 手术室送风路径
+    label_en: OR Supply Air Path
+    carrier_type: supply_air
+    payload_type: cooling_energy
+    flow_category: mass_flow
+    source_node: "HVAC-AHU_SNK_AHU_OR_01"
+    sink_nodes: ["MED-OR_SNK_OR_001"]
+    intermediate_nodes: ["HVAC-AHU_DST_MIX_POINT"]
+    served_spaces: [OR-001, OR-002, OR-003, OR-004]
+    design_parameters:
+      supply_temperature: "18-22°C"
+      air_changes: "36 ACH (I级)"
+      filtration: "HEPA 99.97%"
+      flow_rate: "12000 m³/h"
+      pressure_differential: "+15 Pa"
+
+  # ===================================================================
+  # 医用氧气路径
+  # ===================================================================
+  - path_id: FLOW-O2-MAIN
+    label_cn: 医用氧气供应路径
+    label_en: Medical O2 Supply Path
+    carrier_type: oxygen
+    payload_type: medical_supply
+    flow_category: mass_flow
+    source_node: "MGAS-O2_SRC_LOX"
+    sink_nodes: ["MGAS-O2_SNK_TERMINAL_OR_001"]
+    intermediate_nodes:
+      - "MGAS-O2_DST_REDUCER"
+      - "MGAS-O2_DST_ZONE_OR"
+    served_spaces: [OR-001, ICU-001]
+    design_parameters:
+      supply_pressure: "0.4 MPa"
+      terminal_pressure: "0.3 MPa"
+      purity: "≥99.5% O2"
+
+  # ===================================================================
+  # 电力供配路径
+  # ===================================================================
+  - path_id: FLOW-ELEC-NORMAL
+    label_cn: 正常电力供配路径
+    label_en: Normal Power Distribution Path
+    carrier_type: electricity_hv
+    payload_type: electrical_energy
+    flow_category: energy_flow
+    source_node: "ELEC-HV_SRC_TRANS_1"
+    sink_nodes: ["ELEC-IPS_DST_ISOTRANS_OR"]
+    intermediate_nodes:
+      - "ELEC-LV_DST_MDB_1"
+      - "ELEC-LV_DST_BUS_COUPLER"
+    design_parameters:
+      input_voltage: "10kV"
+      output_voltage: "380/220V"
+      load_density: "100-150 W/m²"
+
+  - path_id: FLOW-ELEC-EMERGENCY
+    label_cn: 应急电力供配路径
+    label_en: Emergency Power Path
+    carrier_type: electricity_lv
+    payload_type: electrical_energy
+    flow_category: energy_flow
+    source_node: "ELEC-EPS_SRC_GEN_1"
+    sink_nodes: ["ELEC-IPS_DST_ISOTRANS_OR"]
+    intermediate_nodes:
+      - "ELEC-EPS_DST_ATS_1"
+      - "ELEC-EPS_DST_UPS_1"
+    design_parameters:
+      startup_time: "≤15秒"
+      autonomy: "≥24小时"
+      load_coverage: "一级特别重要负荷"
+
+  # ===================================================================
+  # 消防水路径
+  # ===================================================================
+  - path_id: FLOW-FIRE-HYDRANT
+    label_cn: 消火栓供水路径
+    label_en: Fire Hydrant Water Path
+    carrier_type: fire_water
+    payload_type: fire_suppression
+    flow_category: mass_flow
+    source_node: "FIRE-HYDRANT_SRC_PUMP"
+    sink_nodes: ["FIRE-HYDRANT_SNK_RISER"]
+    design_parameters:
+      dynamic_pressure: "0.1-0.5 MPa"
+      flow_rate: "5-40 L/s"
+
+  # ===================================================================
+  # BACnet 数据通信路径
+  # ===================================================================
+  - path_id: FLOW-DATA-BACNET
+    label_cn: BACnet控制通信路径
+    label_en: BACnet Control Data Path
+    carrier_type: data_signal
+    payload_type: control_information
+    flow_category: information_flow
+    source_node: "BA-BAS_DST_DDC_OR"
+    sink_nodes: ["BA-BMS_SERVER"]
+    intermediate_nodes: ["BA-NAC_OR", "BA-EDGE_GW"]
+    design_parameters:
+      protocol: "BACnet/IP + MS/TP"
+      field_baud: "76800 bps"
+      backbone: "1 Gbps Ethernet"
+
+  # ===================================================================
+  # Phase 6F: 生活冷水供水路径
+  # ===================================================================
+  - path_id: FLOW-DW-COLD
+    label_cn: 生活冷水供水路径
+    label_en: Domestic Cold Water Supply
+    carrier_type: domestic_water_cold
+    payload_type: potable_water
+    flow_category: mass_flow
+    source_node: "PLUMB-WSS_SRC_PUMP"
+    sink_nodes: ["PLUMB-WSS_SNK_OR_SCRUB", "PLUMB-PW_SNK_CSSD"]
+    served_spaces: [OR-SCRUB, WARD-A, OPD, KITCHEN]
+    design_parameters:
+      pressure_zones: ["低区(1-4F): 市政直供", "中区(5-10F): 加压泵组"]
+      supply_pressure: "0.15-0.50 MPa"
+      water_quality: "GB5749 生活饮用水标准"
+
+  # ===================================================================
+  # Phase 6F: 生活热水循环路径
+  # ===================================================================
+  - path_id: FLOW-DW-HOT
+    label_cn: 生活热水循环路径
+    label_en: Domestic Hot Water Circulation
+    carrier_type: domestic_water_hot
+    payload_type: thermal_comfort
+    flow_category: mass_flow
+    source_node: "PLUMB-HWS_SRC_HX"
+    sink_nodes: ["PLUMB-WSS_SNK_OR_SCRUB"]
+    intermediate_nodes: ["PLUMB-HWS_DST_CIRC_PUMP"]
+    design_parameters:
+      supply_temperature: "60°C"
+      return_temperature: "50°C"
+      anti_legionella: "60°C持续供水，定期70°C热消毒"
+
+  # ===================================================================
+  # Phase 6F: 排水重力路径
+  # ===================================================================
+  - path_id: FLOW-DRN-GRAVITY
+    label_cn: 排水重力路径
+    label_en: Gravity Drainage Path
+    carrier_type: sewage
+    payload_type: waste_removal
+    flow_category: mass_flow
+    source_node: "PLUMB-DRN_SNK_BUILDING"
+    sink_nodes: ["PLUMB-DRN_SNK_SEWER"]
+    design_parameters:
+      flow_type: 重力流
+      pipe_slope: "≥1%"
+      treatment: ["隔油池(厨房)", "化粪池", "医疗废水预处理"]
+
+  # ===================================================================
+  # Phase 6F: 蒸汽供应路径
+  # ===================================================================
+  - path_id: FLOW-STM-MAIN
+    label_cn: 蒸汽供应路径
+    label_en: Steam Supply Path
+    carrier_type: saturated_steam
+    payload_type: thermal_energy
+    flow_category: mass_flow
+    source_node: "HVAC-HTP_SRC_BOILER"
+    sink_nodes: ["PLUMB-HWS_SRC_HX", "MED-CSSD-STERILIZER"]
+    design_parameters:
+      high_pressure: "0.8-1.0 MPa (工艺加热/消毒)"
+      low_pressure: "0.2-0.4 MPa (生活热水/加湿)"
+      condensate_return: "重力+泵送回流, 闪蒸回收"
+
+  # ===================================================================
+  # Phase 6F: 排烟路径
+  # ===================================================================
+  - path_id: FLOW-SMOKE-EXHAUST
+    label_cn: 排烟路径
+    label_en: Smoke Exhaust Path
+    carrier_type: smoke_laden_air
+    payload_type: fire_safety
+    flow_category: mass_flow
+    source_node: "FIRE-SMOKE_SRC_FAN_1"
+    sink_nodes: ["FIRE-SMOKE_SNK_OUTDOORS"]
+    design_parameters:
+      exhaust_volume: "≥60000 m³/h per zone"
+      temperature_rating: "280°C / 0.5h"
+      activation: "火灾联动信号"
+      standard_ref: "GB51251-2017"
+
+  # ===================================================================
+  # Phase 6F: 医用真空路径
+  # ===================================================================
+  - path_id: FLOW-VAC-MAIN
+    label_cn: 医用真空路径
+    label_en: Medical Vacuum Path
+    carrier_type: vacuum
+    payload_type: suction_service
+    flow_category: mass_flow
+    source_node: "MGAS-VAC_SRC_PUMP"
+    sink_nodes: ["MGAS-VAC_SNK_TERMINAL_OR", "MGAS-VAC_SNK_TERMINAL_ICU"]
+    design_parameters:
+      vacuum_level: "-60 to -70 kPa"
+      contamination_control: "过滤器阻截+消毒灭菌"
+      capacity: "100% 备用冗余"
+      standard_ref: "GB50751-2012"
+
+statistics:
+  total_flow_paths: 15
+  by_category:
+    mass_flow: 11
+    energy_flow: 2
+    information_flow: 1
+    fire_suppression: 1
+  systems_covered: [HVAC, ELECTRICAL, MEDICAL_GAS, FIRE_PROTECTION, BUILDING_AUTOMATION, PLUMBING, STEAM]
+  phase6f_additions: [FLOW-DW-COLD, FLOW-DW-HOT, FLOW-DRN-GRAVITY, FLOW-STM-MAIN, FLOW-SMOKE-EXHAUST, FLOW-VAC-MAIN]

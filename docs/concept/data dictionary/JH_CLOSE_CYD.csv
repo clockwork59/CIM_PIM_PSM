@@ -1,0 +1,31 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CLOSE_CYD,表全名,JHPDL:JH_CLOSE_CYD,,,,,,
+,表说明,闭环数据规范,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CYD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CYD0001,String字符串（变长）,,CLOSE_CYD_SN,闭环数据记录唯一号,内部三级编码CD0.000.000.001,20,是,是
+,\x00\x02,CYD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,CYD0003,String字符串（变长）,,HIS_PAT_ID,患者业务唯一号,患者业务唯一号,200,,
+,\x00\x04,CYD0004,String字符串（变长）,,HIS_VIS_ID,就诊业务唯一号,就诊业务唯一号,200,,
+,\x00\x05,CYD0005,String字符串（变长）,,ORD_NO,业务系统医嘱号或申请单号,业务系统医嘱号或申请单号,20,,
+,\x00\x06,CYD0006,String字符串（变长）,,BAR_CODE,条码号,输血、药品医嘱执行均会用到条码号,20,,
+,\x00\x07,CYD0007,String字符串（变长）,,CLOSE_CYC_TYPE,闭环类型,闭环类型例如医嘱、检验、检查、输血、手术等,200,,
+,\x00\x08,CYD0008,String字符串（变长）,,SC_EXEC,操作编码,,31,,
+,\x00\x09,CYD0009,String字符串（变长）,,ST_EXEC,操作名称,,20,,
+,\x00\x0A,CYD0010,String字符串（变长）,,SC_OPER,执行人编码,第一执行人/签名人,20,,
+,\x00\x0B,CYD0011,String字符串（变长）,,ST_OPER,执行人姓名,第一执行人/签名人,20,,
+,\x00\x0C,CYD0012,String字符串（变长）,,SC_OPER1,执行人编码1,第二执行人/签名人,20,,
+,\x00\x0D,CYD0013,String字符串（变长）,,ST_OPER1,执行人姓名1,第二执行人/签名人,20,,
+,\x00\x0E,CYD0014,String字符串（变长）,,SC_OPER2,执行人编码2,第三执行人/签名人,20,,
+,\x00\x0F,CYD0015,String字符串（变长）,,ST_OPER2,执行人姓名2,第三执行人/签名人,20,,
+,\x00\x10,CYD0016,String字符串（变长）,,SC_DEPT,执行科室编码,,20,,
+,\x00\x11,CYD0017,String字符串（变长）,,ST_DEPT,执行科室名称,,20,,
+,\x00\x12,CYD0018,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,EXEC_TIME,执行时间,,31,,
+,\x00\x13,CYD0019,String字符串（变长）,,EXEC_COMENT,执行情况、备注,例如危急值闭环需要显示处理结果,500,,
+,\x00\x14,CYD0020,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x15,CYD0021,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x16,CYD0022,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,200,,
+,\x00\x17,CYD0023,String字符串（变长）,,PARENT_ORDER_NO,父医嘱号,父医嘱号,200,,

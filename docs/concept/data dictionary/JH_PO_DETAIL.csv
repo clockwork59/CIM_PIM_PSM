@@ -1,0 +1,37 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_PO_DETAIL,表全名,JHPDL:JH_PO_DETAIL,,,,,,
+,表说明,门诊出诊排班明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,DOD,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,DOD0001,String字符串（变长）,,PO_DETAIL_SN,出诊明细编号,临床医生门诊出诊排班明细编号，系统生成三级编码，如“DD0.000.000.001”,20,是,是
+,\x00\x02,DOD0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,DOD0003,String字符串（变长）,,PLAN_OUT_SN,出诊排班编号,临床医生门诊出诊排班记录编号，来源JH_PLAN_OUT的DOP0001,20,是,是
+,\x00\x04,DOD0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,DOD0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x06,DOD0006,String字符串（变长）,,PO_DETAIL_CODE,出诊明细号,来源业务系统的排班明细记录唯一号,100,,
+,\x00\x07,DOD0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,POD_START_TIME,明细开始时间,,19,,
+,\x00\x08,DOD0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,POD_END_TIME,明细结束时间,,19,,
+,\x00\x09,DOD0009,String字符串（变长）,,POD_DESC,明细描述,如“某某某3月14日上午10点号”,4000,,
+,\x00\x0A,DOD0010,简化字典（Integer整型，4个字节）,461,SD_POD_GRANT,号源配送端,资源发放源；字典项：自助机，业务窗口，网上，电话,20,,
+,\x00\x0B,DOD0011,String字符串（变长）,,ST_POD_GRANT,号源配送端描述,源业务系统中对该号源分配给那端使用的文字描述,500,,
+,\x00\x0C,DOD0012,Short短整型（2个字节）,,POD_RESOURCE,资源总数,,6,,
+,\x00\x0D,DOD0013,Short短整型（2个字节）,,POD_REMAIN,剩余号数,,6,,
+,\x00\x0E,DOD0014,简化字典（Integer整型，4个字节）,460,SD_POD_STATE,排班状态,排班状态；字典项：编辑中，正常执行，作废,20,,
+,\x00\x0F,DOD0015,String字符串（变长）,,SC_POD_GRANT,号源配送端编码,来源业务系统的号源配送端编码,200,,
+,\x00\x10,DOD0016,String字符串（变长）,,SC_POD_STATE,排班状态编码,来源业务系统的排班状态编码,200,,
+,\x00\x11,DOD0017,String字符串（变长）,,ST_POD_STATE,排班状态描述,来源业务系统的排班状态描述,200,,
+,\x00\x12,DOD0018,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,POD_TIME,明细时间,,31,,
+,\x00\x13,DOD0019,String字符串（变长）,,OPER_CODE,操作人,,10,,
+,\x00\x14,DOD0020,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPER_DATE,操作时间,,30,,
+,\x00\x15,DOD0021,Integer整型（4个字节）,,POD_APPLOAD,预约总量,,4,,
+,\x00\x16,DOD0022,Integer整型（4个字节）,,POD_APPLOAD_REMAIN,预约剩余量,,4,,
+,\x00\x17,DOD0023,Integer整型（4个字节）,,POD_ADDLOAD,加号数量,,4,,
+,\x00\x18,DOD0024,String字符串（变长）,,START_NO,起始号,,20,,
+,\x00\x19,DOD0025,String字符串（变长）,,SC_TIME_INTERVAL,出诊时段编码,,10,,
+,\x00\x1A,DOD0026,String字符串（变长）,,ST_TIME_INTERVAL,出诊时段描述,,50,,
+,\x00\x1B,DOD0027,String字符串（变长）,,SC_RESOURCE_TYPE,排班资源类别代码,排班资源类别代码,200,,
+,\x00\x1C,DOD0028,String字符串（变长）,,ST_RESOURCE_TYPE,排班资源类别名称,排班资源类别名称,200,,
+,\x00\x1D,DOD0029,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

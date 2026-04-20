@@ -1,0 +1,685 @@
+# 医疗设备分类体系 (Medical Equipment Classification System)
+# 基于CIM模型的设备本体架构
+
+equipment_classification:
+  # HVAC系统设备分类
+  HVAC:
+    category_id: "HVAC"
+    category_name: "暖通空调设备"
+    description: "医疗建筑环境与空气处理设备"
+
+    equipment_families:
+      # 冷源设备家族
+      CHILLER_FAMILY:
+        family_id: "CHILLER_FAMILY"
+        family_name: "冷水机组设备家族"
+        description: "制冷主机设备及其配套"
+        criticality_level: "CRITICAL"
+
+        equipment_types:
+          CENTRIFUGAL_CHILLER:
+            type_id: "CENTRIFUGAL_CHILLER"
+            type_name: "离心式冷水机组"
+            description: "大容量医疗级离心式制冷机组"
+            capacity_range: "500-2000 RT"
+            applications: ["大型综合医院", "医疗综合体"]
+            efficiency_target: "COP ≥ 6.0 (ARI工况)"
+            medical_features:
+              - "医疗级可靠性要求：N+1配置"
+              - "低噪音设计：≤65dB@1m"
+              - "精确温度控制：±0.5°C"
+              - "备用快速启动：≤3分钟"
+
+          SCREW_CHILLER:
+            type_id: "SCREW_CHILLER"
+            type_name: "螺杆式冷水机组"
+            description: "中等容量螺杆式制冷机组"
+            capacity_range: "100-500 RT"
+            applications: ["中型医院", "专科医院"]
+            efficiency_target: "COP ≥ 5.0 (ARI工况)"
+            medical_features:
+              - "部分负荷性能优化"
+              - "滑阀无级调节：10-100%"
+              - "双压缩机冗余设计"
+              - "智能防喘振控制"
+
+          RECIPROCATING_CHILLER:
+            type_id: "RECIPROCATING_CHILLER"
+            type_name: "涡旋式冷水机组"
+            description: "小容量模块化制冷机组"
+            capacity_range: "10-100 RT"
+            applications: ["小型医院", "门诊部"]
+            efficiency_target: "COP ≥ 4.0 (ARI工况)"
+            medical_features:
+              - "模块化设计：1-8模块组合"
+              - "占地面积小"
+              - "维护简便"
+              - "低振动设计"
+
+          ABSORPTION_CHILLER:
+            type_id: "ABSORPTION_CHILLER"
+            type_name: "吸收式冷水机组"
+            description: "余热驱动的吸收式制冷机组"
+            capacity_range: "100-1000 RT"
+            applications: ["有废热源的医院"]
+            efficiency_target: "COP ≥ 1.2"
+            medical_features:
+              - "可利用发电废热"
+              - "电力消耗极低"
+              - "运行噪音低"
+              - "环保工质"
+
+      # 冷却塔设备家族
+      COOLING_TOWER_FAMILY:
+        family_id: "COOLING_TOWER_FAMILY"
+        family_name: "冷却塔设备家族"
+        description: "排热散热设备"
+
+        equipment_types:
+          CROSSFLOW_TOWER:
+            type_id: "CROSSFLOW_TOWER"
+            type_name: "横流式冷却塔"
+            description: "侧面进风横流式冷却塔"
+            medical_features:
+              - "医疗级防军团菌设计"
+              - "不锈钢集水盘"
+              - "自动加药系统"
+              - "双速风机节能运行"
+
+          COUNTERFLOW_TOWER:
+            type_id: "COUNTERFLOW_TOWER"
+            type_name: "逆流式冷却塔"
+            description: "底部进风逆流式冷却塔"
+            medical_features:
+              - "紧凑设计"
+              - "高效热交换"
+              - "低噪音风机"
+              - "易维护结构"
+
+          DRY_COOLER:
+            type_id: "DRY_COOLER"
+            type_name: "干式冷却器"
+            description: "节水型干式冷却设备"
+            medical_features:
+              - "零耗水设计"
+              - "抗冻性能强"
+              -"适用于缺水地区"
+              -"维护简便"
+
+      # 水泵设备家族
+      PUMP_FAMILY:
+        family_id: "PUMP_FAMILY"
+        family_name: "水泵设备家族"
+        description: "各类工艺循环泵"
+
+        equipment_types:
+          CHILLED_WATER_PUMP_PRIMARY:
+            type_id: "CHILLED_WATER_PUMP_PRIMARY"
+            type_name: "冷冻水一次泵"
+            description: "连接冷水机组和分集水器"
+            flow_type: "常量泵"
+            medical_features:
+              - "变频控制"
+              - "双泵并联 N+1"
+              - "防锈材质"
+              - "防气蚀设计"
+
+          CHILLED_WATER_PUMP_SECONDARY:
+            type_id: "CHILLED_WATER_PUMP_SECONDARY"
+            type_name: "冷冻水二次泵"
+            description: "分区域变流量冷冻水泵"
+            flow_type: "变量泵"
+            medical_features:
+              - "区域变频控制"
+              - "变流量系统"
+              -"压差旁通控制"
+              -"能耗优化"
+
+          CONDENSER_WATER_PUMP:
+            type_id: "CONDENSER_WATER_PUMP"
+            type_name: "冷却水泵"
+            description: "冷却塔冷却水循环"
+            medical_features:
+              - "大流量设计"
+              -"耐腐蚀材质"
+              -"双速运行"
+              -"防堵塞设计"
+
+          HOT_WATER_PUMP:
+            type_id: "HOT_WATER_PUMP"
+            type_name: "热水循环泵"
+            description: "热水供热系统循环泵"
+            medical_features:
+              - "耐高温材质"
+              -"热水专用密封"
+              -"低噪音运行"
+              -"节能控制"
+
+      # 空调机组设备家族
+      AHU_FAMILY:
+        family_id: "AHU_FAMILY"
+        family_name: "空调机组设备家族"
+        description: "空气处理及分配设备"
+
+        equipment_types:
+          GENERAL_AHU:
+            type_id: "GENERAL_AHU"
+            type_name: "常规空调机组"
+            description: "普通区域空气处理机组"
+            applications: ["门诊", "办公室", "会议室"]
+            medical_features:
+              -"初效+中效过滤"
+              -"新风比可调"
+              -"噪音控制"
+              -"节能运行模式"
+
+          CLEAN_AHU:
+            type_id: "CLEAN_AHU"
+            type_name: "洁净空调机组"
+            description: "洁净环境专用机组"
+            applications: ["手术室", "ICU", "药房"]
+            cleanliness_grade: "ISO 5-8级"
+            medical_features:
+              -"三级过滤(初/中/高效)"
+              -"温湿度精密控制"
+              -"层流送风设计"
+              -"压差梯度控制"
+
+          FRESH_AIR_AHU:
+            type_id: "FRESH_AIR_AHU"
+            type_name: "新风处理机组"
+            description: "专门处理新风的空调机组"
+            applications: ["新风预处理", "全热回收"]
+            medical_features:
+              -"热回收装置"
+              -"PM2.5过滤"
+              -"除湿加湿功能"
+              -"防结露设计"
+
+          MAKEUP_AIR_AHU:
+            type_id: "MAKEUP_AIR_AHU"
+            type_name: "补风机组"
+            description: "补偿排风的新风处理机组"
+            medical_features:
+              -"压力控制"
+              -"与排风系统联动"
+              -"季节补偿调节"
+              -"应急补风"
+
+          HEAT_RECOVERY_AHU:
+            type_id: "HEAT_RECOVERY_AHU"
+            type_name: "全热回收机组"
+            description: "排风能量回收空调机组"
+            medical_features:
+              -"全热交换效率≥65%"
+              -"旁通功能"
+              -"防交叉污染"
+              -"自动清洗"
+
+      # 洁净过滤设备家族
+      FILTRATION_FAMILY:
+        family_id: "FILTRATION_FAMILY"
+        family_name: "净化过滤设备家族"
+        description: "洁净环境空气过滤设备"
+
+        equipment_types:
+          HEPA_FILTER:
+            type_id: "HEPA_FILTER"
+            type_name: "HEPA高效过滤器"
+            description: "高效颗粒空气过滤器"
+            efficiency: "99.97% @ 0.3μm"
+            medical_features:
+              -"逐台扫描检漏"
+              -"阻力监控"
+              -"寿命预测"
+              -"钳密密封"
+
+          ULPA_FILTER:
+            type_id: "ULPA_FILTER"
+            type_name: "ULPA超高效过滤器"
+            description: "超高效颗粒空气过滤器"
+            efficiency: "99.999% @ 0.12μm"
+            applications: ["百级洁净区"]
+
+          BAG_FILTER:
+            type_id: "BAG_FILTER"
+            type_name: "袋式中效过滤器"
+            description: "中级效率袋式过滤器"
+            efficiency: "60-95%"
+
+          PANEL_FILTER:
+            type_id: "PANEL_FILTER"
+            type_name: "板式初效过滤器"
+            description: "初级过滤平板式过滤器"
+            efficiency: "20-40%"
+
+      # 风机盘管设备家族
+      FCU_FAMILY:
+        family_id: "FCU_FAMILY"
+        family_name: "风机盘管设备家族"
+        description: "末端空气处理设备"
+
+        equipment_types:
+          HORIZONTAL_FCU:
+            type_id: "HORIZONTAL_FCU"
+            type_name: "卧式风机盘管"
+            installation: "吊顶安装"
+
+          VERTICAL_FCU:
+            type_id: "VERTICAL_FCU"
+            type_name: "立式风机盘管"
+            installation: "地面安装"
+
+          CASSETTE_FCU:
+            type_id: "CASSETTE_FCU"
+            type_name: "卡式风机盘管"
+            installation: "卡式天花安装"
+
+          HIGH_STATIC_FCU:
+            type_id: "HIGH_STATIC_FCU"
+            type_name: "高静压风机盘管"
+            applications: ["带风管系统"]
+
+      # 变风量末端设备家族
+          VAV_FAMILY:
+            family_id: "VAV_FAMILY"
+            family_name: "变风量末端设备家族"
+            description: "风量调节末端装置"
+
+            equipment_types:
+              PRESSURE_DEPENDENT_VAV:
+                type_id: "PRESSURE_DEPENDENT_VAV"
+                type_name: "压力相关型VAV末端"
+                description: "根据风压被动调节"
+
+              PRESSURE_INDEPENDENT_VAV:
+                type_id: "PRESSURE_INDEPENDENT_VAV"
+                type_name: "压力无关型VAV末端"
+                description: "主动风量控制"
+                features: ["风量检测", "自动控制", "节能运行"]
+
+              VAV_WITH_HEAT:
+                type_id: "VAV_WITH_HEAT"
+                type_name: "再热型VAV末端"
+                description: "带再热功能的VAV末端"
+                heating_type: ["电加热", "热水加热"]
+
+  # PLUMBING系统设备分类
+  PLUMBING:
+    category_id: "PLUMBING"
+    category_name: "给排水设备"
+    description: "给水处理及供应设备"
+
+    equipment_families:
+      WATER_PUMP_FAMILY:
+        family_id: "WATER_PUMP_FAMILY"
+        family_name: "给水泵设备家族"
+
+        equipment_types:
+          BOOSTER_PUMP:
+            type_id: "BOOSTER_PUMP"
+            type_name: "变频供水泵"
+            description: "生活给水加压设备"
+            applications: ["市政供水加压"]
+
+          HOT_WATER_CIRC_PUMP:
+            type_id: "HOT_WATER_CIRC_PUMP"
+            type_name: "热水循环泵"
+            description: "热水系统循环设备"
+
+          DRAINAGE_PUMP:
+            type_id: "DRAINAGE_PUMP"
+            type_name: "污水提升泵"
+            description: "污水排放提升设备"
+
+      WATER_TREATMENT_FAMILY:
+        family_id: "WATER_TREATMENT_FAMILY"
+        family_name: "水处理设备家族"
+
+        equipment_types:
+          WATER_SOFTENER:
+            type_id: "WATER_SOFTENER"
+            type_name: "软水器"
+            description: "水质软化处理设备"
+
+          REVERSE_OSMOSIS:
+            type_id: "REVERSE_OSMOSIS"
+            type_name: "反渗透设备"
+            description: "纯水制备设备"
+            medical_grade: true
+
+          ION_EXCHANGER:
+            type_id: "ION_EXCHANGER"
+            type_name: "离子交换器"
+            description: "离子交换水处理"
+
+  # ELECTRICAL系统设备分类
+  ELECTRICAL:
+    category_id: "ELECTRICAL"
+    category_name: "电气设备"
+    description: "电力供配及电气安全设备"
+
+    equipment_families:
+      TRANSFORMER_FAMILY:
+        family_id: "TRANSFORMER_FAMILY"
+        family_name: "变压器设备家族"
+
+        equipment_types:
+          POWER_TRANSFORMER:
+            type_id: "POWER_TRANSFORMER"
+            type_name: "电力变压器"
+            description: "主配电变压器"
+            applications: ["医院主供电"]
+            medical_features:
+              -"低损耗硅钢片"
+              -"温控冷却系统"
+              -"局放监测"
+              -"防火设计"
+
+          DRY_TYPE_TRANSFORMER:
+            type_id: "DRY_TYPE_TRANSFORMER"
+            type_name: "干式变压器"
+            description: "医疗建筑专用干式变压器"
+            advantages: ["无油防火", "维护简便", "环保"]
+
+      SWITCHGEAR_FAMILY:
+        family_id: "SWITCHGEAR_FAMILY"
+        family_name: "配电设备家族"
+
+        equipment_types:
+          HV_SWITCHGEAR:
+            type_id: "HV_SWITCHGEAR"
+            type_name: "高压开关柜"
+            description: "35kV/10kV配电设备"
+            medical_grade: true
+
+          LV_SWITCHGEAR:
+            type_id: "LV_SWITCHGEAR"
+            type_name: "低压开关柜"
+            description: "380V配电设备"
+            applications: ["楼层配电", "设备配电"]
+
+          DISTRIBUTION_BOARD:
+            type_id: "DISTRIBUTION_BOARD"
+            type_name: "配电箱"
+            description: "末端配电设备"
+
+          BUSWAY:
+            type_id: "BUSWAY"
+            type_name: "母线槽"
+            description: "大容量配电干线"
+
+      EMERGENCY_POWER_FAMILY:
+        family_id: "EMERGENCY_POWER_FAMILY"
+        family_name: "应急电源设备家族"
+
+        equipment_types:
+          DIESEL_GENERATOR:
+            type_id: "DIESEL_GENERATOR"
+            type_name: "柴油发电机组"
+            description: "备用发电设备"
+            medical_features:
+              -"自动启动≤15s"
+              -"N+1冗余配置"
+              -"24小时燃油储备"
+              -"远程监控"
+
+          UPS_SYSTEM:
+            type_id: "UPS_SYSTEM"
+            type_name: "UPS系统"
+            description: "不间断电源"
+            applications: ["IT设备", "医疗设备"]
+            types: ["在线式", "后备式", "互动式"]
+
+          EPS_SYSTEM:
+            type_id: "EPS_SYSTEM"
+            type_name: "EPS应急电源"
+            description: "应急照明电源"
+            duration: "≥90分钟"
+
+      ISOLATED_POWER_FAMILY:
+        family_id: "ISOLATED_POWER_FAMILY"
+        family_name: "医用隔离电源家族"
+
+        equipment_types:
+          ISOLATION_TRANSFORMER:
+            type_id: "ISOLATION_TRANSFORMER"
+            type_name: "医用隔离变压器"
+            description: "手术室专用隔离电源"
+            standard: "IEC 60364-7-710"
+            isolation_level: "≥5500V AC"
+
+          INSULATION_MONITOR:
+            type_id: "INSULATION_MONITOR"
+            type_name: "绝缘监视仪"
+            description: "医疗场所绝缘监测"
+            functions: ["绝缘阻抗监测", "故障定位", "报警显示"]
+
+  # MEDICAL_GAS系统设备分类
+  MEDICAL_GAS:
+    category_id: "MEDICAL_GAS"
+    category_name: "医疗气体设备"
+    description: "医疗气体供应及处理设备"
+    standard: "GB 50751"
+
+    equipment_families:
+      OXYGEN_SUPPLY_FAMILY:
+        family_id: "OXYGEN_SUPPLY_FAMILY"
+        family_name: "医用氧气供应家族"
+
+        equipment_types:
+          LOX_TANK:
+            type_id: "LOX_TANK"
+            type_name: "液氧储罐"
+            description: "液氧储存设备"
+            safety_level: "LIFE_SAFETY"
+            capacity: "≥7天用量"
+
+          OXYGEN_MANIFOLD:
+            type_id: "OXYGEN_MANIFOLD"
+            type_name: "氧气汇流排"
+            description: "气氧供应设备"
+            redundancy: "备用"
+
+          OXYGEN_REGULATOR:
+            type_id: "OXYGEN_REGULATOR"
+            type_name: "氧气减压装置"
+            description: "氧气压力调节设备"
+            pressure_range: "0.3-0.6MPa"
+
+      VACUUM_FAMILY:
+        family_id: "VACUUM_FAMILY"
+        family_name: "真空系统设备家族"
+
+        equipment_types:
+          VACUUM_PUMP:
+            type_id: "VACUUM_PUMP"
+            type_name: "真空泵"
+            description: "医疗负压吸引设备"
+            vacuum_level: "40-150mmHg"
+            redundancy: "N+1"
+
+          VACUUM_TANK:
+            type_id: "VACUUM_TANK"
+            type_name: "真空罐"
+            description: "真空缓冲储存设备"
+
+      COMPRESSED_AIR_FAMILY:
+        family_id: "COMPRESSED_AIR_FAMILY"
+        family_name: "医疗空气设备家族"
+
+        equipment_types:
+          OIL_FREE_COMPRESSOR:
+            type_id: "OIL_FREE_COMPRESSOR"
+            type_name: "无油空压机"
+            description: "医疗级压缩空气源"
+            quality: "Oil≤0.1mg/m³"
+
+          AIR_DRYER:
+            type_id: "AIR_DRYER"
+            type_name: "空气干燥器"
+            description: "压缩空气干燥设备"
+            dew_point: "≤-20°C"
+
+  # FIRE_PROTECTION系统设备分类
+  FIRE_PROTECTION:
+    category_id: "FIRE_PROTECTION"
+    category_name: "消防设备"
+    description: "消防灭火及报警设备"
+
+    equipment_families:
+      FIRE_PUMP_FAMILY:
+        family_id: "FIRE_PUMP_FAMILY"
+        family_name: "消防水泵家族"
+
+        equipment_types:
+          HYDRANT_PUMP:
+            type_id: "HYDRANT_PUMP"
+            type_name: "消火栓泵"
+            description: "消火栓系统加压设备"
+            safety_level: "LIFE_SAFETY"
+            requirement: "一用一备"
+
+          SPRINKLER_PUMP:
+            type_id: "SPRINKLER_PUMP"
+            type_name: "喷淋泵"
+            description: "自动喷淋系统加压设备"
+
+      FIRE_SUPPRESSION_FAMILY:
+        family_id: "FIRE_SUPPRESSION_FAMILY"
+        family_name: "灭火设备家族"
+
+        equipment_types:
+          FM200_SYSTEM:
+            type_id: "FM200_SYSTEM"
+            type_name: "七氟丙烷灭火系统"
+            description: "气体灭火设备"
+            applications: ["机房", "贵重设备室"]
+            discharge_time: "≤60s"
+
+          IG541_SYSTEM:
+            type_id: "IG541_SYSTEM"
+            type_name: "IG541灭火系统"
+            description: "惰性气体灭火设备"
+
+  # VERTICAL_TRANSPORT系统设备分类
+  VERTICAL_TRANSPORT:
+    category_id: "VERTICAL_TRANSPORT"
+    category_name: "垂直交通设备"
+    description: "电梯及扶梯设备"
+
+    equipment_families:
+      ELEVATOR_FAMILY:
+        family_id: "ELEVATOR_FAMILY"
+        family_name: "电梯设备家族"
+
+        equipment_types:
+          PATIENT_ELEVATOR:
+            type_id: "PATIENT_ELEVATOR"
+            type_name: "病床电梯"
+            description: "医疗专用电梯"
+            medical_features:
+              -"担架适配"
+              -"医用气体管道预留"
+              -"紧急呼叫"
+              -"备用电源"
+            capacity: "1600-2000kg"
+            door_width: ">1100mm"
+
+          PASSENGER_ELEVATOR:
+            type_id: "PASSENGER_ELEVATOR"
+            type_name: "乘客电梯"
+            description: "普通乘客电梯"
+
+          SERVICE_ELEVATOR:
+            type_id: "SERVICE_ELEVATOR"
+            type_name: "医用污物电梯"
+            description: "医疗污物专用电梯"
+            features: ["防腐蚀", "易清洁", "独立通风"]
+
+  # BUILDING_AUTOMATION系统设备分类
+  BUILDING_AUTOMATION:
+    category_id: "BUILDING_AUTOMATION"
+    category_name: "楼宇自动化设备"
+    description: "楼宇自控及监控设备"
+
+    equipment_families:
+      CONTROLLER_FAMILY:
+        family_id: "CONTROLLER_FAMILY"
+        family_name: "控制器设备家族"
+
+        equipment_types:
+          DDC_CONTROLLER:
+            type_id: "DDC_CONTROLLER"
+            type_name: "DDC控制器"
+            description: "直接数字控制器"
+            functions: ["逻辑控制", "PID调节", "数据采集", "通讯转换"]
+
+          PLC_CONTROLLER:
+            type_id: "PLC_CONTROLLER"
+            type_name: "PLC控制器"
+            description: "可编程逻辑控制器"
+            applications: ["特殊设备控制", "联动控制"]
+
+      SENSOR_FAMILY:
+        family_id: "SENSOR_FAMILY"
+        family_name: "传感器设备家族"
+
+        equipment_types:
+          TEMP_SENSOR:
+            type_id: "TEMP_SENSOR"
+            type_name: "温度传感器"
+            accuracy: "±0.3°C"
+
+          PRESSURE_SENSOR:
+            type_id: "PRESSURE_SENSOR"
+            type_name: "压力传感器"
+            accuracy: "±0.25%"
+
+          FLOW_SENSOR:
+            type_id: "FLOW_SENSOR"
+            type_name: "流量传感器"
+            types: ["电磁", "超声波", "涡轮"]
+
+      ACTUATOR_FAMILY:
+        family_id: "ACTUATOR_FAMILY"
+        family_name: "执行器设备家族"
+
+        equipment_types:
+          VALVE_ACTUATOR:
+            type_id: "VALVE_ACTUATOR"
+            type_name: "阀门执行器"
+            types: ["电动", "气动"]
+            control: ["开关", "调节"]
+
+          DAMPER_ACTUATOR:
+            type_id: "DAMPER_ACTUATOR"
+            type_name: "风阀执行器"
+            torque: "根据阀门规格"
+
+# 设备分类统计信息
+classification_statistics:
+  total_equipment_families: 18  # 设备家族总数
+  total_equipment_types: 123    # 设备类型总数
+
+  by_system_category:
+    HVAC: 7 families, 42 types      # 7个家族，42种类型
+    PLUMBING: 2 families, 6 types   # 2个家族，6种类型
+    ELECTRICAL: 6 families, 18 types # 6个家族，18种类型
+    MEDICAL_GAS: 3 families, 8 types  # 3个家族，8种类型
+    FIRE_PROTECTION: 2 families, 5 types # 2个家族，5种类型
+    VERTICAL_TRANSPORT: 1 family, 3 types # 1个家族，3种类型
+    BUILDING_AUTOMATION: 3 families, 4 types # 3个家族，4种类型
+
+  by_medical_grade:
+    medical_grade: 45 types         # 医疗级专用设备
+    standard_grade: 78 types        # 标准工业设备
+
+  by_criticality_level:
+    LIFE_SAFETY: 12 types           # 生命安全级
+    PATIENT_SAFETY: 15 types        # 患者安全级
+    CRITICAL: 48 types              # 关键级
+    IMPORTANT: 28 types             # 重要级
+    SECONDARY: 20 types             # 次要级
+
+  P0_core_equipment_count: 18       # P0核心设备数量(详细建模)

@@ -1,0 +1,650 @@
+# 传感器模型库 - 医疗建筑控制系统
+
+sensor_type_classification:
+  category_definitions:
+    SENSOR-TEMP:
+      name: "温度传感器"
+      description: "测量空气、水、表面温度参数"
+      accuracy_class: "±0.1°C to ±0.5°C"
+      temperature_range: "-40°C to +85°C"
+      applications: ["室温控制", "送风温度", "水温监测", "设备保护"]
+
+    SENSOR-HUM:
+      name: "湿度传感器"
+      description: "测量相对湿度参数"
+      accuracy_class: "±2% to ±5% RH"
+      humidity_range: "0% to 100% RH"
+      applications: ["湿度控制", "舒适性控制", "洁净室监控"]
+
+    SENSOR-PRES:
+      name: "压力/压差传感器"
+      description: "测量气体/液体压力、压差参数"
+      accuracy_class: "±0.1% to ±0.5% FS"
+      applications: ["风压控制", "水压监测", "压差控制", "过滤器监测"]
+
+    SENSOR-FLOW:
+      name: "流量传感器"
+      description: "测量液体/气体流量参数"
+      accuracy_class: "±0.5% to ±2% of reading"
+      applications: ["能量计算", "流量控制", "性能监测"]
+
+    SENSOR-AIR:
+      name: "空气质量传感器"
+      description: "测量CO2、PM、VOCs等空气品质参数"
+      accuracy_class: "±50ppm to ±200ppm (CO2)"
+      applications: ["新风控制", "空气质量监测", "健康环境"]
+
+    SENSOR-ELEC:
+      name: "电气参数传感器"
+      description: "测量电压、电流、功率、功率因数等电气参数"
+      accuracy_class: "±0.2% to ±1.0%"
+      applications: ["能耗监测", "功率控制", "电气保护"]
+
+    SENSOR-LEVEL:
+      name: "液位传感器"
+      description: "测量液体高度或体积"
+      accuracy_class: "±2mm to ±10mm"
+      applications: ["水箱水位", "冷凝水监测", "液体储存"]
+
+    SENSOR-SPD:
+      name: "转速传感器"
+      description: "测量旋转设备转速"
+      accuracy_class: "±0.1% to ±1.0%"
+      applications: ["风机转速", "泵转速", "设备状态"]
+
+    SENSOR-POS:
+      name: "位置传感器"
+      description: "测量阀门开度、风阀位置等"
+      accuracy_class: "±0.5% to ±2%"
+      applications: ["阀门定位", "风阀控制", "执行器反馈"]
+
+    SENSOR-OTHER:
+      name: "其他传感器"
+      description: "特殊用途传感器"
+      applications: ["照度", "噪声", "振动", "特殊气体"]
+
+# 详细传感器模型
+detailed_sensor_models:
+
+  # 温度传感器
+  sensor_temp_room_air:
+    sensor_id: "SENSOR-TEMP-ROOM-001"
+    name: "室内温度传感器"
+    type: "SENSOR-TEMP"
+    subtype: "ROOM-AIR"
+    description: "室内空气温度测量"
+
+    technical_specs:
+      measurement_range: "0°C to 50°C"
+      accuracy: "±0.3°C"
+      resolution: "0.1°C"
+      response_time: "30秒 (空气流速0.15m/s)"
+      drift: "< 0.1°C/年"
+
+    installation:
+      location: "距地1.2-1.5m，避免直射阳光、热源、风口"
+      mounting: "壁挂式或嵌入式"
+      protection_class: "IP30"
+      wiring: "三芯屏蔽电缆，最大距离100m"
+
+    output_signal:
+      type: "4-20mA or 0-10V"
+      loop_power: "24V DC"
+      load_resistance: "≤500Ω (电流型)"
+      isolation: "信号隔离"
+
+    calibration:
+      method: "两点校准法（0°C，25°C）"
+      frequency: "每年一次"
+      reference: "标准温度计±0.1°C"
+
+  sensor_temp_duct_supply_air:
+    sensor_id: "SENSOR-TEMP-DUCT-SUPPLY-001"
+    name: "送风温度传感器"
+    type: "SENSOR-TEMP"
+    subtype: "DUCT-SUPPLY-AIR"
+    description: "空调送风温度测量"
+
+    technical_specs:
+      measurement_range: "0°C to 40°C"
+      accuracy: "±0.2°C"
+      resolution: "0.1°C"
+      response_time: "15秒 (风速3m/s)"
+      drift: "< 0.1°C/年"
+
+    installation:
+      location: "距风机出口3-5倍管径处，直管段"
+      insertion_length: "管径1/3至2/3"
+      mounting: "螺纹连接或法兰连接"
+      protection_class: "IP65"
+      material: "不锈钢探杆，不锈钢接线盒"
+
+    output_signal:
+      type: "4-20mA or 0-10V or BACnet MS/TP"
+      communication: "BACnet, Modbus RTU, 4-20mA"
+      power_supply: "24V AC/DC"
+
+  sensor_temp_chilled_water:
+    sensor_id: "SENSOR-TEMP-CHILLED-WATER-001"
+    name: "冷冻水温度传感器"
+    type: "SENSOR-TEMP"
+    subtype: "PIPE-CHILLED-WATER"
+    description: "冷冻水供回水温度测量"
+
+    technical_specs:
+      measurement_range: "0°C to 25°C"
+      accuracy: "±0.15°C"
+      resolution: "0.1°C"
+      response_time: "5秒 (水流速1m/s)"
+      pressure_rating: "1.6 MPa"
+
+    installation:
+      location: "分水器、集水器总管，各主要支路"
+      mounting: "管箍式安装或热套安装"
+      insertion_length: "计算至管道中心"
+      thermal_cup: "带导热硅胶"
+
+    output_signal:
+      type: "4-20mA两个独立通道"
+      features: "温度梯度计算，平均温度"
+
+  sensor_temp_surface:
+    sensor_id: "SENSOR-TEMP-SURFACE-001"
+    name: "表面温度传感器"
+    type: "SENSOR-TEMP"
+    subtype: "SURFACE"
+    description: "管道、设备表面温度"
+
+    technical_specs:
+      measurement_range: "-20°C to +80°C"
+      accuracy: "±0.5°C"
+      response_time: "1分钟"
+      contact_method: "贴附式或磁铁式"
+
+    installation:
+      surface_prep: "清洁、平整、去氧化层"
+      mounting: "导热胶+不锈钢带箍"
+      insulation: "与绝热层配套"
+      weather_proof: "IP65"
+
+  # 湿度传感器
+  sensor_hum_room:
+    sensor_id: "SENSOR-HUM-ROOM-001"
+    name: "室内湿度传感器"
+    type: "SENSOR-HUM"
+    subtype: "ROOM-AIR"
+    description: "室内空气相对湿度测量"
+
+    technical_specs:
+      measurement_range: "0% to 100% RH"
+      accuracy: "±2% RH (20-80% RH)"
+      resolution: "0.1% RH"
+      response_time: "30秒 (空气流速0.15m/s)"
+      hysteresis: "< 1% RH"
+      long_term_stability: "< 1% RH/年"
+      temperature_dependency: "< 0.05% RH/°C"
+
+    installation:
+      location: "距地1.2-1.5m，通风良好处"
+      protection: "防尘罩，防冷凝"
+      mounting: "壁挂式"
+
+    output_signal:
+      type: "4-20mA or 0-10V or Modbus RTU"
+      dual_output: "可选温度+湿度一体"
+
+  sensor_hum_duct:
+    sensor_id: "SENSOR-HUM-DUCT-001"
+    name: "风管湿度传感器"
+    type: "SENSOR-HUM"
+    subtype: "DUCT-AIR"
+    description: "空调系统风管湿度"
+
+    technical_specs:
+      measurement_range: "0% to 100% RH"
+      accuracy: "±3% RH"
+      response_time: "8秒 (风速3m/s)"
+      humidity_temp_compensation: "自动温度补偿"
+
+    installation:
+      location: "直管段，距局部阻力件下游3-5倍管径"
+      insertion_length: "管径1/3至1/2"
+      mounting: "螺纹或法兰连接"
+      material: "不锈钢或铝合金"
+
+    environmental:
+      operating_temp: "-10°C to +60°C"
+      protection: "IP65"
+      explosion_proof: "可选Ex d IIC T6"
+
+  # 压力/压差传感器
+  sensor_pressure_duct:
+    sensor_id: "SENSOR-PRES-DUCT-001"
+    name: "风管静压传感器"
+    type: "SENSOR-PRES"
+    subtype: "DUCT-STATIC-PRESSURE"
+    description: "风管静压测量"
+
+    technical_specs:
+      measurement_range: "0 to 1000 Pa"
+      accuracy: "±0.25% FS"
+      resolution: "0.1 Pa"
+      stability: "±0.1% FS/年"
+      over_pressure: "10x量程"
+
+    installation:
+      sampling: "不锈钢取压管"
+      location: "直管段，气流稳定处"
+      connections: "内螺纹或胶管接头"
+      orientation: "水平或垂直"
+
+    output_signal:
+      type: "4-20mA or 0-10V"
+      zero_span_adjust: "外部可调"
+
+  sensor_pressure_diff_room:
+    sensor_id: "SENSOR-PRES-DIFF-ROOM-001"
+    name: "房间压差传感器"
+    type: "SENSOR-PRES"
+    subtype: "ROOM-PRESSURE-DIFFERENCE"
+    description: "各房间相对压差"
+
+    technical_specs:
+      measurement_range: "-60 to +60 Pa"
+      accuracy: "±0.25% FS"
+      resolution: "0.01 Pa"
+      stability: "±0.1% FS/年"
+      reference: "高压端+，低压端-"
+
+    installation:
+      location: "干净房间（高压侧）"
+      reference_room: "走廊或相邻区域（低压侧）"
+      tubing: "内径3-5mm聚氨酯管"
+      length_limit: "不超过50m"
+
+    cleanroom_specific:
+      cleanroom_classes: "ISO 5 to ISO 8"
+      materials: "易清洁材质"
+      smooth_surface: "Ra < 0.8μm"
+
+  sensor_pressure_water_chilled:
+    sensor_id: "SENSOR-PRES-WATER-CHILLED-001"
+    name: "冷冻水压力传感器"
+    type: "SENSOR-PRES"
+    subtype: "PIPE-WATER-PRESSURE"
+    description: "冷冻水系统压力"
+
+    technical_specs:
+      measurement_range: "0 to 1.6 MPa"
+      accuracy: "±0.1% FS"
+      resolution: "0.001 MPa"
+      pressure_connection: "G1/2"内螺纹"
+      materials: "17-4PH不锈钢隔膜"
+
+    installation:
+      location: "水泵出口、系统最高点、最低点"
+      mounting: "直接安装或隔膜密封"
+      isolation: "阀门隔离"
+
+    output_signal:
+      type: "4-20mA两线制"
+      power: "24V DC"
+      protection: "反极性保护"
+
+  # 流量传感器
+  sensor_flow_water_electromagnetic:
+    sensor_id: "SENSOR-FLOW-WATER-MAG-001"
+    name: "电磁流量计"
+    type: "SENSOR-FLOW"
+    subtype: "WATER-ELECTROMAGNETIC"
+    description: "冷冻水/冷却水流量"
+
+    technical_specs:
+      measurement_range: "0.1 to 10 m/s"
+      accuracy: "±0.5% of reading"
+      repeatability: "±0.1%"
+      conductivity: "≥5μS/cm"
+      pipe_size_range: "DN15 to DN2000"
+
+    flow_conditions:
+      velocity_range: "0.3 to 8 m/s推荐"
+      straight_pipe: "前10D后5D"
+      mounting: "任意方向"
+      full_pipe: "必须满管"
+
+    output_signal:
+      type: "4-20mA + 脉冲 + Modbus RTU"
+      power: "24V DC或220V AC"
+      display: "就地显示可选"
+
+  sensor_flow_water_ultrasonic:
+    sensor_id: "SENSOR-FLOW-WATER-US-001"
+    name: "超声波流量计"
+    type: "SENSOR-FLOW"
+    subtype: "WATER-ULTRASONIC"
+    description: "外夹式水流量测量"
+
+    technical_specs:
+      measurement_range: "0.01 to 12 m/s"
+      accuracy: "±1% to ±2% of reading"
+      pipe_materials: "金属、塑料、玻璃"
+      pipe_diameter: "DN15 to DN6000"
+
+    advantages:
+      non_intrusive: "无需断管"
+      bidirectional: "双向测量"
+      portable: "便携式"
+      no_pressure_drop: "无压损"
+
+    limitations:
+      pipe_condition: "要求管道清洁"
+      straight_run: "前后直管段要求"
+      coating: "不能有衬里"
+
+  sensor_flow_air_thermal:
+    sensor_id: "SENSOR-FLOW-AIR-THERMAL-001"
+    name: "热式空气质量流量计"
+    type: "SENSOR-FLOW"
+    subtype: "AIR-THERMAL-MASS"
+    description: "空调系统风量测量"
+
+    technical_specs:
+      measurement_range: "0.1 to 60 m/s"
+      accuracy: "±1.0% of reading ±0.5% FS"
+      temperature_range: "-20°C to +70°C"
+      pressure_range: "0 to 1.0 MPa"
+
+    installation:
+      methods: ["插入式", "管道式", "外夹式"]
+      insertion_length: "计算至管道中心"
+      orientation: "任意"
+
+    output_signal:
+      type: "4-20mA + 脉冲 + HART"
+      temperature_compensation: "自动"
+      mass_flow: "标准状态输出"
+
+  # 空气质量传感器
+  sensor_air_co2_ndir:
+    sensor_id: "SENSOR-AIR-CO2-NDIR-001"
+    name: "红外CO2传感器"
+    type: "SENSOR-AIR"
+    subtype: "CO2-NDIR"
+    description: "室内CO2浓度测量"
+
+    technical_specs:
+      measurement_range: "0 to 5000 ppm"
+      accuracy: "±50ppm ±3% of reading"
+      resolution: "1 ppm"
+      response_time: "< 2分钟"
+      drift: "< ±30ppm/年"
+
+    ndir_technology:
+      light_source: "红外LED或热丝"
+      detection: "光声或光学"
+      reference_channel: "内置参考"
+      auto_calibration: "ABC Logic"
+
+    installation:
+      location: "呼吸带高度，避免直接气流"
+      ventilation: "良好通风"
+      mounting: "壁挂或吸顶"
+
+    output_signal:
+      type: "4-20mA or Modbus RTU"
+      dual_output: "可同时输出温度"
+      relay: "可选报警继电器"
+
+  sensor_air_pm_laser:
+    sensor_id: "SENSOR-AIR-PM-LASER-001"
+    name: "激光颗粒物传感器"
+    type: "SENSOR-AIR"
+    subtype: "PM-LASER"
+    description: "PM2.5和PM10测量"
+
+    technical_specs:
+      measurement_range: "0 to 1000 μg/m³"
+      accuracy: "±10% (100-500 μg/m³)"
+      resolution: "0.1 μg/m³"
+      particle_size: "0.3 to 10 μm"
+      counting_efficiency: "50% @ 0.3μm, 98% @ >0.5μm"
+
+    laser_principle:
+      method: "光散射原理"
+      wavelength: "激光二极管"
+      sampling: "内置风扇，流量约1L/min"
+
+    installation:
+      location: "室内有代表性位置"
+      maintenance: "定期清洁光学窗口"
+
+    output_signal:
+      type: "UART, I2C, PWM"
+      data: "PM1.0, PM2.5, PM10分别输出"
+
+  sensor_air_voc_photoid:
+    sensor_id: "SENSOR-AIR-VOC-PHOTOID-001"
+    name: "光离子化VOC传感器"
+    type: "SENSOR-AIR"
+    subtype: "VOC-PHOTOID"
+    description: "挥发性有机化合物总浓度"
+
+    technical_specs:
+      measurement_range: "0 to 10000 ppb"
+      accuracy: "±10% of reading"
+      response_time: "< 5秒"
+      lamp: "10.6eV PID灯"
+
+    pid_technology:
+      ionization: "紫外光离子化"
+      detection: "电流检测"
+      selectivity: "总VOC响应"
+
+    installation:
+      pre_heat: "30分钟预热"
+      calibration: "异丁烯标准气体"
+
+    output_signal:
+      type: "4-20mA, 0-10V, Modbus"
+      rel_output: "TVOC as ppm isobutylene"
+
+  # 电气参数传感器
+  sensor_electrical_power:
+    sensor_id: "SENSOR-ELEC-POWER-001"
+    name: "多功能电力传感器"
+    type: "SENSOR-ELEC"
+    subtype: "POWER-MULTI"
+    description: "三相电压、电流、功率、电能"
+
+    technical_specs:
+      voltage_range: "AC 57.7V to 480V"
+      current_range: "AC 5A (CT输入)"
+      power_accuracy: "±0.5%"
+      energy: "有功电能 ±0.5S级"
+      frequency_range: "45Hz to 65Hz"
+
+    measurement:
+      parameters:
+        - "三相电压 (V, Vavg)"
+        - "三相电流 (A, Aavg, Aneutral)"
+        - "有功功率 (kW, kWtotal)"
+        - "无功功率 (kvar)"
+        - "视在功率 (kVA)"
+        - "功率因数 (PF)"
+        - "频率 (Hz)"
+        - "有功电能 (kWh)"
+        - "无功电能 (kvarh)"
+
+    installation:
+      ct_ratio: "可配置，5/5A to 5000/5A"
+      mounting: "DIN导轨或面板"
+
+    communication:
+      protocols: ["Modbus RTU", "Modbus TCP", "BACnet/IP"]
+      outputs: ["实时数据", "需量", "电能质量"]
+
+  # 液位传感器
+  sensor_level_float:
+    sensor_id: "SENSOR-LEVEL-FLOAT-001"
+    name: "浮球液位开关"
+    type: "SENSOR-LEVEL"
+    subtype: "LEVEL-FLOAT-SWITCH"
+    description: "水箱高低液位报警"
+
+    technical_specs:
+      measurement_type: "点式开关"
+      switch_rating: "SPDT 250VAC 5A"
+      float_material: "不锈钢或塑料"
+
+    installation:
+      mounting: "顶部或侧面"
+      cable: "防水电缆"
+
+    applications:
+      - "生活水箱"
+      - "消防水池"
+      - "冷却水塔"
+
+  sensor_level_ultrasonic:
+    sensor_id: "SENSOR-LEVEL-ULTRASONIC-001"
+    name: "超声波液位变送器"
+    type: "SENSOR-LEVEL"
+    subtype: "LEVEL-ULTRASONIC"
+    description: "非接触式液位连续测量"
+
+    technical_specs:
+      measurement_range: "0.2 to 10m"
+      accuracy: "±0.2% of range"
+      beam_angle: "6°-12°"
+      frequency: "42kHz"
+
+    installation:
+      location: "远离进水口、搅拌器"
+      mounting: "顶部法兰或螺纹"
+      dead_zone: "0.2m"
+
+    output_signal:
+      type: "4-20mA, HART, Modbus RTU"
+      display: "可选就地显示"
+
+  sensor_level_pressure:
+    sensor_id: "SENSOR-LEVEL-PRESSURE-001"
+    name: "投入式液位变送器"
+    type: "SENSOR-LEVEL"
+    subtype: "LEVEL-SUBMERSIBLE-PRES"
+    description: "静压法液位测量"
+
+    technical_specs:
+      measurement_range: "0 to 200m"
+      accuracy: "±0.1% FS"
+      level_protection: "IP68"
+
+    installation:
+      method: "投入式"
+      cable: "通气电缆"
+
+    applications:
+      - "深井"
+      - "地下水池"
+      - "河水"
+
+  # 转速传感器
+  sensor_speed_tachometer:
+    sensor_id: "SENSOR-SPD-TACHO-001"
+    name: "光电转速传感器"
+    type: "SENSOR-SPD"
+    subtype: "SPEED-PHOTOELECTRIC"
+    description: "旋转设备转速测量"
+
+    technical_specs:
+      measurement_range: "1 to 99999 rpm"
+      accuracy: "±0.01%"
+      detection_method: "光电或磁电"
+
+    installation:
+      target: "反光标签或磁性目标"
+      distance: "5-15mm"
+
+    output_signal:
+      type: "脉冲, 4-20mA, RS485"
+      power: "5-24V DC"
+
+  # 位置传感器
+  sensor_position_valve:
+    sensor_id: "SENSOR-POS-VALVE-001"
+    name: "阀门位置变送器"
+    type: "SENSOR-POS"
+    subtype: "POSITION-VALVE"
+    description: "调节阀开度反馈"
+
+    technical_specs:
+      measurement_range: "0 to 100%"
+      accuracy: "±0.5%"
+      output: "4-20mA (2线制)"
+      rotation_angle: "0-90° or 0-160°"
+
+    mounting:
+      method: "直接安装在执行器"
+      coupling: "柔性耦合"
+
+    features:
+      - "机械限位"
+      - "位置指示"
+      - "故障安全"
+
+# 传感器选型指南
+sensor_selection_criteria:
+
+  accuracy_requirements:
+    level_1: "±0.1°C (关键控制点)"
+    level_2: "±0.2°C (一般控制点)"
+    level_3: "±0.5°C (监测点)"
+
+  response_time_requirements:
+    fast_loop: "< 5秒 (直接控制)"
+    medium_loop: "5-30秒 (房间控制)"
+    slow_loop: "> 30秒 (环境监测)"
+
+  environmental_requirements:
+    cleanroom: "易清洁，耐腐蚀"
+    outdoors: "防雨，防冻，防雷"
+    corrosive: "抗化学腐蚀"
+    vibration: "抗振设计"
+
+  output_signal_selection:
+    analog: "4-20mA (长距离，抗干扰)"
+    voltage: "0-10V (短距离，高精度)"
+    digital: "RS485 Modbus (多参数，远距高)"
+    wireless: "Zigbee/WiFi (新装，难布线)"
+
+# 传感器校准要求
+calibration_requirements:
+
+  frequency:
+    critical: "每6个月"
+    standard: "每年"
+    monitoring: "每2年"
+
+  methods:
+    temperature: "恒温水槽两点法(0°C, 25°C)"
+    humidity: "标准湿度箱三点法(11%, 75%, 90%)"
+    pressure: "标准压力计比较法"
+    flow: "标准容器称重法或标准流量计"
+
+  reference_standards:
+    temperature: "±0.05°C"
+    humidity: "±1% RH"
+    pressure: "±0.02%"
+    flow: "±0.1%"
+
+# 备用和维护spare_parts:
+  strategic_spares:
+    critical_sensors: "100%备份"
+    standard_sensors: "20%备份"
+    consumables: "易损件充足库存"
+
+  preventive_maintenance:
+    cleaning: "定期清洁敏感元件"
+    inspection: "连接检查"
+    drift_monitoring: "漂移监测"
+    documentation: "校准和维护记录"

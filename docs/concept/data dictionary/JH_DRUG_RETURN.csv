@@ -1,0 +1,30 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_RETURN,表全名,JHPDL:JH_DRUG_RETURN,,,,,,
+,表说明,药库退货记录主表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MRE,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MRE0001,String字符串（变长）,,DRUG_RETURN_SN,药库退货唯一号,内部三级编码DW0.000.000.001,20,是,是
+,\x00\x02,MRE0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MRE0003,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x04,MRE0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x05,MRE0005,String字符串（变长）,,SC_VENDOR,供应商编码,,200,是,是
+,\x00\x06,MRE0006,String字符串（变长）,,ST_VENDOR,供应商名称,,200,,
+,\x00\x07,MRE0007,String字符串（变长）,,DRUG_RET_NO,退货单号,,200,是,是
+,\x00\x08,MRE0008,String字符串（变长）,,SC_RET_APP_USER,退货制单人编码,,200,,
+,\x00\x09,MRE0009,String字符串（变长）,,ST_RET_APP_USER,退货制单人名称,,200,,
+,\x00\x0A,MRE0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_APP_TIME,退货单制单时间,,31,是,是
+,\x00\x0B,MRE0011,String字符串（变长）,,SC_RET_STOR_ROOM,退货库房编码,,200,是,是
+,\x00\x0C,MRE0012,String字符串（变长）,,ST_RET_STOR_ROOM,退货库房名称,,200,,
+,\x00\x0D,MRE0013,String字符串（变长）,,SC_RET_CHK_USER,单据审核人编码,,200,,
+,\x00\x0E,MRE0014,String字符串（变长）,,ST_RET_CHK_USER,单据审核人名称,,200,,
+,\x00\x0F,MRE0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_CHK_TIME,审核时间,,31,,
+,\x00\x10,MRE0016,String字符串（变长）,,SC_RET_TYPE,退货类型编码,,200,是,是
+,\x00\x11,MRE0017,String字符串（变长）,,ST_RET_TYPE,退货类型描述,过期、损耗、入库退回、退回供应商等等,500,,
+,\x00\x12,MRE0018,String字符串（变长）,,RET_REASON,退货原因,,4000,,
+,\x00\x13,MRE0019,String字符串（变长）,,SC_RET_STATUS,退货单状态编码,,200,,
+,\x00\x14,MRE0020,String字符串（变长）,,ST_RET_STATUS,退货单状态描述,,500,,
+,\x00\x15,MRE0021,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RET_STAT_TIME,状态变化时间,,31,,
+,\x00\x16,MRE0022,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

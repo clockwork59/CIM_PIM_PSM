@@ -1,0 +1,29 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_PATH_TISS_PROC,表全名,JHPDL:JH_PATH_TISS_PROC,,,,,,
+,表说明,病理组织处理流程,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,HAA,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,HAA0001,String字符串（变长）,,PATH_TISSUE_SN,病理标本编号,病理标本编号，系统生成三级编码，如“AA0.000.000.001”,20,是,是
+,\x00\x02,HAA0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,HAA0003,String字符串（变长）,,EXAM_APPLY_SN,检查申请单编号,检查申请单编号，来源JH_EXAM_APPLY的EAP0001,20,是,是
+,\x00\x04,HAA0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPECIMEN_RECIVE_TIME,标本接收时间,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,20,,
+,\x00\x05,HAA0005,String字符串（变长）,,SC_RECIVE_DOCT,标本接收人编码,,200,,
+,\x00\x06,HAA0006,String字符串（变长）,,ST_RECIVE_DOCT,标本接收人姓名,,200,,
+,\x00\x07,HAA0007,String字符串（变长）,,SPECIMEN_EXPLAIN,标本信息,,200,,
+,\x00\x08,HAA0008,Double双精度浮点型（8个字节）,,SPECIMEN_NUM,标本数量,,20,,
+,\x00\x09,HAA0009,String字符串（变长）,,SPECIMEN_UNIT,标本单位,,20,,
+,\x00\x0A,HAA0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPECIMEN_SAMP_TIME,标本取材时间,,20,,
+,\x00\x0B,HAA0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPECIMEN_WAX_TIME,标本涂蜡时间,,20,,
+,\x00\x0C,HAA0012,String字符串（变长）,,SC_WAX_DOCT,涂蜡操作人编码,,200,,
+,\x00\x0D,HAA0013,String字符串（变长）,,ST_WAX_DOCT,涂蜡操作人名称,,200,,
+,\x00\x0E,HAA0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPECIMEN_PIECE_TIME,标本切片时间,,20,,
+,\x00\x0F,HAA0015,String字符串（变长）,,SC_PIECE_DOCT,切片操作人编码,,200,,
+,\x00\x10,HAA0016,String字符串（变长）,,ST_PIECE_DOCT,切片操作人名称,,200,,
+,\x00\x11,HAA0017,String字符串（变长）,,SC_SAMP_DOCT,取材操作人编码,,200,,
+,\x00\x12,HAA0018,String字符串（变长）,,ST_SAMP_DOCT,取材操作人名称,,200,,
+,\x00\x13,HAA0019,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x14,HAA0020,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,,,
+,\x00\x15,HAA0021,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

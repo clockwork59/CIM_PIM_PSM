@@ -1,0 +1,6 @@
+@prefix cim-topo: <https://cim.medical/ontology/v3.4/topology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+cim-topo:HVAC a rdfs:Class ; rdfs:label "暖通空调系统"@zh .
+cim-topo:PLUMBING a rdfs:Class ; rdfs:label "给排水系统"@zh .
+cim-topo:ELECTRICAL a rdfs:Class ; rdfs:label "电气系统"@zh .

@@ -1,0 +1,35 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_DRUG_CURR_STOCK,表全名,JHPDL:JH_DRUG_CURR_STOCK,,,,,,
+,表说明,当前库存明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MGK,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MGK0001,String字符串（变长）,,DRUG_CURR_ST_SN,当前库存明细唯一号,内部三级编码DS0.000.000.001,20,是,是
+,\x00\x02,MGK0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x07,MGK0007,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x09,MGK0009,String字符串（变长）,,SC_PHARMACY,库房ID,库房ID,200,是,是
+,\x00\x0A,MGK0010,String字符串（变长）,,ST_PHARMACY,库房名称,库房名称,200,,
+,\x00\x0B,MGK0011,String字符串（变长）,,SC_INVENTORY_ITM,药品编码,,200,,
+,\x00\x0C,MGK0012,String字符串（变长）,,ST_INVENTORY_ITM,药品名称,,200,,
+,\x00\x0D,MGK0013,Date日期型（yyyy-mm-dd）（10个字节）,,DRUG_EXPIRY,药品效期,转换成日期格式后的有效截止日期,31,,
+,\x00\x12,MGK0018,String字符串（变长）,,SC_DRUG_TYPE,药品类型编码,中成、西、草、高值,200,,
+,\x00\x13,MGK0019,String字符串（变长）,,ST_DRUG_TYPE,药品类型描述,,500,,
+,\x00\x06,MGK0006,String字符串（变长）,,BATCH_NO,批次号,,200,是,是
+,\x00\x03,MGK0003,String字符串（变长）,,DRUG_INFO_SN,库存项SN,强关联备用，弱关联时可不用编写该字段规则,20,,
+,\x00\x04,MGK0004,String字符串（变长）,,DRUG_BATCH_SN,批次SN,强关联备用，弱关联时可不用编写该字段规则,200,是,是
+,\x00\x05,MGK0005,String字符串（变长）,,HIS_INV_ITM_ID,库存项ID,库存项业务唯一ID，库存项目字典的MDI0009，弱关联必须,200,是,是
+,\x00\x0E,MGK0014,Double双精度浮点型（8个字节）,,DRUG_TOT_QTY,当前库存总量数量,可能需要动态计算,38,,
+,\x00\x0F,MGK0015,Double双精度浮点型（8个字节）,,DRUG_FREEZ_QTY,当前冻结库存量,,38,,
+,\x00\x10,MGK0016,Double双精度浮点型（8个字节）,,DRUG_AVAI_QTY,当前可用库存量,,38,,
+,\x00\x11,MGK0017,String字符串（变长）,,DRUG_UNIT,库存单位,以便于计算的单位填写，比如基本单位，同数量必须匹配,200,,
+,\x00\x14,MGK0020,Double双精度浮点型（8个字节）,,DRUG_PURCH_PRI,进货单价,,38,,
+,\x00\x15,MGK0021,Double双精度浮点型（8个字节）,,DRUG_WHOLE_PRI,批发单价,,38,,
+,\x00\x16,MGK0022,Double双精度浮点型（8个字节）,,DRUG_RETAIL_PRI,零售单价,,38,,
+,\x00\x17,MGK0023,Double双精度浮点型（8个字节）,,DRUG_PURCH_AMO,进货金额,,38,,
+,\x00\x18,MGK0024,Double双精度浮点型（8个字节）,,DRUG_WHOLE_AMO,批发金额,,38,,
+,\x00\x19,MGK0025,Double双精度浮点型（8个字节）,,DRUG_RETAIL_AMO,零售金额,,38,,
+,\x00\x1A,MGK0026,String字符串（变长）,,DRUG_REMARK,备注,,4000,,
+,\x00\x08,MGK0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,31,是,是
+,\x00\x1B,MGK0027,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

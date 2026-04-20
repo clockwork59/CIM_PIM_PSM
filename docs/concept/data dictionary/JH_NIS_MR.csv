@@ -1,0 +1,44 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_NIS_MR,表全名,JHPDL:JH_NIS_MR,,,,,,
+,表说明,护理记录（含护理评估）,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,INR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,INR0001,String字符串（变长）,,NURSE_REC_SN,护理记录编号,护理记录编号，系统生成三级编码，如“NR0.000.000.001”,20,是,是
+,\x00\x02,INR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,INR0003,String字符串（变长）,,IN_HOSP_SN,住院就诊编号,住院就诊编号，来源JH_IN_HOSP的IHR0001,20,是,是
+,\x00\x04,INR0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,MEASURING_TIME,发生时间,实际测量的时间与日期,19,是,是
+,\x00\x05,INR0005,Integer整型（4个字节）,,MEASURING_POINT,发生时点,属于那个测量时间点，如2、4、6小时点,20,,
+,\x00\x06,INR0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RECORD_TIME,录入时间,护士转录到系统的时间,19,,
+,\x00\x07,INR0007,String字符串（变长）,,RECORD_NURSE,录入护士名称,转录数据的护士,200,,
+,\x00\x08,INR0008,String字符串（变长）,,NR_TYPE_NO,项目类型码,护理记录类型编码，院内编码,500,是,是
+,\x00\x09,INR0009,String字符串（变长）,,NR_TYPE_NAME,项目类型名,护理记录名称，可以是英文,700,,
+,\x00\x0A,INR0010,String字符串（变长）,,NR_TYPE_DESC,项目类型描述,显示给用户的护理记录名称描述，如体温、基础护理等,4000,,
+,\x00\x0B,INR0011,简化字典（Integer整型，4个字节）,454,NR_TYPE_DT,项目分类,护理记录类型内部简化字典,20,是,是
+,\x00\x0C,INR0012,String字符串（变长）,,NURSE_REC_UNIT,项目单位,记录项使用的单位,50,,
+,\x00\x0D,INR0013,Double双精度浮点型（8个字节）,,NURSE_REC_VAL_N,项目数值,数值型记录值，用于计算,100,,
+,\x00\x0E,INR0014,String字符串（变长）,,NURSE_REC_VAL_C,项目值描述,如果是非数值型记录项目，在这里描述，数值型的数据可以多写一份文本值,4000,,
+,\x00\x0F,INR0015,String字符串（变长）,,NURSE_REC_MEMO,项目备注,,500,是,是
+,\x00\x10,INR0016,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x11,INR0017,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x12,INR0018,简化字典（Integer整型，4个字节）,379,DELETE_FLAG,项目删除标记,是否作废的记录项目数据,20,,
+,\x00\x13,INR0019,简化字典（Integer整型，4个字节）,379,ICU_FLAG,重症患者标记,是否来源重症患者记录项目,20,是,是
+,\x00\x14,INR0020,String字符串（变长）,,ICU_DEVICE,机采设备,若是重症机器采集项目数据，描述来源的机器设备,200,,
+,\x00\x15,INR0021,简化字典（Integer整型，4个字节）,379,NURSE_EVA_FLAG,评估标记,是否护理评估记录项目,20,,
+,\x00\x16,INR0022,Integer整型（4个字节）,,NR_ORDER_NUM,项目显示顺序,该项目显示顺序编号,20,是,是
+,\x00\x17,INR0023,String字符串（变长）,,SC_NR_TYPE_DT,项目分类编码,源业务系统的项目分类编码,200,,
+,\x00\x18,INR0024,String字符串（变长）,,ST_NR_TYPE_DT,项目分类描述,源业务系统的项目分类描述,200,,
+,\x00\x19,INR0025,简化字典（Integer整型，4个字节）,379,SD_ICU_FLAG,重症记录标识,重症记录标识,,,
+,\x00\x1A,INR0026,String字符串（变长）,,NIS_LEVEL,护理级别,护理级别,200,,
+,\x00\x1B,INR0027,String字符串（变长）,,EVALUATION_NURSE,评估人,评估人,200,,
+,\x00\x1C,INR0028,String字符串（变长）,,LAB_ITEM_CODE,检验报告项目代码,检验报告项目代码,200,,
+,\x00\x1D,INR0029,String字符串（变长）,,ORDER_CODE,医嘱项目代码,医嘱项目代码,200,,
+,\x00\x1E,INR0030,String字符串（变长）,,SC_EVALUATION_NURSE,评估护士编码,评估护士编码,100,,
+,\x00\x23,INR0035,String字符串（变长）,,SC_RECORD_NURSE,录入护士编码,转录数据的护士,200,,
+,\x00\x1F,INR0031,String字符串（变长）,,SC_EXEC_NURSE,执行护士编码,"护理计划的执行护士,业务库护士编码",100,,
+,\x00\x24,INR0036,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x20,INR0032,String字符串（变长）,,ST_EXEC_NURSE,执行护士名称,护理计划执行护士，源业务库执行护士名称,100,,
+,\x00\x21,INR0033,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PLAN_EXEC_TIME,计划执行时间,计划执行时间,,,
+,\x00\x22,INR0034,String字符串（变长）,,PLAN_EXEC_REC,护理计划项目,护理计划项目,,,

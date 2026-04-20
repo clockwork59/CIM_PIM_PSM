@@ -1,0 +1,33 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_LAB_RES_VIS,表全名,JHPDL:JH_LAB_RES_VIS,,,,,,
+,表说明,微生物结果明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,LRV,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,LRV0001,String字符串（变长）,,LAB_RES_VIS_SN,细菌培养结果编号,细菌培养结果编号，系统生成三级编码，如“LV0.000.000.001”,20,是,是
+,\x00\x02,LRV0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,LRV0003,String字符串（变长）,,LAB_RESULT_SN,检验结果编号,检验结果编号，来源JH_LAB_RESULT的LRS0001,20,是,是
+,\x00\x0C,LRV0012,String字符串（变长）,,VIS_TYPE,微生物类型,比如“鉴定报告、血培养”,200,,
+,\x00\x05,LRV0005,Integer整型（4个字节）,,VIS_ITEM_ORDER,项目顺序号,排序显示顺序,20,,
+,\x00\x04,LRV0004,String字符串（变长）,,VIS_ITEM_NO,项目编码,,200,,
+,\x00\x06,LRV0006,String字符串（变长）,,VIS_ITEM_NAME,项目名称,,200,,
+,\x00\x07,LRV0007,String字符串（变长）,,VIS_ITEM_NAME_S,项目缩写,,200,,
+,\x00\x08,LRV0008,String字符串（变长）,,RESULT_CHAR,结果描述,文本方式的结果,4000,,
+,\x00\x09,LRV0009,String字符串（变长）,,RESULT_WARN,结果提示,,500,,
+,\x00\x0A,LRV0010,String字符串（变长）,,RESULT_UNIT,结果单位,结果单位,200,,
+,\x00\x0B,LRV0011,String字符串（变长）,,RESULT_REF,参考范围,,500,,
+,\x00\x0E,LRV0014,String字符串（变长）,,VIS_MED_SEN,药敏结果,,4000,,
+,\x00\x0F,LRV0015,String字符串（变长）,,RESULT_PRE_FIX,修改前结果,,4000,,
+,\x00\x10,LRV0016,String字符串（变长）,,INSTRUMENT_NO,检测仪器,,500,,
+,\x00\x0D,LRV0013,自定义字典类型，字符串（变长）,379,RESULT_CTL_FLAG,危急值标志,危急值标志，是否,200,,
+,\x00\x14,LRV0020,简化字典（Integer整型，4个字节）,379,SD_RESULT_CTL,是否危急值,危急值标志，是否,20,,
+,\x00\x15,LRV0021,String字符串（变长）,,ST_RESULT_CTL,是否危急值说明,源业务系统是否危急值说明,20,,
+,\x00\x16,LRV0022,String字符串（变长）,,SC_RESULT_CTL,是否危急值编码,源业务系统是否危急值编码,20,,
+,\x00\x11,LRV0017,String字符串（变长）,,VIS_REMARK,备注,,4000,,
+,\x00\x12,LRV0018,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x13,LRV0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x17,LRV0023,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x18,LRV0024,String字符串（变长）,,SC_LIS_METHOD,检验方法编码,检验方法编码,200,,
+,\x00\x19,LRV0025,String字符串（变长）,,ST_LIS_METHOD,检验方法名称,检验方法名称,200,,

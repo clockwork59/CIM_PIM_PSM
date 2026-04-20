@@ -1,0 +1,51 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CRISIS,表全名,JHPDL:JH_CRISIS,,,,,,
+,表说明,危急值记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CRR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CRR0001,String字符串（变长）,,CRISIS_SN,危急值编号,危急值编号，系统生成三级编码，如“CR0.000.000.001”,20,是,是
+,\x00\x02,CRR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x04,CRR0004,String字符串（变长）,,CRISIS_SRC_SN,危急值来源编号,根据危急值类型关联对应结果报告单编号，如检验危急值来源检验结果的唯一编号,200,是,是
+,\x00\x07,CRR0007,String字符串（变长）,,CRIS_SEND_IP,发送端IP,,200,,
+,\x00\x08,CRR0008,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CRIS_SEND_TIME,发送时间,,19,,
+,\x00\x09,CRR0009,String字符串（变长）,,CRIS_TITLE,信息标题,,200,,
+,\x00\x0A,CRR0010,String字符串（变长）,,CRIS_CONTENT,信息内容,,4000,,
+,\x00\x0C,CRR0012,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CRIS_READ_TIME,信息阅读时间,第一个人阅读该危急值的时间,19,,
+,\x00\x0E,CRR0014,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,CRIS_TREAT_TIME,信息处理时间,第一个人处理该危急值的时间,19,,
+,\x00\x0F,CRR0015,String字符串（变长）,,HIS_PAT_ID,患者业务唯一号,院内来源业务系统业务流通的患者唯一编号,100,是,是
+,\x00\x10,CRR0016,String字符串（变长）,,HIS_VIS_ID,就诊业务唯一号,院内来源业务系统业务流通的就诊唯一编号,100,是,是
+,\x00\x14,CRR0020,简化字典（Integer整型，4个字节）,427,SD_CRISIS_TYPE,危急值类型简码,危急值来源类型，如“检验危急值、检查危急值、体征危急值”,20,是,是
+,\x00\x15,CRR0021,String字符串（变长）,,ST_CRISIS_TYPE,危急值类型描述,写清楚是检验危急值，还是检查危急值,500,,
+,\x00\x16,CRR0022,简化字典（Integer整型，4个字节）,379,SD_CRIS_READ,是否已阅消息,是否有人阅读过危急值提醒信息,20,,
+,\x00\x17,CRR0023,简化字典（Integer整型，4个字节）,379,SD_CRIS_TREAT,是否已处理,是否有人处理了危急值提醒信息,20,,
+,\x00\x18,CRR0024,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,就诊类型的中台标准编码,20,是,是
+,\x00\x19,CRR0025,String字符串（变长）,,SC_SEND_DEPT,发送科室编码,发出危急值的科室,200,,
+,\x00\x1A,CRR0026,String字符串（变长）,,ST_SEND_DEPT,发送科室名称,,200,,
+,\x00\x1B,CRR0027,String字符串（变长）,,SC_SEND_EMP,发送者编码,发出危急值的医师,200,,
+,\x00\x1C,CRR0028,String字符串（变长）,,ST_SEND_EMP,发送者名称,,200,,
+,\x00\x1D,CRR0029,String字符串（变长）,,SC_CRISIS_TYPE,危急值类型编码,源业务系统的危急值类型编码,200,,
+,\x00\x1E,CRR0030,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统的就诊类型编码,200,是,是
+,\x00\x1F,CRR0031,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统的就诊类型描述,200,,
+,\x00\x20,CRR0032,String字符串（变长）,,CRIS_APP_NO,关联检验检查的申请单号,关联检验检查的申请单号,50,,
+,\x00\x21,CRR0033,String字符串（变长）,,CRIS_ORDER_LINK,关联医嘱ID,关联检验检查的医嘱ID,50,,
+,\x00\x22,CRR0034,String字符串（变长）,,SC_CRIS_ITEM,检验检查项目编码,检验检查项目编码,2000,,
+,\x00\x23,CRR0035,String字符串（变长）,,ST_CRIS_ITEM,检验检查项目名称,检验检查项目名称,700,,
+,\x00\x11,CRR0017,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x13,CRR0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x24,CRR0036,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x25,CRR0037,String字符串（变长）,,SC_CRIS_READ,信息阅读人编码,信息阅读人编码,200,,
+,\x00\x26,CRR0038,String字符串（变长）,,ST_CRIS_READ,信息阅读人名称,信息阅读人名称,200,,
+,\x00\x27,CRR0039,String字符串（变长）,,SC_CRIS_TREAT,信息处理人编码,信息处理人编码,200,,
+,\x00\x28,CRR0040,String字符串（变长）,,ST_CRIS_TREAT,信息处理人名称,信息处理人名称,200,,
+,\x00\x29,CRR0041,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,RECE_TREAT_TIME,接收处理结果时间,接收处理结果时间,200,,
+,\x00\x2A,CRR0042,String字符串（变长）,,SC_RECE_TREAT,接收处理结果人编码,接收处理结果人编码,200,,
+,\x00\x2B,CRR0043,String字符串（变长）,,ST_RECE_TREAT,接收处理结果人名称,接收处理结果人名称,200,,
+,\x00\x03,CRR0003,自定义字典类型，字符串（变长）,427,CRISIS_TYPE,危急值类型,危急值来源类型，如“检验危急值、检查危急值、体征危急值”,200,是,是
+,\x00\x05,CRR0005,String字符串（变长）,,CRIS_SEND_DEPT,发送科室,发出危急值的科室，编码+名称,200,,
+,\x00\x06,CRR0006,String字符串（变长）,,CRIS_SEND_NAME,发送者,发出危急值的医师，编码+名称,200,,
+,\x00\x0B,CRR0011,自定义字典类型，字符串（变长）,379,CRIS_READ_FLAG,信息阅读标记,是否有人阅读过危急值提醒信息,200,,
+,\x00\x0D,CRR0013,自定义字典类型，字符串（变长）,379,CRIS_TREAT_FLAG,信息处理标记,是否有人处理了危急值提醒信息,200,,
+,\x00\x12,CRR0018,自定义字典类型，字符串（变长）,383,VISIT_TYPE,就诊类型,"就诊类型，如“3#,#4#,#门诊”（直接复制JH_PAT_VISIT）",200,是,是

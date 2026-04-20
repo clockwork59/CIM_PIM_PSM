@@ -1,0 +1,26 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_PAT_VIS_MANAGER,表全名,JHPDL:JH_PAT_VIS_MANAGER,,,,,,
+,表说明,就诊科室人员管理记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,PAR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,PAR0001,String字符串（变长）,,PAT_VIS_MANAGER_SN,科室人员管理记录编号,科室人员管理记录编号，系统生成三级编码，如“PC0.000.000.001”,20,是,是
+,\x00\x02,PAR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,PAR0003,String字符串（变长）,,PAT_VISIT_SN,通用就诊记录编号,通用就诊记录编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x06,PAR0006,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,,,是,是
+,\x00\x07,PAR0007,String字符串（变长）,,SC_MANAGER_TYPE,管理类型代码,参与就诊管理的程度，如入科、转科、会诊、出院科、医技职能科、病案科、医务科等,200,,
+,\x00\x08,PAR0008,String字符串（变长）,,ST_MANAGER_TYPE,管理类型描述,,200,,
+,\x00\x09,PAR0009,String字符串（变长）,,SC_MANAGER_DEPT,管理科室代码,,200,,
+,\x00\x0A,PAR0010,String字符串（变长）,,ST_MANAGER_DEPT,管理科室描述,,200,,
+,\x00\x0B,PAR0011,String字符串（变长）,,SC_MANAGER_USER,管理人员代码,,200,,
+,\x00\x0C,PAR0012,String字符串（变长）,,ST_MANAGER_USER,管理人员描述,,200,,
+,\x00\x0D,PAR0013,Date日期型（yyyy-mm-dd）（10个字节）,,MANAGER_START_DATE,管理开始日期,,,,
+,\x00\x0E,PAR0014,Date日期型（yyyy-mm-dd）（10个字节）,,MANAGER_END_DATE,管理结束日期,,,,
+,\x00\x0F,PAR0015,String字符串（变长）,,SC_USER_ROLE,管理人员角色代码,如：住院医师、主任医师、责任护士、实习医生、医技检查医师、医务管理人员、会诊医师等,200,,
+,\x00\x10,PAR0016,String字符串（变长）,,ST_USER_ROLE,管理人员角色描述,,200,,
+,\x00\x11,PAR0017,String字符串（变长）,,MANAGER_REMARK,备注,,300,,
+,\x00\x04,PAR0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,PAR0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,,是,
+,\x00\x12,PAR0018,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

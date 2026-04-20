@@ -1,0 +1,31 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_NURSE_DTL,表全名,JHPDL:JH_NURSE_DTL,,,,,,
+,表说明,患者护理明细规范,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,NAB,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,NAB0001,String字符串（变长）,,NURSE_DTL_SN,事件唯一号,内部三级编码NB0.000.000.001,20,是,是
+,\x00\x02,NAB0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,NAB0003,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,HIS_PAT_ID,患者ID,患者ID,31,是,是
+,\x00\x04,NAB0004,String字符串（变长）,,HIS_VISIT_ID,业务系统就诊流水号,业务系统就诊流水号,100,,
+,\x00\x05,NAB0005,String字符串（变长）,,PAT_VISIT_SN,就诊流水号,对应JH_PAT_VISIT的PAV0001字段，无法关联则为空,100,,
+,\x00\x06,NAB0006,String字符串（变长）,,SC_DIS_DEPT,事件发生科室,事件发生科室,100,,
+,\x00\x07,NAB0007,String字符串（变长）,,ST_DIS_DEPT,事件发生科室,事件发生科室,100,,
+,\x00\x08,NAB0008,String字符串（变长）,,SC_EVENT,事件编码,事件编码,20,,
+,\x00\x09,NAB0009,String字符串（变长）,,ST_EVENT,事件名称,事件名称，如跌倒、经口经鼻胃肠导管非计划拔管、中心静脉导管留置等,40,,
+,\x00\x0A,NAB0010,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,STAR_DATE,事件开始时间,事件开始时间或事件发生时间，如经口经鼻胃肠导管留置开始时间,20,,
+,\x00\x0B,NAB0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,END_DATE,事件结束时间,事件结束时间，例如，如经口经鼻胃肠导管留置结束时间,40,,
+,\x00\x0C,NAB0012,String字符串（变长）,,SC_OPERA,操作人,操作人,20,,
+,\x00\x0D,NAB0013,String字符串（变长）,,ST_OPERA,操作人,操作人,20,,
+,\x00\x0E,NAB0014,String字符串（变长）,,NURSE_COMMENT,备注,备注,20,,
+,\x00\x0F,NAB0015,String字符串（变长）,,VALUE_NAME,值描述,此事件对应指标类型，一个事件有多个指标，如跌倒伤害等级,,,
+,\x00\x10,NAB0016,String字符串（变长）,,VALUE,值,此值对应的事件指标值1，如跌倒伤害等级具体的值,,,
+,\x00\x11,NAB0017,String字符串（变长）,,VALUE_NAME1,值描述1,此事件对应的第二个指标类型，一个事件有多个指标值，如跌倒评分,,,
+,\x00\x12,NAB0018,String字符串（变长）,,VALUE1,值1,此值对应的事件指标值1，如跌倒伤害评分具体的值,,,
+,\x00\x13,NAB0019,String字符串（变长）,,VALUE_NAME2,值描述2,此事件对应的第三个指标类型，一个事件有多个指标值,,,
+,\x00\x14,NAB0020,String字符串（变长）,,VALUE2,值2,此值对应的事件指标值2,,,
+,\x00\x15,NAB0021,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x16,NAB0022,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x17,NAB0023,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

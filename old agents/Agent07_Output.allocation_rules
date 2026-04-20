@@ -1,0 +1,441 @@
+# Agent-07: 能耗分摊规则库
+# Energy Consumption Allocation Rule Library
+
+allocation_algorithms = {
+    "algorithm_01_chiller_electricity_allocation": {
+        "algorithm_name": "冷站电耗分摊算法（按冷量使用）",
+        "algorithm_code": "ALLOC_CHILLER_01",
+        "allocation_basis": "基于实际冷量消耗的比例分摊",
+        "applicable_systems": ["中央空调系统", "区域供冷系统"],
+        "allocation_formula": {
+            "main_formula": "Zone_Allocation = (Zone_Cooling_Load / Total_Cooling_Produced) × Total_Chiller_Power",
+            "cooling_load_calculation": "Q_zone = ṁ_water × Cp × (T_return - T_supply) × Time",
+            "correction_factors": {
+                "seasonal_correction": "1.0 + 0.1×sin(2π×(month-4)/12)",
+                "efficiency_correction": "COP_actual / COP_design",
+                "distribution_losses": "1.05 (5%分配损失)"
+            }
+        },
+        "measurement_requirements": {
+            "required_meters": [
+                "回路总电表：冷站总用电量",
+                "机组电表：每台制冷机单独计量",
+                "辅助设备电表：水泵、冷却塔等",
+                "冷量表：各分区冷量消耗",
+                "温度传感器：供回水温度监测",
+                "流量计：各支路流量监测"
+            ],
+            "meter_accuracy": {
+                "electricity": "0.5S级（总表），1.0级（分配表）",
+                "thermal_energy": "2级精度",
+                "flow_measurement": "±1%误差",
+                "temperature": "±0.1°C精度"
+            }
+        },
+        "calculation_methodology": {
+            "step_1_data_collection": {
+                "time_resolution": "15分钟间隔数据",
+                "data_validation": "异常值检测和缺失值插补",
+                "quality_checks": [
+                    "能量平衡检查：总制冷量≈Σ分区冷量",
+                    "一致性检查：电耗趋势与冷量趋势相关性",
+                    "合理性检查：COP值在合理范围（3.0-6.0）"
+                ]
+            },
+            "step_2_direct_allocation": {
+                "direct_metered_zones": "已安装冷量表区域直接分摊",
+                "allocation_basis": "实时冷量比例 = Zone_Load / Total_Load",
+                "power_breakdown": {
+                    "chiller_power": "制冷主机能耗",
+                    "pump_power": "水泵系统能耗",
+                    "cooling_tower_power": "冷却塔能耗",
+                    "auxiliary_power": "控制系统等辅助能耗"
+                }
+            },
+            "step_3_indirect_allocation": {
+                "non_metered_zones": "按估算模型分配",
+                "estimation_models": {
+                    "area_based_model": "Q_estimate = Area × Power_Density × Load_Factor",
+                    "occupancy_based_model": "Q_estimate = People_Count × Load_Per_Person",
+                    "hourly_profile_model": "基于历史数据的时间序列模型"
+                },
+                "uncertainty_analysis": "±15%估算误差范围"
+            },
+            "step_4_validation_adjustment": {
+                "total_validation": "Σ分配值 = 总计量值 - 损耗",
+                "difference_distribution": "差异按比例分配给各区域",
+                "monthly_reconciliation": "月度结算时统一调整"
+            }
+        },
+        "practical_example": {
+            "scenario": "夏季典型工况",
+            "building_data": {
+                "total_cooling_load": "2500kWh（24小时）",
+                "total_chiller_power": "875kWh（24小时）",
+                "zones_distribution": {
+                    "outpatient_dept": {"area": "4500㎡", "load_percentage": 35, "allocation": "306.25kWh"},
+                    "inpatient_ward_A": {"area": "5200㎡", "load_percentage": 40, "allocation": "350.00kWh"},
+                    "medical_tech_dept": {"area": "2800㎡", "load_percentage": 18, "allocation": "157.50kWh"},
+                    "administration": {"area": "1500㎡", "load_percentage": 7, "allocation": "61.25kWh"}
+                }
+            }
+        }
+    },
+
+    "algorithm_02_pump_electricity_allocation": {
+        "algorithm_name": "水泵电耗分摊算法（按流量或面积）",
+        "algorithm_code": "ALLOC_PUMP_02",
+        "allocation_basis": "基于服务区域的用水需求和实际流量",
+        "applicable_systems": ["生活供水系统", "空调水系统", "消防稳压系统", "污水提升系统"],
+        "allocation_formula": {
+            "flow_based_allocation": "Zone_Allocation = (Zone_Flow_Rate / Total_Flow_Rate) × Pump_Power",
+            "area_based_allocation": "Zone_Allocation = (Zone_Area / Total_Served_Area) × Pump_Power",
+            "composite_allocation": "Weighted_Avg = 0.7×Flow_Basis + 0.3×Area_Basis",
+            "head_loss_correction": "Actual_Head_Loss_Zone / Total_Head_Loss"
+        },
+        "system_specifics": {
+            "domestic_water_system": {
+                "allocation_method": "主要按实际用水量分配",
+                "measurement_basis": "住户分水表读数",
+                "seasonal_factors": [
+                    "夏季系数：1.2（空调冷却用水增加）",
+                    "冬季系数：0.9（用水相对减少）",
+                    "节假日系数：0.7（门诊用水减少）"
+                ]
+            },
+            "hvac_water_system": {
+                "allocation_method": "完全按分配流量计量",
+                "correction_factors": {
+                    "distance_penalty": "远端用户+5%能耗",
+                    "height_penalty": "每10米高度+2%能耗",
+                    "pipe_resistance": "按水力计算动态调整"
+                }
+            }
+        },
+        "calculation_detailed": {
+            "step_1_pump_characteristics": {
+                "power_curve_model": "P_actual = P_rated × (Q_actual/Q_rated)^(2.5-3.0)",
+                "efficiency_curve": "η = f(Q/Q_rated) 标准泵效率曲线",
+                "head_calculation": "H = H_static + H_friction + H_local"
+            },
+            "step_2_zone_demand_analysis": {
+                "water_usage_patterns": {
+                    "medical_zones": "6:00-18:00高峰，夜间低谷",
+                    "residential_zones": "6:00-9:00, 18:00-22:00双峰",
+                    "commercial_zones": "8:00-18:00平稳期"
+                },
+                "simultaneity_factors": {
+                    "hospital_buildings": "0.7-0.8（同时使用系数）",
+                    "mixed_occupancy": "0.6-0.7（复合用能模式）"
+                }
+            },
+            "step_3_time_variant_allocation": {
+                "hourly_allocation": "基于15分钟功率数据",
+                "daily_variation": "用水量 × 日变化系数",
+                "monthly_adjustment": "基于水表月度抄表数据校核"
+            }
+        }
+    },
+
+    "algorithm_03_gas_network_allocation": {
+        "algorithm_name": "天然气管网分摊算法（按采暖面积）",
+        "algorithm_code": "ALLOC_GAS_03",
+        "allocation_basis": "基于采暖面积和实际热负荷的综合分配",
+        "applicable_systems": ["集中采暖系统", "生活热水系统", "厨房餐饮系统", "医疗设备系统"],
+        "allocation_formula": {
+            "heating_load_allocation": "Zone_Gas = (Zone_Heating_Area × Zone_Heat_Index) / (Σ Zone_Heat_Area × Heat_Index) × Gas_Heating",
+            "domestic_hot_water": "DHW_Gas = User_DHW_Consumption / Total_DHW × Gas_DHW",
+            "cooking_gas_allocation": "Kitchen_Gas = Meal_Count / Total_Meals × Gas_Cooking",
+            "load_factor_corrections": {
+                "exposure_correction": "南向-5%, 北向+8%",
+                "occupancy_correction": "不同区域的占用时间差异",
+                "ventilation_correction": "新风负荷的温度修正"
+            }
+        },
+        "heat_load_calculation": {
+            "design_heat_load": "Q_design = q_design × A × (t_in - t_out_design)",
+            "dynamic_heat_load": "Q_actual = Q_design × (t_in - t_out_actual) / (t_in - t_out_design)",
+            "hourly_heat_profiles": "基于建筑热惯性模型",
+            "weather_data_integration": "实时气象数据修正"
+        },
+        "metering_strategy": {
+            "primary_meters": [
+                "院区总燃气表（贸易结算表）",
+                "锅炉房进气表（主要用能设备）",
+                "厨房总表（独立核算单元）"
+            ],
+            "secondary_meters": [
+                "分楼分支计量表",
+                "生活热水专用表",
+                "医疗设备专用表"
+            ],
+            "smart_gas_meters": {
+                "communication": "LoRaWAN/NB-IoT",
+                "data_frequency": "24小时连续记录",
+                "safety_features": "泄漏检测+自动切断",
+                "accuracy_class": "1.0级（贸易结算）, 2.0级（内部分配）"
+            }
+        },
+        "allocation_detailed_steps": {
+            "step_1_gas_consumption_breakdown": {
+                "heating_gas_by_season": {
+                    "degree_day_method": "Q_heating_gas = α × HDD × A",
+                    "seasonal_efficiency_correction": "η_system = f(weather_conditions)",
+                    "comparison_approaches": [
+                        "度日法（Degree Day Method）",
+                        "热平衡法（Heat Balance Method）",
+                        "回归分析法（Regression Analysis）"
+                    ]
+                },
+                "non_heating_gas_breakdown": {
+                    "kitchen_gas": "Meal_based_calculation",
+                    "hot_water_gas": "Usage_based_allocation",
+                    "medical_equipment": "Operation_schedule_based"
+                }
+            },
+            "step_2_building_allocation": {
+                "area_basis_weights": {
+                    "envelope_characteristics": {"U_value": "外墙传热系数", "window_ratio": "窗墙比", "orientation_factor": "朝向系数"},
+                    "internal_gains": {"occupancy_density": "人员密度", "equipment_load": "设备发热", "lighting_load": "照明发热"},
+                    "system_efficiency": {"boiler_efficiency": "锅炉效率", "distribution_losses": "管网损失", "control_strategy": "控制策略"}
+                },
+                "zonal_allocation_factors": {
+                    "patient_wards": 1.0,
+                    "clinical_areas": 1.2,
+                    "administrative_zones": 0.8,
+                    "common_areas": 1.1,
+                    "storage_areas": 0.6
+                }
+            },
+            "step_3_monthly_verification": {
+                "allocation_consistency_check": "分配总和 = 总表读数",
+                "weather_normalization": "标准化到典型气象年",
+                "energy_intensity_benchmarking": "与当地气候类似建筑对比"
+            }
+        }
+    },
+
+    "algorithm_04_lighting_allocation": {
+        "algorithm_name": "照明分摊算法（按占用时间）",
+        "algorithm_code": "ALLOC_LIGHTING_04",
+        "allocation_basis": "基于实际照明使用时间和空间占用模式",
+        "applicable_systems": ["一般照明系统", "医疗专用照明", "应急照明系统", "景观照明系统"],
+        "allocation_formula": {
+            "time_based_allocation": "Zone_Allocation = (Actual_Lighting_Hours / Total_Hours) × (Lighting_Power_Zone / Total_Power) × Total_Lighting_Consumption",
+            "occupancy_weighted_allocation": "Zone_Allocation = Occupancy_Hours_Zone × Area_Zone × Lighting_Density_Zone / Σ(Occupancy×Area×Density) × Total",
+            "daylight_compensation": "Effective_Lighting_Hours = Scheduled_Hours × (1 - Daylight_Utilization_Factor)",
+            "control_system_efficiency": "Control_Saving = Baseline_Consumption × Control_Efficiency_Rate"
+        },
+        "occupancy_modeling": {
+            "usage_patterns": {
+                "clinical_spaces": {
+                    "outpatient_departments": "8:00-18:00 工作日正常",
+                    "emergency_departments": "24小时连续",
+                    "operating_rooms": "预约制，夜间急诊除外",
+                    "ICU_wards": "24小时家族探视限制照明"
+                },
+                "administrative_areas": {
+                    "offices": "8:00-18:00",
+                    "conference_rooms": "预约使用",
+                    "common_areas": "感光控制+时间控制"
+                }
+            },
+            "occupancy_sensors": {
+                "sensor_types": ["被动红外PIR", "超声波", "微波", "多技术组合"],
+                "coverage_areas": "传感器探测范围",
+                "occupancy_schedules": "基于历史占用数据",
+                "false_positive_minimization": "多重确认机制"
+            }
+        },
+        "control_strategies_analysis": {
+            "daylight_harvesting": {
+                "sensor_locations": "靠近窗户和天窗区域",
+                "dimming_strategies": "0-10V调光、DALI协议、PWM控制",
+                "energy_savings": "20-60% 自然光利用时间",
+                "comfort_considerations": "维持300-500lux照度要求"
+            },
+            "occupancy_based_controls": {
+                "presence_detection": "人体感应自动开关",
+                "absence_timeout": "15分钟无人自动关灯",
+                "daylight_integration": "无视需求时减少照明",
+                "zonal_control": "按房间或区域独立控制"
+            },
+            "time_based_scheduling": {
+                "time_clocks": "程序设定开关时间",
+                "building_management_integration": "BAS系统集成",
+                "holiday_adjustments": "节假日自动调光",
+                "seasonal_adjustments": "考虑日落时间变化"
+            }
+        },
+        "allocation_calculation_detailed": {
+            "step_1_zone_characterization": {
+                "lighting_power_density": {"medical_areas": "15-25W/m²", "administrative": "10-15W/m²", "circulation": "5-10W/m²", "parking": "2-5W/m²"},
+                "occupancy_factors": {"scheduled_occupancy": "计划占用比例", "actual_occupancy": "实际占用监测", "full_time_equivalents": "全职当量换算"},
+                "daylight_availability": {"solar_irradiance": "太阳辐射数据", "window_to_wall_ratio": "窗墙比", "skylight_contribution": "天窗贡献度"}
+            },
+            "step_2_usage_profiling": {
+                "hourly_occupancy_data": "基于门禁系统和感应器",
+                "monthly_comparisons": "不同月份使用时间对比",
+                "weather_correlation": "日照时间与照明能耗的关系",
+                "special_events_tracking": "特殊活动照明需求"
+            },
+            "step_3_efficiency_credits": {
+                "energy_efficiency_savings": {
+                    "LED_conversion": "50-70% 相比传统光源节省",
+                    "occupancy_sensors": "20-30% 节省移动感应区域",
+                    "daylight_controls": "15-25% 节省近窗区域",
+                    "dimming_controls": "10-20% 节省可调光区域"
+                },
+                "bonus_allocation": "能效改善奖励分数",
+                "baseline_adjustments": "基准线动态调整机制"
+            }
+        }
+    },
+
+    "algorithm_05_common_area_allocation": {
+        "algorithm_name": "公共区域分摊算法（按科室面积比例）",
+        "algorithm_code": "ALLOC_COMMON_05",
+        "allocation_basis": "基于各科室使用面积和对公共区域依赖度的综合权重分配",
+        "applicable_areas": ["走廊通道", "楼梯电梯", "卫生间", "设备平台", "停车场", "绿化景观"],
+        "allocation_formula": {
+            "basic_area_propea_allocation": "Common_Area_Allocation = (Department_Area / Total_Departmental_Area) × Concommon_Area_Energy",
+            "usage_intensity_modification": "Actual_Allocation = Base_Allocation × Usage_Intensity_Factor × Dependency_Factor",
+            "traffic_flow_consideration": "Foot_Traffic_Weight = Daily_Visitors_Department / Total_Daily_Visitors",
+            "multi_factor_composite": "Final_Weight = α×Area_Ratio + β×Traffic_Ratio + γ×Dependency_Ratio + δ×Time_Utilization_Ratio"
+        },
+        "common_area_categories": {
+            "horizontal_circulation": {
+                "areas": ["公共走廊", "大厅", "候诊区", "连廊"],
+                "measuring_method": "按服务半径范围分配",
+                "allocation_factors": {"proximity_factor": "就近原则", "circulation_intensity": "交通强度", "functional_dependency": "功能依赖度"}
+            },
+            "vertical_circulation": {
+                "areas": ["电梯", "楼梯", "自动扶梯"],
+                "measuring_method": "按楼层权重和交通分布",
+                "allocation_factors": {"floor_level_weight": "楼层权重", "usage_frequency": "使用频率", "population_served": "服务人数"}
+            },
+            "service_areas": {
+                "areas": ["卫生间", "清洁间", "设备管井", "屋顶设备平台"],
+                "measuring_method": "按使用频率和设备服务范围",
+                "allocation_factors": {"area_specific_use": "区域专用性", "equipment_dependency": "设备依赖度", "maintenance_requirements": "维护需求度"}
+            },
+            "outdoor_common": {
+                "areas": ["停车场", "道路", "绿化", "景观照明"],
+                "measuring_method": "按空间共享程度和使用时间",
+                "allocation_factors": {"space_sharing_ratio": "空间共享比例", "usage_time_overlap": "使用重叠时间", "visitor_percentage": "访客比例"}
+            }
+        },
+        "detailed_allocation_methodology": {
+            "step_1_common_area_inventory": {
+                "space_quantification": {
+                    "area_measurement_GIS": "基于BIM模型的精确面积计算",
+                    "3D_spatial_analysis": "三维空间分析公共区域的分布",
+                    "functional_zoning": "按功能和使用特征分区划分",
+                    "accessibility_analysis": "可达性分析各科室连接度"
+                },
+                "energy_database": {
+                    "submeter_installation": "公共区域分项电表",
+                    "manual_reading_backup": "人工抄表验证",
+                    "usage_time_logs": "使用时间记录",
+                    "maintenance_schedules": "设备维护记录"
+                }
+            },
+            "step_2_departmental_characterization": {
+                "physical_parameters": {
+                    "rental_or_ownership_areas": "各科室正式面积",
+                    "effective_usage_areas": "实际使用面积",
+                    "population_metrics": {
+                        "staff_count": "工作人员数量",
+                        "patient_volume": "患者流量",
+                        "visitor_access": "访客出入频率"
+                    }
+                },
+                "operational_parameters": {
+                    "time_schedules": {
+                        "operating_hours": "开放时间",
+                        "peak_hours": "高峰时间",
+                        "weekend_operations": "周末运营",
+                        "24h_requirements": "24小时服务"
+                    },
+                    "dependency_ratings": {
+                        "public_parking_dependency": "对停车需求程度",
+                        "elevator_usage_dependency": "对电梯依赖度",
+                        "common_facility_dependency": "公共设旽依赖度"
+                    }
+                }
+            },
+            "step_3_multi_criteria_weighting": {
+                "criteria_matrix": {
+                    "area_proportion": {"weight": 0.4, "description": "基础面积比例"},
+                    "traffic_volume": {"weight": 0.25, "description": "交通流量权重"},
+                    "usage_time_factor": {"weight": 0.2, "description": "使用时间系数"},
+                    "functional_dependency": {"weight": 0.15, "description": "功能依赖度"}
+                },
+                "analytic_hierarchy_process": "层次分析法确定权重",
+                "sensitivity_analysis": "关键参数敏感性分析"
+            },
+            "step_4_optimization_and_refining": {
+                "dynamic_adjustment_mechanisms": {
+                    "usage_pattern_changes": "根据实际使用模式调整",
+                    "seasonal_variations": "考虑季节变化影响",
+                    "spatial_reorganization": "空间重组后的重新分配",
+                    "energy_efficiency_improvements": "能效改善后的奖励"
+                },
+                "feedback_mechanisms": {
+                    "quarterly_usage_surveys": "季度使用调查",
+                    "occupancy_sensor_validation": "传感器数据验证",
+                    "departmental_feedback_collection": "科室反馈收集",
+                    "benchmarking_against_standards": "与标准对比验证"
+                }
+            }
+        },
+        "validation_and_quality_assurance": {
+            "allocation_self_consistency": "∑分配值 = 总公共能耗",
+            "temporal_stability": "分配比例的时间稳定性分析",
+            "cross_departmental_comparison": "类似科室间的对比验证",
+            "energy_intensity_benchmarking": "能效指标对比",
+            "stakeholder_satisfaction": "利益相关者满意度调查"
+        }
+    }
+},
+
+# 分摊规则元数据系统
+allocation_rule_metadata = {
+    "rule_classification": {
+        "measured_based_rules": ["算法01", "算法03"],
+        "model_based_rules": ["算法02", "算法04", "算法05"],
+        "hybrid_approaches": ["基于实际数据+理论模型的组合方法"],
+        "customizable_rules": "允许根据具体建筑特征调整的规则"
+    },
+
+    "implementation_guides": {
+        "minimum_data_requirements": "各算法所需的最少数据测量点",
+        "meter_installation_standards": "精度要求、安装位置、通信规范",
+        "software_integration": "与EMS系统、BAS系统的接口标准",
+        "validation_procedures": "算法正确性验证和校准程序"
+    },
+
+    "performance_metrics": {
+        "allocation_accuracy": "±5%（实测基础算法）-±15%（模型基础算法）",
+        "temporal_resolution": "15分钟到24小时可选",
+        "data_completeness": "≥95%（有效数据率）",
+        "computational_efficiency": "秒级运算时间"
+    }
+}
+
+# 规则间的协同和交互关系
+rule_interactions = {
+    "cascading_relationships": {
+        "cooling_water_impact": "01算法分配影响02算法的补水泵能耗",
+        "lighting_heat_gain": "04算法照明能耗影响01算法的冷负荷",
+        "common_area_hvac": "05算法公共区域能耗影响01算法的冷热量",
+        "cross_allocation_prevention": "避免重复分配机制"
+    },
+
+    "coordination_mechanisms": {
+        "priority_orders": "决策冲突时的优先级规则",
+        "mutual_exclusions": "互相排斥的分配规则",
+        "iterative_refinement": "多轮迭代优化分配结果",
+        "consensus_building": "各算法结果的一致性达成机制"
+    }
+}

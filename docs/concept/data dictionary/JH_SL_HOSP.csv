@@ -1,0 +1,14 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_SL_HOSP,表全名,JHPDL:JH_SL_HOSP,,,,,,
+,表说明,专科就诊记录（如口腔、妇产科等）,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,SHR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,SHR0001,String字符串（变长）,,SPECIALIST_SN,专科就诊编号,专科就诊编号，系统生成二级编码，如“S00.000.001”,20,是,是
+,\x00\x02,SHR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,SHR0003,String字符串（变长）,,PAT_VISIT_SN,就诊编号,就诊编号，来源JH_PAT_VISIT的PAV0001,20,是,是
+,\x00\x04,SHR0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SPECIALIST_TIME,专科就诊开始时间,专科门诊就诊开始时间,19,,
+,\x00\x05,SHR0005,自定义字典类型，字符串（变长）,,SPECIALIST_TYPE,专科类型,"专科类型，如“3#,#4#,#口腔”",200,,
+,\x00\x06,SHR0006,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

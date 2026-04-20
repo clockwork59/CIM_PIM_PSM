@@ -1,0 +1,1087 @@
+# ============================================================================
+# CIM Medical Building Unified Domain Model - Ontology Skeleton
+# Version: 2.0.0-Final
+# Generated: 2025-01-17
+# ============================================================================
+
+@prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:        <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:       <http://www.w3.org/2004/02/skos/core#> .
+@prefix sh:         <http://www.w3.org/ns/shacl#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-topo:   <https://cim.medical/ontology/v3.4/topology#> .
+@prefix cim-space:  <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-flow:   <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-ctrl:   <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-meter:  <https://cim.medical/ontology/v3.4/metering#> .
+@prefix cim-om:     <https://cim.medical/ontology/v3.4/operations#> .
+@prefix cim-loc:    <https://cim.medical/ontology/v3.4/location#> .
+
+# ============================================================================
+# ONTOLOGY METADATA
+# ============================================================================
+
+<https://cim.medical/ontology/v3.4>
+    a owl:Ontology ;
+    rdfs:label "CIM Medical Building Unified Domain Model"@en ;
+    rdfs:label "医疗建筑CIM统一领域模型"@zh-CN ;
+    owl:versionInfo "2.0.0-Final" ;
+    rdfs:comment "Complete ontology skeleton with property definitions aligned to medical constraints."@en .
+
+# ============================================================================
+# ANNOTATION PROPERTIES
+# ============================================================================
+
+cim:unit
+    a owl:AnnotationProperty ;
+    rdfs:label "unit"@en ;
+    rdfs:label "单位"@zh-CN ;
+    rdfs:comment "用于标注数据属性的物理单位"@zh-CN .
+
+cim:sourceAgent
+    a owl:AnnotationProperty ;
+    rdfs:label "source agent"@en ;
+    rdfs:label "来源Agent"@zh-CN .
+
+# ============================================================================
+# CORE BASE CLASSES
+# ============================================================================
+
+cim:Entity
+    a owl:Class ;
+    rdfs:label "Entity"@en ;
+    rdfs:label "实体"@zh-CN ;
+    rdfs:comment "The root abstract class for all CIM objects."@en .
+
+cim:PhysicalObject
+    a owl:Class ;
+    rdfs:subClassOf cim:Entity ;
+    rdfs:label "Physical Object"@en ;
+    rdfs:label "物理对象"@zh-CN .
+
+cim:LogicalObject
+    a owl:Class ;
+    rdfs:subClassOf cim:Entity ;
+    rdfs:label "Logical Object"@en ;
+    rdfs:label "逻辑对象"@zh-CN .
+
+# ============================================================================
+# TOPOLOGY DOMAIN (Agent-01)
+# ============================================================================
+
+cim-topo:Node
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Topology Node"@en ;
+    rdfs:label "拓扑节点"@zh-CN ;
+    cim:sourceAgent "Agent-01" .
+
+cim-topo:Source_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Source Node"@en ;
+    rdfs:label "源节点"@zh-CN ;
+    rdfs:comment "系统的能量/介质输入端，流动的起点"@zh-CN .
+
+cim-topo:Sink_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Sink Node"@en ;
+    rdfs:label "末端节点"@zh-CN ;
+    rdfs:comment "系统的能量/介质消耗端，流动的终点"@zh-CN .
+
+cim-topo:Distribution_Node
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Distribution Node"@en ;
+    rdfs:label "分配节点"@zh-CN ;
+    rdfs:comment "进行分配、汇集、调节的中间节点"@zh-CN .
+
+cim-topo:LogicalNode
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:Node ;
+    rdfs:label "Logical Node"@en ;
+    rdfs:label "逻辑节点"@zh-CN ;
+    rdfs:comment "纯逻辑节点，无需物理设备映射。用于解决GAP-001。"@zh-CN .
+
+cim-topo:Junction
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:LogicalNode ;
+    rdfs:label "Junction"@en ;
+    rdfs:label "汇集点"@zh-CN .
+
+cim-topo:Splitter
+    a owl:Class ;
+    rdfs:subClassOf cim-topo:LogicalNode ;
+    rdfs:label "Splitter"@en ;
+    rdfs:label "分配点"@zh-CN .
+
+cim-topo:System
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Technical System"@en ;
+    rdfs:label "技术系统"@zh-CN ;
+    cim:sourceAgent "Agent-01" .
+
+cim-topo:hasSourceNode
+    a owl:ObjectProperty ;
+    rdfs:domain cim-topo:System ;
+    rdfs:range cim-topo:Source_Node ;
+    rdfs:label "has source node"@en .
+
+# ============================================================================
+# SPACE DOMAIN (Agent-02)
+# ============================================================================
+
+cim-space:Space
+    a owl:Class ;
+    rdfs:subClassOf cim:PhysicalObject ;
+    rdfs:label "Space"@en ;
+    rdfs:label "空间"@zh-CN ;
+    cim:sourceAgent "Agent-02" .
+
+cim-space:Site
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Site"@en ;
+    rdfs:label "院区"@zh-CN .
+
+cim-space:Building
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Building"@en ;
+    rdfs:label "建筑"@zh-CN .
+
+cim-space:Floor
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Floor"@en ;
+    rdfs:label "楼层"@zh-CN .
+
+cim-space:Room
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Room (L4)"@en ;
+    rdfs:label "房间"@zh-CN .
+
+cim-space:CleanSpace
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Clean Space"@en ;
+    rdfs:label "洁净空间"@zh-CN ;
+    rdfs:comment "所有需要洁净度控制的空间的抽象基类"@zh-CN .
+
+cim-space:OperatingRoom
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "Operating Room"@en ;
+    rdfs:label "手术室"@zh-CN ;
+    skos:note "Standard: GB 50333-2013" .
+
+cim-space:surgeryGrade
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:OperatingRoom ;
+    rdfs:range xsd:string ;
+    rdfs:label "surgery grade"@en ;
+    rdfs:label "手术室等级"@zh-CN ;
+    rdfs:comment "取值: Class_I, Class_II, Class_III, Class_IV"@zh-CN .
+
+cim-space:temperature
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "design temperature"@en ;
+    rdfs:label "设计温度"@zh-CN ;
+    cim:unit "°C" .
+
+cim-space:cleanlinessClass
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:CleanSpace ;
+    rdfs:range xsd:string ;
+    rdfs:label "cleanliness class"@en ;
+    rdfs:label "洁净等级"@zh-CN .
+
+# ============================================================================
+# EQUIPMENT DOMAIN (Agent-03)
+# ============================================================================
+
+cim-equip:Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim:PhysicalObject ;
+    rdfs:label "Equipment"@en ;
+    rdfs:label "设备"@zh-CN ;
+    cim:sourceAgent "Agent-03" .
+
+cim-equip:Component
+    a owl:Class ;
+    rdfs:subClassOf cim:PhysicalObject ;
+    rdfs:label "Component"@en ;
+    rdfs:label "组件"@zh-CN .
+
+cim-equip:reliabilityLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "reliability level"@en ;
+    rdfs:label "可靠性等级"@zh-CN ;
+    rdfs:comment "取值: LIFE_SAFETY, PATIENT_SAFETY, CRITICAL, IMPORTANT, SECONDARY"@zh-CN .
+
+cim-equip:hasLocalControl
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "has local control"@en ;
+    rdfs:label "有本地控制"@zh-CN .
+
+cim-equip:externalControlSystem
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "external control system"@en ;
+    rdfs:label "外部控制系统"@zh-CN .
+
+cim-equip:isUncontrolledLoad
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is uncontrolled load"@en ;
+    rdfs:label "是否为非受控负荷"@zh-CN .
+
+cim:mappingStatus
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-topo:Node ;
+    rdfs:range xsd:string ;
+    rdfs:label "mapping status"@en ;
+    rdfs:comment "取值: Mapped, PendingMapping, LogicalOnly"@zh-CN .
+
+# ============================================================================
+# LOCATION DOMAIN (Agent-05)
+# ============================================================================
+
+cim-loc:MEP_Room
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "MEP Room"@en ;
+    rdfs:label "机电设备用房"@zh-CN ;
+    cim:sourceAgent "Agent-05" .
+
+cim-loc:Shaft
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Shaft"@en ;
+    rdfs:label "竖井"@zh-CN .
+
+cim-loc:Ceiling_Void
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Ceiling Void"@en ;
+    rdfs:label "吊顶内"@zh-CN .
+
+cim:locatedIn
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "located in"@en ;
+    rdfs:label "位于"@zh-CN .
+
+cim:locationStatus
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "location status"@en ;
+    rdfs:comment "取值: Defined, TBD"@zh-CN .
+
+# ============================================================================
+# SPACE DOMAIN - Additional Properties (Agent-02)
+# ============================================================================
+
+cim-space:Zone
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "Zone (L3)"@en ;
+    rdfs:label "功能区"@zh-CN .
+
+cim-space:SubSpace
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Space ;
+    rdfs:label "SubSpace (L5)"@en ;
+    rdfs:label "子空间"@zh-CN .
+
+cim-space:ICU
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "ICU"@en ;
+    rdfs:label "重症监护病房"@zh-CN .
+
+cim-space:IsolationRoom
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "Isolation Room"@en ;
+    rdfs:label "隔离病房"@zh-CN .
+
+cim-space:NegativePressureRoom
+    a owl:Class ;
+    rdfs:subClassOf cim-space:IsolationRoom ;
+    rdfs:label "Negative Pressure Room"@en ;
+    rdfs:label "负压隔离病房"@zh-CN .
+
+cim-space:PositivePressureRoom
+    a owl:Class ;
+    rdfs:subClassOf cim-space:IsolationRoom ;
+    rdfs:label "Positive Pressure Room"@en ;
+    rdfs:label "正压隔离病房"@zh-CN .
+
+cim-space:CleanLaboratory
+    a owl:Class ;
+    rdfs:subClassOf cim-space:CleanSpace ;
+    rdfs:label "Clean Laboratory"@en ;
+    rdfs:label "洁净实验室"@zh-CN .
+
+cim-space:relativeHumidity
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "relative humidity"@en ;
+    rdfs:label "相对湿度"@zh-CN ;
+    cim:unit "%RH" .
+
+cim-space:pressureDifferential
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "pressure differential"@en ;
+    rdfs:label "压差"@zh-CN ;
+    cim:unit "Pa" .
+
+cim-space:airChangesPerHour
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "air changes per hour"@en ;
+    rdfs:label "换气次数"@zh-CN ;
+    cim:unit "ACH" .
+
+cim-space:noiseLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "noise level"@en ;
+    rdfs:label "噪声水平"@zh-CN ;
+    cim:unit "dB(A)" .
+
+cim-space:vibrationLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "vibration level"@en ;
+    rdfs:label "振动水平"@zh-CN ;
+    cim:unit "mm/s" .
+
+cim-space:biohazardLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:string ;
+    rdfs:label "biohazard level"@en ;
+    rdfs:label "生物危害等级"@zh-CN ;
+    rdfs:comment "取值: BSL-1, BSL-2, BSL-3, BSL-4, none"@zh-CN .
+
+cim-space:illuminance
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "illuminance"@en ;
+    rdfs:label "照度"@zh-CN ;
+    cim:unit "lx" .
+
+cim-space:infectionControlLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:string ;
+    rdfs:label "infection control level"@en ;
+    rdfs:label "感染控制等级"@zh-CN ;
+    rdfs:comment "取值: strict, critical, enhanced, standard, minimal"@zh-CN .
+
+# ============================================================================
+# EQUIPMENT DOMAIN - HVAC Subclasses (Agent-03)
+# ============================================================================
+
+cim-equip:HVAC_Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "HVAC Equipment"@en ;
+    rdfs:label "暖通空调设备"@zh-CN .
+
+cim-equip:Chiller
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HVAC_Equipment ;
+    rdfs:label "Chiller"@en ;
+    rdfs:label "冷水机组"@zh-CN .
+
+cim-equip:CentrifugalChiller
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Chiller ;
+    rdfs:label "Centrifugal Chiller"@en ;
+    rdfs:label "离心式冷水机组"@zh-CN .
+
+cim-equip:ScrewChiller
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Chiller ;
+    rdfs:label "Screw Chiller"@en ;
+    rdfs:label "螺杆式冷水机组"@zh-CN .
+
+cim-equip:MagneticBearingChiller
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Chiller ;
+    rdfs:label "Magnetic Bearing Chiller"@en ;
+    rdfs:label "磁悬浮冷水机组"@zh-CN .
+
+cim-equip:CoolingTower
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HVAC_Equipment ;
+    rdfs:label "Cooling Tower"@en ;
+    rdfs:label "冷却塔"@zh-CN .
+
+cim-equip:Pump
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HVAC_Equipment ;
+    rdfs:label "Pump"@en ;
+    rdfs:label "水泵"@zh-CN .
+
+cim-equip:AHU
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HVAC_Equipment ;
+    rdfs:label "Air Handling Unit"@en ;
+    rdfs:label "空调机组"@zh-CN .
+
+cim-equip:CleanAHU
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:AHU ;
+    rdfs:label "Clean AHU"@en ;
+    rdfs:label "洁净空调机组"@zh-CN .
+
+cim-equip:FCU
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HVAC_Equipment ;
+    rdfs:label "Fan Coil Unit"@en ;
+    rdfs:label "风机盘管"@zh-CN .
+
+cim-equip:VAV_Terminal
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HVAC_Equipment ;
+    rdfs:label "VAV Terminal"@en ;
+    rdfs:label "变风量末端"@zh-CN .
+
+cim-equip:HEPA_Filter
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Component ;
+    rdfs:label "HEPA Filter"@en ;
+    rdfs:label "HEPA高效过滤器"@zh-CN .
+
+# ============================================================================
+# EQUIPMENT DOMAIN - Electrical Subclasses
+# ============================================================================
+
+cim-equip:Electrical_Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Electrical Equipment"@en ;
+    rdfs:label "电气设备"@zh-CN .
+
+cim-equip:Transformer
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Transformer"@en ;
+    rdfs:label "变压器"@zh-CN .
+
+cim-equip:IsolationTransformer
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Transformer ;
+    rdfs:label "Medical Isolation Transformer"@en ;
+    rdfs:label "医用隔离变压器"@zh-CN .
+
+cim-equip:UPS
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "UPS"@en ;
+    rdfs:label "不间断电源"@zh-CN .
+
+cim-equip:DieselGenerator
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Diesel Generator"@en ;
+    rdfs:label "柴油发电机组"@zh-CN .
+
+# ============================================================================
+# EQUIPMENT DOMAIN - Medical Gas & Fire
+# ============================================================================
+
+cim-equip:MedicalGas_Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Medical Gas Equipment"@en ;
+    rdfs:label "医疗气体设备"@zh-CN .
+
+cim-equip:FireProtection_Equipment
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Fire Protection Equipment"@en ;
+    rdfs:label "消防设备"@zh-CN .
+
+# ============================================================================
+# CONTROL DOMAIN (Agent-06) - Expanded
+# ============================================================================
+
+cim-ctrl:ControlDevice
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Control Device"@en ;
+    rdfs:label "控制设备"@zh-CN ;
+    cim:sourceAgent "Agent-06" .
+
+cim-ctrl:Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:ControlDevice ;
+    rdfs:label "Sensor"@en ;
+    rdfs:label "传感器"@zh-CN .
+
+cim-ctrl:Temperature_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Temperature Sensor"@en ;
+    rdfs:label "温度传感器"@zh-CN .
+
+cim-ctrl:Humidity_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Humidity Sensor"@en ;
+    rdfs:label "湿度传感器"@zh-CN .
+
+cim-ctrl:Pressure_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Pressure/DP Sensor"@en ;
+    rdfs:label "压力/压差传感器"@zh-CN .
+
+cim-ctrl:Flow_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Flow Sensor"@en ;
+    rdfs:label "流量传感器"@zh-CN .
+
+cim-ctrl:AirQuality_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Air Quality Sensor"@en ;
+    rdfs:label "空气质量传感器"@zh-CN .
+
+cim-ctrl:Actuator
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:ControlDevice ;
+    rdfs:label "Actuator"@en ;
+    rdfs:label "执行器"@zh-CN .
+
+cim-ctrl:ModulatingValve
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Actuator ;
+    rdfs:label "Modulating Valve"@en ;
+    rdfs:label "电动调节阀"@zh-CN .
+
+cim-ctrl:MotorizedDamper
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Actuator ;
+    rdfs:label "Motorized Damper"@en ;
+    rdfs:label "电动风阀"@zh-CN .
+
+cim-ctrl:VFD
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Actuator ;
+    rdfs:label "Variable Frequency Drive"@en ;
+    rdfs:label "变频器"@zh-CN .
+
+cim-ctrl:Controller
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:ControlDevice ;
+    rdfs:label "Controller"@en ;
+    rdfs:label "控制器"@zh-CN .
+
+cim-ctrl:DDC_Controller
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Controller ;
+    rdfs:label "DDC Controller"@en ;
+    rdfs:label "直接数字控制器"@zh-CN .
+
+cim-ctrl:PLC_Controller
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Controller ;
+    rdfs:label "PLC Controller"@en ;
+    rdfs:label "可编程逻辑控制器"@zh-CN .
+
+cim-ctrl:NAC_Controller
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Controller ;
+    rdfs:label "Network Automation Controller"@en ;
+    rdfs:label "网络自动化控制器"@zh-CN .
+
+cim-ctrl:ControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Control Loop"@en ;
+    rdfs:label "控制回路"@zh-CN ;
+    cim:sourceAgent "Agent-06" .
+
+cim-ctrl:PID_Loop
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:ControlLoop ;
+    rdfs:label "PID Control Loop"@en ;
+    rdfs:label "PID控制回路"@zh-CN .
+
+cim-ctrl:CascadePID_Loop
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:PID_Loop ;
+    rdfs:label "Cascade PID Loop"@en ;
+    rdfs:label "串级PID回路"@zh-CN .
+
+cim-ctrl:ControlStateMachine
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Control State Machine"@en ;
+    rdfs:label "控制状态机"@zh-CN .
+
+cim-ctrl:InterlockRule
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Interlock Rule"@en ;
+    rdfs:label "联锁规则"@zh-CN .
+
+cim-ctrl:DegradationStrategy
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Degradation Strategy"@en ;
+    rdfs:label "降级策略"@zh-CN .
+
+cim-ctrl:monitors
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:Sensor ;
+    rdfs:range cim:Entity ;
+    rdfs:label "monitors"@en ;
+    rdfs:label "监测"@zh-CN .
+
+cim-ctrl:controls
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:Controller ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "controls"@en ;
+    rdfs:label "控制"@zh-CN .
+
+cim-ctrl:hasSensor
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:ControlLoop ;
+    rdfs:range cim-ctrl:Sensor ;
+    rdfs:label "has sensor"@en .
+
+cim-ctrl:hasActuator
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:ControlLoop ;
+    rdfs:range cim-ctrl:Actuator ;
+    rdfs:label "has actuator"@en .
+
+cim-ctrl:criticality
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-ctrl:ControlDevice ;
+    rdfs:range xsd:string ;
+    rdfs:label "criticality"@en ;
+    rdfs:label "关键性等级"@zh-CN ;
+    rdfs:comment "取值: P0-LIFE_SAFETY, P1-MISSION_CRITICAL, P2-IMPORTANT, P3-SECONDARY"@zh-CN .
+
+# ============================================================================
+# METERING DOMAIN (Agent-07) - Expanded
+# ============================================================================
+
+cim-meter:Meter
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Meter"@en ;
+    rdfs:label "计量表"@zh-CN ;
+    cim:sourceAgent "Agent-07" .
+
+cim-meter:ElectricMeter
+    a owl:Class ;
+    rdfs:subClassOf cim-meter:Meter ;
+    rdfs:label "Electric Meter"@en ;
+    rdfs:label "电表"@zh-CN .
+
+cim-meter:ThermalMeter
+    a owl:Class ;
+    rdfs:subClassOf cim-meter:Meter ;
+    rdfs:label "Thermal Energy Meter"@en ;
+    rdfs:label "热量表"@zh-CN .
+
+cim-meter:WaterMeter
+    a owl:Class ;
+    rdfs:subClassOf cim-meter:Meter ;
+    rdfs:label "Water Meter"@en ;
+    rdfs:label "水表"@zh-CN .
+
+cim-meter:GasMeter
+    a owl:Class ;
+    rdfs:subClassOf cim-meter:Meter ;
+    rdfs:label "Gas Meter"@en ;
+    rdfs:label "燃气表"@zh-CN .
+
+cim-meter:VirtualMeter
+    a owl:Class ;
+    rdfs:subClassOf cim-meter:Meter ;
+    rdfs:label "Virtual Meter"@en ;
+    rdfs:label "虚拟计量"@zh-CN .
+
+cim-meter:meteringLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-meter:Meter ;
+    rdfs:range xsd:integer ;
+    rdfs:label "metering level"@en ;
+    rdfs:label "计量层级"@zh-CN ;
+    rdfs:comment "取值: 0=总表, 1=区域, 2=分户, 3=分项"@zh-CN .
+
+cim-meter:meters
+    a owl:ObjectProperty ;
+    rdfs:domain cim-meter:Meter ;
+    rdfs:range cim:Entity ;
+    rdfs:label "meters"@en ;
+    rdfs:label "计量"@zh-CN .
+
+cim-meter:derivedFrom
+    a owl:ObjectProperty ;
+    rdfs:domain cim-meter:VirtualMeter ;
+    rdfs:range cim-meter:Meter ;
+    rdfs:label "derived from"@en ;
+    rdfs:label "来源于"@zh-CN .
+
+cim-meter:parentMeter
+    a owl:ObjectProperty ;
+    rdfs:domain cim-meter:Meter ;
+    rdfs:range cim-meter:Meter ;
+    rdfs:label "parent meter"@en ;
+    rdfs:label "上级计量表"@zh-CN .
+
+# ============================================================================
+# OPERATIONS DOMAIN (Agent-08) - Expanded
+# ============================================================================
+
+cim-om:AlarmEvent
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Alarm Event"@en ;
+    rdfs:label "告警事件"@zh-CN ;
+    cim:sourceAgent "Agent-08" .
+
+cim-om:WorkOrder
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Work Order"@en ;
+    rdfs:label "工单"@zh-CN ;
+    cim:sourceAgent "Agent-08" .
+
+cim-om:MaintenanceStrategy
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Maintenance Strategy"@en ;
+    rdfs:label "维护策略"@zh-CN .
+
+cim-om:AssetLifecycle
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Asset Lifecycle"@en ;
+    rdfs:label "资产生命周期"@zh-CN .
+
+cim-om:SOP
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Standard Operating Procedure"@en ;
+    rdfs:label "标准操作规程"@zh-CN .
+
+cim-om:EmergencyPlan
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Emergency Plan"@en ;
+    rdfs:label "应急预案"@zh-CN .
+
+cim-om:severity
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-om:AlarmEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "severity"@en ;
+    rdfs:label "严重程度"@zh-CN ;
+    rdfs:comment "取值: P0_Emergency, P1_Critical, P2_Major, P3_Minor"@zh-CN .
+
+cim-om:targetEquipment
+    a owl:ObjectProperty ;
+    rdfs:domain cim-om:WorkOrder ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "target equipment"@en .
+
+# ============================================================================
+# FLOW DOMAIN (Agent-04) - Expanded
+# ============================================================================
+
+cim-flow:FlowPath
+    a owl:Class ;
+    rdfs:subClassOf cim:LogicalObject ;
+    rdfs:label "Flow Path"@en ;
+    rdfs:label "流动路径"@zh-CN ;
+    cim:sourceAgent "Agent-04" .
+
+cim-flow:MassFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:FlowPath ;
+    rdfs:label "Mass Flow"@en ;
+    rdfs:label "物质流"@zh-CN .
+
+cim-flow:EnergyFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:FlowPath ;
+    rdfs:label "Energy Flow"@en ;
+    rdfs:label "能量流"@zh-CN .
+
+cim-flow:InformationFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:FlowPath ;
+    rdfs:label "Information Flow"@en ;
+    rdfs:label "信息流"@zh-CN .
+
+cim-flow:carrierType
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range xsd:string ;
+    rdfs:label "carrier type"@en ;
+    rdfs:label "载体类型"@zh-CN .
+
+cim-flow:payloadType
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range xsd:string ;
+    rdfs:label "payload type"@en ;
+    rdfs:label "荷载类型"@zh-CN .
+
+# ============================================================================
+# CROSS-DOMAIN RELATIONSHIP PROPERTIES
+# ============================================================================
+
+cim:mapsToNode
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-topo:Node ;
+    rdfs:label "maps to topology node"@en ;
+    rdfs:label "映射到拓扑节点"@zh-CN .
+
+cim:serves
+    a owl:ObjectProperty ;
+    rdfs:domain cim:Entity ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "serves"@en ;
+    rdfs:label "服务于"@zh-CN .
+
+cim:contains
+    a owl:ObjectProperty, owl:TransitiveProperty ;
+    rdfs:domain cim-space:Space ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "contains"@en ;
+    rdfs:label "包含"@zh-CN .
+
+cim:componentOf
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Component ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "component of"@en ;
+    rdfs:label "属于组件"@zh-CN .
+
+cim:flowsThrough
+    a owl:ObjectProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-topo:Node ;
+    rdfs:label "flows through"@en ;
+    rdfs:label "流经"@zh-CN .
+
+cim:measuredBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim:Entity ;
+    rdfs:range cim-ctrl:Sensor ;
+    rdfs:label "measured by"@en ;
+    rdfs:label "被测量于"@zh-CN .
+
+cim:meteredBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim:Entity ;
+    rdfs:range cim-meter:Meter ;
+    rdfs:label "metered by"@en ;
+    rdfs:label "被计量于"@zh-CN .
+
+cim:interlocksWith
+    a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "interlocks with"@en ;
+    rdfs:label "联锁于"@zh-CN .
+
+cim:triggeredBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-om:AlarmEvent ;
+    rdfs:range cim-ctrl:Sensor ;
+    rdfs:label "triggered by"@en ;
+    rdfs:label "触发于"@zh-CN .
+
+cim:degradesTo
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:ControlLoop ;
+    rdfs:range cim-ctrl:DegradationStrategy ;
+    rdfs:label "degrades to"@en ;
+    rdfs:label "降级至"@zh-CN .
+
+cim:belongsToSystem
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-topo:System ;
+    rdfs:label "belongs to system"@en ;
+    rdfs:label "属于系统"@zh-CN .
+
+cim:hasMedicalCompliance
+    a owl:DatatypeProperty ;
+    rdfs:domain cim:Entity ;
+    rdfs:range xsd:string ;
+    rdfs:label "medical compliance standard"@en ;
+    rdfs:label "医疗合规标准"@zh-CN ;
+    rdfs:comment "引用的医疗建筑国标/行标编号"@zh-CN .
+
+# ============================================================================
+# Phase 6C: 放射科/核医学空间类
+# ============================================================================
+
+cim-space:RadiologyRoom
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "放射科影像机房"@zh-CN ;
+    rdfs:label "Radiology Imaging Room"@en .
+
+cim-space:CT_Room
+    a owl:Class ;
+    rdfs:subClassOf cim-space:RadiologyRoom ;
+    rdfs:label "CT机房"@zh-CN .
+
+cim-space:DSA_CathLab
+    a owl:Class ;
+    rdfs:subClassOf cim-space:RadiologyRoom ;
+    rdfs:label "DSA/导管室"@zh-CN .
+
+cim-space:LinearAccelerator_Room
+    a owl:Class ;
+    rdfs:subClassOf cim-space:RadiologyRoom ;
+    rdfs:label "放射治疗室/直线加速器"@zh-CN .
+
+cim-space:NuclearMedicine_HotLab
+    a owl:Class ;
+    rdfs:subClassOf cim-space:Room ;
+    rdfs:label "核医学热室"@zh-CN .
+
+cim-space:PETCT_Room
+    a owl:Class ;
+    rdfs:subClassOf cim-space:RadiologyRoom ;
+    rdfs:label "PET-CT室"@zh-CN .
+
+# ============================================================================
+# Phase 6D: 智能照明系统类
+# ============================================================================
+
+cim-equip:LightingSystem
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "照明系统"@zh-CN ;
+    rdfs:label "Lighting System"@en .
+
+cim-equip:EmergencyLighting
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:LightingSystem ;
+    rdfs:label "应急照明"@zh-CN ;
+    rdfs:comment "含疏散指示灯和备用照明, GB 17945合规"@zh-CN .
+
+cim-equip:SurgicalLight
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:LightingSystem ;
+    rdfs:label "手术无影灯"@zh-CN ;
+    rdfs:comment "照度≥40000lx, 色温4000-6500K"@zh-CN .
+
+cim-equip:CircadianLighting
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:LightingSystem ;
+    rdfs:label "昼夜节律照明"@zh-CN ;
+    rdfs:comment "ICU/病房光生物学照明, 色温可调2700-6500K"@zh-CN .
+
+# ============================================================================
+# Phase 6D: 安防系统类
+# ============================================================================
+
+cim-equip:SecuritySystem
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "安防系统"@zh-CN ;
+    rdfs:label "Security System"@en .
+
+cim-equip:AccessControl
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:SecuritySystem ;
+    rdfs:label "门禁系统"@zh-CN ;
+    rdfs:comment "含刷卡/生物识别/密码, 可联动消防解锁"@zh-CN .
+
+cim-equip:VideoSurveillance
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:SecuritySystem ;
+    rdfs:label "视频监控系统"@zh-CN .
+
+cim-equip:NurseCallSystem
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:SecuritySystem ;
+    rdfs:label "护士呼叫系统"@zh-CN ;
+    rdfs:comment "含床头呼叫、走廊显示、护士站主机"@zh-CN .
+
+cim-equip:IntrusionDetection
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:SecuritySystem ;
+    rdfs:label "入侵报警系统"@zh-CN .
+
+# ============================================================================
+# Phase 6D: 新增属性（放射/照明/安防）
+# ============================================================================
+
+cim-space:radiationShielding
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:string ;
+    rdfs:label "辐射屏蔽规格"@zh-CN ;
+    rdfs:comment "铅当量或混凝土厚度描述"@zh-CN .
+
+cim-space:floorLoading
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "地面承重"@zh-CN ;
+    rdfs:comment "单位 kN/m²"@zh-CN .
+
+cim-space:exhaustRecirculation
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "排风回风标志"@zh-CN ;
+    rdfs:comment "false=禁止回风循环"@zh-CN .
+
+cim-equip:colorTemperatureRange
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:LightingSystem ;
+    rdfs:range xsd:string ;
+    rdfs:label "色温范围"@zh-CN ;
+    rdfs:comment "单位 K, 格式 min-max"@zh-CN .
+
+# ============================================================================
+# END OF EXPANDED ONTOLOGY SKELETON
+# ============================================================================

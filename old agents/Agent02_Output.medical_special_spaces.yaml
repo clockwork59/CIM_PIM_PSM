@@ -1,0 +1,749 @@
+# 医疗专用空间详细建模（Medical Special Spaces Detailed Modeling）
+# 基于GB50333、GSP、GB51039等医疗建筑标准
+
+# 1. 手术室详细规格（GB50333-2013标准）
+operating_rooms_detailed:
+
+  or_general_specifications:
+    standard_reference: "GB50333-2013"
+    applicability: "新建、改建、扩建的综合医院洁净手术部"
+    architectural_requirements:
+      location_requirements:
+        - "应位于医院中环境安静、远离污染源、交通便利的区域"
+        - "宜位于住院楼和急诊科的便捷通道上"
+        - "不应设在首层和顶层"
+        - "应自成一区，与医院其他部门有明确的分隔"
+
+      layout_organization:
+        principle: "三区三通道布局"
+        zones:
+          - zone_name: "洁净区"
+            description: "包含手术间、刷手间、无菌物品间"
+            pressure_gradient: "+15 Pa"
+            air_changes: "15-20 次/h"
+          - zone_name: "清洁区"
+            description: "包含办公、值班、敷料、器械准备"
+            pressure_gradient: "+5 Pa"
+            air_changes: "8-12 次/h"
+          - zone_name: "污染区"
+            description: "包含污物处理、清洗、患者入口"
+            pressure_gradient: "-10 Pa"
+            air_changes: "8-10 次/h"
+
+        circulation:
+          - staff_flow: "医护通道 → 清洁通道 → 洁净通道 → 手术间"
+          - patient_flow: "患者入口 → 换床间 → 洁净通道 → 手术间 → 恢复室"
+          - material_flow: "无菌物品 → 无菌储存 → 洁净通道 → 手术间"
+          - waste_flow: "手术间 → 清洁通道 → 污物处理 → 出口"
+
+      construction_details:
+        ceiling_height: ">= 3.0m"
+        floor_load: ">= 4.0 kN/㎡"
+        wall_construction: "宜用整体或装配式壁板，采用无尘、光滑表面"
+        ceiling_construction: "应采用轻质龙骨、整体或装配式吊顶"
+        floor_finish: "应采用耐磨、防滑、耐腐蚀、易清洗、不起尘、不开裂的材料"
+        corners: "墙与墙、墙与地、墙与顶相交形成应做R>=50mm的圆角"
+
+  cleanroom_classifications:
+    class_I_or:
+      name: "I级特别洁净手术室"
+      applications: ["关节置换手术", "器官移植手术", "脑外科、心脏外科和眼科等手术", "对于手术时间长的手术"]
+      air_cleanliness: "手术台(工作面高度)为100级，周边区为1000级"
+      air_changes: "20 次/h"
+      air_velocity: "0.20-0.25 m/s (手术台上方)"
+      particle_count: "≤350个/m³ (≥0.5μm)"
+      temperature_range: "22-25°C"
+      humidity_range: "40-60%"
+      noise_level: "≤50 dB"
+      illumination: "750-1500 lx (手术台工作面)"
+      pressure_differential: ">= +15 Pa"
+
+      hvac_system:
+        air_supply_system: "集中式净化空调系统，设置三级空气过滤"
+        filtration_efficiency: "粗效(G4) + 中效(F8) + 高效(H13)"
+        air_distribution: "手术台上方集中送风，两侧下回风"
+        return_air_method: "竖向双侧下回风"
+        fresh_air_rate: "60 m³/h·人"
+
+      key_systems:
+        medical_gas_systems:
+          oxygen: "2个终端，压力400kPa，流量100L/min"
+          nitrous_oxide: "1个终端，压力400kPa，流量20L/min"
+          medical_air: "2个终端，压力400kPa，流量60L/min"
+          medical_vacuum: "2个终端，真空度40kPa"
+          anesthetic_gas_scavenging: "2个终端，排气量80L/min"
+
+        electrical_systems:
+          power_supply: "三级负荷，双回路供电"
+          operating_lamp: "手术无影灯，照度40000-160000 lx"
+          ups_system: "在线式UPS，容量10kVA，供电时间>=30min"
+          it_system: "医疗IT系统，绝缘监视"
+          emergency_lighting: "自带蓄电池，供电时间>=90min"
+
+        monitoring_systems:
+          temperature_monitoring: "数字显示，精度±0.5°C"
+          humidity_monitoring: "数字显示，精度±3%"
+          pressure_monitoring: "数字显示，精度±1Pa"
+          particle_counting: "在线监测，灵敏度0.5μm"
+
+      space_dimensions:
+        operating_room_area: "50-60㎡"
+        circulation_area: ">= 25㎡"
+        ceiling_height: ">= 3.0m"
+        door_width: ">= 1.4m"
+        window_requirement: "不宜设外窗，如设应采用双层密闭窗"
+
+      materials_finishes:
+        wall_finishes: "电解钢板、不锈钢板或抗菌树脂板"
+        floor_finishes: "防静电PVC卷材或橡胶地板"
+        ceiling_finishes: "电解钢板或铝塑板"
+        color_schema: "浅色系，反射系数0.5-0.8"
+
+    class_II_or:
+      name: "II级标准洁净手术室"
+      applications: ["胸外科", "整形外科", "泌尿外科", "肝胆胰外科", "骨科手术", "普外科的一类切口无菌手术"]
+      air_cleanliness: "手术台(工作面高度)为1000级，周边区为10000级"
+      air_changes: "18 次/h"
+      air_velocity: "0.18-0.22 m/s"
+      particle_count: "≤3500个/m³ (≥0.5μm)"
+      temperature_range: "22-25°C"
+      humidity_range: "40-60%"
+      noise_level: "≤50 dB"
+      illumination: "750-1500 lx"
+      pressure_differential: ">= +10 Pa"
+      space_dimensions:
+        operating_room_area: "40-50㎡"
+        ceiling_height: ">= 3.0m"
+
+    class_III_or:
+      name: "III级一般洁净手术室"
+      applications: ["普外科(除去一类切口手术)", "妇产科手术"]
+      air_cleanliness: "手术台(工作面高度)为10000级，周边区为100000级"
+      air_changes: "15 次/h"
+      air_velocity: "0.15-0.18 m/s"
+      particle_count: "≤35000个/m³ (≥0.5μm)"
+      temperature_range: "22-25°C"
+      humidity_range: "35-60%"
+      noise_level: "≤50 dB"
+      illumination: "750-1500 lx"
+      pressure_differential: ">= +8 Pa"
+      space_dimensions:
+        operating_room_area: "30-40㎡"
+        ceiling_height: ">= 2.8m"
+
+    class_IV_or:
+      name: "IV级准洁净手术室"
+      applications: ["肛肠外科手术", "污染类等手术"]
+      air_cleanliness: "300000级"
+      air_changes: "12 次/h"
+      air_velocity: "无特殊要求"
+      particle_count: "≤350000个/m³ (≥0.5μm)"
+      temperature_range: "22-26°C"
+      humidity_range: "35-60%"
+      noise_level: "≤50 dB"
+      illumination: "750-1500 lx"
+      pressure_differential: ">= +5 Pa"
+      space_dimensions:
+        operating_room_area: "25-30㎡"
+        ceiling_height: ">= 2.8m"
+
+# 2. ICU病房详细规格（GB51039-2014标准）
+icu_rooms_detailed:
+
+  icu_classification:
+    general_icu:
+      name: "综合ICU"
+      bed_capacity: "8-30张"
+      nurse_to_patient_ratio: "2:1-3:1"
+      architectural_requirements:
+        total_area: "床均建筑面积≥20㎡，总人数均25-30㎡"
+        bed_spacing: ">= 2.5m"
+        bed_area: "每张床位使用面积≥15㎡"
+        ceiling_height: ">= 2.8m"
+        layout_type: "开放式和封闭式相结合"
+
+      environmental_requirements:
+        temperature_range: "24±1.5°C"
+        humidity_range: "50±10%"
+        air_changes: "6-8 次/h (开放区)，12-15 次/h (单间)"
+        filtration_level: "H12"
+        noise_level: "≤45 dB (昼间)，≤40 dB (夜间)"
+        illumination: "100-200 lx (一般照明)，>500 lx (治疗照明)"
+        pressure_differential: "+5 Pa (正压)"
+
+      hvac_system:
+        system_type: "集中式空调系统，24小时连续运行"
+        fresh_air_rate: "50 m³/h·床"
+        air_distribution: "上送下回"
+        temperature_control: "分区域独立控制"
+        emergency_backup: "独立冷热源或双路供电"
+
+      key_systems:
+        monitoring_systems:
+          - "多功能监护仪"
+          - "呼吸机"
+          - "输液泵"
+          - "血气分析仪"
+          - "除颤仪"
+          - "床旁超声"
+
+        medical_gas_systems:
+          oxygen: "2个终端/床，压力400kPa"
+          compressed_air: "1个终端/床，压力400kPa"
+          medical_vacuum: "2个终端/床，真空度40kPa"
+
+        electrical_systems:
+          power_supply: "三级负荷，双回路供电"
+          ups_system: "床旁UPS，2kVA，供电时间>=30min"
+          emergency_power: "柴油发电机或蓄电池"
+          isolated_power: "医疗IT系统"
+
+        infection_control:
+          hand_hygiene: "每床设有洗手池，感应式水龙头"
+          isolation_rooms: "设置负压隔离病房(占总数5-10%)"
+          surface_materials: "应选用光滑、无缝隙、易清洁材料"
+
+        auxiliary_functions:
+          - "家属谈话室: 每病区≥12㎡"
+          - "医护值班室: 每病区≥15㎡"
+          - "药品储存室"
+          - "仪器设备室"
+          - "医疗废物暂存室"
+          - "被服储存室"
+
+    specialized_icu:
+      categories:
+        - name: "儿科ICU (PICU)"
+          bed_capacity: "8-20张"
+          special_requirements:
+            - "设置家属陪住空间"
+            - "儿科专用监护设备"
+            - "游戏治疗区"
+            - "儿童友好设计"
+
+        - name: "新生儿ICU (NICU)"
+          bed_capacity: "20-40张"
+          special_requirements:
+            - "恒温恒湿环境(箱内36-37°C，箱外24-26°C)"
+            - "减少噪声和光线刺激"
+            - "设置母乳喂养室"
+            - "新生儿专用监护设备"
+
+        - name: "心脏外科ICU (CSICU)"
+          bed_capacity: "12-24张"
+          special_requirements:
+            - "心脏专用监护设备"
+            - "IABP和ECMO支持"
+            - "血气分析仪床旁检测"
+            - "临时心脏起搏器"
+
+        - name: "呼吸ICU (RICU)"
+          bed_capacity: "10-20张"
+          special_requirements:
+            - "高配呼吸机比例"
+            - "设置负压隔离病房"
+            - "支气管镜设备"
+            - "血气分析仪"
+
+# 3. 隔离病房详细规格
+detailed_isolation_rooms:
+
+  negative_pressure_isolation:
+    applicability: ["呼吸道传染病", "空气传播疾病", "经气溶胶传播疾病"]
+    isolation_principles: ["负压控制", "气流定向", "高效过滤", "单间隔离"]
+
+    environmental_requirements:
+      temperature_range: "22-26°C"
+      humidity_range: "45-65%"
+      air_changes: "12 次/h (全新风)"
+      pressure_differential: "-15 to -30 Pa (相对缓冲间)"
+      filtration: "H13 + HEPA"
+      recovery_time: "≤10 min (压差恢复)"
+
+    architectural_requirements:
+      room_area: "≥20㎡ (病房)", "≥4㎡ (缓冲间)"
+      layout: "双门设计，前室或缓冲间"
+      ceiling_height: ">= 2.8m"
+      bathroom: "独立卫生间，负压设计"
+      hand_washing: "感应式水龙头"
+
+    ventilation_system:
+      system_type: "专用空调系统，不允许回风"
+      air_supply: "上送风，床尾送风"
+      air_exhaust: "床头下排风"
+      airflow_pattern: "气流从清洁区流向污染区"
+      hourly_variable: "6-12 次/h"
+      fresh_air_rate: "100%"
+
+      pressure_gradients:
+        - zone: "病房"
+          pressure: "-30 Pa"
+        - zone: "缓冲间"
+          pressure: "-15 Pa"
+        - zone: "走廊"
+          pressure: "0 Pa"
+
+      filtration:
+        supply_air: "H13 (送风过滤)"
+        exhaust_air: "HEPA H14 (排风过滤)"
+
+    key_features:
+      - "双门互锁设计"
+      - "门密封条"
+      - "窗户密封性"
+      - "所有缝隙密封"
+      - "专用病人通道"
+      - "独立卫生间，负压(-10Pa)"
+      - "传递窗，双门互锁"
+      - "压差监测报警"
+      - "HEPA排风过滤"
+      - "紫外线消毒装置"
+
+    monitoring_control:
+      pressure_monitoring: "数字显示压差，声光报警"
+      airflow_monitoring: "风量显示和报警"
+      temperature_humidity: "连续监测记录"
+      filter_status: "过滤器阻力监测"
+      door_status: "门开关状态监测"
+
+  positive_pressure_isolation:
+    applicability: ["免疫功能低下患者", "造血干细胞移植", "器官移植患者", "严重烧伤患者"]
+    isolation_principles: ["正压保护", "高效过滤", "人员物品净化", "环境严格消毒"]
+
+    environmental_requirements:
+      temperature_range: "22-26°C"
+      humidity_range: "45-65%"
+      air_changes: "12-15 次/h"
+      pressure_differential: "+15 to +30 Pa"
+      filtration: "H13 + HEPA"
+      bacteria_count: "≤10 CFU/m³"
+
+    architectural_requirements:
+      room_area: "≥15㎡"
+      airlock: "设前室或气闸，双门互锁"
+      ceiling_height: ">= 2.8m"
+      bathroom: "独立卫生间"
+      hand_hygiene: "感应式洗手池"
+
+    ventilation_system:
+      system_type: "专用净化空调系统，24h运行"
+      airflow_pattern: "上送下回，集中送风"
+      fresh_air_rate: "50 m³/h·床"
+
+      pressure_gradients:
+        - zone: "病房"
+          pressure: "+30 Pa"
+        - zone: "前室"
+          pressure: "+20 Pa"
+        - zone: "走廊"
+          pressure: "0 Pa"
+
+    special_features:
+      - "层流送风"
+      - "HEPA送风过滤"
+      - "人员淋浴间"
+      - "物品传递窗"
+      - "独立卫生间"
+      - "紫外线消毒"
+      - "抗菌材料装饰"
+      - "防潮防水"
+      - "圆角设计便于清洁"
+
+# 4. 洁净实验室详细规格
+clean_laboratories_detailed:
+
+  bs_laboratories:
+    biosafety_levels:
+      bsl_1:
+        description: "基础实验室，处理一般微生物"
+        access_restriction: "门关闭即可"
+        safety_equipment: ["生物安全柜", "洗手池", "消毒设备"]
+        ventilation: "常规通风"
+        pressure_differential: "无要求"
+
+      bsl_2:
+        description: "基础防护实验室，处理人体病原体"
+        access_restriction: "门禁控制"
+        safety_equipment:
+          - "II级生物安全柜"
+          - "洗眼器"
+          - "紧急淋浴"
+          - "高压灭菌器"
+          - "防溅设备"
+
+        architectural_requirements:
+          access_control: "自动闭门系统"
+          surface_finish: "防水、耐腐蚀、易清洁"
+          ventilation_pattern: "定向气流（清洁→污染）"
+          ceiling_height: ">= 2.6m"
+
+        environmental_requirements:
+          temperature_range: "20-26°C"
+          humidity_range: "30-70%"
+          ventilation: "独立系统，6-8次/h"
+          pressure_differential: "-10 Pa"
+          filtration: "HEPA排风过滤"
+
+        special_systems:
+          - "双门入口"
+          - "手卫生设施"
+          - "个人防护设备"
+          - "废弃物收集容器"
+          - "生物安全标识"
+
+      bsl_3:
+        description: "高度防护实验室，处理潜在气溶胶传播病原体"
+        access_restriction: "严格管制，两道门禁"
+
+        architectural_requirements:
+          physical_isolation: "独立建筑或隔离区域"
+          airlock_required: "气闸室或缓冲间"
+          inner_change_room: "设淋浴间"
+          ceiling_height: ">= 2.6m"
+          surface_finish: "整体密封性"
+
+        ventilation_system:
+          system_type: "专用系统，24h连续运行"
+          airflow_direction: "清洁区→半污染区→污染区"
+          air_changes: "12-15 次/h"
+          pressure_gradients:
+            clean_area: "+15 Pa"
+            semi_contaminated: "0 Pa"
+            contaminated_area: "-30 Pa"
+          exhaust_treatment: "双重HEPA过滤"
+          supply_filtration: "HEPA过滤"
+
+      bsl_4:
+        description: "最高防护实验室，处理无特效治疗的高危病原体"
+        access_restriction: "最高级管控，多重门禁"
+        special_requirements:
+          - "独立建筑，最小化选址"
+          - "穿脱正压防护服"
+          - "污染废气消毒处理"
+          - "双HEPA+焚烧处理"
+          - "生命支持系统"
+          - "化学消毒淋浴"
+          - "废弃物高温高压消毒"
+
+  clinical_laboratories:
+    hematology_lab:
+      environmental_requirements:
+        temperature_range: "22-26°C"
+        humidity_range: "40-65%"
+        lighting: "500-750 lx"
+        ventilation: "6-8 次/h"
+
+      equipment_requirements:
+        - "血球分析仪"
+        - "凝血功能分析仪"
+        - "血型鉴定设备"
+        - "离心机"
+        - "生物安全柜"
+
+      special_requirements:
+        - "防震台座"
+        - "防电磁干扰"
+        - "稳定的电源"
+        - "网络连接"
+
+    chemistry_lab:
+      environmental_requirements:
+        temperature_stability: "±2°C"
+        humidity_range: "45-65%"
+        air_changes: "8-10 次/h"
+        ventilation_type: "局部排风 + 全面通风"
+
+      infrastructure:
+        - "纯水制备系统"
+        - "废液收集系统"
+        - "压缩空气"
+        - "氮气"
+        - "UPS不间断电源"
+        - "网络数据接口"
+
+# 5. 药房详细规格
+pharmacy_detailed:
+
+  hospital_pharmacy:
+    functional_zones:
+      - zone_name: "门急诊药房"
+        service_pattern: "柜台式发药"
+        prescription_volume: "500-1500张/日"
+        waiting_capacity: "20-50人"
+
+      - zone_name: "住院药房"
+        service_pattern: "单剂量配方系统"
+        daily_doses: "2000-10000剂次"
+        unit_dose: "centralized dispensing"
+
+      - zone_name: "静脉用药配置中心(PIVAs)"
+        cleanliness_requirement: "万级洁净度背景，百级超净工作台"
+        air_classification: "10,000级 + 100级"
+        daily_volume: "500-3000袋"
+        chemotherapy_volume: "100-500袋"
+
+    gsp_compliance:
+      drug_storage_requirements:
+        room_temperature: "常温库：10-30°C"
+        cool_storage: "阴凉库：≤20°C"
+        cold_storage: "冷藏库：2-8°C"
+        frozen_storage: "冷冻库：≤-20°C"
+        special_storage: "特殊药品库(毒麻精放)"
+
+      environmental_controls:
+        temperature_logging: "24h连续记录"
+        humidity_range: "45-75%"
+        humidity_logging: "24h连续记录"
+        light_protection: "避光储存区域"
+        ventilation: "密闭式通风系统"
+
+      quality_any_system:
+        temperature_alarm: "超温声光报警"
+        humidity_alarm: "超湿声光报警"
+        power_failure_alarm: "断电报警"
+
+    pivas_detailed_specifications:
+      cleanliness_levels:
+        - zone: "一次更衣室"
+          classification: "100,000级"
+          air_changes: "15 次/h"
+
+        - zone: "二次更衣室"
+          classification: "10,000级"
+          air_changes: "20 次/h"
+
+        - zone: "配置操作间"
+          classification: "10,000级"
+          air_changes: "25 次/h"
+          laminar_flow: "百级超净工作台"
+
+      airflow_pattern: "垂直单向流"
+      pressure_gradients: "+15Pa (正压)"
+
+      special_requirements:
+        - "专用净化空调系统"
+        - "HEPA送风过滤"
+        - "人员更衣室完整更衣"
+        - "手消毒设备"
+        - "生物安全柜(化疗药物)"
+        - "层流工作台(普通药物)"
+        - "净化水系统"
+        - "医疗废物收集"
+        - "监控摄像系统"
+        - "净化水系统"
+
+# 6. 供应室详细规格
+central_supply_detailed:
+
+  cssd_workflow:
+    principle: "单向流程：污→洁→无菌，不交叉，不倒流"
+    workflow_stages:
+
+      stage_1_recycling:
+        zone_name: "污车清洗存放区"
+        air_classification: "非洁净区"
+        pressure: "-10 Pa"
+        functions: ["污车接收", "污车清洗", "污车存放"]
+
+      stage_2_sorting:
+        zone_name: "污染物品接收分类区"
+        air_classification: "清洁区"
+        pressure: "-5 Pa"
+        functions: ["污染器械清点", "分类分拣", "初步预处理"]
+
+      stage_3_washing:
+        zone_name: "全自动器械清洗消毒区"
+        air_classification: "清洁区"
+        pressure: "0 Pa"
+        functions: ["器械清洗", "消毒处理", "初步检查"]
+        equipment: ["全自动清洗消毒机", "超声波清洗机", "清洗工作台"]
+
+      stage_4_packaging:
+        zone_name: "器械包装灭菌区"
+        air_classification: "清洁区"
+        pressure: "+5 Pa"
+        functions: ["器械检查", "功能测试", "分类包装", "灭菌处理"]
+        equipment: ["器械检查台", "包装台", "压力蒸汽灭菌器", "环氧乙烷灭菌器"]
+
+      stage_5_sterilization:
+        zone_name: "无菌物品储存发放区"
+        air_classification: "洁净区"
+        pressure: "+10 Pa"
+        functions: ["无菌物品存储", "物品发放", "质量控制"]
+        temperature_humidity: "18-28°C，35-75%"
+
+    environmental_requirements:
+      temperature_control: "18-28°C"
+      humidity_control: "35-75%"
+      ventilation: "10-12 次/h"
+      pressure_gradients: "高压区→低压区单向流动"
+      air_filtration: "H12级别"
+
+    quality_control:
+      process_monitoring: ["物理监测", "化学监测", "生物监测"]
+      documentation: ["清洗记录", "灭菌记录", "发放记录", "质量追溯"]
+      validation: "定期验证清洗灭菌效果"
+
+# 7. 机电设备用房详细规格
+mechanical_electrical_detailed:
+
+  central_plant:
+    chiller_plant_room:
+      equipment_capacity: "根据医院总负荷确定"
+      space_requirements:
+        - "设备四周维护通道宽度≥1.5m"
+        - "设备上方吊装空间≥1.5m"
+        - "设备基础高出地面≥150mm"
+        - "排水沟和集水坑"
+        - "设备运输通道"
+
+      environmental_conditions:
+        temperature: "≤40°C"
+        ventilation: "15-20 次/h"
+        noise_control: "≤85 dB (设备间)，≤60 dB (控制室)"
+        vibration_isolation: "减振基础，减振吊架"
+
+      utility_connections:
+        power_supply: "专用变压器，配电柜"
+        cooling_tower_water: "循环冷却水系统"
+        city_water: "补水、清洗"
+        compressed_air: "仪表用气"
+
+      safety_systems:
+        - "氨气泄漏检测(氨制冷时)"
+        - "制冷剂回收装置"
+        - "应急排风系统"
+        - "消防灭火系统"
+        - "应急照明系统"
+
+    boiler_room:
+      fuel_types: ["燃气", "燃油", "电锅炉"]
+      stack_requirements:
+        - "烟囱高度符合环保要求"
+        - "烟气处理装置"
+        - "在线监测系统"
+
+      safety_devices:
+        - "燃气泄漏检测报警"
+        - "自动切断装置"
+        - "防爆通风系统"
+        - "CO检测报警"
+        - "紧急停炉装置"
+
+      space_configuration:
+        boiler_space: "按设备类型和容量计"
+        fuel_storage: "符合消防规范"
+        maintenance_area: "设备检修空间"
+        control_room: "独立隔间，正压送风"
+
+  electrical_systems:
+    transformer_room:
+      transformer_capacity: "根据医院负荷计算"
+      architectural_requirements:
+        room_height: "≥4.5m (需考虑吊芯检修)"
+        floor_load: "≥10 kN/㎡ (大型变压器)"
+        access_door: ">=2.0m×2.5m (设备运输门)"
+        ventilation: "自然通风+机械排风"
+        drainage: "电缆沟排水"
+
+      fire_protection:
+        fire_resistance_rating: "一级耐火等级"
+
+    generator_room:
+      backup_power_capacity: "一级负荷和特别重要负荷"
+      fuel_settings:
+        fuel_type: "柴油"
+        fuel_tank_capacity: "8-24小时连续运行"
+        fuel_storage: "地下储油罐或日用油箱"
+
+      ventilation_requirements:
+        engine_air_inlet: "满足燃烧需要"
+        heat_removal_ventilation: "排除发动机散热量"
+        exhaust_gas_treatment: "消声、净化、高空排放"
+
+      noise_control:
+        source_noise: "100-120 dB"
+        noise_control_target: "≤60 dB (厂界)"
+        measures: ["隔振基础", "消声器", "隔音罩", "吸声材料"]
+
+# 8. 接口规范定义（为Agent-05提供）
+interface_specifications:
+
+  space_encoding_interface:
+    coding_format: "{LevelCode}-{InstanceCode}"
+    level_identifiers:
+      site: "ST"
+      building: "BD"
+      floor: "FL"
+      zone: "ZN"
+      room: "RM"
+      subspace: "SS"
+
+    instance_code_rules:
+      sequential: "Two-digit sequential number"
+      functional: "Functional abbreviation + sequential"
+      zone_combination: "ZoneCode + RoomCode"
+
+    examples:
+      site_level: "ST-01"  # 第1院区
+      building_level: "BD-01-OP"  # 门诊楼Building 01
+      floor_level: "FL-01-03"  # Building 01第3层
+      zone_level: "ZN-SRG-01"  # 手术区域01
+      room_level: "RM-OR-I-01"  # I级手术室01
+      subspace_level: "SS-CLEAN-01"  # 清洁子区01
+
+  environmental_requirements_interface:
+    parameter_format:
+      temperature: "{Setpoint}±{Tolerance}°C"
+      humidity: "{Range}% RH"
+      pressure: "{Value} Pa (relative to {Reference})"
+      airflow: "{Rate} 次/h ACH"
+
+    accuracy_requirements:
+      temperature_control: "±1°C"
+      humidity_control: "±5% RH"
+      pressure_control: "±2 Pa"
+      airflow_control: "±10%"
+
+    monitoring_protocols:
+      continuous_monitoring: ["Temperature", "Humidity", "Pressure", "Air Quality"]
+      alarm_thresholds: "15-minute average deviation > ±15% of setpoint"
+      data_logging: "Minimum 1-minute resolution"
+
+  system_dependency_interface:
+    system_categories:
+      hvac_systems:
+        dependencies:
+          - "Space environmental requirements"
+          - "Occupancy schedules"
+          - "Equipment loads"
+          - "Process requirements"
+        interface_parameters:
+          - setpoints
+          - airflow_rates
+          - filtration_requirements
+          - energy_recovery_options
+          - control_strategies
+
+      electrical_systems:
+        dependencies:
+          - "Equipment power loads"
+          - "Lighting requirements"
+          - "Safety-critical loads"
+          - "UPS requirements"
+        interface_parameters:
+          - power_density
+          - load_characteristics
+          - power_quality
+          - reliability_levels
+
+      medical_gas_systems:
+        dependencies:
+          - "Patient care requirements"
+          - "Equipment gas consumption"
+          - "Emergency scenarios"
+        interface_parameters:
+          - gas_types
+          - flow_rates
+          - pressure_levels
+          - terminal_locations

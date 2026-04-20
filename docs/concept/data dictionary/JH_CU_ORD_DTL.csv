@@ -1,0 +1,43 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_CU_ORD_DTL,表全名,JHPDL:JH_CU_ORD_DTL,,,,,,
+,表说明,体检套餐明细记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,CHC,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,CHC0001,String字符串（变长）,,CHECK_ORD_DTL_SN,体检套餐明细编号,体检套餐明细编号，系统生成三级编码，如“CC0.000.000.001”,20,是,是
+,\x00\x02,CHC0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,CHC0003,String字符串（变长）,,CHECK_ORDER_SN,体检套餐主表编号,体检套餐主表编号，来源JH_CU_ORDER的CHB0001,20,是,是
+,\x00\x04,CHC0004,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x05,CHC0005,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,19,是,
+,\x00\x06,CHC0006,String字符串（变长）,,SC_ORD_ITEM,医嘱编码,,50,,是
+,\x00\x07,CHC0007,String字符串（变长）,,ST_ORD_ITEM,医嘱名称,,200,,
+,\x00\x21,CHC0033,String字符串（变长）,,ORDER_ID,医嘱ID,业务系统医嘱唯一识别ID,50,,是
+,\x00\x08,CHC0008,String字符串（变长）,,SC_ITEM_STATUS,状态编码,预约、执行、未做等,50,,
+,\x00\x09,CHC0009,String字符串（变长）,,ST_ITEM_STATUS,状态描述,,100,,
+,\x00\x22,CHC0034,简化字典（Integer整型，4个字节）,387,SD_ITEM_STATUS,中台执行状态简码,中台标准代码，执行状态,,,
+,\x00\x20,CHC0032,String字符串（变长）,,CHECK_PAT_ID,体检系统内部患者ID,,50,,是
+,\x00\x0F,CHC0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ITM_EXE_TIME,执行时间,,,,
+,\x00\x10,CHC0016,String字符串（变长）,,SC_EXE_USER,执行人编码,,100,,
+,\x00\x11,CHC0017,String字符串（变长）,,ST_EXE_USER,执行人姓名,,200,,
+,\x00\x17,CHC0023,String字符串（变长）,,SC_EXE_DEPT,执行科室编码,,100,,
+,\x00\x18,CHC0024,String字符串（变长）,,ST_EXE_DEPT,执行科室描述,,200,,
+,\x00\x19,CHC0025,String字符串（变长）,,SC_ITM_CATEGORY,项目大类编码,,100,,是
+,\x00\x1A,CHC0026,String字符串（变长）,,ST_ITM_CATEGORY,项目大类描述,,200,,
+,\x00\x1B,CHC0027,String字符串（变长）,,SC_SUB_CATEGORY,项目子类编码,,100,,是
+,\x00\x1C,CHC0028,String字符串（变长）,,ST_SUB_CATEGORY,项目子类描述,,200,,
+,\x00\x1E,CHC0030,String字符串（变长）,,ITM_RESULT,项目结果,,4000,,
+,\x00\x1F,CHC0031,String字符串（变长）,,ITM_DIAG_ADVICE,项目结论建议,,4000,,
+,\x00\x1D,CHC0029,String字符串（变长）,,CHECK_REMARKS,备注,,500,,
+,\x00\x0A,CHC0010,Double双精度浮点型（8个字节）,,ITM_ORG_FEE,套餐内原价,,,,
+,\x00\x0B,CHC0011,Double双精度浮点型（8个字节）,,ITM_ACT_FEE,实际应收价格,,,,
+,\x00\x0C,CHC0012,Double双精度浮点型（8个字节）,,ITM_DIS_FEE,折扣金额,,,,
+,\x00\x0D,CHC0013,简化字典（Integer整型，4个字节）,379,SD_PAID,是否已收费,,,,
+,\x00\x0E,CHC0014,简化字典（Integer整型，4个字节）,379,SD_ADD_ITEM,是否加项,套餐外额外增加项目,,,
+,\x00\x12,CHC0018,String字符串（变长）,,SC_FEE_TYPE,费用类别编码,公费、团体结算、自费等,50,,
+,\x00\x13,CHC0019,String字符串（变长）,,ST_FEE_TYPE,费用类别描述,,200,,
+,\x00\x14,CHC0020,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,ITM_PAID_TIME,结算时间,,,,
+,\x00\x15,CHC0021,String字符串（变长）,,SC_CHARGE_USER,结算人员编码,,100,,
+,\x00\x16,CHC0022,String字符串（变长）,,ST_CHARGE_USER,结算人员姓名,,200,,
+,\x00\x23,CHC0035,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

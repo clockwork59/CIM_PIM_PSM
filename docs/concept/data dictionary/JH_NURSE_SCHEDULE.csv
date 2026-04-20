@@ -1,0 +1,35 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_NURSE_SCHEDULE,表全名,JHPDL:JH_NURSE_SCHEDULE,,,,,,
+,表说明,护理排班规范,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,NAA,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,NAA0001,String字符串（变长）,,NURSE_SCH_SN,护理排班唯一号,内部三级编码NA0.000.000.001,20,是,是
+,\x00\x02,NAA0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,NAA0003,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,SCH_DATE,班次日期,班次对应的日期,31,是,是
+,\x00\x04,NAA0004,String字符串（变长）,,SC_SCH_DEPT,班次科室,科室编码,100,,
+,\x00\x05,NAA0005,String字符串（变长）,,ST_SCH_DEPT,班次科室,科室名称,100,,
+,\x00\x06,NAA0006,String字符串（变长）,,SC_SCH_WARD,班次病区/护理单元,病区/护理单元编码,100,,
+,\x00\x07,NAA0007,String字符串（变长）,,ST_SCH_WARD,班次病区/护理单元,病区/护理单元名称,100,,
+,\x00\x08,NAA0008,String字符串（变长）,,SC_EMP,班次人员,班次人员工号,20,,
+,\x00\x09,NAA0009,String字符串（变长）,,ST_EMP,班次人员,班次人员姓名,40,,
+,\x00\x0A,NAA0010,String字符串（变长）,,SC_SHIFT,班次,班次编码,20,,
+,\x00\x0B,NAA0011,String字符串（变长）,,ST_SHIFT,班次,班次名称,40,,
+,\x00\x0C,NAA0012,String字符串（变长）,,SHIFT_VALUE,班次时长值,班次时长值,20,,
+,\x00\x0D,NAA0013,String字符串（变长）,,SHIFT_UNIT,班次时长单位,班次时长单位,20,,
+,\x00\x0E,NAA0014,String字符串（变长）,,SC_ATTEND,考勤类别,考勤编码,20,,
+,\x00\x0F,NAA0015,String字符串（变长）,,ST_ATTEND,考勤类别,考勤名称，如出勤、补休、事假、病假等,100,,
+,\x00\x10,NAA0016,String字符串（变长）,,GROUP,考勤分组,考勤分组,20,,
+,\x00\x11,NAA0017,简化字典（Integer整型，4个字节）,379,SD_ATTEND,是否出勤,上班标志,10,,
+,\x00\x12,NAA0018,String字符串（变长）,,SC_STATUS,排班状态,排班状态编码,20,,
+,\x00\x13,NAA0019,String字符串（变长）,,ST_STATUS,排班状态,排班状态名称,100,,
+,\x00\x14,NAA0020,String字符串（变长）,,SC_OPERA,排班操作人员,排班操作人员编码,20,,
+,\x00\x15,NAA0021,String字符串（变长）,,ST_OPERA,排班操作人员,排班操作人员姓名,40,,
+,\x00\x16,NAA0022,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,OPERA_DATE,操作时间,操作时间,31,,
+,\x00\x17,NAA0023,String字符串（变长）,,SORT,排班顺序号,排班顺序号,20,,
+,\x00\x18,NAA0024,String字符串（变长）,,COMMENT,排班备注,排班备注,200,,
+,\x00\x19,NAA0025,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x1A,NAA0026,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x1B,NAA0027,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

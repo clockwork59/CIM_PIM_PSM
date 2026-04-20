@@ -1,0 +1,28 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_PHA_QUA_DTL,表全名,JHPDL:JH_OUT_PHA_QUA_DTL,,,,,,
+,表说明,三级绩效：门诊药事专业医疗质量控制明细表,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MAA,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MAA0001,String字符串（变长）,,OUT_PHA_QUA_DTL_SN,门诊药事专业质控明细编号,门诊药事专业质控明细编号，系统生成三级编码，如“MA0.000.000.001”,20,是,是
+,\x00\x02,MAA0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MAA0003,String字符串（变长）,,OUT_HOSP_SN,门诊就诊编号,门诊就诊编号，来源JH_OUT_HOSP的OHR0001,20,是,是
+,\x00\x04,MAA0004,String字符串（变长）,,OUT_CODE,门诊业务号,门诊业务系统发放的编号,6,,
+,\x00\x05,MAA0005,String字符串（变长）,,OUT_NUM,门诊次数,前往门诊的次数，继承“JH_PAT_VISIT”的“PAV0009”,19,,
+,\x00\x06,MAA0006,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PRESC_DATE,处方时间,处方时间,200,,
+,\x00\x07,MAA0007,String字符串（变长）,,SC_CUR_DEPT,科室编码,开立处方科室编码,200,,
+,\x00\x08,MAA0008,String字符串（变长）,,ST_CUR_DEPT,科室名称,开立处方科室名称,200,,
+,\x00\x09,MAA0009,简化字典（Integer整型，4个字节）,383,SD_VISIT_TYPE,就诊类型,患者就诊类型,200,,
+,\x00\x0A,MAA0010,String字符串（变长）,,SC_VISIT_TYPE,就诊类型编码,源业务系统患者就诊类型编码,200,,
+,\x00\x0B,MAA0011,String字符串（变长）,,ST_VISIT_TYPE,就诊类型说明,源业务系统患者就诊类型描述,200,,
+,\x00\x0C,MAA0012,简化字典（Integer整型，4个字节）,379,SD_SFQSHMZCF,药品收费前药师审核门诊处方标记,药品收费前药师审核门诊处方标记,200,,
+,\x00\x0D,MAA0013,简化字典（Integer整型，4个字节）,379,SD_SFQSHJZCF,药品收费前药师审核急诊处方标记,药品收费前药师审核急诊处方标记,200,,
+,\x00\x0E,MAA0014,简化字典（Integer整型，4个字节）,379,SD_DP,处方点评标志,处方点评标志,200,,
+,\x00\x0F,MAA0015,简化字典（Integer整型，4个字节）,379,SD_HG,合格处方标志,合格处方标志,200,,
+,\x00\x10,MAA0016,简化字典（Integer整型，4个字节）,379,SD_JMTPZJS,静脉使用糖皮质激素标记,静脉使用糖皮质激素标记,200,,
+,\x00\x11,MAA0017,简化字典（Integer整型，4个字节）,379,SD_JY,基药标志,基药标志,200,,
+,\x00\x12,MAA0018,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,,200,,
+,\x00\x13,MAA0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,,,,
+,\x00\x14,MAA0020,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

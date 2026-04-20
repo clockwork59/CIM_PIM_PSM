@@ -1,0 +1,41 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_OUT_DIAG,表全名,JHPDL:JH_OUT_DIAG,,,,,,
+,表说明,门诊临床诊断记录,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,ODR,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,ODR0001,String字符串（变长）,,OUT_DIAG_SN,门诊临床诊断编号,门诊临床诊断编号，系统生成三级编码，如“MG0.000.000.001”,20,是,是
+,\x00\x02,ODR0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,ODR0003,String字符串（变长）,,OUT_HOSP_SN,门诊就诊编号,门诊就诊编号，来源JH_OUT_HOSP的OHR0001,20,是,是
+,\x00\x04,ODR0004,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DIAG_TIME,诊断时间,临床医生下达诊断的时间,19,,
+,\x00\x06,ODR0006,String字符串（变长）,,DIAG_CODE,诊断编码,临床医生下达诊断的编码,200,是,是
+,\x00\x07,ODR0007,String字符串（变长）,,DIAG_NAME,诊断名称,临床医生下达诊断的名称,200,是,是
+,\x00\x08,ODR0008,String字符串（变长）,,DIAG_DESC,诊断描述,临床医生下达诊断的描述,16000,,
+,\x00\x0C,ODR0012,Integer整型（4个字节）,,DIAG_ORDER_ID,诊断序号,,20,,
+,\x00\x0D,ODR0013,Integer整型（4个字节）,,DIAG_ORDER_SUB,诊断子序号,,20,,
+,\x00\x0F,ODR0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DIAG_CHIEF_TIME,主任签名时间,,19,,
+,\x00\x10,ODR0016,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,DIAG_UPDATE_TIME,更新时间,,31,,
+,\x00\x12,ODR0018,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x13,ODR0019,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x14,ODR0020,简化字典（Integer整型，4个字节）,420,SD_DIAG_TYPE,诊断类型简码,临床医生下达诊断的类型，门诊诊断、入院诊断等,20,,
+,\x00\x15,ODR0021,String字符串（变长）,,ST_DIAG_TYPE,诊断类型描述,,200,,
+,\x00\x1F,ODR0031,String字符串（变长）,,SC_DIAG_TYPE,临床诊断类型编码,源业务系统的临床诊断类型编码,200,,
+,\x00\x16,ODR0022,简化字典（Integer整型，4个字节）,379,SD_DIAG_WEST,是否西医诊断,是否西医诊断，否则为中医证候,20,,
+,\x00\x17,ODR0023,简化字典（Integer整型，4个字节）,379,SD_DIAG_CONFIRM,是否确诊,,20,,
+,\x00\x18,ODR0024,String字符串（变长）,,SC_DIAG_DEPT,诊断科室编码,,200,,
+,\x00\x19,ODR0025,String字符串（变长）,,ST_DIAG_DEPT,诊断科室名称,,200,,
+,\x00\x1A,ODR0026,String字符串（变长）,,SC_DIAG_DOCT,诊断医师编码,,200,,
+,\x00\x1B,ODR0027,String字符串（变长）,,ST_DIAG_DOCT,诊断医师名称,,200,,
+,\x00\x1C,ODR0028,String字符串（变长）,,SC_DIAG_CHIEF,主任医师编码,,200,,
+,\x00\x1D,ODR0029,String字符串（变长）,,ST_DIAG_CHIEF,主任医师名称,,200,,
+,\x00\x1E,ODR0030,自定义字典类型，字符串（变长）,379,DIAG_MAIN_FLAG,主诊断标识,主诊断标识,200,是,是
+,\x00\x20,ODR0032,简化字典（Integer整型，4个字节）,379,SD_DIAG_MAIN,主诊断标识,主诊断标识,,,
+,\x00\x21,ODR0033,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x05,ODR0005,自定义字典类型，字符串（变长）,420,DIAG_TYPE,诊断类型,临床医生下达诊断的类型，门诊诊断、入院诊断等,200,,
+,\x00\x09,ODR0009,String字符串（变长）,,DIAG_DEPT,诊断科室,"下达诊断的科室编码＋名称，如“001#,#内科”",200,,
+,\x00\x0A,ODR0010,String字符串（变长）,,DIAG_DOCTOR,诊断医师,"下达诊断的医师编码＋名称，如“1001#,#张三”",200,,
+,\x00\x0B,ODR0011,自定义字典类型，字符串（变长）,379,DIAG_FLAG,西医诊断标记,是否西医诊断，否则为中医证候,200,,
+,\x00\x0E,ODR0014,String字符串（变长）,,DIAG_CHIEF,主任医师,,200,,
+,\x00\x11,ODR0017,自定义字典类型，字符串（变长）,379,DIAG_CONFIRM_FLAG,确诊标识,,200,,

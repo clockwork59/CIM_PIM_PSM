@@ -1,0 +1,520 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent-06 全域控制系统 - 实时监控驾驶舱</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        /* 布局结构 */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 350px;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        .panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-ok { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .status-warn { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        .status-alarm { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .status-offline { background: rgba(148, 163, 184, 0.2); color: var(--text-secondary); border: 1px solid var(--text-secondary); }
+
+        /* 数据表格 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .data-table th { text-align: left; color: var(--text-secondary); padding: 8px 4px; border-bottom: 1px solid var(--border-color); }
+        .data-table td { padding: 6px 4px; border-bottom: 1px solid #33415555; }
+        .data-table tr:hover { background-color: #33415533; }
+        
+        .value-col { text-align: right; font-family: 'Courier New'; font-weight: bold; }
+        .unit { color: var(--text-secondary); font-weight: normal; margin-left: 2px; }
+
+        /* 树形结构 */
+        .tree-node { margin-left: 15px; border-left: 1px solid var(--border-color); padding-left: 10px; margin-bottom: 5px; }
+        .tree-label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .tree-label:hover { color: var(--accent-blue); }
+
+        /* 逻辑块可视化 */
+        .logic-block {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .logic-title { color: var(--accent-yellow); font-size: 12px; margin-bottom: 5px; }
+        .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 11px; }
+        .param-row { display: flex; justify-content: space-between; }
+
+        /* 状态机可视化 */
+        .fsm-viz {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .fsm-state {
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: #334155;
+            color: #64748b;
+            font-size: 11px;
+            border: 1px solid transparent;
+        }
+        .fsm-state.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        /* 顶部概览条 */
+        .top-bar {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 20px;
+            background: var(--bg-panel);
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            align-items: center;
+        }
+        .kpi-box { display: flex; flex-direction: column; }
+        .kpi-label { font-size: 11px; color: var(--text-secondary); }
+        .kpi-value { font-size: 18px; font-weight: bold; color: var(--text-primary); }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+    </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
+<body>
+
+    <div class="dashboard-grid">
+        <!-- 顶部 KPI -->
+        <div class="top-bar">
+            <div style="font-size: 20px; font-weight: bold; color: var(--accent-blue); margin-right: 30px;">
+                Agent-06 全域控制系统 <span style="font-size: 12px; color: var(--text-secondary);">v3.2.1</span>
+            </div>
+            <div class="kpi-box">
+                <span class="kpi-label">控制对象总数</span>
+                <span class="kpi-value">512</span>
+            </div>
+            <div class="kpi-box">
+                <span class="kpi-label">实时 I/O 点位</span>
+                <span class="kpi-value">4,256</span>
+            </div>
+            <div class="kpi-box">
+                <span class="kpi-label">活跃报警 (P0/P1)</span>
+                <span class="kpi-value" style="color: var(--accent-red);">0 / 2</span>
+            </div>
+            <div class="kpi-box">
+                <span class="kpi-label">系统负荷</span>
+                <span class="kpi-value">68%</span>
+            </div>
+            <div class="kpi-box">
+                <span class="kpi-label">网络状态 (L1-L3)</span>
+                <span class="status-badge status-ok">ONLINE</span>
+            </div>
+            <div class="kpi-box" style="margin-left: auto;">
+                <span class="kpi-label">当前运行策略</span>
+                <span class="status-badge status-ok">MPC优化中 (L1)</span>
+            </div>
+        </div>
+
+        <!-- 左侧：系统拓扑与网络 -->
+        <div class="panel">
+            <div class="panel-header">
+                系统拓扑与网络 (L1-L3)
+                <span class="status-badge status-ok">稳定</span>
+            </div>
+            
+            <div style="font-size: 12px; margin-bottom: 10px; color: var(--text-secondary);">基于 Agent-03 ID 映射</div>
+
+            <!-- L1 层 -->
+            <div class="tree-node">
+                <div class="tree-label">☁️ L1: 云端/中央监控层</div>
+                <div class="tree-node">
+                    <div class="tree-label">🖥️ BMS-SRV-01 (主) <span class="status-badge status-ok" style="margin-left:auto">RUN</span></div>
+                </div>
+                <div class="tree-node">
+                    <div class="tree-label">🧠 Opt-Engine (MPC) <span class="status-badge status-ok" style="margin-left:auto">ACTIVE</span></div>
+                    <div style="font-size: 11px; color: #666; margin-left: 20px;">预测负荷: 4200kW | 下次计算: 04:30</div>
+                </div>
+            </div>
+
+            <!-- L2 层 -->
+            <div class="tree-node">
+                <div class="tree-label">🏢 L2: 边缘控制层 (BACnet/IP)</div>
+                <div class="tree-node">
+                    <div class="tree-label">Gateway-01 (主楼) <span class="status-badge status-ok" style="margin-left:auto">OK</span></div>
+                </div>
+                <div class="tree-node">
+                    <div class="tree-label">NAC-OR (手术部) <span class="status-badge status-ok" style="margin-left:auto">OK</span></div>
+                    <div class="tree-node">
+                        <div class="tree-label">DDC-OR-01 (OR-001/002)</div>
+                        <div class="tree-node" style="color: var(--accent-green);">
+                            CO-HVAC-AHU-OR-001
+                        </div>
+                        <div class="tree-node" style="color: var(--accent-green);">
+                            CO-HVAC-ROOM-OR-001
+                        </div>
+                    </div>
+                </div>
+                <div class="tree-node">
+                    <div class="tree-label">NAC-CHP (冷站) <span class="status-badge status-ok" style="margin-left:auto">OK</span></div>
+                    <div class="tree-node">
+                        <div class="tree-label">PLC-CHP-01 (群控)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 接口状态 -->
+            <div class="panel-header" style="margin-top: 20px;">
+                外部接口状态
+            </div>
+            <table class="data-table">
+                <tbody><tr>
+                    <td>FAS (消防)</td>
+                    <td><span class="status-badge status-ok">NORMAL</span></td>
+                    <td style="font-size: 10px;">硬接点心跳正常</td>
+                </tr>
+                <tr>
+                    <td>HIS (医疗)</td>
+                    <td><span class="status-badge status-ok">SYNCED</span></td>
+                    <td style="font-size: 10px;">排程已更新 14:00</td>
+                </tr>
+                <tr>
+                    <td>Weather API</td>
+                    <td><span class="status-badge status-ok">ONLINE</span></td>
+                    <td style="font-size: 10px;">32°C / 65%</td>
+                </tr>
+            </tbody></table>
+        </div>
+
+        <!-- 中间：核心控制对象详情 -->
+        <div class="panel">
+            <div class="panel-header">
+                关键区域监控: OR-001 (I级洁净手术室)
+                <span class="status-badge status-ok" style="background: rgba(59, 130, 246, 0.2); color: white;">P0-LIFE_SAFETY</span>
+            </div>
+
+            <!-- 状态机可视化 -->
+            <div class="fsm-viz">
+                <div class="fsm-state">OFF</div>
+                <div class="fsm-state">STANDBY</div>
+                <div class="fsm-state">PREP</div>
+                <div class="fsm-state active">SURGERY</div>
+                <div class="fsm-state">DECON</div>
+                <div class="fsm-state" style="border-color: var(--accent-red); color: var(--accent-red);">EMERGENCY</div>
+            </div>
+            <div style="margin-bottom: 15px; font-size: 12px; display: flex; justify-content: space-between;">
+                <span>当前模式: <strong style="color: var(--accent-blue);">手术模式 (Precision Control)</strong></span>
+                <span>来源: HIS排程 (ID: SUR-20250115-001)</span>
+            </div>
+
+            <!-- 环境参数与控制回路 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                
+                <!-- 温度控制回路 -->
+                <div class="logic-block">
+                    <div class="logic-title">LOOP-OR001-TEMP (串级PID)</div>
+                    <table class="data-table">
+                        <tbody><tr>
+                            <th>参数</th>
+                            <th>值</th>
+                            <th>设定 (SP)</th>
+                        </tr>
+                        <tr>
+                            <td>室内温度 (PV)</td>
+                            <td class="value-col" style="color: var(--accent-green);">22.1 <span class="unit">°C</span></td>
+                            <td class="value-col">22.0 <span class="unit">°C</span></td>
+                        </tr>
+                        <tr>
+                            <td>送风温度 (Slave SP)</td>
+                            <td class="value-col">16.5 <span class="unit">°C</span></td>
+                            <td class="value-col">Auto</td>
+                        </tr>
+                        <tr>
+                            <td>冷水阀 (AO)</td>
+                            <td class="value-col">45.2 <span class="unit">%</span></td>
+                            <td><span class="status-badge status-ok">AUTO</span></td>
+                        </tr>
+                    </tbody></table>
+                    <div class="param-grid" style="margin-top: 8px; border-top: 1px solid #333; padding-top: 5px;">
+                        <div class="param-row"><span>Master Kp:</span><span>2.0</span></div>
+                        <div class="param-row"><span>Master Ti:</span><span>600s</span></div>
+                        <div class="param-row"><span>Slave Kp:</span><span>1.5</span></div>
+                        <div class="param-row"><span>Slave Ti:</span><span>180s</span></div>
+                        <div class="param-row" style="grid-column: 1/-1; color: var(--text-secondary);">
+                            *前馈激活: Q_load预测补偿 +5%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 压差控制回路 -->
+                <div class="logic-block">
+                    <div class="logic-title">LOOP-OR001-PRESS (快速PI)</div>
+                    <table class="data-table">
+                        <tbody><tr>
+                            <th>参数</th>
+                            <th>值</th>
+                            <th>设定 (SP)</th>
+                        </tr>
+                        <tr>
+                            <td>室内压差 (PV)</td>
+                            <td class="value-col" style="color: var(--accent-green);">+15.2 <span class="unit">Pa</span></td>
+                            <td class="value-col">+15.0 <span class="unit">Pa</span></td>
+                        </tr>
+                        <tr>
+                            <td>排风阀 (AO)</td>
+                            <td class="value-col">32.0 <span class="unit">%</span></td>
+                            <td><span class="status-badge status-ok">AUTO</span></td>
+                        </tr>
+                        <tr>
+                            <td>门状态 (DI)</td>
+                            <td class="value-col" style="color: var(--accent-green);">CLOSED</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody></table>
+                    <div class="param-grid" style="margin-top: 8px; border-top: 1px solid #333; padding-top: 5px;">
+                        <div class="param-row"><span>Kp:</span><span>1.2</span></div>
+                        <div class="param-row"><span>Ti:</span><span>30s</span></div>
+                        <div class="param-row" style="grid-column: 1/-1; color: var(--accent-yellow);">
+                            *虚拟传感器状态: 备用 (物理传感器正常)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设备详细 I/O 列表 -->
+            <div class="panel-header" style="margin-top: 20px;">
+                AHU-OR-001 设备 I/O 详情
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>点位ID (Agent-03继承)</th>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>当前值/状态</th>
+                        <th>故障诊断</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HVAC-MAIN-3F-OR-AHU01-AI_SA_TEMP</td>
+                        <td>送风温度</td>
+                        <td>AI</td>
+                        <td class="value-col">16.5 <span class="unit">°C</span></td>
+                        <td><span class="status-badge status-ok">Normal</span></td>
+                    </tr>
+                    <tr>
+                        <td>HVAC-MAIN-3F-OR-AHU01-AI_SA_HUMID</td>
+                        <td>送风湿度</td>
+                        <td>AI</td>
+                        <td class="value-col">55.0 <span class="unit">%RH</span></td>
+                        <td><span class="status-badge status-ok">Normal</span></td>
+                    </tr>
+                    <tr>
+                        <td>HVAC-MAIN-3F-OR-AHU01-AI_SF_FREQ</td>
+                        <td>送风机频率</td>
+                        <td>AI</td>
+                        <td class="value-col">48.5 <span class="unit">Hz</span></td>
+                        <td><span class="status-badge status-ok">Normal</span></td>
+                    </tr>
+                    <tr>
+                        <td>HVAC-MAIN-3F-OR-AHU01-AI_HEPA_DP</td>
+                        <td>高效压差</td>
+                        <td>AI</td>
+                        <td class="value-col">320 <span class="unit">Pa</span></td>
+                        <td><span class="status-badge status-ok">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>HVAC-MAIN-3F-OR-AHU01-DI_SF_FAULT</td>
+                        <td>送风机故障</td>
+                        <td>DI</td>
+                        <td class="value-col">FALSE</td>
+                        <td><span class="status-badge status-ok">Normal</span></td>
+                    </tr>
+                    <tr>
+                        <td>HVAC-MAIN-3F-OR-AHU01-DI_FD_STAT</td>
+                        <td>防火阀状态</td>
+                        <td>DI</td>
+                        <td class="value-col">NORMAL</td>
+                        <td><span class="status-badge status-ok">Interlock Ready</span></td>
+                    </tr>
+                    <tr>
+                        <td>ELEC-MAIN-3F-OR-IPS01-AI_ISO</td>
+                        <td>隔离电源绝缘</td>
+                        <td>AI</td>
+                        <td class="value-col">450 <span class="unit">kΩ</span></td>
+                        <td><span class="status-badge status-ok">&gt;50kΩ</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 右侧：冷源与报警 -->
+        <div class="panel">
+            <div class="panel-header">
+                冷热源群控 (HVAC-CHP)
+                <span class="status-badge status-ok">COP: 5.2</span>
+            </div>
+
+            <!-- 群控状态 -->
+            <div class="logic-block">
+                <div class="logic-title">FSM-CHP-STAGING</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>当前状态: <strong style="color: var(--accent-blue);">STATE_2CH</strong></span>
+                    <span>负荷: 3200 kW</span>
+                </div>
+                <div style="height: 6px; background: #333; border-radius: 3px; margin-bottom: 5px;">
+                    <div style="width: 68%; height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); border-radius: 3px;"></div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary);">加机阈值: &gt;85% (10min) | 减机阈值: &lt;50% (10min)</div>
+            </div>
+
+            <table class="data-table">
+                <tbody><tr>
+                    <th>设备</th>
+                    <th>状态</th>
+                    <th>负荷/频率</th>
+                </tr>
+                <tr>
+                    <td>CH-001 (离心)</td>
+                    <td><span class="status-badge status-ok">RUN</span></td>
+                    <td class="value-col">82 <span class="unit">%</span></td>
+                </tr>
+                <tr>
+                    <td>CH-002 (离心)</td>
+                    <td><span class="status-badge status-ok">RUN</span></td>
+                    <td class="value-col">78 <span class="unit">%</span></td>
+                </tr>
+                <tr>
+                    <td>CH-003 (离心)</td>
+                    <td><span class="status-badge status-offline">STANDBY</span></td>
+                    <td class="value-col">0 <span class="unit">%</span></td>
+                </tr>
+                <tr>
+                    <td>CHWP-001 (VFD)</td>
+                    <td><span class="status-badge status-ok">RUN</span></td>
+                    <td class="value-col">45 <span class="unit">Hz</span></td>
+                </tr>
+            </tbody></table>
+
+            <div class="panel-header" style="margin-top: 20px; border-color: var(--accent-yellow);">
+                系统报警与事件
+            </div>
+            <div style="flex: 1; overflow-y: auto;">
+                <!-- 报警条目 -->
+                <div style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid var(--accent-yellow); padding: 8px; margin-bottom: 5px; font-size: 12px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--accent-yellow); font-weight: bold;">WARNING</span>
+                        <span style="color: #666;">10:42:15</span>
+                    </div>
+                    <div>HVAC-MAIN-B1-CHP-CT002-AI_VIB</div>
+                    <div>冷却塔2# 振动值偏高 (4.8mm/s)</div>
+                </div>
+
+                <div style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid var(--accent-blue); padding: 8px; margin-bottom: 5px; font-size: 12px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--accent-blue); font-weight: bold;">EVENT</span>
+                        <span style="color: #666;">10:30:00</span>
+                    </div>
+                    <div>FSM-OR001-HVAC</div>
+                    <div>模式切换: PREP -&gt; SURGERY</div>
+                    <div style="color: #666;">Trigger: HIS Schedule Start</div>
+                </div>
+
+                <div style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid var(--accent-blue); padding: 8px; margin-bottom: 5px; font-size: 12px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--accent-blue); font-weight: bold;">INFO</span>
+                        <span style="color: #666;">10:15:00</span>
+                    </div>
+                    <div>MPC-Optimizer</div>
+                    <div>下发优化指令: CHWS_SP = 7.5°C</div>
+                </div>
+            </div>
+
+            <!-- 降级策略状态 -->
+            <div class="panel-header" style="margin-top: 20px;">
+                韧性与降级状态 (R-C)
+            </div>
+            <table class="data-table">
+                <tbody><tr>
+                    <td>L1 通信</td>
+                    <td><span class="status-badge status-ok">Connected</span></td>
+                </tr>
+                <tr>
+                    <td>虚拟传感器</td>
+                    <td><span class="status-badge status-ok">Ready</span></td>
+                </tr>
+                <tr>
+                    <td>消防联动</td>
+                    <td><span class="status-badge status-ok">Armed</span></td>
+                </tr>
+                <tr>
+                    <td>权限模式</td>
+                    <td><span class="status-badge status-ok">Standard</span></td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+
+
+
+</body></html>

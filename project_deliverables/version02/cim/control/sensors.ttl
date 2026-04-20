@@ -1,0 +1,85 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:        <https://cim.medical/ontology/v3.4#> .
+@prefix cim-ctrl:   <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
+
+<https://cim.medical/ontology/v3.4/control/sensors>
+    a owl:Ontology ;
+    rdfs:label "CIM Control Module"@en ;
+    rdfs:comment "Sensors and control devices for building automation."@en ;
+    owl:versionInfo "2.0.0-Final" ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> .
+
+cim-ctrl:ControlDevice
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Control Device"@en ;
+    rdfs:label "控制设备"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Base class for all control devices."@en .
+
+cim-ctrl:Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:ControlDevice ;
+    rdfs:label "Sensor"@en ;
+    rdfs:label "传感器"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Device that measures and reports physical parameters."@en .
+
+cim-ctrl:Temperature_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Temperature Sensor"@en ;
+    rdfs:label "温度传感器"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Measures temperature in °C."@en .
+
+cim-ctrl:Humidity_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Humidity Sensor"@en ;
+    rdfs:label "湿度传感器"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Measures relative humidity in %RH."@en .
+
+cim-ctrl:Pressure_Sensor
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:Sensor ;
+    rdfs:label "Pressure Sensor"@en ;
+    rdfs:label "压差/压力传感器"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Measures pressure or differential pressure in Pa."@en .
+
+cim-ctrl:monitors
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:Sensor ;
+    rdfs:range cim:Entity ;
+    rdfs:label "monitors"@en ;
+    rdfs:label "监测"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Sensor monitors physical parameter of target entity."@en .
+
+cim-ctrl:Actuator
+    a owl:Class ;
+    rdfs:subClassOf cim-ctrl:ControlDevice ;
+    rdfs:label "Actuator"@en ;
+    rdfs:label "执行器"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Device that controls equipment operation."@en .
+
+cim-ctrl:controls
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ctrl:Actuator ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "controls"@en ;
+    rdfs:label "控制"@zh-CN ;
+    cim:sourceAgent "Agent-06" ;
+    rdfs:comment "Actuator controls target equipment."@en .
+
+# ============================================================================
+# END OF CONTROL SENSORS MODULE
+# ============================================================================

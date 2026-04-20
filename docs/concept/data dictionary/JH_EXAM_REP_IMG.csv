@@ -1,0 +1,27 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_EXAM_REP_IMG,表全名,JHPDL:JH_EXAM_REP_IMG,,,,,,
+,表说明,检查影像索引,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,ERI,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,ERI0001,String字符串（变长）,,EXAM_REP_IMG_SN,检查影像编号,检查影像编号，系统生成三级编码，如“EP0.000.000.001”,20,是,是
+,\x00\x02,ERI0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,ERI0003,String字符串（变长）,,EXAM_REPORT_SN,检查报告编号,检查报告编号，来源JH_EXAM_REPORT的ERT0001,20,是,是
+,\x00\x05,ERI0005,String字符串（变长）,,IMG_TITLE,图片标题,,200,,
+,\x00\x06,ERI0006,String字符串（变长）,,ORDER_NO,排序,,200,,
+,\x00\x07,ERI0007,String字符串（变长）,,FILE_SN_CODE,图片唯一号,关联到表“JH_FILE_CONTENT”,20,是,是
+,\x00\x08,ERI0008,String字符串（变长）,,IMG_REMARK,图片备注,,4000,,
+,\x00\x09,ERI0009,Long长整型（8个字节）,,FILE_SIZE,图片大小,,20,,
+,\x00\x0A,ERI0010,String字符串（变长）,,FILE_TYPE,图片格式,图片文件格式，JPG、PNG、MP4等,50,,
+,\x00\x0B,ERI0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,LAST_UPDATE,最后更新时间,,31,,
+,\x00\x0C,ERI0012,String字符串（变长）,,IMG_SRC_CODE,外部关联编号,来源系统的关联编号，如文件名、图片ID等,200,,
+,\x00\x0D,ERI0013,String字符串（变长）,,IMG_SRC_URL,外部关联地址,来源系统的关联URL地址或下载地址,500,,
+,\x00\x0E,ERI0014,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x0F,ERI0015,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x10,ERI0016,简化字典（Integer整型，4个字节）,431,SD_IMG_TYPE,图片类型简码,"图片类型，如“1#,#002#,#缩略图”（缩略图、内容图）",20,,
+,\x00\x11,ERI0017,String字符串（变长）,,SC_IMG_TYPE,图片类型编码,源业务系统的图片类型编码,200,,
+,\x00\x12,ERI0018,String字符串（变长）,,ST_IMG_TYPE,图片类型描述,源业务系统的图片类型描述,200,,
+,\x00\x13,ERI0019,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x04,ERI0004,自定义字典类型，字符串（变长）,431,IMG_TYPE,图片类型,"图片类型，如“1#,#002#,#缩略图”（缩略图、内容图）",200,,

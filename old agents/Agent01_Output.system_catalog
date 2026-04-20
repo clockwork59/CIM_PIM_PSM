@@ -1,0 +1,630 @@
+# 医疗建筑技术系统目录 (Medical Building Technology Systems Catalog)
+# 基于CIM模型的8大系统类别分类
+
+system_categories:
+  HVAC:
+    category_id: "HVAC"
+    category_name: "暖通空调系统"
+    category_name_en: "Heating, Ventilation and Air Conditioning"
+    description: "医疗建筑环境与空气处理系统"
+    criticality_level: "CRITICAL"
+    healthcare_specific: true
+
+    subsystems:
+      CHP: # Chiller Plant
+        system_id: "HVAC-CHP"
+        system_name: "冷源系统"
+        description: "中央制冷系统，包括冷水机组、冷却塔、冷冻水泵"
+        criticality: "CRITICAL"
+        service_areas: ["全科", "手术室", "ICU", "药房", "检验科"]
+        components:
+          - "冷水机组(Chiller)"
+          - "冷却塔(Cooling Tower)"
+          - "冷冻水泵(Chilled Water Pump)"
+          - "冷却水泵(Condenser Water Pump)"
+          - "膨胀水箱(Expansion Tank)"
+          - "分集水器(Hydraulic Separator)"
+          - "水处理设备"
+        energy_profile:
+          power_consumption: "HIGH"
+          load_type: "COOLING_LOAD"
+          efficiency_target: "≥5.0 COP"
+        operational_parameters:
+          supply_temp: "7/12°C"
+          delta_t: "5-7°C"
+          flow_rate: "Variable"
+          control_strategy: "VFD + ΔT优化"
+
+      HTP: # Heat Plant
+        system_id: "HVAC-HTP"
+        system_name: "热源系统"
+        description: "中央供热系统，包括锅炉、热泵、热水泵"
+        criticality: "CRITICAL"
+        service_areas: ["全科", "手术室", "ICU", "病房", "热水供应"]
+        components:
+          - "蒸汽/热水锅炉"
+          - "热泵机组"
+          - "热水泵(Hot Water Pump)"
+          - "热交换器(Heat Exchanger)"
+          - "膨胀水箱"
+          - "分汽缸/分水器"
+          - "水处理设备"
+        energy_profile:
+          fuel_types: ["天然气", "电力", "柴油"]
+          efficiency_target: "≥90% 热效率"
+          emissions: "需满足医疗级排放标准"
+        operational_parameters:
+          supply_temp: "60/80°C"
+          delta_t: "20°C"
+          control_strategy: "气候补偿 + 分时分区"
+
+      AHU: # Air Handling Units
+        system_id: "HVAC-AHU"
+        system_name: "空气处理系统"
+        description: "中央空调机组系统，包括新风、回风、送风处理"
+        criticality: "CRITICAL"
+        service_areas: ["全科", "手术室", "ICU", "洁净区"]
+        components:
+          - "组合式空调机组"
+          - "新风机组"
+          - "风机盘管"
+          - "变风量末端(VAV)"
+          - "过滤器(初效/中效/高效)"
+          - "加湿器"
+          - "紫外线杀菌装置"
+        air_quality_requirements:
+          filtration: "≥99.97% @ 0.3μm"
+          ventilation_rate: "6-15 ACH"
+          pressure_cascade: "洁净区→半洁净区→普通区"
+          temperature: "24±2°C"
+          humidity: "50±10%"
+
+      CLN: # Cleanroom HVAC
+        system_id: "HVAC-CLN"
+        system_name: "洁净空调系统"
+        description: "手术室、ICU、药房等洁净环境专用空调系统"
+        criticality: "CRITICAL"
+        service_areas: ["手术室", "ICU", "NICU", "药房", "检验科"]
+        cleanliness_levels:
+          OR: "ISO 5级 (百级)"
+          ICU: "ISO 7级 (万级)"
+          Pharmacy: "ISO 8级 (十万级)"
+        components:
+          - "专用净化空调机组"
+          - "HEPA/ULPA过滤器"
+          - "层流送风天花"
+          - "回风口"
+          - "压差控制器"
+          - "温湿度精密控制器"
+        requirements:
+          laminar_flow: "垂直层流/水平层流"
+          pressure_differential: "15-30 Pa"
+          air_changes: "20-40 ACH"
+          recovery_time: "≤30 min"
+
+      ISO: # Isolation HVAC
+        system_id: "HVAC-ISO"
+        system_name: "负压隔离系统"
+        description: "传染病负压隔离病房专用通风系统"
+        criticality: "CRITICAL"
+        service_areas: ["负压隔离病房", "传染病区", "BSL实验室"]
+        biosafety_levels:
+          BSL-2: "基础负压隔离"
+          BSL-3: "加强负压隔离"
+        components:
+          - "全新风空调机组"
+          - "HEPA过滤器(排风)"
+          - "负压排风机"
+          - "压差监控器"
+          - "气流方向指示器"
+          - "紧急通风系统"
+        safety_features:
+          pressure_differential: "-30 Pa (相对相邻区)"
+          air_changes: "12-15 ACH"
+          exhaust_filtration: "99.97% HEPA"
+          backup_power: "24小时应急保障"
+          failure_alarm: "实时压力监测报警"
+
+      SMO: # Smoke Control
+        system_id: "HVAC-SMO"
+        system_name: "通风排烟系统"
+        description: "消防排烟、日常通风系统"
+        criticality: "LIFE_SAFETY"
+        service_areas: ["地下车库", "中庭", "楼梯间", "前室"]
+        components:
+          - "消防排烟风机"
+          - "正压送风机"
+          - "排烟口/送风口"
+          - "防火阀"
+          - "排烟防火阀"
+          - "风压传感器"
+        fire_safety:
+          smoke_extraction: "≥6 ACH (火灾时)"
+          pressurization: "50 Pa (楼梯间)"
+          smoke_free_zone: "≤8 min 目标时间"
+
+  PLUMBING:
+    category_id: "PLUMBING"
+    category_name: "给排水系统"
+    category_name_en: "Plumbing Systems"
+    description: "医疗建筑给排水及水处理系统"
+    criticality_level: "CRITICAL"
+    healthcare_specific: true
+
+    subsystems:
+      WSS: # Water Supply System
+        system_id: "PLUMBING-WSS"
+        system_name: "生活给水系统"
+        description: "饮用水供应系统，包括市政供水加压、储水"
+        criticality: "CRITICAL"
+        components:
+          - "市政供水引入管"
+          - "生活水箱"
+          - "变频供水设备"
+          - "给水泵"
+          - "管道系统"
+          - "阀门配件"
+
+      HWS: # Hot Water System
+        system_id: "PLUMBING-HWS"
+        system_name: "热水供应系统"
+        description: "医疗生活热水系统，含热水制备、循环"
+        criticality: "SECONDARY"
+        components:
+          - "热水锅炉/换热器"
+          - "热水储罐"
+          - "热水循环泵"
+          - "热水管道"
+          - "混水阀"
+          - "温度控制器"
+        temperature_control:
+          supply_temp: "60-65°C"
+          use_temp: "40-45°C"
+          circulation: "24小时连续循环"
+
+      DRN: # Drainage System
+        system_id: "PLUMBING-DRN"
+        system_name: "排水系统"
+        description: "污水、废水、雨水排放系统"
+        criticality: "SECONDARY"
+        components:
+          - "排水管道"
+          - "化粪池"
+          - "污水处理设备"
+          - "雨水收集系统"
+          - "通气管"
+          - "检查井"
+        healthcare_special:
+          medical_wastewater: "需预处理后方可排放"
+          biochemical_treatment: "实验室废水特殊处理"
+
+      PW: # Pure Water
+        system_id: "PLUMBING-PW"
+        system_name: "医用纯水系统"
+        description: "实验室、手术室、消毒供应中心纯水制备"
+        criticality: "CRITICAL"
+        applications:
+          - "实验室检验用水"
+          - "手术器械清洗"
+          - "制药配液"
+          - "消毒供应"
+        water_quality:
+          resistivity: "≥10 MΩ·cm"
+          conductivity: "≤0.1 μS/cm"
+          TOC: "≤500 ppb"
+          bacteria: "≤10 CFU/100ml"
+        components:
+          - "预处理系统"
+          - "反渗透设备"
+          - "离子交换器"
+          - "超滤装置"
+          - "紫外线杀菌"
+          - "精密过滤器"
+
+  ELECTRICAL:
+    category_id: "ELECTRICAL"
+    category_name: "电气系统"
+    category_name_en: "Electrical Systems"
+    description: "医疗建筑电力供配与电气安全系统"
+    criticality_level: "CRITICAL"
+    healthcare_specific: true
+
+    subsystems:
+      HV: # High Voltage
+        system_id: "ELECTRICAL-HV"
+        system_name: "高压配电系统"
+        description: "35kV/10kV高压配电及变电站系统"
+        criticality: "CRITICAL"
+        components:
+          - "高压开关柜"
+          - "变压器"
+          - "直流屏"
+          - "继电保护装置"
+          - "高压电缆"
+        capacity:
+          load_density: "100-150 W/m²"
+          reliability: "一级负荷 + 一级特别重要负荷"
+          backup_requirement: "双重电源保障"
+
+      LV: # Low Voltage
+        system_id: "ELECTRICAL-LV"
+        system_name: "低压配电系统"
+        description: "380V/220V低压配电及照明配电"
+        criticality: "CRITICAL"
+        components:
+          - "低压开关柜"
+          - "配电箱"
+          - "母线槽"
+          - "低压电缆"
+          - "断路器"
+          - "电能质量监测"
+        load_classification:
+          first_class: "手术室、ICU、急诊科"
+          second_class: "普通病房、电梯"
+          third_class: "办公、景观照明"
+
+      EPS: # Emergency Power System
+        system_id: "ELECTRICAL-EPS"
+        system_name: "应急电源系统"
+        description: "备用电源系统，包括柴油发电机、UPS"
+        criticality: "LIFE_SAFETY"
+        components:
+          - "柴油发电机组"
+          - "UPS不间断电源"
+          - "EPS应急照明电源"
+          - "自动切换开关"
+          - "发电机组控制柜"
+          - "燃料供应系统"
+        requirements:
+          startup_time: "≤15秒"
+          fuel_capacity: "≥24小时连续运行"
+          load_coverage: "一级特别重要负荷"
+          testing_frequency: "月度空载测试 + 年度负载测试"
+
+      LGT: # Lighting System
+        system_id: "ELECTRICAL-LGT"
+        system_name: "照明系统"
+        description: "室内外照明，含应急照明、医疗专用照明"
+        criticality: "SECONDARY"
+        components:
+          - "LED照明灯具"
+          - "照明配电箱"
+          - "智能照明控制"
+          - "应急照明"
+          - "手术无影灯"
+          - "紫外线消毒灯"
+        requirements:
+          illuminance: "按GB50034标准"
+          emergency_duration: "≥90分钟"
+          color_temperature: "3000-5000K (医疗场所)"
+
+      IPS: # Isolated Power System
+        system_id: "ELECTRICAL-IPS"
+        system_name: "医用隔离电源系统"
+        description: "手术室、ICU等医疗场所专用隔离电源"
+        criticality: "PATIENT_SAFETY"
+        medical_standards: "IEC 60364-7-710"
+        components:
+          - "医用隔离变压器"
+          - "绝缘监视仪"
+          - "外接报警显示"
+          - "专用配电箱"
+          - "漏电保护器"
+        safety_features:
+          isolation_voltage: "≥5500V AC"
+          insulation_monitor: "实时监测绝缘电阻"
+          fault_alarm: "第一故障报警"
+          fault_location: "故障定位功能"
+
+  MEDICAL_GAS:
+    category_id: "MEDICAL_GAS"
+    category_name: "医疗气体系统"
+    category_name_en: "Medical Gas Systems"
+    description: "医疗专用气体供应与控制系统"
+    criticality_level: "LIFE_SAFETY"
+    healthcare_specific: true
+    regulated_by: "GB 50751 医用气体工程技术规范"
+
+    subsystems:
+      O2: # Oxygen
+        system_id: "MEDICAL_GAS-O2"
+        system_name: "医用氧气系统"
+        description: "生命支持氧气供应系统"
+        criticality: "LIFE_SAFETY"
+        purity_requirement: "≥99.5% O2"
+        pressure_requirements:
+          supply_pressure: "0.3-0.6 MPa"
+          terminal_pressure: "0.2-0.5 MPa"
+        components:
+          - "液氧储罐/汇流排"
+          - "氧气减压装置"
+          - "氧气管道系统"
+          - "氧气终端"
+          - "压力监测装置"
+          - "阀门组件"
+        supply_source:
+          primary: "液氧储罐(主用)"
+          backup: "汇流排(备用)"
+          capacity: "≥7天用量"
+          redundancy: "N+1"
+        applications:
+          - "手术室麻醉"
+          - "ICU呼吸机"
+          - "普通病房吸氧"
+          - "急诊抢救"
+
+      VAC: # Vacuum
+        system_id: "MEDICAL_GAS-VAC"
+        system_name: "医用真空系统"
+        description: "负压吸引系统"
+        criticality: "CRITICAL"
+        vacuum_level: "40-150 mmHg 绝对压力"
+        flow_rate_requirement: "≥40 L/min 终端"
+        components:
+          - "真空泵机组"
+          - "真空罐"
+          - "真空管道"
+          - "吸引终端"
+          - "细菌过滤器"
+          - "排污装置"
+        applications:
+          - "手术吸引"
+          - "吸痰"
+          - "伤口引流"
+          - "生化检验"
+
+      AIR: # Medical Air
+        system_id: "MEDICAL_GAS-AIR"
+        system_name: "医疗空气系统"
+        description: "医疗级压缩空气供应"
+        criticality: "CRITICAL"
+        quality_requirement:
+          oil_content: "≤0.1 mg/m³"
+          particulate: "≤0.5 mg/m³"
+          dew_point: "≤-20°C"
+        components:
+          - "无油空压机"
+          - "干燥器"
+          - "过滤器"
+          - "储气罐"
+          - "输送管级"
+          - "终端设备"
+        applications:
+          - "呼吸机动力"
+          - "麻醉机"
+          - "手术器械"
+          - "检验设备"
+
+      N2O: # Nitrous Oxide
+        system_id: "MEDICAL_GAS-N2O"
+        system_name: "氧化亚氮系统"
+        description: "麻醉气体供应"
+        criticality: "SECONDARY"
+        purity_requirement: "≥98% N2O"
+        components:
+          - "氧化亚氮汇流排"
+          - "减压装置"
+          - "输送管道"
+          - "终端"
+
+      CO2: # Carbon Dioxide
+        system_id: "MEDICAL_GAS-CO2"
+        system_name: "二氧化碳系统"
+        description: "手术用气腹气体"
+        criticality: "SECONDARY"
+        components:
+          - "二氧化碳汇流排"
+          - "减压装置"
+          - "输送管道"
+          - "专用终端"
+
+  FIRE_PROTECTION:
+    category_id: "FIRE_PROTECTION"
+    category_name: "消防系统"
+    category_name_en: "Fire Protection Systems"
+    description: "建筑消防与生命安全系统"
+    criticality_level: "LIFE_SAFETY"
+    healthcare_specific: false
+    regulated_by: ["GB 50016", "GB 50084", "GB 51251"]
+
+    subsystems:
+      HYDRANT:
+        system_id: "FIRE_PROTECTION-HYDRANT"
+        system_name: "消火栓系统"
+        description: "室内室外消火栓给水系统"
+        criticality: "LIFE_SAFETY"
+        water_pressure:
+          static: "≤1.0 MPa"
+          dynamic: "0.1-0.5 MPa"
+        flow_rate_requirements:
+          indoor: "5-40 L/s"
+          outdoor: "15-45 L/s"
+        components:
+          - "消火栓泵"
+          - "稳压装置"
+          - "消火栓箱"
+          - "水带水枪"
+          - "水泵接合器"
+          - "屋顶水箱"
+
+      SPRINKLER:
+        system_id: "FIRE_PROTECTION-SPRINKLER"
+        system_name: "自动喷水灭火系统"
+        description: "湿式、干式、预作用、雨淋等喷水系统"
+        criticality: "LIFE_SAFETY"
+        hazard_classification:
+          light: "病房、办公室"
+          ordinary: "门诊、走道"
+          extra: "设备用房、库房"
+        design_density:
+          light: "4.5 L/min·m²"
+          ordinary: "6-8 L/min·m²"
+          extra: "12-18 L/min·m²"
+        components:
+          - "喷淋泵"
+          - "报警阀组"
+          - "水流指示器"
+          - "喷头"
+          - "末端试水装置"
+          - "气压稳压装置"
+
+      GAS_FIRE:
+        system_id: "FIRE_PROTECTION-GAS_FIRE"
+        system_name: "气体灭火系统"
+        description: "特殊场所气体灭火保护"
+        criticality: "LIFE_SAFETY"
+        protected_areas: ["变配电室", "信息中心", "贵重设备室"]
+        gas_types:
+          - "七氟丙烷(FM200)"
+          - "IG541"
+          - "气溶胶"
+        discharge_time: "≤60秒"
+        hold_time: "≥10分钟"
+
+      ALARM:
+        system_id: "FIRE_PROTECTION-ALARM"
+        system_name: "火灾自动报警系统"
+        description: "火灾探测、报警、联动控制系统"
+        criticality: "LIFE_SAFETY"
+        components:
+          - "火灾报警控制器"
+          - "感烟探测器"
+          - "感温探测器"
+          - "手动报警按钮"
+          - "声光报警器"
+          - "消防电话系统"
+          - "消防广播"
+          - "气体灭火控制器"
+
+  VERTICAL_TRANSPORT:
+    category_id: "VERTICAL_TRANSPORT"
+    category_name: "垂直交通系统"
+    category_name_en: "Vertical Transportation Systems"
+    description: "电梯、扶梯等垂直运输设备"
+    criticality_level: "CRITICAL"
+    healthcare_specific: true
+
+    subsystems:
+      ELEVATOR:
+        system_id: "VERTICAL_TRANSPORT-ELEVATOR"
+        system_name: "电梯系统"
+        description: "医疗专用电梯系统"
+        criticality: "CRITICAL"
+        classifications:
+          - "病床电梯(医用电梯)"
+          - "乘客电梯"
+          - "医用污物电梯"
+          - "消防电梯"
+          - "汽车电梯"
+        healthcare_features:
+          - "担架适配"
+          - "医用气体管道井"
+          - "残疾人操控"
+          - "紧急报警"
+          - "备用电源"
+        requirements:
+          load_capacity: "1600-2000kg (病床电梯)"
+          door_width: "≥1100mm"
+          speed: "1.0-2.5 m/s"
+          control: "群控 + 医用优先"
+
+      ESCALATOR:
+        system_id: "VERTICAL_TRANSPORT-ESCALATOR"
+        system_name: "自动扶梯系统"
+        description: "门诊大厅等公共区域自动扶梯"
+        criticality: "SECONDARY"
+
+  BUILDING_AUTOMATION:
+    category_id: "BUILDING_AUTOMATION"
+    category_name: "楼宇自动化系统"
+    category_name_en: "Building Automation Systems"
+    description: "建筑设备监控系统与能源管理"
+    criticality_level: "CRITICAL"
+    healthcare_specific: true
+
+    subsystems:
+      BAS: # Building Automation System
+        system_id: "BUILDING_AUTOMATION-BAS"
+        system_name: "楼宇设备自控系统"
+        description: "全建筑设备自动化监控"
+        criticality: "CRITICAL"
+        integration_scope:
+          - "空调系统监控"
+          - "给排水系统监控"
+          - "送排风系统监控"
+          - "电梯系统监控"
+          - "照明系统监控"
+          - "冷热源优化控制"
+        system_architecture:
+          level_1: "中央监控系统"
+          level_2: "网络控制器"
+          level_3: "现场控制器 (DDC)"
+          level_4: "现场设备 (传感器/执行器)"
+
+      EMS: # Energy Management System
+        system_id: "BUILDING_AUTOMATION-EMS"
+        system_name: "能源管理系统"
+        description: "能耗监测、分析与优化"
+        criticality: "IMPORTANT"
+        monitoring_scope:
+          - "电能耗计量"
+          - "水能耗计量"
+          - "燃气消耗计量"
+          - "蒸汽消耗计量"
+          - "冷热耗计量"
+        analytics:
+          - "能耗趋势分析"
+          - "能效评估"
+          - "成本分析"
+          - "碳排放核算"
+          - "预测性维护"
+
+      ENV: # Environmental Monitoring
+        system_id: "BUILDING_AUTOMATION-ENV"
+        system_name: "环境监测系统"
+        description: "室内外环境参数监测"
+        criticality: "IMPORTANT"
+        parameters:
+          indoor:
+            - "温度/湿度"
+            - "照度"
+            - "噪声"
+            - "CO2浓度"
+            - "PM2.5/PM10"
+            - "总挥发性有机物"
+          outdoor:
+            - "温度/湿度"
+            - "风速风向"
+            - "大气压力"
+            - "太阳辐射"
+
+      DDC: # Digital Distribution Center
+        system_id: "BUILDING_AUTOMATION-DDC"
+        system_name: "数字化配电监控系统"
+        description: "电力系统数字化监控与管理"
+        criticality: "CRITICAL"
+        monitoring_items:
+          - "电流/电压/功率"
+          - "功率因数"
+          - "谐波分析"
+          - "电能质量"
+          - "设备状态"
+          - "故障报警"
+
+criticality_level_definition:
+  LIFE_SAFETY: "生命安全等级 - 直接关系生命安全，如消防、应急电源"
+  PATIENT_SAFETY: "患者安全等级 - 关系到患者安全的医疗系统"
+  CRITICAL: "关键等级 - 影响医院正常运营的关键系统"
+  IMPORTANT: "重要等级 - 重要但可短期停用的系统"
+  SECONDARY: "次要等级 - 辅助系统，可较长时间停用"
+
+statistics:
+  total_system_categories: 8
+  total_subsystems: 26
+  criticality_distribution:
+    LIFE_SAFETY: 5
+    PATIENT_SAFETY: 2
+    CRITICAL: 12
+    IMPORTANT: 4
+    SECONDARY: 3
+  healthcare_specific_systems: 6 # 医疗专用系统类别数

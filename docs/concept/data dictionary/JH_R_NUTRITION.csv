@@ -1,0 +1,21 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_R_NUTRITION,表全名,JHPDL:JH_R_NUTRITION,,,,,,
+,表说明,临床营养专业统计表规范,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,MAP,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,MAP0001,String字符串（变长）,,R_NUTRITION_SN,统计数据唯一号,内部三级编码MP0.000.000.001,20,是,是
+,\x00\x02,MAP0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x03,MAP0003,String字符串（变长）,,SC_HOSPITAL,院区编码,院区编码,40,是,是
+,\x00\x04,MAP0004,String字符串（变长）,,ST_HOSPITAL,院区名称,院区名称,40,,
+,\x00\x05,MAP0005,String字符串（变长）,,SC_DEPT,科室编码,科室编码,40,,
+,\x00\x06,MAP0006,String字符串（变长）,,ST_DEPT,科室名称,科室名称,100,,
+,\x00\x07,MAP0007,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,R_DATE,统计时间,统计时间,31,,
+,\x00\x08,MAP0008,String字符串（变长）,,MZTS_SUM,营养门诊诊疗投诉发生人次数,营养门诊诊疗投诉发生人次数,100,,
+,\x00\x09,MAP0009,String字符串（变长）,,MZZL_SUM,营养门诊诊疗总人次数,营养门诊诊疗总人次数,100,,
+,\x00\x0A,MAP0010,String字符串（变长）,,NUTRITION_COMMENT,备注,备注,200,,
+,\x00\x0B,MAP0011,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,PDL最新更新时间,,31,是,是
+,\x00\x0C,MAP0012,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x0D,MAP0013,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,

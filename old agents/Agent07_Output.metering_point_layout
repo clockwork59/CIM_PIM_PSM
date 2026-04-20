@@ -1,0 +1,529 @@
+# Agent-07: 计量点布局规划详
+# Metering Point Layout Planning
+
+metering_point_layout = {
+    "L0_total_level_layout": {
+        "level_name": "总表层（院区总表）布局",
+        "installation_requirements": {
+            "location_principle": "市政接入点或产权分界点，确保完整独立计量",
+            "accessibility": "便于抄表、维护和定期检定",
+            "security_requirements": "防窃电、防破坏、防潮防水",
+            "communication_integrity": "信号稳定，无遮挡，可回传"
+        },
+        "specific_installation_points": {
+            "total_electricity_meter": {
+                "meter_code": "L0-E-001-0000-01",
+                "location": "院区变电站35kV进线侧",
+                "coordinates_grid": {"lat": 31.2304, "lng": 121.4737},
+                "elevation": "±0.000m （相对基准面）",
+                "environmental_conditions": "室内干燥，温度-5~45°C",
+                "installation_accessories": {
+                    "panel_type": "GCS抽出式开关柜",
+                    "current_transformers": "35kV/5A，精度0.2S级",
+                    "voltage_transformers": "35kV/100V，精度0.2级",
+                    "protection_relay": "微机保护装置",
+                    "communication_gateway": "DL/T645协议+4G无线模块"
+                },
+                "meter_specifications": {
+                    "type": "三相四线电子式多功能电表",
+                    "accuracy_class": "0.2S级",
+                    "voltage": "3×57.7V/100V",
+                    "current": "3×5(6)A",
+                    "functions": [
+                        "有功、无功电能计量", "需量计量", "分时段计费",
+                        "功率因数测量", "谐波分析", "事件记录", "远程通信"
+                    ]
+                },
+                "backup_meters": {
+                    "primary_vs_secondary": "主表+副表双重计量",
+                    "verification_frequency": "每月对比一次",
+                    "alarm_threshold": "差值>±2%时报警"
+                }
+            },
+
+            "total_water_meter": {
+                "meter_code": "L0-W-001-0000-01",
+                "location": "市政进水管网接口处，院区东门入口处",
+                "coordinates_grid": {"lat": 31.2298, "lng": 121.4745},
+                "depth": "地下1.5m（防冻要求）",
+                "pipe_specifications": {
+                    "diameter": "DN300国标钢管",
+                    "material": "Q235B碳钢，内衬PE防腐",
+                    "pressure_rating": "PN16",
+                    "velocity_range": "0.6-3.0m/s"
+                },
+                "installation_conditions": {
+                    "straight_pipe_requirements": "前10D后5D（前十后五）",
+                    "valve_arrangement": "装阀便于检修",
+                    "drainage_facilities": "装排水坑和泵",
+                    "frost_protection": "保温+电伴热"
+                },
+                "meter_selection": {
+                    "type": "DN300电磁流量计",
+                    "accuracy_class": "0.5级",
+                    "measurement_range": "Q3=250m³/h, 量程比100:1",
+                    "output_signals": ["4-20mA", "脉冲输出", "RS485/Modbus"],
+                    "communication": "NB-IoT无线远传"
+                },
+                "meter_well_chamber": {
+                    "dimensions": "2.5m×2.0m×2.5m（长宽高）",
+                    "construction": "整体钢筋混凝土",
+                    "waterproof_grade": "S6抗渗等级",
+                    "access_method": "钢制检修人孔+扶梯"
+                }
+            },
+
+            "total_gas_meter": {
+                "meter_code": "L0-G-001-0000-01",
+                "location": "市政燃气管网调压计量站",
+                "coordinates_grid": {"lat": 31.2292, "lng": 121.4732},
+                "site_requirements": {
+                    "safety_clearance": "距离建筑物≥5m，距离重要设施≥10m",
+                    "explosion_protection": "Ex d IIB T4防护等级",
+                    "ventilation_requirements": "自然通风+机械排风",
+                    "fire_protection": "自动灭火系统+防爆开关"
+                },
+                "pressure_regulation_stages": {
+                    "high_pressure_inlet": "0.4MPa（市政中压）",
+                    "medium_pressure_outlet": "0.2MPa（院内中低压）",
+                    "low_pressure_distribution": "3-5kPa（末端使用）",
+                    "regulator_accuracy": "±2%"
+                },
+                "meter_specifications": {
+                    "type": "DN150腰轮（罗茨）流量计",
+                    "accuracy_class": "1.0级",
+                    "flow_range": "6-1000m³/h",
+                    "pressure_range": "0.1-0.6MPa",
+                    "temperature_compensation": "内置温压补偿",
+                    "communication": "RS485/Modbus + GPRS模块"
+                },
+                "safety_systems": {
+                    "emergency_shutoff_valve": "远程切断功能",
+                    "leak_detection_system": "可燃气体报警器",
+                    "overpressure_protection": "安全泄放阀",
+                    "flame_arresters": "管道阻火器"
+                }
+            },
+
+            "total_thermal_meter": {
+                "meter_code": "L0-T-001-0000-01",
+                "location": "能源中心冷热源总出入口",
+                "coordinates_grid": {"lat": 31.2301, "lng": 121.4729},
+                "system_configuration": {
+                    "chilled_water_loop": {
+                        "supply_temperature": "7°C", "return_temperature": "12°C",
+                        "flow_rate_max": "820m³/h", "design_pressure": "0.8MPa"
+                    },
+                    "hot_water_loop": {
+                        "supply_temperature": "45°C", "return_temperature": "40°C",
+                        "flow_rate_max": "380m³/h", "design_pressure": "0.6MPa"
+                    }
+                },
+                "heat_meter_composition": {
+                    "flow_sensor": "DN350电磁流量计（供回水各1套）",
+                    "temperature_sensors": "Pt1000铂电阻（配对精度±0.05°C）",
+                    "energy_calculator": "热量积算仪（多回路）",
+                    "accuracy_class": "1级（±2%组合误差）"
+                },
+                "pipe_installation_details": {
+                    "straight_run_requirements": "电磁流量计前5D后3D（前五后三）",
+                    "temperature_sensor_location": "流量传感器下游3-5D处",
+                    "anti_vibration_mounts": "减振支架和软连接",
+                    "insulation_specifications": "橡塑保温厚度50mm+铝护壳"
+                }
+            }
+        }
+    },
+
+    "L1_area_level_layout": {
+        "level_name": "区域表层（楼栋/分区）布局",
+        "coverage_zones": {
+            "main_zones": ["门诊部", "住院部A", "住院部B", "医技部", "行政部", "后勤保障部"],
+            "support_zones": ["能源中心", "污水处理站", "垃圾处理站", "洗衣房", "中央厨房"],
+            "external_zones": ["院区道路", "停车场", "绿化景观", "应急出入口"]
+        },
+        "electrical_metering_layout": {
+            "building_main_feeders": {
+                "outpatient_building_main": {
+                    "meter_code": "L1-E-101-0000-01",
+                    "installation_location": "门诊楼一层变配电室10kV进线柜",
+                    "transformer_capacity": "2×1600kVA + 1×1250kVA",
+                    "power_distribution": {
+                        "high_voltage_switchgear": "KYN28A-12金属封闭铠装式",
+                        "transformer_specifications": "SCB13型干式变压器，阻抗6%",
+                        "low_voltage_panel": "MNS抽出式低压开关柜",
+                        "backup_power": "800kW柴油发电机"
+                    },
+                    "meter_configurations": {
+                        "total_incoming_meter": "0.5S级三相多功能电表",
+                        "transformer_submeters": "各变压器低压侧独立计量",
+                        "backup_generator_meter": "发电机电能计量",
+                        "power_quality_monitor": "谐波分析+电压质量"
+                    },
+                    "communication_setup": {
+                        "local_network": "以太网LAN连接EMS系统",
+                        "wireless_backup": "4G通信模块",
+                        "database_interface": "MODBUS-TCP协议"
+                    }
+                },
+
+                "inpatient_building_A_main": {
+                    "meter_code": "L1-E-102-0000-01",
+                    "installation_location": "住院楼A地下二层变配电室",
+                    "special_requirements": {
+                        "medical_grade_requirements": "JGJ312-2013医疗建筑电气规范",
+                        "emergency_power_continuity": "三级负荷分级供电",
+                        "power_reliability": ">99.9%",
+                        "backup_redundancy": "N+1配置"
+                    },
+                    "dual_power_supply": {
+                        "utility_sources": "2路10kV市电进线",
+                        "transfer_switching": "自动切换ATS",
+                        "ups_systems": {
+                            "central_ups": "200kVA",
+                            "distributed_ups": "各楼层45kVA",
+                            "battery_backup": "关键区域90分钟"
+                        },
+                        "diesel_backup": "2×1200kW柴油发电机组"
+                    }
+                }
+            }
+        },
+
+        "thermal_metering_by_zone": {
+            "cooling_distribution_zones": {
+                "zone_1_outpatient": {
+                    "meter_code": "L1-T-101-0000-01", "area_served": "门诊区", "design_load": "680RT",
+                    "plant_connection": "来自能源中心1#制冷机",
+                    "distribution_method": "一次泵变流量系统",
+                    "metering_points": {
+                        "supply_chilled_water": "DN250供水总管流量+温度",
+                        "return_chilled_water": "DN250回水总管流量+温度",
+                        "energy_calculation": "热量表法计算冷量",
+                        "sub_loop_meters": "各楼层支路热量分表"
+                    }
+                },
+                "zone_2_inpatient": {
+                    "meter_code": "L1-T-102-0000-01", "area_served": "住院区", "design_load": "920RT",
+                    "plant_connection": "来自能源中心2#制冷机+3#制冷机",
+                    "night_load_requirement": "24小时供冷（病房）",
+                    "special_considerations": "ICU区不间断供冷"
+                }
+            },
+
+            "heating_distribution_zones": {
+                "low_temperature_heating": {
+                    "supply_temperature": "60°C", "return_temperature": "50°C",
+                    "distribution_chapters": ["门诊大厅", "候诊区", "医护办公室"],
+                    "radiator_type": "铝合金散热器+地暖组合"
+                },
+                "medium_temperature_heating": {
+                    "supply_temperature": "80°C", "return_temperature": "60°C",
+                    "application_areas": ["病房", "手术室预热", "设备用房"],
+                    "allocating_meters": "按分区设置热计量表，楼栋总表+楼层分表"
+                }
+            }
+        }
+    },
+
+    "L2_subscriber_level_layout": {
+        "level_name": "分户表层（科室/病区）布局",
+        "installation_philosophy": {
+            "granularity_principle": "按最小独立核算单位设置",
+            "measurement_independence": "各科室用能完全独立计量",
+            "billing_readiness": "支持内部成本核算和绩效考核",
+            "management_autonomy": "便于科室级能源管理"
+        },
+
+        "clinical_department_installations": {
+            "emergency_department_meters": {
+                "department_code": "DEPT_0301",
+                "metering_hierarchy": {
+                    "main_feeder": {
+                        "meter_code": "L2-E-101-0301-01", "location": "急诊科配电总箱进线",
+                        "rated_capacity": "250A", "installation_height": "1.4m",
+                        "panel_type": "XL-21动力配电柜",
+                        "power_quality": "安装谐波滤波设备"
+                    },
+                    "subsystems": {
+                        "treatment_rooms": ["24间诊室独立分表", "每间额定功率15kW", "医疗设备专用回路"],
+                        "emergency_power_supply": ["UPS设备60kVA", "柴油发电接口", "自动切换ATS"],
+                        "special_equipment": ["洗胃机2kW", "除颤器3kW", "呼吸机1.5kW", "监护设备5kW"]
+                    }
+                },
+                "load_characteristics": {
+                    "24_7_operation": True,
+                    "peak_demand": "180kW",
+                    "critical_loads": ">50%医疗负荷",
+                    "power_quality_requirements": "配置UPS+隔离变压器"
+                }
+            },
+
+            "ICU_intensive_care_meters": {
+                "department_code": "DEPT_0302",
+                "install_criticality": "最高级",
+                "metering_setup": {
+                    "dual_circuit_redundancy": "2路独立供电+切换",
+                    "isolated_power_systems": "医用IT隔离电源系统",
+                    "equipment_list": {
+                        "bedside_monitors": "24床×1.2kW = 28.8kW",
+                        "mechanical_ventilators": "20台×2.5kW = 50kW",
+                        "infusion_pumps": "120台×0.2kW = 24kW",
+                        "hemodialysis_machines": "8台×4kW = 32kW"
+                    }
+                }
+            }
+        },
+
+        "equipment_specific_metering": {
+            "large_medical_equipment": {
+                "CT_scanner_dedicated": {
+                    "meter_code": "L2-E-103-2001-01", "equipment_model": "CT_scanner_Philips_iCT_256",
+                    "power_rating": "135kW", "installation_zone": "放射科",
+                    "meter_specifications": "0.5S级多功能电表",
+                    "auxiliary_loads": "控制室空调+计算机系统+照明",
+                    "load_cycling": "瞬时大功率启动模式",
+                    "cooling_requirements": "专用精密机房空调"
+                },
+                "MRI_systems": {
+                    "meter_code": "L2-E-103-2002-01", "equipment_type": "3T_MRI_Siemens_Prisma",
+                    "head_load": "200kW", "cryocooler_power": "35kW",
+                    "ancillary_equipment": "氦气压机+梯度功放+RFS",
+                    "superconducting_magnet": "液氮冷却系统",
+                    "quench_pipe_system": "失超安全系统",
+                    "install_specialty": "需要磁屏蔽和防爆结构"
+                }
+            },
+
+            "hospital_infrastructure_systems": {
+                "kitchen_dining_complex": {
+                    "location_code": "BLD11_KITCHEN",
+                    "meter_hierarchy": {
+                        "total_electricity": "厨房总电表L2-E-111-0000-01",
+                        "cooking_equipment": ["蒸汽炒锅15kW", "蒸柜25kW", "烤箱18kW", "保温台8kW"],
+                        "refrigeration_systems": ["冷库机组45kW", "冰箱冰柜25kW", "制冰机12kW"],
+                        "auxiliary_systems": ["洗碗机30kW", "排烟风机22kW", "送新风15kW"]
+                    },
+                    "gas_metering": "厨房燃气总表+分区表",
+                    "water_metering": "餐饮用水单独计量",
+                    "steam_system": "蒸汽计量表（食堂+消毒供应）"
+                }
+            }
+        }
+    },
+
+    "L3_itemized_level_layout": {
+        "level_name": "分项表层（能源用途）布局",
+        "itemization_principle": "按最终用途细分至最小可管理单元",
+        "resolution_requirements": "支持详细的能效分析和节能诊断",
+
+        "HVAC_itemized_metering": {
+            "chiller_plant_detailed": {
+                "equipment_level_meters": {
+                    "centrifugal_chiller_01": {
+                        "meter_code": "L3-E-109-9001-01", "equipment_ref": "Chiller_#1_1800RT",
+                        "metering_location": "冷冻机配电柜进线侧",
+                        "measurement_parameters": ["有功功率", "无功功率", "功率因数", "谐波含量"],
+                        "auxiliary_meters": ["冷冻水泵45kW", "冷却塔风机22kW", "冷却水泵75kW"]
+                    }
+                },
+                "system_efficiency_monitoring": {
+                    "COP_calculation": "Cop = (冷热量表读数) / (制冷机总能耗)",
+                    "plant_efficiency": "机房整体效率=总冷量/(制冷机+水泵+冷却塔+辅机)",
+                    "part_load_performance": "部分负荷性能系数IPLV测试",
+                    "seasonal_efficiency": "季节能效比SEER统计"
+                }
+            },
+
+            "air_handling_unit_level": {
+                "major_ahu_metering": {
+                    "ahu_fresh_air_systems": "新风处理机组分项计量",
+                    "ahu_return_air_systems": "回风处理机组分项计量",
+                    "zone_specific_ahu": "区域空调机组单独计量",
+                    "precision_air_conditioning": "机房专用精密空调计量"
+                },
+                "fan_power_analysis": {
+                    "supply_fan_power": "送风机功率",
+                    "return_exhaust_fan_power": "回排风机功率",
+                    "coil_reheat_power": "再热盘管功率",
+                    "damper_actuator": "风阀执行器功率"
+                },
+                "air_distribution_monitoring": {
+                    "static_pressure": "送风静压监测",
+                    "air_flow_rate": "风量监测",
+                    "temperature_differential": "温差监测",
+                    "occupancy_correlation": "占用率关联分析"
+                }
+            }
+        },
+
+        "lighting_system_itemization": {
+            "detailed_scategories": {
+                "medical_specialty_lighting": {
+                    "operating_room_lighting": {
+                        "meter_code": "L3-E-120-4001-01", "area": "12间手术室",
+                        "illumination_level": "150,000lux", "color_temperature": "4500K",
+                        "power_density": "250W/m²", "backup_lighting": "LED无影灯"
+                    },
+                    "examination_room_lighting": {
+                        "power_levels": "500-1000lux 可调",
+                        "color_rendering": "CR&Igt;90", "glare_rating": "UGR≤19",
+                        "examination_lamps": "诊疗照明 单独计量"
+                    },
+                    "ward_lighting_systems": {
+                        "patient_room_lighting": "病房一般照明",
+                        "night_lighting": "夜间护理照明",
+                        "reading_lighting": "床头阅读照明",
+                        "emergency_exit_lighting": "应急疏散照明"
+                    }
+                },
+                "administrative_lighting": {
+                    "office_general": "行政办公室照明",
+                    "conference_room_lighting": "会议室专用照明",
+                    "reception_lighting": "接待大厅照明",
+                    "corridor_lighting": "走廊通道照明",
+                    "exterior_lighting": "室外景观照明"
+                }
+            }
+        },
+
+        "power_equipment_itemization": {
+            "vertical_transportation": {
+                "elevator_system_metering": {
+                    "medical_bed_elevators": "病床电梯分项计量",
+                    "passenger_elevators": "乘客电梯分项计量",
+                    "service_elevators": "医用电梯分项计量",
+                    "freight_elevators": "货梯分项计量"
+                },
+                "operational_analysis": {
+                    "trip_frequency": "运行次数统计",
+                    "energy_per_trip": "单位运行耗能量",
+                    "standby_consumption": "待机功耗",
+                    "load_factor_optimization": "负荷率优化分析"
+                }
+            },
+
+            "water_pumping_systems": {
+                "domestic_water_systems": {
+                    "constant_pressure_supply": "恒压供水系统",
+                    "non_potable_water_systems": "中水回用系统",
+                    "drainage_pumping": "污水提升系统",
+                    "irrigation_systems": "绿化浇灌系统"
+                },
+                "hvac_water_systems": {
+                    "chilled_water_pumping": "冷冻水系统",
+                    "hot_water_circulation": "热水循环泵",
+                    "condensate_systems": "冷凝水系统",
+                    "cooling_tower_systems": "冷却水塔系统"
+                }
+            }
+        },
+
+        "special_systems_itemization": {
+            "data_center_infrastructure": {
+                "server_room_systems": {
+                    "IT_equipment_loads": "服务器设备功耗",
+                    "UPS_system_losses": "UPS损耗和电池充放电",
+                    "precision_cooling_systems": "机房专用空调",
+                    "power_distribution_losses": "配电系统损耗"
+                },
+                "reliability_monitoring": {
+                    "power_usage_effectiveness": "PUE=数据中心总耗电/IT设备耗电",
+                    "cooling_load_factor": "CLF=制冷功耗/IT功耗",
+                    "infrastructure_efficiency": "基础设施效率分析"
+                }
+            },
+
+            "medical_equipment_systems": {
+                "radiology_equipment_power": "大型医疗设备功耗",
+                "laboratory_equipment_power": "检验科设备功耗",
+                "pharmacy_equipment_power": "药房自动化设备功耗",
+                "biomedical_engineering": "医疗设备维护功耗"
+            }
+        },
+
+        "life_safety_systems_itemization": {
+            "emergency_power_systems": {
+                "diesel_generator_systems": {
+                    "fuel_consumption_meters": "发电机组油耗计量",
+                    "generator_power_output": "发电机电力输出计量",
+                    "cooling_system_power": "发电机冷却系统功耗",
+                    "control_system_power": "发电机控制系统功耗"
+                },
+                "UPS_systems": {
+                    "UPS_input_power": "UPS输入电能",
+                    "UPS_output_power": "UPS输出电能",
+                    "battery_charging_power": "电池充电耗能",
+                    "UPS_efficiency_monitoring": "UPS变换效率监测"
+                }
+            },
+
+            "fire_protection_systems": {
+                "fire_pumps_power": {
+                    "sprinkler_pumps": "喷淋泵功耗",
+                    "fire_suppression_pumps": "消防泵功耗",
+                    "jockey_pumps": "稳压泵功耗",
+                    "water_tank_heating": "消防水箱加热功耗"
+                },
+                "emergency_ventilation": {
+                    "smoke_exhaust_fans": "排烟风机功耗",
+                    "pressurization_fans": "正压送风机功耗",
+                    "emergency_ram_air": "应急进风系统功耗"
+                }
+            }
+        }
+    },
+
+    "installation_quality_assurance": {
+        "quality_control_checklists": {
+            "pre_installation": ["图纸会审", "设备开箱检查", "基础验收"],
+            "installation_process": ["安装位置校准", "接线正确性", "接地可靠性"],
+            "post_installation": ["绝缘测试", "通电调试", "功能验证", "整定板定值录入"]
+        },
+        "documentation_requirements": {
+            "as_built_drawings": "竣工图纸",
+            "test_certificates": "测试结果证书",
+            "calibration_reports": "计量器具检定证书",
+            "operation_manuals": "设备操作说明书",
+            "maintenance_procedures": "维护操作规程"
+        },
+        "acceptance_testing": {
+            "electrical_safety_tests": ["绝缘电阻测试", "接地电阻测试", "漏电保护测试"],
+            "functionality_tests": ["通信功能测试", "数据准确性验证", "报警功能验证"],
+            "integration_tests": ["系统集成调试", "数据一致性检查", "EMS系统对接"]
+        }
+    },
+
+    "commissioning_and_handover": {
+        "pre_commissioning": "安装完成自检",
+        "functional_testing": "系统性能验证",
+        "commissioning_report": "调试报告",
+        "training_delivery": "运维操作培训",
+        "spare_parts_handover": "备品备件移交",
+        "final_acceptance": "最终验收"
+    }
+}
+
+# 布局优化与空间管理
+layout_optimization = {
+    "space_management_principles": {
+        "accessibility_priority": "维护检修便利性优先",
+        "expansion_preparedness": "预留扩容空间和接口",
+        "conflict_avoidance": "避免与其他专业冲突",
+        "security_cocealment": "重要设备安全防护"
+    },
+
+    "gis_integration": {
+        "location_mapping": "使用GPS和GIS坐标精确定位",
+        "underground_utility_coordination": "地下管线综合协调",
+        "3d_modeling": "三维建模和碰撞检查",
+        "asset_management": "设备资产管理"
+    },
+
+    "future_expansion_planning": {
+        "modular_design": "模块化可扩展设计",
+        "interface_standardization": "接口标准化",
+        "technology_upgradability": "技术可升级",
+        "capacity_forecast": "容量预留和设计"
+    }
+}

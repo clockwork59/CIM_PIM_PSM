@@ -1,0 +1,37 @@
+﻿索引,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+,命名空间,JHPDL,,,,,,,,
+,,,,,,,,,,
+,表名,JH_LAB_VIS_DTL,表全名,JHPDL:JH_LAB_VIS_DTL,,,,,,
+,表说明,药敏与培养结果明细,,,,,,,,
+,列族名,CF,RowKey类型,Long长整型（8个字节）,列族代号,LRM,,,,
+,,,,,,,,,,
+,序号（I）,列名（N）,数据类型（T）,对应字典序号（K）,输出编号（C）,中文说明（D）,备注,字段长度,IDG索引,主题库索引
+,\x00\x01,LRM0001,String字符串（变长）,,LAB_VIS_DTL_SN,药敏与培养结果明细编号,药敏与培养结果明细编号，系统生成三级编码，如“LM0.000.000.001”,20,是,是
+,\x00\x02,LRM0002,String字符串（变长）,,HIS_KEY,来源业务系统主键,院内来源业务系统该行数据的唯一编号（可能需要转换）,200,是,是
+,\x00\x17,LRM0023,String字符串（变长）,,HIS_KEY_SRC,业务主键结构,院内来源业务系统行主键的构建方式（说明HIS_KEY是怎么构成的）,200,,
+,\x00\x03,LRM0003,String字符串（变长）,,LAB_RES_VIS_SN,微生物结果编号,微生物结果编号，来源JH_LAB_RES_VIS的LRV0001,20,是,是
+,\x00\x04,LRM0004,Integer整型（4个字节）,,BAC_ORDER,显示顺序号,,20,,
+,\x00\x05,LRM0005,String字符串（变长）,,BAC_NO,细菌编码,代码,200,,
+,\x00\x06,LRM0006,String字符串（变长）,,BAC_NAME,细菌名称,抗生素,200,,
+,\x00\x07,LRM0007,String字符串（变长）,,BAC_NAME_EN,细菌英文名称,英文名,200,,
+,\x00\x08,LRM0008,String字符串（变长）,,OBR_RESULT,结果,结果,500,,
+,\x00\x09,LRM0009,String字符串（变长）,,OBR_MIC_VALUE,MIC值,MIC,50,,
+,\x00\x0A,LRM0010,String字符串（变长）,,OBR_MM_VALUE,MM值,MM,50,,
+,\x00\x0B,LRM0011,String字符串（变长）,,OBR_ANT_METHOD,使用方法,用法,500,,
+,\x00\x0C,LRM0012,String字符串（变长）,,OBR_URINE,尿液,尿液,500,,
+,\x00\x0D,LRM0013,String字符串（变长）,,OBR_TURNING,折点,折点,500,,
+,\x00\x0E,LRM0014,String字符串（变长）,,OBR_REF,结果提示,结果提示,200,,
+,\x00\x0F,LRM0015,String字符串（变长）,,OBR_METHOD,实验类型,如“MIC、ZONE”,200,,
+,\x00\x10,LRM0016,String字符串（变长）,,OBR_ATYPE,所属药敏卡,,200,,
+,\x00\x11,LRM0017,String字符串（变长）,,OBR_UNIT,单位,,50,,
+,\x00\x12,LRM0018,String字符串（变长）,,OBR_VALUE,涂片结果,,500,,
+,\x00\x13,LRM0019,String字符串（变长）,,OBR_DESCRIBE,描述内容,,500,,
+,\x00\x16,LRM0022,String字符串（变长）,,OBR_REMARK,备注,,500,,
+,\x00\x18,LRM0024,String字符串（变长）,,ANTI_NO,抗菌药编码,抗菌药编码,200,,
+,\x00\x19,LRM0025,String字符串（变长）,,ANTI_NAME,抗菌药名称,抗菌药名称,200,,
+,\x00\x1A,LRM0026,DateTime日期时间型（yyyy-mm-dd hh:nn:ss）（19个字节）,,PDL_LAST_UPDATE,系统更新时间,数据中台系统内部记录的最后修改时间,31,是,是
+,\x00\x1B,LRM0027,简化字典（Integer整型，4个字节）,379,SD_OBR,是否涂片结果,是为“涂片结果”，否为“描述结果”,20,,
+,\x00\x1C,LRM0028,简化字典（Integer整型，4个字节）,379,SD_OBR_POSITIVE,是否阳性,是否阳性,20,,
+,\x00\x1D,LRM0029,String字符串（变长）,,MED_ORG_SN,医疗机构编号,用于区分多院区、集团医院、区域医疗的医疗机构唯一编号,,,
+,\x00\x14,LRM0020,自定义字典类型，字符串（变长）,379,OBR_FLAG,涂片结果标记,是为“涂片结果”，否为“描述结果”,200,,
+,\x00\x15,LRM0021,自定义字典类型，字符串（变长）,379,OBR_POSITIVE_FLAG,阳性标志,是否阳性,200,,

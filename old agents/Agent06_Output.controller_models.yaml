@@ -1,0 +1,237 @@
+# Agent-06 控制器层级模型
+# 从 docs/agents/06/Agent-06 控制系统建模师 - 全域控制系统实现模型.md §3.1 提取
+# 版本: v3.1 | 提取日期: 2026-04-05
+
+meta:
+  agent_id: Agent-06
+  agent_name: 控制系统建模师
+  version: v3.1
+  output_type: controller_models
+  source_document: "Agent-06 控制系统建模师 - 全域控制系统实现模型.md"
+  source_section: "§3.1 控制器层级架构"
+  extracted_at: "2026-04-05"
+
+controller_hierarchy:
+
+  # ===================================================================
+  # L1: 云端/中央监控层
+  # ===================================================================
+  L1_Central:
+    name: 云端/中央监控层
+    location: 数据中心 / 中央控制室
+    components:
+      BMS_Server:
+        type: 楼宇自控服务器
+        quantity: 2  # 主备
+        functions:
+          - 全院系统监控
+          - 历史数据存储
+          - 报表生成
+          - 远程访问
+        database: "时序数据库 (InfluxDB/TimescaleDB)"
+        data_retention: "5年"
+
+      Optimization_Engine:
+        type: 优化算法服务器
+        functions:
+          - 冷站能效优化
+          - 需求响应
+          - 预测性维护
+        algorithms:
+          - "Model Predictive Control (MPC)"
+          - "Machine Learning"
+        update_interval: "5-15min"
+
+      SCADA_Workstation:
+        type: 监控工作站
+        quantity: 4
+        locations:
+          - 中央控制室 ×2
+          - 动力机房值班室
+          - 工程部办公室
+
+    communication:
+      uplink: "Internet/VPN (加密)"
+      downlink: "BACnet/IP"
+
+    failure_impact:
+      description: |
+        L1失效时：优化算法停止，远程监控中断，历史数据暂中断。
+        L2/L3继续独立运行。能效下降10-15%。
+
+  # ===================================================================
+  # L2: 边缘控制层
+  # ===================================================================
+  L2_Edge:
+    name: 边缘控制层
+    components:
+
+      Edge_Gateway:
+        type: 边缘网关
+        quantity: 2  # 主楼+附楼
+        functions:
+          - "协议转换 (BACnet ↔ MQTT)"
+          - 本地数据缓存 (7天)
+          - 云边协同
+          - 本地报警处理
+        specs:
+          processor: "ARM Cortex-A72"
+          memory: "4GB RAM"
+          storage: "256GB SSD"
+          power: "24VDC, 冗余"
+        offline_capability: "72小时独立运行"
+
+      NAC_Controllers:
+        type: 网络自动化控制器
+        quantity: 8
+        distribution:
+          - {id: "NAC-OR",      location: 手术部,    managed_ddcs: 12}
+          - {id: "NAC-ICU",     location: ICU区域,   managed_ddcs: 8}
+          - {id: "NAC-CHP",     location: 冷冻站,    managed_ddcs: 4}
+          - {id: "NAC-EL",      location: 电气机房,  managed_ddcs: 6}
+          - {id: "NAC-WARD-A",  location: 住院楼A,   managed_ddcs: 15}
+          - {id: "NAC-WARD-B",  location: 住院楼B,   managed_ddcs: 15}
+          - {id: "NAC-OPD",     location: 门诊楼,    managed_ddcs: 12}
+          - {id: "NAC-SERVICE", location: 后勤楼,    managed_ddcs: 8}
+        functions:
+          - DDC程序管理
+          - 趋势数据汇总
+          - 区域报警处理
+          - 区域时间程序
+
+      DDC_Controllers:
+        type: 直接数字控制器
+        total_quantity: 80
+        distribution:
+          HVAC: 45
+          ELEC: 12
+          PLUMB: 8
+          MGAS: 6
+          FIRE: 5  # 接口，非主控
+          INT: 4
+        specs:
+          io_capacity: "8-32 AI/AO, 16-32 DI/DO"
+          communication: "BACnet MS/TP or IP"
+          standalone: true
+          battery: "72h RTC保持"
+
+      PLC_Controllers:
+        type: 可编程逻辑控制器
+        quantity: 6
+        applications:
+          - {id: "PLC-FAS",   function: 消防联动控制,   redundancy: 热备, safety_rating: SIL2}
+          - {id: "PLC-CHP-1", function: 冷站群控,       redundancy: 推荐热备}
+          - {id: "PLC-CHP-2", function: 锅炉群控}
+          - {id: "PLC-EPS",   function: 应急电源管理,   redundancy: 热备}
+          - {id: "PLC-MGAS",  function: 医用气体监控}
+          - {id: "PLC-ELEV",  function: 电梯群控}
+
+    communication:
+      inter_controller: "BACnet MS/TP, 76800bps"
+      to_gateway: "BACnet/IP"
+
+  # ===================================================================
+  # L3: 硬件保护层
+  # ===================================================================
+  L3_Hardware:
+    name: 硬件保护层
+    devices:
+      mechanical_thermostat:
+        quantity: 30
+        locations: 所有手术室、ICU
+        range: "18-26°C"
+        action: 直接控制备用加热器
+
+      freeze_protection_switch:
+        quantity: 50
+        locations: 所有表冷器/新风段
+        setpoint: "5°C"
+        action: 强制开热水阀/关新风阀
+
+      fire_damper_70c:
+        quantity: 200
+        locations: 穿越防火分区处
+        fusible: "70°C"
+        action: 弹簧关闭
+
+      smoke_fire_damper_280c:
+        quantity: 50
+        locations: 排烟风管
+        fusible: "280°C"
+        action: 弹簧关闭
+
+      pressure_relief:
+        quantity: 10
+        locations: 锅炉、压缩机
+        action: 超压泄放
+
+      emergency_stop:
+        quantity: 100
+        locations: 大型设备旁
+        action: 硬线直接断电
+
+# ===================================================================
+# 网络拓扑架构 (§3.4)
+# ===================================================================
+network_topology:
+  layers:
+    L1_Enterprise:
+      protocol: TCP/IP
+      security: 防火墙隔离
+      components: [BMS服务器, 优化引擎, SCADA工作站, Web服务器]
+
+    L2_Building:
+      protocol: BACnet/IP
+      topology: "星型 + 环网备份"
+      vlan: "VLAN 100"
+      switches:
+        type: 工业级交换机
+        quantity: 10
+        features: [RSTP冗余, VLAN隔离, 端口镜像]
+      security: [MAC地址绑定, 端口安全, 禁用未授权端口]
+
+    L3_Field:
+      protocols:
+        BACnet_MSTP:
+          baud_rate: "76800 bps"
+          cable: "RVSP 2×0.75 屏蔽双绞线"
+          max_length: "1200m"
+          max_devices: "127 per trunk"
+        Modbus_RTU:
+          baud_rate: "9600 bps"
+          parity: Even
+          max_devices: "32 per bus"
+        Hardwired:
+          usage: 消防联动/安全联锁
+          type: "24VDC 或 干接点"
+
+# ===================================================================
+# 数据点表命名规则 (§3.5)
+# ===================================================================
+point_naming_convention:
+  format: "{System}-{Location}-{Equipment}-{PointType}_{PointName}"
+  segments:
+    System: {length: "3-5字符", values: [HVAC, ELEC, PLUMB, MGAS, FIRE, INT]}
+    Location: {format: "{Building}-{Floor}-{Zone}"}
+    Equipment: {source: "继承Agent-03设备ID"}
+    PointType:
+      AI: 模拟量输入
+      AO: 模拟量输出
+      DI: 数字量输入
+      DO: 数字量输出
+      AV: 模拟量值（计算/设定）
+      BV: 二进制值
+      MSV: 多状态值
+    PointName: {examples: [TEMP, HUMID, PRESS, FLOW, STATUS, CMD, SP, FB, ALM]}
+
+# ===================================================================
+# 统计
+# ===================================================================
+statistics:
+  total_controllers: 98  # 2 BMS + 1 OPT + 4 SCADA + 2 Gateway + 8 NAC + 80 DDC + 6 PLC
+  total_hardware_protection: 440
+  controller_by_protocol:
+    BACnet_IP: 18   # Gateway + NAC + BACnet/IP DDC
+    BACnet_MSTP: 80 # DDC
+    Modbus_RTU: "第三方设备"
+    Hardwired: "消防联动"
