@@ -1,0 +1,1108 @@
+# FMEA知识库 - 医疗建筑核心设备故障模式分析
+# 基于 ISO 14224 + HVAC行业经验 + Agent-03设备本体模型
+#
+# 评分标准 (基于FMEA方法):
+# - Severity (1-10): 故障影响严重程度
+#   * 10=Extreme: 系统完全失效，危及患者安全
+#   * 8-9=Very High: 设备完全停机，影响多个区域
+#   * 6-7=High: 性能严重下降，需要立即维修
+#   * 4-5=Moderate: 性能下降，可在下次计划维护处理
+#   * 2-3=Low: 轻微影响，不影响主要功能
+#   * 1=Minor: 无实际影响
+#
+# - Occurrence (1-10): 故障发生频率
+#   * 10=Very High: ≥1次/月
+#   * 8-9=High: 1次/3-6个月
+#   * 6-7=Moderate: 1次/年
+#   * 4-5=Low: 1次/2-3年
+#   * 2-3=Very Low: 1次/5-10年
+#   * 1=Rare: ≤1次/10年
+#
+# - Detection (1-10): 故障可检测性
+#   * 10=Extremely Difficult: 无法检测，直到灾难性故障
+#   * 8-9=Very Difficult: 需要特殊检测设备和长时间
+#   * 6-7=Difficult: 需要仪表或经验判断
+#   * 4-5=Moderate: 可通过监控系统发现
+#   * 2-3=Easy: 明显可见或可测量
+#   * 1=Very Easy: 自动报警，实时检测
+#
+# RPN (Risk Priority Number) = Severity × Occurrence × Detection
+# RPN ≥ 100: 需要立即采取行动
+# 80 ≤ RPN < 100: 优先处理
+# 60 ≤ RPN < 80: 备选处理
+# < 60: 可接受，监控即可
+
+FMEA_Library:
+  # ===== 冷水机组 (Centrifugal / Screw / Scroll Chiller) =====
+  - equipment_type: "离心式冷水机组"
+    manufacturer_examples: ["开利 19XR", "约克 YK", "特灵 CVHE"]
+    specifications:
+      - cooling_capacity: "500-3000 kW"
+      - refrigerant: "R134a, R1233zd"
+      - power_supply: "380V/3Ph/50Hz"
+      - design_life: "20-25年"  # 工业标准值
+
+    failure_modes:
+      # 💎 压缩机系统故障
+      - failure_id: "CHL-CMP-001"
+        failure_mode: "压缩机喘振"
+        severity: 9
+        occurrence: 3
+        detection: 2
+        rpn: 54
+        category: "压缩机系统"
+        symptoms:
+          - "异常低频喘鸣声（5-20Hz）"
+          - "运行电流剧烈波动（±20%额定值）"
+          - "制冷量急剧下降（30-50%）"
+          - "振动传感器警报"
+          - "冷凝压力快速升高"
+        causes:
+          - "冷凝器脏污导致冷凝压力过高"
+          - "冷却水流量不足或温度过高"
+          - "负荷过低（<40%额定负荷）"
+          - "制冷剂充注过多"
+          - "冷凝器风扇故障"
+          - "导叶开度过小"
+        immediate_actions:
+          - "紧急停止机组，防止机械损坏"
+          - "检查冷凝器和冷却塔运行状态"
+          - "监测轴承温度"
+        maintenance_actions:
+          - "清洗冷凝器管束和冷却塔填料"
+          - "检查冷却水流量和温度"
+          - "调整导叶最小开度设定"
+          - "校准制冷剂充注量"
+          - "检查并清洁冷凝器"
+        prevention:
+          - "每月清洗冷凝器"
+          - "维持冷却水温度 28-32°C"
+          - "避免长时间低负荷运行（<50%）"
+          - "安装喘振检测保护装置"
+        typical_repair_time: "4-8小时"
+        impact_scope: "整个系统停机"
+
+      - failure_id: "CHL-CMP-002"
+        failure_mode: "压缩机轴承磨损"
+        severity: 8
+        occurrence: 2
+        detection: 3
+        rpn: 48
+        category: "压缩机系统"
+        symptoms:
+          - "轴承温度升高（>85°C）"
+          - "振动值增大（>7.1mm/s RMS）"
+          - "运行噪音增大（>85dB）"
+          - "油液金属颗粒增加"
+          - "效率下降"
+        causes:
+          - "润滑油系统污染或油量不足"
+          - "长时间运行在高负荷状态"
+          - "制冷剂液体携带（液击）"
+          - "轴承质量问题"
+          - "润滑不良"
+        immediate_actions:
+          - "密切监测温度和振动"
+          - "准备备机切换"
+          - "检查润滑油状态"
+        maintenance_actions:
+          - "更换轴承组件"
+          - "清洗润滑系统"
+          - "更换润滑油（清洁度NAS 8级）"
+          - "检查油泵和油路"
+          - "动平衡校正"
+        prevention:
+          - "每季度油液分析"
+          - "每年更换润滑油"
+          - "控制吸气过热度（>5°C）"
+          - "安装曲轴箱加热器"
+        typical_repair_time: "8-16小时"
+        impact_scope: "单机停机"
+
+      - failure_id: "CHL-CMP-003"
+        failure_mode: "压缩机电机绕组短路"
+        severity: 10
+        occurrence: 1
+        detection: 8
+        rpn: 80
+        category: "压缩机系统"
+        symptoms:
+          - "机组无法启动"
+          - "断路器跳闸"
+          - "电机烧毁异味"
+          - "绝缘电阻<0.5MΩ"
+        causes:
+          - "电压不平衡（>2%）"
+          - "频繁启停"
+          - "制冷剂泄漏导致过热"
+          - "电机冷却不足"
+          - "绕组绝缘老化"
+        immediate_actions:
+          - "立即断电"
+          - "检查供电电压"
+          - "检查绝缘电阻"
+        maintenance_actions:
+          - "电机重绕或更换"
+          - "检查电压稳定性"
+          - "检查压缩机过热原因"
+          - "改善冷却系统"
+          - "更换启动装置"
+        prevention:
+          - "监测相电压不平衡"
+          - "限制每小时启动次数（≤6次）"
+          - "定期检查绝缘电阻"
+          - "保证电机冷却"
+        typical_repair_time: "24-48小时"
+        impact_scope: "单机长时间停机"
+
+      # 💎 冷凝器系统故障
+      - failure_id: "CHL-CDS-001"
+        failure_mode: "冷凝器结垢/堵塞"
+        severity: 7
+        occurrence: 4
+        detection: 3
+        rpn: 84
+        category: "冷凝器系统"
+        symptoms:
+          - "冷凝压力升高（>1.5的设计压力）"
+          - "制冷效率下降（COP下降15-30%）"
+          - "压缩机电流增加"
+          - "冷凝器进出口温差增大"
+          - "冷却水流动阻力增加"
+        causes:
+          - "冷却水水质差（硬度高）"
+          - "水处理不当"
+          - "长时间未清洗（>6个月）"
+          - "微生物生长"
+          - "空气中的灰尘和杂物"
+        immediate_actions:
+          - "监测冷凝压力"
+          - "检查冷却水水质"
+          - "临时增加冷却水流量"
+        maintenance_actions:
+          - "化学清洗（酸洗）冷凝器管束"
+          - "机械清洗（海绵球）"
+          - "检查和更换水处理剂"
+          - "水质化验"
+          - "冷却塔清洗"
+        prevention:
+          - "每月水质化验"
+          - "每季度机械清洗"
+          - "每年化学清洗"
+          - "优化水处理加药"
+          - "安装在线清洗装置"
+        typical_repair_time: "4-8小时"
+        impact_scope: "系统效率下降"
+
+      - failure_id: "CHL-CDS-002"
+        failure_mode: "冷却水流量不足"
+        severity: 7
+        occurrence: 5
+        detection: 2
+        rpn: 70
+        category: "冷凝器系统"
+        symptoms:
+          - "冷却水流量 < 设计流量的90%"
+          - "冷凝压力高"
+          - "冷却水泵电流低"
+          - "冷却塔水位异常"
+        causes:
+          - "水泵叶轮磨损"
+          - "管路阻塞或阀门未完全打开"
+          - "水泵选型偏小"
+          - "水系统有空气"
+          - "过滤器堵塞"
+        immediate_actions:
+          - "检查水泵运行状态"
+          - "检查管路阀门开度"
+          - "检查过滤器"
+          - "排气处理"
+        maintenance_actions:
+          - "清洗或更换水泵叶轮"
+          - "清理管路"
+          - "更换过滤器"
+          - "调整水系统平衡"
+          - "水泵更换（如选型错误）"
+        prevention:
+          - "每周检查水泵电流"
+          - "每月清洗过滤器"
+          - "定期检查水系统平衡"
+          - "水系统排气"
+        typical_repair_time: "2-6小时"
+        impact_scope: "单机效率下降"
+
+      # 💎 蒸发器系统故障
+      - failure_id: "CHL-EVS-001"
+        failure_mode: "蒸发器结冰"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "蒸发器系统"
+        symptoms:
+          - "蒸发器表面有冰层（视觉检查）"
+          - "蒸发压力下降（<3.5 bar）"
+          - "制冷量明显下降"
+          - "冷冻水出水温度低于设定值"
+          - "压缩机吸气温度过低"
+        causes:
+          - "冷冻水流量过低"
+          - "冷冻水温度过低（<6°C）"
+          - "制冷剂充注不足"
+          - "膨胀阀开度过小"
+          - "蒸发器脏堵"
+          - "低负荷运行时间过长"
+        immediate_actions:
+          - "停机化冰"
+          - "检查冷冻水流量"
+          - "检查制冷剂压力"
+        maintenance_actions:
+          - "解冻（热水或蒸汽）"
+          - "检查并调整冷冻水流量"
+          - "校准膨胀阀"
+          - "补充制冷剂"
+          - "清洗蒸发器"
+        prevention:
+          - "控制冷冻水出水温度 >6°C"
+          - "保证设计流量（>80%）"
+          - "避免<40%负荷长时间运行"
+          - "安装防冻保护装置"
+        typical_repair_time: "2-4小时"
+        impact_scope: "单机停机"
+
+      # 💎 制冷剂系统故障
+      - failure_id: "CHL-REF-001"
+        failure_mode: "制冷剂泄漏"
+        severity: 8
+        occurrence: 2
+        detection: 6
+        rpn: 96
+        category: "制冷剂系统"
+        symptoms:
+          - "系统制冷能力下降"
+          - "吸气压力低"
+          - "压缩机运行时间延长"
+          - "视液镜有气泡"
+          - "电子检漏仪报警"
+          - "冷量不足警报"
+        causes:
+          - "管路连接处松动"
+          - "密封件老化"
+          - "管路腐蚀"
+          - "维修不当"
+          - "振动导致磨损"
+        immediate_actions:
+          - "查找泄漏点"
+          - "监测制冷剂压力"
+          - "评估系统冷量"
+        maintenance_actions:
+          - "使用电子检漏仪定位"
+          - "修复泄漏点（焊接或更换）"
+          - "系统抽真空"
+          - "定量充注制冷剂"
+          - "保压测试"
+          - "系统性能测试"
+        prevention:
+          - "每季度检漏"
+          - "紧固管路连接"
+          - "更换老化密封"
+          - "安装泄漏监测系统"
+        typical_repair_time: "4-12小时"
+        impact_scope: "系统冷量下降"
+        environmental_impact: "制冷剂泄漏需环保处理"
+
+      # 💎 润滑油系统故障
+      - failure_id: "CHL-OIL-001"
+        failure_mode: "润滑油污染或劣化"
+        severity: 6
+        occurrence: 4
+        detection: 4
+        rpn: 96
+        category: "润滑油系统"
+        symptoms:
+          - "油液颜色变黑"
+          - "油压下降"
+          - "油过滤器压差增大"
+          - "轴承温度升高"
+          - "油分析显示酸值升高"
+        causes:
+          - "制冷剂携带进入油系统"
+          - "水分进入（系统泄漏）"
+          - "油冷却器泄漏"
+          - "长时间运行未更换"
+          - "系统污染"
+        immediate_actions:
+          - "检查油压"
+          - "油液取样分析"
+          - "检查油冷却器"
+        maintenance_actions:
+          - "更换全部润滑油"
+          - "清洗油系统"
+          - "更换油过滤器"
+          - "更换干燥剂"
+          - "系统抽真空脱水"
+        prevention:
+          - "每季度油液分析"
+          - "控制制冷剂携带"
+          - "防止系统泄漏"
+          - "每年更换润滑油"
+        typical_repair_time: "4-6小时"
+        impact_scope: "润滑系统性能下降"
+
+    failure_statistics:
+      # 基于行业平均数据和Agent-08运维日志
+      mtbf_hours: 87600  # 平均无故障时间 ~10年
+      critical_failures_per_year: 0.5
+      common_failures_top5:
+        - "冷凝器结垢"
+        - "制冷剂泄漏"
+        - "压缩机喘振"
+        - "冷却水流量异常"
+        - "控制系统故障"
+      preventive_maintenance_hours: 40  # 年维护工时
+      corrective_maintenance_hours: 16   # 年维修工时
+
+  # ===== 空气处理机组 AHU =====
+  - equipment_type: "空气处理机组"
+    manufacturer_examples: ["美标 TFX", "开利 39M", "特灵 Climate Changer"]
+    specifications:
+      - air_flow: "2000-50000 m³/h"
+      - cooling_capacity: "10-500 kW"
+      - heating_capacity: "10-300 kW"
+      - power_supply: "380V/3Ph/50Hz"
+      - design_life: "15-20年"
+
+    failure_modes:
+      - failure_id: "AHU-FAN-001"
+        failure_mode: "风机皮带断裂/打滑"
+        severity: 7
+        occurrence: 5
+        detection: 2
+        rpn: 70
+        category: "风机系统"
+        symptoms:
+          - "风量显著下降（<80%设计值）"
+          - "风机转速降低"
+          - "电机空转"
+          - "摩擦噪音"
+          - "皮带粉尘"
+        causes:
+          - "皮带老化（橡胶硬化）"
+          - "张紧力不当（过紧或过松）"
+          - "皮带规格不匹配"
+          - "皮带轮不对中"
+          - "风机过载"
+          - "运行环境温度过高"
+        immediate_actions:
+          - "停止风机"
+          - "检查皮带张紧度"
+          - "检查皮带轮对中"
+        maintenance_actions:
+          - "更换皮带（建议3条同时更换）"
+          - "调整张紧力"
+          - "对中调整"
+          - "清洁皮带轮"
+          - "检查整机动平衡"
+        prevention:
+          - "每季度检查皮带张紧和磨损"
+          - "每2年更换皮带"
+          - "确保皮带轮对中"
+          - "控制过载运行"
+          - "改善通风环境"
+        typical_repair_time: "1-3小时"
+        impact_scope: "风量严重不足"
+
+      - failure_id: "AHU-FAN-002"
+        failure_mode: "风机轴承故障"
+        severity: 8
+        occurrence: 3
+        detection: 3
+        rpn: 72
+        category: "风机系统"
+        symptoms:
+          - "异常振动（>7.1mm/s RMS）"
+          - "轴承温度升高（>80°C）"
+          - "尖锐金属摩擦声"
+          - "轴封泄漏"
+          - "润滑脂泄漏"
+        causes:
+          - "润滑脂不足或污染"
+          - "长期振动运行"
+          - "过载运行"
+          - "轴承安装不当"
+          - "转子不平衡"
+          - "轴弯曲"
+        immediate_actions:
+          - "监测振动和温度"
+          - "准备停机"
+          - "检查润滑系统"
+        maintenance_actions:
+          - "更换轴承"
+          - "补充或更换润滑脂"
+          - "动平衡校正"
+          - "检查轴对中"
+          - "更换密封件"
+        prevention:
+          - "每季度振动检测"
+          - "定期润滑（每6个月）"
+          - "每年动平衡检查"
+          - "确保轴对中"
+        typical_repair_time: "4-8小时"
+        impact_scope: "单机停机"
+
+      # 💎 过滤系统故障
+      - failure_id: "AHU-FLT-001"
+        failure_mode: "过滤器堵塞"
+        severity: 5
+        occurrence: 7
+        detection: 2
+        rpn: 70
+        category: "过滤系统"
+        symptoms:
+          - "过滤器压差增大（>250 Pa）"
+          - "风量下降"
+          - "风机电流增加"
+          - "出风温度异常"
+          - "效率下降"
+        causes:
+          - "过滤器使用超时"
+          - "空气质量差（灰尘多）"
+          - "过滤器选型偏小"
+          - "旁路泄漏"
+          - "风速过高"
+        immediate_actions:
+          - "更换过滤器"
+          - "监测压差"
+          - "检查旁路"
+        maintenance_actions:
+          - "更换初效过滤器（每1-2个月）"
+          - "更换中效过滤器（每3-6个月）"
+          - "更换高效过滤器（每1-2年或按压差）"
+          - "检查过滤器安装密封"
+          - "清洁过滤器框架"
+        prevention:
+          - "每2周检查初效压差"
+          - "每4周检查中效压差"
+          - "安装压差报警"
+          - "根据实际使用情况调整更换周期"
+        typical_repair_time: "0.5-2小时"
+        impact_scope: "系统阻力增加"
+
+      # 💎 热交换故障
+      - failure_id: "AHU-HTX-001"
+        failure_mode: "表冷/表热盘管性能下降"
+        severity: 6
+        occurrence: 4
+        detection: 4
+        rpn: 96
+        category: "热交换系统"
+        symptoms:
+          - "冷却/加热能力下降"
+          - "进出水温差减小"
+          - "空气温差低于设计值"
+          - "盘管表面温度不均匀"
+          - "冷凝水排放异常"
+        causes:
+          - "盘管表面脏污或结垢"
+          - "水路阻塞或流量分配不均"
+          - "盘管腐蚀或泄漏"
+          - "放气不畅，有空气聚集"
+          - "阀门开度不当"
+        immediate_actions:
+          - "检查水路流量和温度"
+          - "检查阀门开度"
+          - "排气处理"
+        maintenance_actions:
+          - "清洗盘管（化学+机械）"
+          - "疏通水路"
+          - "更换腐蚀盘管"
+          - "调整阀门平衡"
+          - "检查放气阀"
+        prevention:
+          - "每季度清洗盘管"
+          - "定期水质处理"
+          - "每年检查盘管状况"
+          - "控制水处理"
+          - "正确放气"
+        typical_repair_time: "4-8小时"
+        impact_scope: "热交换效率下降"
+
+      # 💎 控制系统故障
+      - failure_id: "AHU-CTR-001"
+        failure_mode: "送风温度控制失效"
+        severity: 7
+        occurrence: 4
+        detection: 2
+        rpn: 56
+        category: "控制系统"
+        symptoms:
+          - "送风温度偏离设定值（>±2°C）"
+          - "温湿度波动大"
+          - "控制阀频繁动作"
+          - "现场设定与监控不一致"
+          - "温湿度报警"
+        causes:
+          - "温度传感器漂移或故障"
+          - "控制阀卡滞或泄漏"
+          - "控制器参数设置不当"
+          - "PID参数需要调整"
+          - "反馈信号回路问题"
+          - "执行机构故障"
+        immediate_actions:
+          - "检查传感器读数"
+          - "手动控制阀门"
+          - "检查控制回路"
+        maintenance_actions:
+          - "校准或更换温度传感器"
+          - "检修或更换控制阀"
+          - "重新设置控制器参数"
+          - "调整PID参数"
+          - "检查电气连接"
+          - "润滑执行机构"
+        prevention:
+          - "每6个月校准传感器"
+          - "每季度检查阀门"
+          - "定期检查和调整PID"
+          - "备份控制器参数"
+        typical_repair_time: "2-6小时"
+        impact_scope: "温湿度控制不稳定"
+
+    failure_statistics:
+      mtbf_hours: 43800  # 5年
+      common_failures_top5:
+        - "过滤器堵塞"
+        - "风机皮带问题"
+        - "盘管结垢"
+        - "控制传感器故障"
+        - "风机轴承磨损"
+      preventive_maintenance_hours: 24  # 年维护工时
+      corrective_maintenance_hours: 12   # 年维修工时
+
+  # ===== 变压器 Transformers =====
+  - equipment_type: "干式变压器"
+    manufacturer_examples: ["施耐德 Blokset", "ABB DynaV", "西门子 SGB"]
+    specifications:
+      - power_rating: "400-2500 kVA"
+      - voltage_level: "10kV/0.4kV"
+      - insulation_class: "F级或H级"
+      - design_life: "30-40年"
+
+    failure_modes:
+      - failure_id: "TRF-INS-001"
+        failure_mode: "绕组绝缘老化"
+        severity: 9
+        occurrence: 3
+        detection: 7
+        rpn: 189
+        category: "绝缘系统"
+        symptoms:
+          - "绝缘电阻下降（<10MΩ）"
+          - "介质损耗角增大"
+          - "局部放电检测异常"
+          - "温升超标"
+          - "油色谱分析异常（油变）"
+        causes:
+          - "长期过负荷运行"
+          - "高温环境"
+          - "水分侵入"
+          - "电应力长期作用"
+          - "绝缘材料老化"
+        immediate_actions:
+          - "监测温度和电流"
+          - "绝缘测试"
+          - "准备更换计划"
+        maintenance_actions:
+          - "绕组重新绝缘处理"
+          - "干燥处理"
+          - "更换变压器（如老化严重）"
+          - "改善通风散热"
+        prevention:
+          - "控制负载率 <85%"
+          - "控制环境温度 <40°C"
+          - "每年绝缘电阻测试"
+          - "定期检查局部放电"
+          - "防止水分侵入"
+        typical_repair_time: "24-72小时"
+        impact_scope: "长时间停机，需更换"
+
+      - failure_id: "TRF-THR-001"
+        failure_mode: "过热故障"
+        severity: 8
+        occurrence: 2
+        detection: 2
+        rpn: 32
+        category: "热系统"
+        symptoms:
+          - "温度传感器报警"
+          - "绕组温度 >120°C"
+          - "铁芯温度异常"
+          - "绝缘气味"
+          - "冷却系统报警"
+        causes:
+          - "过负荷运行"
+          - "冷却系统失效"
+          - "环境温度太高"
+          - "绕组接触不良"
+          - "谐波电流"
+        immediate_actions:
+          - "减载运行"
+          - "检查冷却系统"
+          - "检查散热通道"
+        maintenance_actions:
+          - "清洁散热器"
+          - "检查并修复冷却风扇"
+          - "检查负荷分配"
+          - "谐波治理"
+          - "调整负荷"
+        prevention:
+          - "安装温度监测系统"
+          - "确保冷却系统良好"
+          - "控制负荷率"
+          - "改善通风"
+          - "定期红外测温"
+        typical_repair_time: "4-12小时"
+        impact_scope: "需减载运行"
+
+    failure_statistics:
+      mtbf_hours: 175200  # 20年
+      critical_failures_per_year: 0.1
+      preventive_maintenance_hours: 8  # 年维护工时
+      corrective_maintenance_hours: 4   # 年维修工时
+
+# ====== 维护周期建议 ======
+maintenance_schedules:
+  centrifugal_chiller:
+    daily:
+      - "检查运行参数（压力、温度、流量）"
+      - "检查有无异常噪音或振动"
+      - "检查视液镜（检查制冷剂）"
+    weekly:
+      - "检查润滑油油位"
+      - "冷凝器和蒸发器趋近温度"
+      - "清洁控制柜"
+    monthly:
+      - "检查安全阀"
+      - "检查压缩机电流"
+      - "冷却塔清洗"
+    quarterly:
+      - "油液分析"
+      - "振动分析"
+      - "电气连接紧固"
+      - "传感器校准"
+    yearly:
+      - "制冷剂泄漏检测"
+      - "电机绝缘测试"
+      - "系统性能测试"
+      - "换热器清洗"
+      - "大修或中修"
+
+  ahu:
+    daily:
+      - "检查运行状态和参数"
+    weekly:
+      - "检查过滤器压差"
+    monthly:
+      - "检查风机振动"
+      - "皮带张紧检查"
+    quarterly:
+      - "过滤器更换"
+      - "传感器校准"
+    yearly:
+      - "风机轴承润滑或更换"
+      - "盘管深度清洗"
+      - "动平衡检查"
+
+# ====== 备件清单 ======
+recommended_spare_parts:
+  centrifugal_chiller:
+    critical:
+      - "压缩机轴承"
+      - "润滑油泵"
+      - "主控板"
+    normal:
+      - "密封件套件"
+      - "安全阀"
+      - "过滤器"
+  ahu:
+    critical:
+      - "风机轴承"
+      - "皮带"
+      - "控制阀"
+    normal:
+      - "过滤器"
+      - "温度传感器"
+      - "风阀执行器"
+
+  # ===== 水泵 Pumps =====
+  - equipment_type: "冷冻水循环泵"
+    manufacturer_examples: ["格兰富 UPS", "威乐 Wilo", "凯士比 KSB"]
+    specifications:
+      - flow_rate: "10-500 m³/h"
+      - head: "10-50 m"
+      - power: "2-75 kW"
+      - efficiency: "65-85%"
+
+    failure_modes:
+      - failure_id: "PMP-001"
+        failure_mode: "机械密封泄漏"
+        severity: 7
+        occurrence: 6
+        detection: 3
+        rpn: 126
+        category: "机械密封"
+        symptoms:
+          - "泵体底部有水滴或水渍"
+          - "密封处可见渗水"
+          - "电机绝缘电阻下降"
+          - "轴承润滑脂乳化"
+          - "泵房地面湿滑"
+        causes:
+          - "密封面磨损或划伤"
+          - "密封弹簧失效"
+          - "密封件老化（橡胶硬化）"
+          - "泵振动过大"
+          - "水质差（含杂质）"
+          - "长时间干转"
+        immediate_actions:
+          - "关闭泵电源"
+          - "检查漏水严重程度"
+          - "准备备用泵切换"
+        maintenance_actions:
+          - "更换机械密封组件"
+          - "检查轴套磨损"
+          - "更换轴承（如已进水）"
+          - "检查泵对中"
+          - "清洗密封腔"
+        prevention:
+          - "每季度检查密封泄漏"
+          - "每2年更换机械密封"
+          - "控制振动（＜7.1mm/s）"
+          - "改善水质（过滤）"
+          - "避免干转"
+          - "安装泄漏监测传感器"
+        typical_repair_time: "2-4小时"
+        impact_scope: "单台泵停机"
+
+      - failure_id: "PMP-002"
+        failure_mode: "轴承过热或损坏"
+        severity: 8
+        occurrence: 4
+        detection: 2
+        rpn: 64
+        category: "轴承系统"
+        symptoms:
+          - "轴承温度＞80°C（报警）"
+          - "异常噪音（金属摩擦声）"
+          - "振动增大"
+          - "润滑脂变色或干涸"
+          - "轴承卡死（无法转动）"
+        causes:
+          - "润滑不良（缺油或油脂变质）"
+          - "轴承安装不当（过紧或过松）"
+          - "泵与电机对中不良"
+          - "轴向力过大"
+          - "轴承本身质量问题"
+          - "长时间过载运行"
+        immediate_actions:
+          - "立即停泵"
+          - "检查轴承温度"
+          - "不要继续运行"
+        maintenance_actions:
+          - "更换轴承"
+          - "清洁轴承座"
+          - "更换润滑脂（清洁）"
+          - "重新对中（激光对中）"
+          - "检查轴向间隙"
+        prevention:
+          - "每月检查轴承温度"
+          - "每6个月补充润滑脂"
+          - "每年更换润滑脂"
+          - "定期对中检查"
+          - "振动监测"
+        typical_repair_time: "3-6小时"
+        impact_scope: "单台泵停机"
+
+    failure_statistics:
+      mtbf_hours: 35040  # 4年
+      common_failures_top5:
+        - "机械密封泄漏"
+        - "轴承故障"
+        - "叶轮磨损"
+        - "气蚀"
+        - "电机故障"
+      preventive_maintenance_hours: 16  # 年维护工时
+      corrective_maintenance_hours: 24   # 年维修工时
+
+recommended_spare_parts:
+  centrifugal_chiller:
+    critical:
+      - "压缩机轴承"
+      - "润滑油泵"
+      - "主控板"
+    normal:
+      - "密封件套件"
+      - "安全阀"
+      - "过滤器"
+  ahu:
+    critical:
+      - "风机轴承"
+      - "皮带"
+      - "控制阀"
+    normal:
+      - "过滤器"
+      - "温度传感器"
+      - "风阀执行器"
+  pump:
+    critical:
+      - "机械密封"
+      - "轴承"
+      - "叶轮"
+    normal:
+      - "O型圈"
+      - "润滑油"
+      - "联轴器"
+
+# ===== 变压器 Transformers =====
+  - equipment_type: "干式变压器"
+    manufacturer_examples: ["施耐德 Blokset", "ABB DynaV", "西门子 SGB"]
+    specifications:
+      - power_rating: "400-2500 kVA"
+      - voltage_level: "10kV/0.4kV"
+      - insulation_class: "F级或H级"  # 155°C或180°C
+      - temperature_rise: "100-125K"
+      - efficiency: ">=98.5% (EU Tier 2)"  # 高效等级
+
+    failure_modes:
+      - failure_id: "TRF-001"
+        failure_mode: "绕组绝缘老化"
+        severity: 9
+        occurrence: 3  # 1次/10年
+        detection: 7   # 需要定期绝缘测试
+        rpn: 189
+        category: "绝缘系统"
+        symptoms:
+          - "绝缘电阻下降（<10MΩ）"  # IEC 60076要求
+          - "介质损耗角（tanδ）增大（>0.5%）"
+          - "局部放电检测异常（>100pC）"  # IEC 60270
+          - "温升超标（>125K）"  # 超过绝缘等级温升
+          - "油色谱分析异常（如有油枕）"  # CO/CO2增长
+          - "绕组温度指示异常（热点温度）"  # IEC 60076-2
+        causes:
+          - "长期过负荷运行（>100%额定）"  # 加速绝缘老化
+          - "高温环境（>40°C）"  # 环境温度超标
+          - "湿度侵入（>75%RH）"  # 绝缘受潮
+          - "电应力长期作用（过电压）"  # 浪涌/雷击
+          - "绝缘材料自然老化"  # 热-氧联合老化
+          - "污染物沉积（导电尘埃）"  # 降低绝缘
+        immediate_actions:
+          - "立即降低负荷（≤70%）"  # 减少热应力
+          - "绝缘电阻测试（兆欧表）"  # 评估绝缘状态
+          - "热点温度监测"  # 光纤传感器或红外
+        maintenance_actions:
+          - "绕组干燥处理（真空干燥）"  # 去湿
+          - "绝缘电阻恢复测试"  # 验证效果
+          - "更换变压器（老化严重）"  # RPN>150需更换
+          - "改善通风散热"  # 风扇或空调
+          - "局部放电监测"  # 持续在线监测
+        prevention:
+          - "控制负载率<85%"  # 延长寿命30%
+          - "控制环境温度<40°C"  # 每降10°C寿命翻倍
+          - "每年绝缘电阻测试（1kV兆欧表）"  # 基线测试
+          - "定期检查局部放电"  # PDM预测性维护
+          - "安装湿度控制器"  # 除湿机
+          - "浪涌保护（SPD）"  # 过电压保护
+        typical_repair_time: "24-72小时"  # 更换或返厂维修
+        impact_scope: "整个建筑供电"  # 影响全部医疗设备
+        safety_impact: "HIGH"  # 影响患者生命安全
+        reference_standard: "IEC 60076-11, IEEE C57.91"  # 干式变压器标准
+
+    failure_statistics:
+      mtbf_hours: 175200  # 20年
+      critical_failures_per_year: 0.1  # 每10年1次严重故障
+      common_failures_top5:
+        - "绝缘老化"
+        - "绕组过热"
+        - "铁芯多点接地"
+        - "冷却系统故障"
+        - "分接开关故障"  # 如有载调压
+      preventive_maintenance_hours: 8  # 年维护工时
+      corrective_maintenance_hours: 4   # 年维修工时
+      availability_target: 0.999  # 99.9%可用性
+
+  # ===== 发电机 Emergency Generator =====
+  - equipment_type: "柴油发电机"
+    manufacturer_examples: ["康明斯 Cummins", "卡特彼勒 CAT", "科勒 Kohler"]
+    specifications:
+      - power_rating: "200-2000 kW"
+      - voltage_level: "400V/3Ph"
+      - fuel_type: "柴油"
+      - startup_time: "≤10秒"  # 应急启动要求
+
+    failure_modes:
+      - failure_id: \"GEN-001\"
+        failure_mode: \"启动失败\"
+        severity: 10  # 危及生命安全
+        occurrence: 2  # 1次/5年
+        detection: 1  # 自检发现
+        rpn: 20
+        category: \"启动系统\"
+        symptoms:
+          - \"启动马达无法转动\"
+          - \"启动马达转动但发动机不点火\"
+          - \"启动后立即停机\"
+          - \"控制器显示启动失败报警\"
+          - \"电池电压低（<22V）\"  # 24V系统
+        causes:
+          - \"蓄电池电量不足或老化\"  # 电解液蒸发
+          - \"启动电路故障（接触器、线路）\"  # 电气连接
+          - \"燃料系统问题（无油、管路气阻）\"  # 油路问题
+          - \"发动机故障（机械卡死）\"  # 少见但严重
+          - \"控制系统故障（传感器误报）\"  # 误启动信号
+          - \"环境温度过低（<-10°C）\"  # 冬季启动困难
+        immediate_actions:
+          - \"检查蓄电池电压和连接\"  # 充电或更换
+          - \"检查燃油液位\"  # 确保充足
+          - \"手动盘车确认机械正常\"  # 无卡死
+          - \"检查环境温度\"  # 预热措施
+        maintenance_actions:
+          - \"更换蓄电池（寿命3-5年）\"  # 定期更换
+          - \"检查启动电路（万用表）\"  # 电气测试
+          - \"燃油系统排气\"  # 排除空气
+          - \"预热发动机（冷却液加热）\"  # 冬季措施
+          - \"检查机油液位\"  # 润滑
+        prevention:
+          - \"每月空载测试启动\"  # NFPA 110要求
+          - \"每年满载测试\"  # 80%负载30分钟
+          - \"每2年更换蓄电池\"  # 预防性更换
+          - \"保持燃油充足\"  # 至少8小时运行
+          - \"燃油定期循环（防变质）\"  # 每6个月
+          - \"冬季预热系统检查\"  # 加热器
+        typical_repair_time: \"2-4小时\"  # 现场修复
+        impact_scope: \"整个应急供电系统\"  # 无备用电源
+        safety_impact: \"EXTREME\"  # 生命安全
+        regulatory_requirement: \"NFPA 110\", \"JGJ 16-2008\"  # 备用电源标准
+        availability_target: \"0.9999\"  # 99.99%可用性
+        maximum_allowed_outage: \"0小时\"  # 不允许停机
+
+# ===== UPS 不间断电源 =====
+  - equipment_type: "UPS不间断电源"
+    manufacturer_examples: ["艾默生 Emerson", "APC", "伊顿 Eaton"]
+    specifications:
+      - power_rating: "10-500 kVA"
+      - voltage_level: "380V/220V"
+      - backup_time: "15-30分钟"  # 标准配置
+      - topology: "双变换在线式"  # 医疗级要求
+      - efficiency: ">=94%"  # 经济运行模式
+
+    failure_modes:
+      - failure_id: "UPS-001"
+        failure_mode: "电池组老化失效"
+        severity: 8  # 电池是UPS核心
+        occurrence: 6  # 3-5年需更换
+        detection: 3  # 定期测试可发现
+        rpn: 144
+        category: "电池系统"
+        symptoms:
+          - "电池内阻增大（＞基线150%）"  # 电池监测仪
+          - "电池容量下降（＜80%额定）"  # 放电测试
+          - "电池温度异常升高"  # 热失控前兆
+          - "电池漏液或鼓包"  # 物理损坏
+          - "UPS报警：电池维护"  # 自检报警
+        causes:
+          - "电池使用年限到期（3-5年）"  # 铅酸电池寿命
+          - "环境温度超标（＞25°C）"  # 温度每升10°C寿命减半
+          - "充放电循环次数过多"  # 频繁断电
+          - "电池质量问题"  # 批次缺陷
+          - "维护不当（长期浮充电压不准）"  # 充电参数
+        immediate_actions:
+          - "立即进行电池容量测试"  # 确认老化
+          - "检查环境温度"  # 改善散热
+          - "准备电池更换"  # 预防性更换
+        maintenance_actions:
+          - "更换全部电池组"  # 串联电池，一组失效全换
+          - "电池均衡充电"  # 激活维护
+          - "清洁电池连接端子"  # 降低内阻
+          - "检查充电电压设置"  # 避免过充/欠充
+        prevention:
+          - "每季度电池内阻测试"  # 趋势分析
+          - "每年电池容量放电测试"  # 30%深度放电
+          - "控制环境温度20-25°C"  # 空调房
+          - "电池组一致性筛选"  # 初始配组
+          - "安装电池监测系统"  # 在线监测每节电池
+        typical_repair_time: "4-8小时"  # 更换时间
+        impact_scope: "失去不间断电源"  # 市电中断时无保护
+        reliability_concern: "CRITICAL"  # 电池是薄弱环节
+        battery_formula: "铅酸电池寿命≈(2.5年 × (25°C/实际温度)^10) × 循环系数"
+        recommended_replacement: "每4年预防性更换"  # 避免突发故障
+
+      - failure_id: "UPS-002"
+        failure_mode: "逆变器故障"
+        severity: 9  # 核心部件
+        occurrence: 2  # 较少见
+        detection: 2  # 监控可发现
+        rpn: 36
+        category: "逆变器系统"
+        symptoms:
+          - "UPS切换到旁路模式"  # 逆变器过载
+          - "输出电压异常（THD＞5%）"  # 波形畸变
+          - "逆变器过载报警"  # 负载超标
+          - "逆变器模块温度高"  # 散热不良
+          - "PFC电路故障"  # 功率因数校正
+        causes:
+          - "IGBT功率模块损坏"  # 开关器件失效
+          - "驱动电路故障"  # 控制信号丢失
+          - "输出过载（＞125%额定）"  # 冲击性负载
+          - "散热系统失效"  # 风扇故障
+          - "输入电压异常"  # 市电质量
+        immediate_actions:
+          - "立即检查负载"  # 卸载部分设备
+          - "切换至旁路供电"  # 保证供电
+          - "检查逆变器温度"  # 过热保护
+        maintenance_actions:
+          - "更换IGBT模块"  # 功率器件
+          - "检查驱动电路"  # 控制板
+          - "检查散热系统"  # 清洁风扇
+          - "输出负载调整"  # 平衡三相
+        prevention:
+          - "每季度红外测温"  # IGBT温度
+          - "每年负载测试"  # 80%负载4小时
+          - "保持清洁的散热通道"  # 定期清洁
+          - "避免冲击性负载"  # 软启动
+          - "输入电压稳定"  # 隔离变压器
+        typical_repair_time: "6-12小时"  # 模块更换
+        impact_scope: "失去不间断电源"  # 旁路供电但无保护
+        redundancy_recommendation: "N+1配置"  # 关键负载
+
+    failure_statistics:
+      mtbf_hours: 87600  # 10年
+      critical_failures_per_year: 0.2  # 电池失效
+      common_failures_top5:
+        - "电池老化"
+        - "逆变器过载"
+        - "散热系统故障"
+        - "静态开关故障"
+        - "控制板故障"
+      preventive_maintenance_hours: 12  # 年维护工时
+      corrective_maintenance_hours: 8   # 年维修工时
+      availability_target: 0.9999  # 99.99%
+
+# ====== 备件清单补充 ======
+recommended_spare_parts:
+  transformer:
+    critical:
+      - "温度控制器（风机）"
+      - "绝缘电阻测试仪"
+      - "绝缘垫片"
+    normal:
+      - "冷却风机"
+      - "温控传感器PT100"
+      - "接线端子"
+  ups:
+    critical:
+      - "电池组（整套）"
+      - "IGBT模块"
+      - "静态开关"
+    normal:
+      - "风扇"
+      - "控制板电池"
+      - "显示面板"

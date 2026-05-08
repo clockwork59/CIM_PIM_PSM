@@ -1,0 +1,506 @@
+# ==============================================================================
+# CIM设备约束 - SHACL形状定义
+# 基于 Agent-03 设备本体模型
+# ==============================================================================
+
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix med: <http://medicine-nju.org/CIM/> .
+@prefix fnd: <http://medicine-nju.org/CIM/Foundation/> .
+@prefix con: <http://medicine-nju.org/CIM/Conceptual/> .
+@prefix ref: <http://medicine-nju.org/CIM/Reference/> .
+@prefix qudt: <http://qudt.org/schema/qudt#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ==============================================================================
+# 冷水机组设备约束
+# ==============================================================================
+
+med:ChillerEquipmentShape
+    a sh:NodeShape ;
+    sh:targetClass med:ChillerEquipment ;
+
+    # ========== 设备ID格式约束 ==========
+    sh:property [
+        sh:path med:equipmentId ;
+        sh:pattern "^CHL-(19XR|YK|CVHE|WSC|MD)-[0-9]{3}$" ;
+        # 格式: CHL-型号-序号 (如: CHL-19XR-001)
+        sh:message "冷水机组ID格式应为 CHL-型号-3位序号"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 制冷量约束 ==========
+    sh:property [
+        sh:path med:coolingCapacity ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 100.0 ;
+        sh:maxInclusive 3000.0 ;
+        sh:message "冷水机组制冷量应在 100-3000 kW 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== COP约束 ==========
+    sh:property [
+        sh:path med:coefficientOfPerformance ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 3.0 ;
+        sh:maxInclusive 8.0 ;
+        sh:message "冷水机组COP应在 3.0-8.0 范围内"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+
+    # ========== 制冷剂类型约束 ==========
+    sh:property [
+        sh:path med:refrigerantType ;
+        sh:in (
+            "R134a"
+            "R1233zd"
+            "R410A"
+            "R32"
+            "R407C"
+        ) ;
+        sh:message "冷水机组制冷剂必须是环保型制冷剂"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+
+    # ========== 位置约束 ==========
+    sh:property [
+        sh:path med:locatedIn ;
+        sh:class med:MechanicalRoom ;
+        sh:message "冷水机组必须位于机房内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 品牌与型号匹配约束 ==========
+    sh:sparql [
+        sh:message "冷水机组型号与品牌不匹配"@zh ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?brand ?model
+            WHERE {
+                $this rdf:type med:ChillerEquipment .
+                $this med:manufacturer ?brand .
+                $this med:model ?model .
+                FILTER (
+                    (?brand = "Carrier" && !CONTAINS(?model, "19XR")) ||
+                    (?brand = "York" && !CONTAINS(?model, "YK")) ||
+                    (?brand = "Trane" && !CONTAINS(?model, "CVHE"))
+                )
+            }
+        """ ;
+    ] ;
+
+    # ========== 冷却水流量约束 ==========
+    sh:property [
+        sh:path med:coolingWaterFlowRate ;
+        sh:sparql [
+            sh:prefixes <http://medicine-nju.org/CIM/> ;
+            sh:select """
+                SELECT $this ?flow ?capacity
+                WHERE {
+                    $this rdf:type med:ChillerEquipment .
+                    $this med:coolingWaterFlowRate ?flow .
+                    $this med:coolingCapacity ?capacity .
+                    BIND ((?capacity * 0.172) AS ?expectedFlow)  # 典型流量系数
+                    FILTER (?flow < ?expectedFlow * 0.9)
+                }
+            """ ;
+        ] ;
+        sh:message "冷却水流量不足（应≥设计流量的90%）"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+.
+
+# ==============================================================================
+# 空气处理机组约束
+# ==============================================================================
+
+med:AirHandlingUnitShape
+    a sh:NodeShape ;
+    sh:targetClass med:AirHandlingUnit ;
+
+    # ========== 风量约束 ==========
+    sh:property [
+        sh:path med:airFlowRate ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 500.0 ;
+        sh:maxInclusive 50000.0 ;
+        sh:message "AHU风量应在 500-50000 m³/h 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 过滤配置约束 ==========
+    sh:property [
+        sh:path med:hasFilterConfiguration ;
+        sh:property [
+            sh:path med:filterClass ;
+            sh:in (
+                "G4"
+                "M5"
+                "M6"
+                "F7"
+                "F8"
+                "F9"
+                "E10"
+                "E11"
+                "E12"
+            ) ;
+        ] ;
+        sh:minCount 2 ;
+        sh:maxCount 3 ;
+        sh:message "AHU应配置 2-3 级过滤系统"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 风机配置约束 ==========
+    sh:property [
+        sh:path med:hasSupplyFan ;
+        sh:minCount 1 ;
+        sh:maxCount 2 ;
+        sh:message "AHU至少配置 1 台送风机，不超过 2 台"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 传感器配置约束 ==========
+    sh:property [
+        sh:path med:hasTemperatureSensor ;
+        sh:qualifiedValueShape [
+            sh:class med:TemperatureSensor ;
+        ] ;
+        sh:qualifiedMinCount 2 ;
+        # 送风温度+回风温度
+        sh:message "AHU必须配置至少 2 个温度传感器"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:property [
+        sh:path med:hasPressureSensor ;
+        sh:qualifiedValueShape [
+            sh:path med:measures ;
+            sh:hasValue med:FilterPressureDrop ;
+        ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "AHU必须配置过滤器压差传感器"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+.
+
+# ==============================================================================
+# 风机盘管约束
+# ==============================================================================
+
+med:FanCoilUnitShape
+    a sh:NodeShape ;
+    sh:targetClass med:FanCoilUnit ;
+
+    # ========== 安装位置约束 ==========
+    sh:property [
+        sh:path med:locatedIn ;
+        sh:class med:Room ;
+        sh:message "FCU必须安装在房间内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 额定功率约束 ==========
+    sh:property [
+        sh:path med:ratedPower ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 0.05 ;
+        sh:maxInclusive 0.5 ;
+        sh:message "FCU额定功率应在 50-500W 范围内"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+.
+
+# ==============================================================================
+# 水泵约束
+# ==============================================================================
+
+med:PumpEquipmentShape
+    a sh:NodeShape ;
+    sh:targetClass med:PumpEquipment ;
+
+    # ========== 流量扬程约束 ==========
+    sh:property [
+        sh:path med:flowRate ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 1.0 ;
+        sh:maxInclusive 1000.0 ;
+        sh:message "水泵流量应在 1-1000 m³/h 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:property [
+        sh:path med:head ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 5.0 ;
+        sh:maxInclusive 150.0 ;
+        sh:message "水泵扬程应在 5-150 m 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 效率约束 ==========
+    sh:property [
+        sh:path med:efficiency ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 0.65 ;
+        sh:maxInclusive 0.92 ;
+        sh:message "水泵效率应在 65-92% 范围内"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+
+    # ========== 冗余配置约束 ==========
+    sh:sparql [
+        sh:message "关键用途水泵必须配置备用泵"@zh ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this rdf:type med:PumpEquipment .
+                $this med:isCritical true .
+                $this med:hasBackupPump ?backup .
+                FILTER (!BOUND(?backup))
+            }
+        """ ;
+    ] ;
+.
+
+# ==============================================================================
+# 变压器设备约束
+# ==============================================================================
+
+med:TransformerEquipmentShape
+    a sh:NodeShape ;
+    sh:targetClass med:TransformerEquipment ;
+
+    # ========== 绝缘温度约束 ==========
+    sh:property [
+        sh:path med:windingTemperature ;
+        sh:sparql [
+            sh:select """
+                SELECT $this ?temp
+                WHERE {
+                    $this rdf:type med:TransformerEquipment .
+                    $this med:windingTemperature ?temp .
+                    FILTER (?temp > 120)
+                }
+            """ ;
+        ] ;
+        sh:message "绕组温度超过120°C，需要减载或检查冷却系统"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 绝缘等级约束 ==========
+    sh:property [
+        sh:path med:insulationClass ;
+        sh:in (
+            "Class A"
+            "Class E"
+            "Class B"
+            "Class F"
+            "Class H"
+            "Class R"
+        ) ;
+        sh:message "变压器绝缘等级必须是标准等级"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 效率等级约束 ==========
+    sh:property [
+        sh:path med:efficiencyRating ;
+        sh:minInclusive 0.95 ;
+        sh:message "变压器效率应 ≥95% (符合IE3/IE4标准)"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+
+    # ========== 负荷率约束 ==========
+    sh:property [
+        sh:path med:loadFactor ;
+        sh:sparql [
+            sh:select """
+                SELECT $this ?load
+                WHERE {
+                    $this rdf:type med:TransformerEquipment .
+                    $this med:loadFactor ?load .
+                    FILTER (?load > 0.85)
+                }
+            """ ;
+        ] ;
+        sh:severity sh:Warning ;
+        sh:message "变压器负荷率 >85%，建议考虑增容或减载"@zh ;
+    ] ;
+.
+
+# ==============================================================================
+# 通用设备约束
+# ==============================================================================
+
+med:EquipmentShape
+    a sh:NodeShape ;
+    sh:targetClass med:Equipment ;
+
+    # ========== 设备ID格式约束 ==========
+    sh:property [
+        sh:path med:equipmentId ;
+        sh:pattern "^[A-Z]{3}-[A-Z0-9-]+-[0-9]{3}$" ;
+        sh:message "设备ID格式不正确 (应为: XXX-型号-序号)"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 安装日期约束 ==========
+    sh:property [
+        sh:path med:installDate ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:message "安装日期必须是有效日期格式"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 保修期计算约束 ==========
+    sh:sparql [
+        sh:message "设备已过保修期，需要更新维护合同"@zh ;
+        sh:severity sh:Info ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this rdf:type med:Equipment .
+                $this med:installDate ?install .
+                $this med:warrantyPeriod ?warrantyYears .
+                BIND (NOW() AS ?now)
+                BIND (?install + ?warrantyYears * "P1Y"^^xsd:duration AS ?warrantyEnd)
+                FILTER (?now > ?warrantyEnd)
+            }
+        """ ;
+    ] ;
+
+    # ========== 预防性维护周期约束 ==========
+    sh:property [
+        sh:path med:hasMaintenanceSchedule ;
+        sh:node med:MaintenanceScheduleShape ;
+        sh:severity sh:Warning ;
+    ] ;
+.
+
+# ==============================================================================
+# 维护计划约束
+# ==============================================================================
+
+med:MaintenanceScheduleShape
+    a sh:NodeShape ;
+
+    sh:property [
+        sh:path med:maintenanceType ;
+        sh:in (
+            "daily"
+            "weekly"
+            "monthly"
+            "quarterly"
+            "yearly"
+        ) ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:property [
+        sh:path med:lastMaintenanceDate ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:sparql [
+        sh:message "维护已超期，需要立即执行"@zh ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this med:maintenanceType ?type .
+                $this med:lastMaintenanceDate ?lastDate .
+                BIND (NOW() AS ?now)
+                # 根据维护类型计算下次维护日期
+                BIND (IF(?type = "daily", ?lastDate + "P1D"^^xsd:duration,
+                    IF(?type = "weekly", ?lastDate + "P7D"^^xsd:duration,
+                    IF(?type = "monthly", ?lastDate + "P1M"^^xsd:duration,
+                    IF(?type = "quarterly", ?lastDate + "P3M"^^xsd:duration,
+                    IF(?type = "yearly", ?lastDate + "P1Y"^^xsd:duration, ?lastDate)))))) AS ?nextDate)
+                FILTER (?now > ?nextDate)
+            }
+        """ ;
+    ] ;
+.
+
+# ==============================================================================
+# 设备-空间关系约束
+# ==============================================================================
+
+med:EquipmentLocatedInSpaceShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf med:locatedIn ;
+
+    sh:property [
+        sh:path med:locatedIn ;
+        sh:nodeKind sh:IRI ;
+        sh:class med:Space ;
+        sh:message "设备必须位于有效的空间内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 空间容量约束 ==========
+    sh:sparql [
+        sh:message "空间内设备总容量超过空间设计容量"@zh ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?space
+            WHERE {
+                $this med:locatedIn ?space .
+                $this med:ratedPower ?power .
+                ?space med:designedEquipmentLoad ?capacity .
+                {
+                    SELECT ?space (SUM(?p) AS ?totalPower)
+                    WHERE {
+                        ?eq med:locatedIn ?space ;
+                           med:ratedPower ?p .
+                    }
+                    GROUP BY ?space
+                }
+                FILTER (?totalPower > ?capacity * 1.1)  # 预留10%余量
+            }
+        """ ;
+    ] ;
+.
+
+# ==============================================================================
+# 设备-系统关系约束
+# ==============================================================================
+
+med:EquipmentInSystemShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf med:componentOf ;
+
+    sh:property [
+        sh:path med:componentOf ;
+        sh:class med:TechnicalSystem ;
+        sh:message "设备必须属于有效的技术系统"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 系统内设备逻辑约束 ==========
+    sh:sparql [
+        sh:message "系统内设备数量不匹配设计要求"@zh ;
+        sh:severity sh:Info ;
+        sh:select """
+            SELECT $this ?system
+            WHERE {
+                $this med:componentOf ?system .
+                ?system rdf:type med:TechnicalSystem .
+                ?system med:expectedComponentCount ?expected .
+                {
+                    SELECT ?system (COUNT(?comp) AS ?actual)
+                    WHERE {
+                        ?comp med:componentOf ?system .
+                    }
+                    GROUP BY ?system
+                }
+                FILTER (ABS(?actual - ?expected) > ?expected * 0.2)
+            }
+        """ ;
+    ] ;
+.

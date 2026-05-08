@@ -1,0 +1,355 @@
+# ==============================================================================
+# CIM医疗建筑空间约束 - SHACL形状定义
+# 基于 ISO 19650 Conceptual Layer 空间本体
+# ==============================================================================
+
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix med: <http://medicine-nju.org/CIM/> .
+@prefix fnd: <http://medicine-nju.org/CIM/Foundation/> .
+@prefix con: <http://medicine-nju.org/CIM/Conceptual/> .
+@prefix ref: <http://medicine-nju.org/CIM/Reference/> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ==============================================================================
+# 手术室专用约束
+# 基于 JCI 标准 + GB50333
+# ==============================================================================
+
+med:OperatingRoomShape
+    a sh:NodeShape ;
+    sh:targetClass med:OperatingRoom ;
+
+    # ========== 温度约束 ==========
+    sh:property [
+        sh:path med:hasTemperatureSetpoint ;
+        sh:minInclusive 20.0 ;
+        sh:maxInclusive 25.0 ;
+        sh:message "手术室温度必须在 20-25°C 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:property [
+        sh:path med:hasTemperatureRange ;
+        sh:property [
+            sh:path med:minValue ;
+            sh:minInclusive 21 ;
+            sh:maxInclusive 24 ;
+        ] ;
+        sh:property [
+            sh:path med:maxValue ;
+            sh:minInclusive 21 ;
+            sh:maxInclusive 24 ;
+        ] ;
+        sh:message "手术室温度波动范围应在 21-24°C"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 湿度约束 ==========
+    sh:property [
+        sh:path med:hasRelativeHumiditySetpoint ;
+        sh:minInclusive 30.0 ;
+        sh:maxInclusive 60.0 ;
+        sh:message "手术室相对湿度必须在 30-60% 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 正压约束 ==========
+    sh:property [
+        sh:path med:hasPressureDifferential ;
+        sh:minInclusive 2.5 ;
+        # 一般 ≥2.5 Pa, 特殊 ≥5 Pa
+        sh:message "手术室必须维持正压 (≥2.5 Pa)"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 换气次数约束 ==========
+    sh:property [
+        sh:path med:hasAirChangesPerHour ;
+        sh:minInclusive 15 ;
+        # 一般 I 级手术室 ≥15 次/h
+        sh:message "手术室换气次数必须 ≥15 次/小时"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 洁净度约束 ==========
+    sh:property [
+        sh:path med:hasCleanlinessClass ;
+        sh:in ( "ISO5" "ISO6" "100级" "1000级" ) ;
+        sh:message "手术室洁净度等级应为 ISO5/6 或 100/1000级"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 传感器配置约束 ==========
+    sh:property [
+        sh:path med:hasTemperatureSensor ;
+        sh:minCount 2 ;
+        sh:maxCount 3 ;
+        # 至少2个温度传感器（工作区+回风口）
+        sh:message "手术室必须配置 2-3 个温度传感器"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:property [
+        sh:path med:hasHumiditySensor ;
+        sh:minCount 1 ;
+        sh:maxCount 2 ;
+        sh:message "手术室必须配置 1-2 个湿度传感器"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    sh:property [
+        sh:path med:hasPressureSensor ;
+        sh:minCount 2 ;
+        # 室内外压差 + 相邻区域压差
+        sh:message "手术室必须配置 2+ 个压差传感器"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== HVAC系统服务约束 ==========
+    sh:property [
+        sh:path med:isServedByHVACSystem ;
+        sh:minCount 1 ;
+        sh:qualifiedValueShape [
+            sh:class med:DedicatedHVACSystem ;
+        ] ;
+        sh:qualifiedMinCount 1 ;
+        # 手术室必须使用独立空调系统
+        sh:message "手术室必须由专用空调系统服务"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 邻近空间约束 ==========
+    sh:property [
+        sh:path med:hasAdjacentRoom ;
+        sh:sparql [
+            sh:select """
+                SELECT $this ?prepRoom
+                WHERE {
+                    $this rdf:type med:OperatingRoom .
+                    FILTER NOT EXISTS {
+                        $this med:hasAdjacentRoom ?prepRoom .
+                        ?prepRoom rdf:type med:PreparationRoom .
+                    }
+                }
+            """ ;
+        ] ;
+        sh:message "手术室必须紧邻器械准备室"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+
+    # ========== 尺寸约束 ==========
+    sh:property [
+        sh:path med:area ;
+        sh:minInclusive 30.0 ;  # m²
+        sh:message "手术室面积应 ≥30m²"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 照明约束 ==========
+    sh:property [
+        sh:path med:hasIlluminanceLevel ;
+        sh:minInclusive 750 ;  # lux
+        sh:message "手术室照度应 ≥750 lux"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+.
+
+# ==============================================================================
+# ICU 重症监护室约束
+# ==============================================================================
+
+med:ICUShape
+    a sh:NodeShape ;
+    sh:targetClass med:ICU ;
+
+    # ========== 温度约束 ==========
+    sh:property [
+        sh:path med:hasTemperatureSetpoint ;
+        sh:minInclusive 24.0 ;
+        sh:maxInclusive 27.0 ;
+        sh:message "ICU温度应保持在 24-27°C"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 湿度约束 ==========
+    sh:property [
+        sh:path med:hasRelativeHumiditySetpoint ;
+        sh:minInclusive 40.0 ;
+        sh:maxInclusive 65.0 ;
+        sh:message "ICU湿度应在 40-65% 范围内"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 换气次数 ==========
+    sh:property [
+        sh:path med:hasAirChangesPerHour ;
+        sh:minInclusive 12 ;
+        sh:message "ICU换气次数应 ≥12 次/h"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 护士站距离约束 ==========
+    sh:property [
+        sh:path med:distanceToNurseStation ;
+        sh:maxInclusive 15.0 ;  # 15米
+        sh:message "ICU床位距护士站距离应 ≤15m"@zh ;
+        sh:severity sh:Warning ;
+    ] ;
+.
+
+# ==============================================================================
+# 负压病房约束（传染病隔离）
+# ==============================================================================
+
+med:NegativePressureRoomShape
+    a sh:NodeShape ;
+    sh:targetClass med:NegativePressureRoom ;
+
+    # ========== 负压约束 ==========
+    sh:property [
+        sh:path med:hasPressureDifferential ;
+        sh:maxInclusive -2.5 ;
+        # 负压病房应维持 -2.5 Pa 或更低
+        sh:message "负压病房必须维持负压 (≤-2.5 Pa)"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 排风约束 ==========
+    sh:property [
+        sh:path med:hasExhaustSystem ;
+        sh:class med:DedicatedExhaustSystem ;
+        sh:message "负压病房必须有独立的排风系统"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 过滤约束 ==========
+    sh:property [
+        sh:path med:hasFilterLevel ;
+        sh:in ( "H13" "H14" ) ;
+        # HEPA过滤器级别
+        sh:message "负压病房排风必须使用 H13/H14 HEPA过滤"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 新风与排风比例 ==========
+    sh:property [
+        sh:path med:hasAirFlowRatio ;
+        sh:sparql [
+            sh:select """
+                SELECT $this ?exhaust ?supply
+                WHERE {
+                    $this rdf:type med:NegativePressureRoom .
+                    $this med:hasSupplyAirFlow ?supply .
+                    $this med:hasExhaustAirFlow ?exhaust .
+                    FILTER (?exhaust <= ?supply * 0.9)
+                }
+            """ ;
+        ] ;
+        sh:message "负压病房排风量应 ≥ 送风量的 90%"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+.
+
+# ==============================================================================
+# 药房洁净室约束
+# ==============================================================================
+
+med:PharmacyCleanRoomShape
+    a sh:NodeShape ;
+    sh:targetClass med:PharmacyCleanRoom ;
+
+    # ========== 洁净度等级 ==========
+    sh:property [
+        sh:path med:hasCleanlinessClass ;
+        sh:in ( "ISO7" "ISO8" "ClassC" "ClassD" ) ;
+        # 配药中心通常需要 C级或D级 (对应ISO 7/8)
+        sh:message "药房洁净室应为 ISO7/8 或 ClassC/D"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 压力梯度 ==========
+    sh:sparql [
+        sh:message "药房洁净室应维持正压梯度"@zh ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this rdf:type med:PharmacyCleanRoom .
+                $this med:hasPressureDifferential ?pressure .
+                FILTER (?pressure < 0)
+            }
+        """ ;
+    ] ;
+.
+
+# ==============================================================================
+# 通用空间约束
+# ==============================================================================
+
+med:HospitalSpaceShape
+    a sh:NodeShape ;
+    sh:targetClass med:HospitalSpace ;
+    sh:targetClass med:MedicalSpace ;
+
+    # ========== ID格式约束 ==========
+    sh:property [
+        sh:path med:spaceId ;
+        sh:pattern "^SPC-[A-Z]{3}-[0-9]{3}$" ;
+        # 格式: SPC-ABC-001 (SPC-空间类型-序号)
+        sh:message "空间ID格式应为 SPC-[类型代码]-[3位序号] (如: SPC-OR-001)"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 层级关系约束 ==========
+    sh:property [
+        sh:path med:containedIn ;
+        sh:qualifiedValueShape [
+            sh:class med:HospitalSpace ;
+        ] ;
+        sh:qualifiedMaxCount 1 ;
+        sh:message "一个空间最多只能属于一个父空间"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+
+    # ========== 面积约束 ==========
+    sh:property [
+        sh:path med:area ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 1.0 ;
+        sh:message "空间面积必须为正数"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+.
+
+# ==============================================================================
+# 关键区域必须有HVAC服务
+# ==============================================================================
+
+med:CriticalSpaceHVACRequirementShape
+    a sh:NodeShape ;
+    sh:targetObjectsOf med:isCritical ;
+    sh:property [
+        sh:path med:isCritical ;
+        sh:hasValue true ;
+        sh:property [
+            sh:path med:isServedByHVACSystem ;
+            sh:minCount 1 ;
+        ] ;
+        sh:message "关键空间必须有至少一个HVAC系统服务"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+    sh:sparql [
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this rdf:type med:CriticalSpace .
+                FILTER NOT EXISTS {
+                    $this med:isServedByHVACSystem ?hvacSystem
+                }
+            }
+        """ ;
+        sh:message "关键空间必须配置HVAC系统"@zh ;
+        sh:severity sh:Violation ;
+    ] ;
+.
