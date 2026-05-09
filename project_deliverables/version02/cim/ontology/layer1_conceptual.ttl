@@ -615,6 +615,25 @@ cim-equip:SmokeExhaustDamper
     rdfs:label "Smoke Exhaust Damper"@en ; rdfs:label "排烟防火阀"@zh-CN ;
     skos:note "280°C 熔断关闭；GB 15930"@zh-CN .
 
+# ── HVAC 末端设备（P0 缺口修复 — BIM 验证 2026-05-09）────────────────────────
+cim-equip:SupplyAirDiffuser
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Supply Air Diffuser"@en ; rdfs:label "送风散流器"@zh-CN ;
+    cim:topologyRole "SINK"^^xsd:string ;
+    skos:note "IFC: IfcFlowTerminal(SD-600×600); Brick: brk:Diffuser。通用送风散流器，区别于洁净室 HEPA 高效送风口"@zh-CN .
+
+cim-equip:ReturnAirGrille
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Return Air Grille"@en ; rdfs:label "回风格栅"@zh-CN ;
+    cim:topologyRole "SOURCE"^^xsd:string ;
+    skos:note "IFC: IfcFlowTerminal(RR-600×600); Brick: brk:Return_Air_Grille。回风系统末端，与 AHU 回风口配对"@zh-CN .
+
+cim-equip:ExhaustAirGrille
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Exhaust Air Grille"@en ; rdfs:label "排风格栅"@zh-CN ;
+    cim:topologyRole "SOURCE"^^xsd:string ;
+    skos:note "IFC: IfcFlowTerminal(ER-600×600); Brick: brk:Exhaust_Air_Grille。排风系统末端"@zh-CN .
+
 # ── 医疗专用空间设备 ─────────────────────────────────────────────────────────
 cim-equip:UV_Disinfection
     a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;

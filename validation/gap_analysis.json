@@ -1,0 +1,326 @@
+{
+  "summary": {
+    "total_ifc_brick_types": 12,
+    "covered": 12,
+    "missing_in_cim": 0,
+    "only_in_cim": 10,
+    "coverage_rate_pct": 100.0,
+    "cim_total_classes": 422,
+    "pset_coverage_pct": 17.4
+  },
+  "coverage_matrix": [
+    {
+      "class": "brk:Actuator",
+      "ifc": 0,
+      "cim_class": "Actuator",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Air_Handler_Unit",
+      "ifc": 2,
+      "cim_class": "AHU",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Boiler",
+      "ifc": 0,
+      "cim_class": "Boiler",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Chiller",
+      "ifc": 1,
+      "cim_class": "Chiller",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Cooling_Tower",
+      "ifc": 0,
+      "cim_class": "CoolingTower",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Diffuser",
+      "ifc": 234,
+      "cim_class": "SupplyAirDiffuser",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Electrical_System",
+      "ifc": 0,
+      "cim_class": "Electrical_Equipment",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Energy_Conversion_Device",
+      "ifc": 3,
+      "cim_class": "Chiller",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Exhaust_Air_Grille",
+      "ifc": 22,
+      "cim_class": "ExhaustAirGrille",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Exhaust_Fan",
+      "ifc": 6,
+      "cim_class": "ExhaustFan",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Fan",
+      "ifc": 7,
+      "cim_class": "Fan",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Filter",
+      "ifc": 0,
+      "cim_class": "HEPA_Filter",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Heat_Exchanger",
+      "ifc": 0,
+      "cim_class": "HeatExchanger",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Pump",
+      "ifc": 0,
+      "cim_class": "Pump",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Return_Air_Grille",
+      "ifc": 184,
+      "cim_class": "ReturnAirGrille",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Sensor",
+      "ifc": 0,
+      "cim_class": "Sensor",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Storage_Tank",
+      "ifc": 0,
+      "cim_class": "WaterTank",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Supply_Fan",
+      "ifc": 2,
+      "cim_class": "SupplyFan",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:VAV_Box",
+      "ifc": 110,
+      "cim_class": "VAV_Terminal",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "cim:Floor",
+      "ifc": 4,
+      "cim_class": "Floor",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "cim:Room",
+      "ifc": 263,
+      "cim_class": "Room",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "cim:Zone",
+      "ifc": 0,
+      "cim_class": "Zone",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    }
+  ],
+  "missing_in_cim": [],
+  "only_in_cim": [
+    {
+      "class": "brk:Actuator",
+      "ifc": 0,
+      "cim_class": "Actuator",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Boiler",
+      "ifc": 0,
+      "cim_class": "Boiler",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Cooling_Tower",
+      "ifc": 0,
+      "cim_class": "CoolingTower",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Electrical_System",
+      "ifc": 0,
+      "cim_class": "Electrical_Equipment",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Filter",
+      "ifc": 0,
+      "cim_class": "HEPA_Filter",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Heat_Exchanger",
+      "ifc": 0,
+      "cim_class": "HeatExchanger",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Pump",
+      "ifc": 0,
+      "cim_class": "Pump",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Sensor",
+      "ifc": 0,
+      "cim_class": "Sensor",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "brk:Storage_Tank",
+      "ifc": 0,
+      "cim_class": "WaterTank",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    },
+    {
+      "class": "cim:Zone",
+      "ifc": 0,
+      "cim_class": "Zone",
+      "cim_exists": true,
+      "status": "⬜ CIM有/IFC无"
+    }
+  ],
+  "covered": [
+    {
+      "class": "brk:Air_Handler_Unit",
+      "ifc": 2,
+      "cim_class": "AHU",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Chiller",
+      "ifc": 1,
+      "cim_class": "Chiller",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Diffuser",
+      "ifc": 234,
+      "cim_class": "SupplyAirDiffuser",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Energy_Conversion_Device",
+      "ifc": 3,
+      "cim_class": "Chiller",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Exhaust_Air_Grille",
+      "ifc": 22,
+      "cim_class": "ExhaustAirGrille",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Exhaust_Fan",
+      "ifc": 6,
+      "cim_class": "ExhaustFan",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Fan",
+      "ifc": 7,
+      "cim_class": "Fan",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Return_Air_Grille",
+      "ifc": 184,
+      "cim_class": "ReturnAirGrille",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:Supply_Fan",
+      "ifc": 2,
+      "cim_class": "SupplyFan",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "brk:VAV_Box",
+      "ifc": 110,
+      "cim_class": "VAV_Terminal",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "cim:Floor",
+      "ifc": 4,
+      "cim_class": "Floor",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    },
+    {
+      "class": "cim:Room",
+      "ifc": 263,
+      "cim_class": "Room",
+      "cim_exists": true,
+      "status": "✅ 已覆盖"
+    }
+  ]
+}

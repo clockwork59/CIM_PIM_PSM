@@ -88,6 +88,27 @@ cim-equip:Fan
     cim:sourceAgent "Agent-03" ;
     skos:note "送风机/排风机，含轴流风机和离心风机"@zh-CN .
 
+cim-equip:SupplyFan
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Fan ;
+    rdfs:label "Supply Fan"@en ;
+    rdfs:label "送风机"@zh-CN ;
+    skos:note "AHU 内置或独立送风机，对应 brk:Supply_Fan"@zh-CN .
+
+cim-equip:ReturnFan
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Fan ;
+    rdfs:label "Return Fan"@en ;
+    rdfs:label "回风机"@zh-CN ;
+    skos:note "回风系统风机，维持回风量与送风量平衡"@zh-CN .
+
+cim-equip:ExhaustFan
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Fan ;
+    rdfs:label "Exhaust Fan"@en ;
+    rdfs:label "排风机"@zh-CN ;
+    skos:note "排风系统风机，含屋顶排风机和管道排风机"@zh-CN .
+
 cim-equip:Boiler
     a owl:Class ;
     rdfs:subClassOf cim-equip:Equipment ;

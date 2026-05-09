@@ -1,0 +1,26 @@
+[
+  {
+    "lod": "LOD200-HVAC",
+    "file": "NVW_DCR-LOD200_Eng-HVAC.ifc",
+    "total_entities": 517535,
+    "elements": 2278,
+    "psets": 929,
+    "props": 1005,
+    "avg_props_per_elem": 0.4,
+    "solids": 0,
+    "curves": 0,
+    "estimated_lod": "LOD 100-150（概念级）"
+  },
+  {
+    "lod": "LOD300-HVAC",
+    "file": "NVW_DCR-LOD300_Eng-HVAC.ifc",
+    "total_entities": 364697,
+    "elements": 5744,
+    "psets": 1567,
+    "props": 1627,
+    "avg_props_per_elem": 0.3,
+    "solids": 1236,
+    "curves": 0,
+    "estimated_lod": "LOD 100-150（概念级）"
+  }
+]

@@ -306,6 +306,29 @@ cim:isPartOf
     rdfs:label "is part of"@en ; rdfs:label "属于"@zh-CN .
 
 # =============================================================================
+# SECTION 4b — P0 缺口修复：末端设备 + Fan 子类桥接 (2026-05-09)
+# =============================================================================
+
+cim-equip:SupplyAirDiffuser
+    owl:equivalentClass brick:Supply_Air_Diffuser ;
+    skos:closeMatch brick:Diffuser .
+
+cim-equip:ReturnAirGrille
+    owl:equivalentClass brick:Return_Air_Grille .
+
+cim-equip:ExhaustAirGrille
+    owl:equivalentClass brick:Exhaust_Air_Grille .
+
+cim-equip:SupplyFan
+    owl:equivalentClass brick:Supply_Fan .
+
+cim-equip:ReturnFan
+    owl:equivalentClass brick:Return_Fan .
+
+cim-equip:ExhaustFan
+    owl:equivalentClass brick:Exhaust_Fan .
+
+# =============================================================================
 # SECTION 5 — CIM 医疗专有类（无 Brick 对应，记录缺口）
 # =============================================================================
 

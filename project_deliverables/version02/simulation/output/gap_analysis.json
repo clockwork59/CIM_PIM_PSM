@@ -1,7 +1,7 @@
 {
-  "simulation_id": "surgical_wing_20260509T100433",
+  "simulation_id": "surgical_wing_20260509T125514",
   "scenario": "Hospital Surgical Suite Wing — 手术部",
-  "generated": "2026-05-09T10:04:33.309115",
+  "generated": "2026-05-09T12:55:14.688239",
   "stages": [
     {
       "stage_id": 1,
@@ -24,20 +24,310 @@
     {
       "stage_id": 3,
       "stage_name": "Detailed Design / 施工图",
-      "gate_result": "PASS",
+      "gate_result": "WARN",
       "critical": 0,
       "major": 0,
-      "minor": 0,
-      "gaps": []
+      "minor": 12,
+      "gaps": [
+        {
+          "gap_id": "SHACL-001",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-002",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-003",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-004",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/surgical_wing#OR_01>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-005",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/surgical_wing#OR_02>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-006",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/surgical_wing#OR_03>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-007",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-008",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-009",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-010",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/surgical_wing#OR_01>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-011",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/surgical_wing#OR_02>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-012",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/surgical_wing#OR_03>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        }
+      ]
     },
     {
       "stage_id": 4,
       "stage_name": "Procurement / 招投标",
-      "gate_result": "PASS",
+      "gate_result": "WARN",
       "critical": 0,
       "major": 0,
-      "minor": 0,
-      "gaps": []
+      "minor": 12,
+      "gaps": [
+        {
+          "gap_id": "SHACL-001",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-002",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-003",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-004",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/surgical_wing#OR_01>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-005",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/surgical_wing#OR_02>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-006",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/surgical_wing#OR_03>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-007",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-008",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-009",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-010",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/surgical_wing#OR_01>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-011",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/surgical_wing#OR_02>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-012",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/surgical_wing#OR_03>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        }
+      ]
     },
     {
       "stage_id": 5,
@@ -51,27 +341,173 @@
     {
       "stage_id": 6,
       "stage_name": "Commissioning / 调试验收",
-      "gate_result": "PASS",
+      "gate_result": "WARN",
       "critical": 0,
       "major": 0,
-      "minor": 0,
-      "gaps": []
+      "minor": 12,
+      "gaps": [
+        {
+          "gap_id": "SHACL-001",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-002",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-003",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-004",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/surgical_wing#OR_01>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-005",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/surgical_wing#OR_02>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-006",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/surgical_wing#OR_03>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-7\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-007",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-008",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-009",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-010",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_01",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/surgical_wing#OR_01>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-011",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_02",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/surgical_wing#OR_02>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        },
+        {
+          "gap_id": "SHACL-012",
+          "severity": "MINOR",
+          "category": "shacl",
+          "entity": "http://cim.medical/instance/surgical_wing#OR_03",
+          "entity_type": "SHACL Shape",
+          "description": "[SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/surgical_wing#OR_03>->cim-space:cleanlinessClass does not contain a value in the set: ['Literal(\"ISO-8\")'] (属性: cleanlinessClass)",
+          "standard_reference": "",
+          "bfo_context": "",
+          "remediation": "修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束",
+          "blocking_next_stage": false
+        }
+      ]
     }
   ],
   "summary": {
-    "total_gaps": 0,
+    "total_gaps": 36,
     "critical": 0,
     "major": 0,
-    "minor": 0,
+    "minor": 36,
     "stages_failing": [],
-    "stages_warning": [],
+    "stages_warning": [
+      3,
+      4,
+      6
+    ],
     "stages_passing": [
       1,
       2,
-      3,
-      4,
-      5,
-      6
+      5
     ]
   }
 }
