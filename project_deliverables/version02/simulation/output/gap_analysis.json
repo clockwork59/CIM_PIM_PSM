@@ -1,0 +1,77 @@
+{
+  "simulation_id": "surgical_wing_20260509T074700",
+  "scenario": "Hospital Surgical Suite Wing — 手术部",
+  "generated": "2026-05-09T07:47:00.092097",
+  "stages": [
+    {
+      "stage_id": 1,
+      "stage_name": "Briefing / 策划阶段",
+      "gate_result": "PASS",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "gaps": []
+    },
+    {
+      "stage_id": 2,
+      "stage_name": "Schematic Design / 初步设计",
+      "gate_result": "PASS",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "gaps": []
+    },
+    {
+      "stage_id": 3,
+      "stage_name": "Detailed Design / 施工图",
+      "gate_result": "PASS",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "gaps": []
+    },
+    {
+      "stage_id": 4,
+      "stage_name": "Procurement / 招投标",
+      "gate_result": "PASS",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "gaps": []
+    },
+    {
+      "stage_id": 5,
+      "stage_name": "Construction / 施工安装",
+      "gate_result": "PASS",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "gaps": []
+    },
+    {
+      "stage_id": 6,
+      "stage_name": "Commissioning / 调试验收",
+      "gate_result": "PASS",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "gaps": []
+    }
+  ],
+  "summary": {
+    "total_gaps": 0,
+    "critical": 0,
+    "major": 0,
+    "minor": 0,
+    "stages_failing": [],
+    "stages_warning": [],
+    "stages_passing": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  }
+}

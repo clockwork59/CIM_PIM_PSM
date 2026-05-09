@@ -1,0 +1,615 @@
+# =============================================================================
+# 仿真场景实例数据 — 医院手术部（外科翼）
+# Simulation Scenario: Hospital Surgical Suite Wing
+#
+# 包含:
+#   - 1 间 I 级洁净手术室 (Class I OR, 100级)
+#   - 2 间 III 级洁净手术室 (Class III OR, 10000级)
+#   - 1 个 6 床位 ICU
+#   - 洁净空调系统 (Clean AHU × 1，N+1 备用)
+#   - 医用气体系统 (O2 / VAC / 医用空气)，三间 OR 均配置
+#   - 应急电源 (柴发 + UPS + IT隔离)，三间 OR 均配置
+#   - BFO 生命周期过程声明（概念→初步→施工图→招标→施工→调试）
+#
+# Version: 2.0 | 2026-05-06  (全缺口修复版)
+# =============================================================================
+
+@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-med:   <https://cim.medical/ontology/v4.0/medium#> .
+@prefix cim-d:     <https://cim.medical/ontology/v4.0/design#> .
+@prefix cim-f:     <https://cim.medical/ontology/v4.0/foundational#> .
+@prefix cim-ref:   <https://cim.medical/ontology/v4.0/reference#> .
+@prefix cim-o:     <https://cim.medical/ontology/v4.0/operational#> .
+@prefix sosa:      <http://www.w3.org/ns/sosa/> .
+
+@prefix inst: <http://cim.medical/instance/surgical_wing#> .
+
+# =============================================================================
+# 建筑层级
+# =============================================================================
+
+inst:Hospital_Building a cim-space:Building ;
+    rdfs:label "某三甲医院"@zh-CN .
+
+inst:Floor_B3 a cim-space:Floor ;
+    rdfs:label "地下3层（手术部）"@zh-CN ;
+    cim-space:isPartOf inst:Hospital_Building .
+
+# =============================================================================
+# 空间实例 (Space Instances)
+# =============================================================================
+
+# ── I 级洁净手术室 (Class I OR) ────────────────────────────────────────────────
+inst:OR_01 a cim-space:OperatingRoom ;
+    rdfs:label "I级洁净手术室 OR-01"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 ;
+    cim-d:cleanroomClass "ISO Class 5 / 100级" ;
+    cim-d:requiredAreaSqm "36.0"^^xsd:decimal ;
+    cim-d:airChangesPerHour "40"^^xsd:integer ;
+    cim-d:pressureClass "positive" ;
+    cim-d:minValue "21.0"^^xsd:decimal ;
+    cim-space:infectionRiskLevel "E" ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_ClassI_AirChanges> ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_ClassI_PressureDiff> ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_Temperature> ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_Humidity> .
+
+# ── III 级洁净手术室 (Class III ORs) ──────────────────────────────────────────
+inst:OR_02 a cim-space:OperatingRoom ;
+    rdfs:label "III级洁净手术室 OR-02"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 ;
+    cim-d:cleanroomClass "ISO Class 7 / 10000级" ;
+    cim-d:requiredAreaSqm "30.0"^^xsd:decimal ;
+    cim-d:airChangesPerHour "24"^^xsd:integer ;
+    cim-d:pressureClass "positive" ;
+    cim-d:minValue "21.0"^^xsd:decimal ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_Temperature> ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_Humidity> .
+
+inst:OR_03 a cim-space:OperatingRoom ;
+    rdfs:label "III级洁净手术室 OR-03"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 ;
+    cim-d:cleanroomClass "ISO Class 7 / 10000级" ;
+    cim-d:requiredAreaSqm "30.0"^^xsd:decimal ;
+    cim-d:airChangesPerHour "24"^^xsd:integer ;
+    cim-d:pressureClass "positive" ;
+    cim-d:minValue "21.0"^^xsd:decimal ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_Temperature> ;
+    cim-d:hasRequirement <https://cim.medical/ontology/v4.0/design/criteria/OR_Humidity> .
+
+# ── ICU (6床位) ───────────────────────────────────────────────────────────────
+inst:ICU_Zone a cim-space:IntensiveCareUnit ;
+    rdfs:label "ICU 6床区"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 ;
+    cim-d:airChangesPerHour "12"^^xsd:integer ;
+    cim-d:pressureClass "positive" ;
+    cim-d:requiredAreaSqm "60.0"^^xsd:decimal .
+
+# ── 辅助空间 ──────────────────────────────────────────────────────────────────
+inst:CleanCorridor a cim-space:Room ;
+    rdfs:label "洁净走廊"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 ;
+    cim-d:cleanroomClass "ISO Class 8 / 100000级" ;
+    cim-d:pressureClass "positive" .
+
+inst:EquipRoom_HVAC a cim-space:MechanicalRoom ;
+    rdfs:label "手术部空调机房"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 .
+
+inst:EquipRoom_MedGas a cim-space:MedicalGasRoom ;
+    rdfs:label "区域医用气体阀箱间"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B3 .
+
+# =============================================================================
+# 暖通空调系统 (HVAC System)
+# =============================================================================
+
+inst:CleanHVAC_System a cim:System ;
+    rdfs:label "手术部洁净空调系统"@zh-CN ;
+    rdfs:type cim:HVACSystem .
+
+# ── 洁净空调箱 (Clean AHU) ────────────────────────────────────────────────────
+inst:AHU_OR_01 a cim-equip:Clean_AHU ;
+    rdfs:label "手术部洁净空调箱 AHU-OR-01"@zh-CN ;
+    cim-d:designTag "AHU-OR-01" ;
+    cim-d:ratedCapacity "20000.0"^^xsd:decimal ;
+    cim-d:ratedPower "22.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-space:locatedIn inst:EquipRoom_HVAC ;
+    cim-c:hasConnectionPoint inst:AHU_OR01_SAout ;
+    cim-c:hasConnectionPoint inst:AHU_OR01_RAin ;
+    cim-c:hasConnectionPoint inst:AHU_OR01_OAin .
+
+inst:AHU_OR01_SAout a cim-c:OutletConnectionPoint ;
+    rdfs:label "AHU-OR-01 送风出口"@zh-CN ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_MAIN .
+
+inst:AHU_OR01_RAin a cim-c:InletConnectionPoint ;
+    rdfs:label "AHU-OR-01 回风入口"@zh-CN ;
+    cim-c:hasMedium cim-med:ReturnAir .
+
+inst:AHU_OR01_OAin a cim-c:InletConnectionPoint ;
+    rdfs:label "AHU-OR-01 新风入口"@zh-CN ;
+    cim-c:hasMedium cim-med:OutdoorAir .
+
+# ── 送风管网 (Supply Air Ductwork) — 三间 OR 全覆盖 ──────────────────────────
+inst:FP_SA_MAIN a cim-flow:SupplyAirFlow ;
+    rdfs:label "主送风干管"@zh-CN ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR01 ;
+    cim-c:connectsTo inst:FP_SA_OR02 ;
+    cim-c:connectsTo inst:FP_SA_OR03 .
+
+inst:FP_SA_OR01 a cim-flow:SupplyAirFlow ;
+    rdfs:label "OR-01 送风支管"@zh-CN ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:DIFFUSER_OR01_1 ;
+    cim-c:connectsTo inst:DIFFUSER_OR01_2 .
+
+inst:FP_SA_OR02 a cim-flow:SupplyAirFlow ;
+    rdfs:label "OR-02 送风支管"@zh-CN ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:DIFFUSER_OR02_1 ;
+    cim-c:connectsTo inst:DIFFUSER_OR02_2 .
+
+inst:FP_SA_OR03 a cim-flow:SupplyAirFlow ;
+    rdfs:label "OR-03 送风支管"@zh-CN ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:DIFFUSER_OR03_1 ;
+    cim-c:connectsTo inst:DIFFUSER_OR03_2 .
+
+# ── 末端送风口 — OR-01 ─────────────────────────────────────────────────────────
+inst:DIFFUSER_OR01_1 a cim-equip:HEPA_Filter ;
+    rdfs:label "OR-01 高效送风口 1"@zh-CN ;
+    cim-space:locatedIn inst:OR_01 ;
+    cim-c:hasConnectionPoint inst:DIFF_OR01_1_in .
+
+inst:DIFF_OR01_1_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR01 .
+
+inst:DIFFUSER_OR01_2 a cim-equip:HEPA_Filter ;
+    rdfs:label "OR-01 高效送风口 2"@zh-CN ;
+    cim-space:locatedIn inst:OR_01 ;
+    cim-c:hasConnectionPoint inst:DIFF_OR01_2_in .
+
+inst:DIFF_OR01_2_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR01 .
+
+# ── 末端送风口 — OR-02 ─────────────────────────────────────────────────────────
+inst:DIFFUSER_OR02_1 a cim-equip:HEPA_Filter ;
+    rdfs:label "OR-02 高效送风口 1"@zh-CN ;
+    cim-space:locatedIn inst:OR_02 ;
+    cim-c:hasConnectionPoint inst:DIFF_OR02_1_in .
+
+inst:DIFF_OR02_1_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR02 .
+
+inst:DIFFUSER_OR02_2 a cim-equip:HEPA_Filter ;
+    rdfs:label "OR-02 高效送风口 2"@zh-CN ;
+    cim-space:locatedIn inst:OR_02 ;
+    cim-c:hasConnectionPoint inst:DIFF_OR02_2_in .
+
+inst:DIFF_OR02_2_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR02 .
+
+# ── 末端送风口 — OR-03 ─────────────────────────────────────────────────────────
+inst:DIFFUSER_OR03_1 a cim-equip:HEPA_Filter ;
+    rdfs:label "OR-03 高效送风口 1"@zh-CN ;
+    cim-space:locatedIn inst:OR_03 ;
+    cim-c:hasConnectionPoint inst:DIFF_OR03_1_in .
+
+inst:DIFF_OR03_1_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR03 .
+
+inst:DIFFUSER_OR03_2 a cim-equip:HEPA_Filter ;
+    rdfs:label "OR-03 高效送风口 2"@zh-CN ;
+    cim-space:locatedIn inst:OR_03 ;
+    cim-c:hasConnectionPoint inst:DIFF_OR03_2_in .
+
+inst:DIFF_OR03_2_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:SupplyAir ;
+    cim-c:connectsTo inst:FP_SA_OR03 .
+
+# ── 排风系统 (Exhaust) ─────────────────────────────────────────────────────────
+inst:FP_EX_OR01 a cim-flow:ExhaustAirFlow ;
+    rdfs:label "OR-01 排风管"@zh-CN ;
+    cim-c:hasMedium cim-med:ExhaustAir .
+
+inst:ExhaustFan_OR a cim-equip:Fan ;
+    rdfs:label "手术部排风机 EF-OR-01"@zh-CN ;
+    cim-d:designTag "EF-OR-01" ;
+    cim-d:ratedCapacity "6000.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:EquipRoom_HVAC ;
+    cim-c:hasConnectionPoint [
+        a cim-c:InletConnectionPoint ;
+        cim-c:hasMedium cim-med:ExhaustAir ;
+        cim-c:connectsTo inst:FP_EX_OR01 ] .
+
+# =============================================================================
+# 医用气体系统 (Medical Gas System)
+# =============================================================================
+
+# ── 气源 (Sources) ─────────────────────────────────────────────────────────────
+inst:LOX_Station a cim-equip:LiquidOxygenStation ;
+    rdfs:label "液氧站"@zh-CN ;
+    cim-d:ratedCapacity "300.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-c:hasConnectionPoint inst:LOX_out .
+
+inst:LOX_out a cim-c:OutletConnectionPoint ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-c:connectsTo inst:FP_O2_MAIN .
+
+inst:VacuumPump_Station a cim-equip:VacuumPumpUnit ;
+    rdfs:label "真空泵机组"@zh-CN ;
+    cim-d:ratedCapacity "200.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "2N" ;
+    cim-c:hasConnectionPoint inst:VAC_out .
+
+inst:VAC_out a cim-c:OutletConnectionPoint ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-c:connectsTo inst:FP_VAC_MAIN .
+
+inst:MedAir_Station a cim-equip:MedGasCompressor ;
+    rdfs:label "医用空气压缩机组"@zh-CN ;
+    cim-d:ratedCapacity "150.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-c:hasConnectionPoint inst:CAIR_out .
+
+inst:CAIR_out a cim-c:OutletConnectionPoint ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-c:connectsTo inst:FP_CAIR_MAIN .
+
+# ── 区域阀箱 (Zone Valve Box) ─────────────────────────────────────────────────
+inst:ZVB_OR_Wing a cim-equip:ZoneValveBox ;
+    rdfs:label "手术部区域阀箱 ZVB-OR-01"@zh-CN ;
+    cim-d:designTag "ZVB-OR-01" ;
+    cim-space:locatedIn inst:EquipRoom_MedGas ;
+    cim-c:hasConnectionPoint inst:ZVB_O2in ;
+    cim-c:hasConnectionPoint inst:ZVB_O2out ;
+    cim-c:hasConnectionPoint inst:ZVB_VACin ;
+    cim-c:hasConnectionPoint inst:ZVB_VACout ;
+    cim-c:hasConnectionPoint inst:ZVB_CAIRin ;
+    cim-c:hasConnectionPoint inst:ZVB_CAIRout .
+
+inst:ZVB_O2in    a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:Oxygen        ; cim-c:connectsTo inst:FP_O2_MAIN .
+inst:ZVB_O2out   a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:Oxygen        ; cim-c:connectsTo inst:FP_O2_OR_DIST .
+inst:ZVB_VACin   a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:MedicalVacuum ; cim-c:connectsTo inst:FP_VAC_MAIN .
+inst:ZVB_VACout  a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:MedicalVacuum ; cim-c:connectsTo inst:FP_VAC_OR_DIST .
+inst:ZVB_CAIRin  a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:MedicalAir    ; cim-c:connectsTo inst:FP_CAIR_MAIN .
+inst:ZVB_CAIRout a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:MedicalAir    ; cim-c:connectsTo inst:FP_CAIR_OR_DIST .
+
+# ── 医用气体干管 ───────────────────────────────────────────────────────────────
+inst:FP_O2_MAIN    a cim-flow:OxygenFlow        ; cim-c:hasMedium cim-med:Oxygen        .
+inst:FP_VAC_MAIN   a cim-flow:MedicalVacuumFlow ; cim-c:hasMedium cim-med:MedicalVacuum .
+inst:FP_CAIR_MAIN  a cim-flow:MedicalAirFlow    ; cim-c:hasMedium cim-med:MedicalAir    .
+
+# ── 手术部分配干管 (三间 OR 共用) ─────────────────────────────────────────────
+inst:FP_O2_OR_DIST   a cim-flow:OxygenFlow        ; cim-c:hasMedium cim-med:Oxygen        ;
+    cim-c:connectsTo inst:FP_O2_OR01 ; cim-c:connectsTo inst:FP_O2_OR02 ; cim-c:connectsTo inst:FP_O2_OR03 .
+
+inst:FP_VAC_OR_DIST  a cim-flow:MedicalVacuumFlow ; cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-c:connectsTo inst:FP_VAC_OR01 ; cim-c:connectsTo inst:FP_VAC_OR02 ; cim-c:connectsTo inst:FP_VAC_OR03 .
+
+inst:FP_CAIR_OR_DIST a cim-flow:MedicalAirFlow    ; cim-c:hasMedium cim-med:MedicalAir    ;
+    cim-c:connectsTo inst:FP_CAIR_OR01 ; cim-c:connectsTo inst:FP_CAIR_OR02 ; cim-c:connectsTo inst:FP_CAIR_OR03 .
+
+# ── OR 支路 FlowPath ──────────────────────────────────────────────────────────
+inst:FP_O2_OR01    a cim-flow:OxygenFlow        ; cim-c:hasMedium cim-med:Oxygen        .
+inst:FP_VAC_OR01   a cim-flow:MedicalVacuumFlow ; cim-c:hasMedium cim-med:MedicalVacuum .
+inst:FP_CAIR_OR01  a cim-flow:MedicalAirFlow    ; cim-c:hasMedium cim-med:MedicalAir    .
+
+inst:FP_O2_OR02    a cim-flow:OxygenFlow        ; cim-c:hasMedium cim-med:Oxygen        .
+inst:FP_VAC_OR02   a cim-flow:MedicalVacuumFlow ; cim-c:hasMedium cim-med:MedicalVacuum .
+inst:FP_CAIR_OR02  a cim-flow:MedicalAirFlow    ; cim-c:hasMedium cim-med:MedicalAir    .
+
+inst:FP_O2_OR03    a cim-flow:OxygenFlow        ; cim-c:hasMedium cim-med:Oxygen        .
+inst:FP_VAC_OR03   a cim-flow:MedicalVacuumFlow ; cim-c:hasMedium cim-med:MedicalVacuum .
+inst:FP_CAIR_OR03  a cim-flow:MedicalAirFlow    ; cim-c:hasMedium cim-med:MedicalAir    .
+
+# ── OR-01 医用气体末端 ────────────────────────────────────────────────────────
+inst:MGO_OR01_O2_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-01 氧气终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR01-O2-1" ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-space:locatedIn inst:OR_01 .
+
+inst:MGO_OR01_O2_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-01 氧气终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR01-O2-2" ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-space:locatedIn inst:OR_01 .
+
+inst:MGO_OR01_VAC_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-01 负压终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR01-VAC-1" ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-space:locatedIn inst:OR_01 .
+
+inst:MGO_OR01_VAC_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-01 负压终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR01-VAC-2" ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-space:locatedIn inst:OR_01 .
+
+inst:MGO_OR01_CAIR_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-01 医用空气终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR01-CAIR-1" ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-space:locatedIn inst:OR_01 .
+
+inst:MGO_OR01_CAIR_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-01 医用空气终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR01-CAIR-2" ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-space:locatedIn inst:OR_01 .
+
+# ── OR-02 医用气体末端 ────────────────────────────────────────────────────────
+inst:MGO_OR02_O2_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-02 氧气终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR02-O2-1" ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-space:locatedIn inst:OR_02 .
+
+inst:MGO_OR02_O2_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-02 氧气终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR02-O2-2" ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-space:locatedIn inst:OR_02 .
+
+inst:MGO_OR02_VAC_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-02 负压终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR02-VAC-1" ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-space:locatedIn inst:OR_02 .
+
+inst:MGO_OR02_VAC_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-02 负压终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR02-VAC-2" ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-space:locatedIn inst:OR_02 .
+
+inst:MGO_OR02_CAIR_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-02 医用空气终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR02-CAIR-1" ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-space:locatedIn inst:OR_02 .
+
+inst:MGO_OR02_CAIR_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-02 医用空气终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR02-CAIR-2" ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-space:locatedIn inst:OR_02 .
+
+# ── OR-03 医用气体末端 ────────────────────────────────────────────────────────
+inst:MGO_OR03_O2_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-03 氧气终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR03-O2-1" ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-space:locatedIn inst:OR_03 .
+
+inst:MGO_OR03_O2_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-03 氧气终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR03-O2-2" ;
+    cim-c:hasMedium cim-med:Oxygen ;
+    cim-space:locatedIn inst:OR_03 .
+
+inst:MGO_OR03_VAC_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-03 负压终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR03-VAC-1" ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-space:locatedIn inst:OR_03 .
+
+inst:MGO_OR03_VAC_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-03 负压终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR03-VAC-2" ;
+    cim-c:hasMedium cim-med:MedicalVacuum ;
+    cim-space:locatedIn inst:OR_03 .
+
+inst:MGO_OR03_CAIR_1 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-03 医用空气终端 1"@zh-CN ;
+    cim-d:designTag "MGO-OR03-CAIR-1" ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-space:locatedIn inst:OR_03 .
+
+inst:MGO_OR03_CAIR_2 a cim-equip:MedicalGasOutlet ;
+    rdfs:label "OR-03 医用空气终端 2"@zh-CN ;
+    cim-d:designTag "MGO-OR03-CAIR-2" ;
+    cim-c:hasMedium cim-med:MedicalAir ;
+    cim-space:locatedIn inst:OR_03 .
+
+# =============================================================================
+# 电气系统 (Electrical System)
+# =============================================================================
+
+# ── 应急电源 (Emergency Power) ────────────────────────────────────────────────
+inst:DieselGenerator a cim-equip:DieselGenerator ;
+    rdfs:label "柴油发电机 DG-01"@zh-CN ;
+    cim-d:designTag "DG-01" ;
+    cim-d:ratedCapacity "400.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-c:hasConnectionPoint inst:GEN_out .
+
+inst:GEN_out a cim-c:OutletConnectionPoint ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_GEN_UPS .
+
+inst:UPS_OR_Wing a cim-equip:UPS ;
+    rdfs:label "手术部 UPS UPS-OR-01"@zh-CN ;
+    cim-d:designTag "UPS-OR-01" ;
+    cim-d:ratedCapacity "80.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-c:hasConnectionPoint inst:UPS_in ;
+    cim-c:hasConnectionPoint inst:UPS_out .
+
+inst:UPS_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_GEN_UPS .
+
+inst:UPS_out a cim-c:OutletConnectionPoint ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_DIST .
+
+inst:FP_EPWR_GEN_UPS a cim-flow:EmergencyPowerFlow ;
+    cim-c:hasMedium cim-med:EmergencyPower .
+
+# ── 应急电源分配母线 (UPS → 三间 OR) ─────────────────────────────────────────
+inst:FP_EPWR_UPS_DIST a cim-flow:EmergencyPowerFlow ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_IT01 ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_IT02 ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_IT03 .
+
+# ── IT 隔离电源面板 — OR-01 ───────────────────────────────────────────────────
+inst:ITPanel_OR01 a cim-equip:IsolatedPowerSystem ;
+    rdfs:label "OR-01 IT隔离电源 ITP-OR-01"@zh-CN ;
+    cim-d:designTag "ITP-OR-01" ;
+    cim-space:locatedIn inst:OR_01 ;
+    cim-c:hasConnectionPoint inst:IT01_in .
+
+inst:IT01_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_IT01 .
+
+inst:FP_EPWR_UPS_IT01 a cim-flow:EmergencyPowerFlow ;
+    cim-c:hasMedium cim-med:EmergencyPower .
+
+# ── IT 隔离电源面板 — OR-02 ───────────────────────────────────────────────────
+inst:ITPanel_OR02 a cim-equip:IsolatedPowerSystem ;
+    rdfs:label "OR-02 IT隔离电源 ITP-OR-02"@zh-CN ;
+    cim-d:designTag "ITP-OR-02" ;
+    cim-space:locatedIn inst:OR_02 ;
+    cim-c:hasConnectionPoint inst:IT02_in .
+
+inst:IT02_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_IT02 .
+
+inst:FP_EPWR_UPS_IT02 a cim-flow:EmergencyPowerFlow ;
+    cim-c:hasMedium cim-med:EmergencyPower .
+
+# ── IT 隔离电源面板 — OR-03 ───────────────────────────────────────────────────
+inst:ITPanel_OR03 a cim-equip:IsolatedPowerSystem ;
+    rdfs:label "OR-03 IT隔离电源 ITP-OR-03"@zh-CN ;
+    cim-d:designTag "ITP-OR-03" ;
+    cim-space:locatedIn inst:OR_03 ;
+    cim-c:hasConnectionPoint inst:IT03_in .
+
+inst:IT03_in a cim-c:InletConnectionPoint ;
+    cim-c:hasMedium cim-med:EmergencyPower ;
+    cim-c:connectsTo inst:FP_EPWR_UPS_IT03 .
+
+inst:FP_EPWR_UPS_IT03 a cim-flow:EmergencyPowerFlow ;
+    cim-c:hasMedium cim-med:EmergencyPower .
+
+# =============================================================================
+# 设施生命周期过程声明 (BFO Process Instances)
+# — 覆盖全部 6 个阶段门控所需的过程与里程碑
+# =============================================================================
+
+# ── 阶段 1：方案设计 (ConceptualDesign) ────────────────────────────────────────
+inst:Project_ConceptualDesign a cim-f:ConceptualDesignProcess ;
+    rdfs:label "手术部方案设计过程"@zh-CN ;
+    cim-f:processStageCode "CONCEPT" ;
+    cim-f:processStartDate "2025-09-01"^^xsd:date ;
+    cim-f:processEndDate   "2025-11-30"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Concept_Approval .
+
+inst:Milestone_Concept_Approval a cim-f:DesignApprovalMilestone ;
+    rdfs:label "方案设计审批通过"@zh-CN .
+
+# ── 阶段 2：初步设计 (SchematicDesign) ─────────────────────────────────────────
+inst:Project_SchematicDesign a cim-f:SchematicDesignProcess ;
+    rdfs:label "手术部初步设计过程"@zh-CN ;
+    cim-f:processStageCode "SD" ;
+    cim-f:processStartDate "2025-12-01"^^xsd:date ;
+    cim-f:processEndDate   "2026-02-28"^^xsd:date .
+
+# ── 阶段 3：施工图设计 (DetailedDesign) ────────────────────────────────────────
+inst:Project_DetailedDesign a cim-f:DetailedDesignProcess ;
+    rdfs:label "手术部施工图设计过程"@zh-CN ;
+    cim-f:processStageCode "DD" ;
+    cim-f:processStartDate "2026-03-01"^^xsd:date ;
+    cim-f:processEndDate   "2026-05-31"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_IDM_DD .
+
+inst:Milestone_IDM_DD a cim-f:InformationDeliveryMilestone ;
+    rdfs:label "施工图信息交付里程碑"@zh-CN .
+
+# ── 阶段 4：招投标 (Tendering) ─────────────────────────────────────────────────
+inst:Project_Tendering a cim-f:TenderingProcess ;
+    rdfs:label "手术部招投标过程"@zh-CN ;
+    cim-f:processStageCode "TENDER" ;
+    cim-f:processStartDate "2026-06-01"^^xsd:date ;
+    cim-f:processEndDate   "2026-07-31"^^xsd:date .
+
+# ── 阶段 5：施工安装 (Construction) ────────────────────────────────────────────
+inst:Project_Construction a cim-f:ConstructionProcess ;
+    rdfs:label "手术部施工安装过程"@zh-CN ;
+    cim-f:processStageCode "CONST" ;
+    cim-f:processStartDate "2026-08-01"^^xsd:date ;
+    cim-f:processEndDate   "2027-03-31"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_ConstructionComplete .
+
+inst:Milestone_ConstructionComplete a cim-f:ConstructionCompletionMilestone ;
+    rdfs:label "竣工验收里程碑"@zh-CN .
+
+# ── 阶段 6：调试验收 (Commissioning) ───────────────────────────────────────────
+inst:Project_Commissioning a cim-f:CommissioningProcess ;
+    rdfs:label "手术部调试验收过程"@zh-CN ;
+    cim-f:processStageCode "COMM" ;
+    cim-f:processStartDate "2027-04-01"^^xsd:date ;
+    cim-f:processEndDate   "2027-06-30"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Handover .
+
+inst:Milestone_Handover a cim-f:HandoverMilestone ;
+    rdfs:label "PIM→AIM 移交里程碑"@zh-CN .
+
+inst:Project_MedGasValidation a cim-f:MedicalGasValidationProcess ;
+    rdfs:label "医用气体系统验证过程"@zh-CN ;
+    cim-f:processStageCode "MEDGAS-VAL" ;
+    cim-f:processStartDate "2027-04-15"^^xsd:date .
+
+inst:Project_CleanroomQual a cim-f:CleanroomQualificationProcess ;
+    rdfs:label "洁净室资质验收过程"@zh-CN ;
+    cim-f:processStageCode "CR-QUAL" ;
+    cim-f:processStartDate "2027-05-01"^^xsd:date .
+
+# ── 时序链 (temporallyPrecedes) ─────────────────────────────────────────────────
+inst:Project_ConceptualDesign cim-f:temporallyPrecedes inst:Project_SchematicDesign .
+inst:Project_SchematicDesign  cim-f:temporallyPrecedes inst:Project_DetailedDesign .
+inst:Project_DetailedDesign   cim-f:temporallyPrecedes inst:Project_Tendering .
+inst:Project_Tendering        cim-f:temporallyPrecedes inst:Project_Construction .
+inst:Project_Construction     cim-f:temporallyPrecedes inst:Project_Commissioning .
+inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_MedGasValidation .
+inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_CleanroomQual .
+
+# ── 信息制品 (Generically Dependent Continuants) ────────────────────────────────
+inst:SchematicIFCModel a cim-f:DesignModel ;
+    rdfs:label "手术部初步设计 IFC 模型"@zh-CN ;
+    cim-f:isoLoD "LOD200" ;
+    cim-f:producedBy inst:Project_SchematicDesign .
+
+inst:DetailedIFCModel a cim-f:DesignModel ;
+    rdfs:label "手术部施工图 IFC 模型"@zh-CN ;
+    cim-f:isoLoD "LOD300" ;
+    cim-f:producedBy inst:Project_DetailedDesign .
+
+# =============================================================================
+# END OF SCENARIO v2.0
+# =============================================================================
