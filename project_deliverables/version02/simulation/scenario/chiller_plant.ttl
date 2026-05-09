@@ -1,0 +1,350 @@
+# =============================================================================
+# 仿真场景实例数据 — 中央冷站 (Central Chiller Plant)
+# Simulation Scenario: Hospital Central Chiller Plant
+#
+# 包含:
+#   - 中央冷站机房 (地下1层)
+#   - 3 台离心式冷水机组 (含COP, 解决 CIM-DQ-002)
+#   - 1 台螺杆式冷水机组 (备用)
+#   - 冷冻水一次泵 × 4 (N+1)
+#   - 冷却水泵 × 4 (N+1)
+#   - 冷却塔 × 3
+#   - 冷冻水/冷却水 FlowPath 回路
+#   - BFO 生命周期过程声明
+#
+# 目的: 验证COP数据完整性 + 冷站拓扑连通性
+# Version: 1.0 | 2026-05-09
+# =============================================================================
+
+@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-med:   <https://cim.medical/ontology/v4.0/medium#> .
+@prefix cim-d:     <https://cim.medical/ontology/v4.0/design#> .
+@prefix cim-f:     <https://cim.medical/ontology/v4.0/foundational#> .
+@prefix cim-ref:   <https://cim.medical/ontology/v4.0/reference#> .
+@prefix cim-o:     <https://cim.medical/ontology/v4.0/operational#> .
+
+@prefix inst: <http://cim.medical/instance/chiller_plant#> .
+
+# =============================================================================
+# 建筑层级
+# =============================================================================
+
+inst:Hospital_Building a cim-space:Building ;
+    rdfs:label "某三甲医院"@zh-CN .
+
+inst:Floor_B1 a cim-space:Floor ;
+    rdfs:label "地下1层"@zh-CN ;
+    cim-space:isPartOf inst:Hospital_Building .
+
+inst:ChillerRoom a cim-space:MechanicalRoom ;
+    rdfs:label "中央冷站机房"@zh-CN ;
+    cim-space:isPartOf inst:Floor_B1 ;
+    cim-d:requiredAreaSqm "400.0"^^xsd:decimal .
+
+inst:CoolingTowerYard a cim-space:Room ;
+    rdfs:label "冷却塔场地(屋顶)"@zh-CN ;
+    cim-space:isPartOf inst:Hospital_Building .
+
+# =============================================================================
+# 冷水机组 (Chiller) — 含 COP 数据 (解决 CIM-DQ-002)
+# =============================================================================
+
+# ── 离心式冷水机组 × 3 ────────────────────────────────────────────────────────
+inst:Chiller_01 a cim-equip:Chiller ;
+    rdfs:label "离心式冷水机组 CHL-01 (开利19XR)"@zh-CN ;
+    cim-d:designTag "CHL-01" ;
+    cim-d:ratedCapacity "1200.0"^^xsd:decimal ;
+    cim-d:ratedPower "210.0"^^xsd:decimal ;
+    cim-d:coolingCOP "5.71"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-d:minValue "5.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom ;
+    cim-c:hasConnectionPoint inst:CHL01_CHW_in ;
+    cim-c:hasConnectionPoint inst:CHL01_CHW_out ;
+    cim-c:hasConnectionPoint inst:CHL01_CW_in ;
+    cim-c:hasConnectionPoint inst:CHL01_CW_out .
+
+inst:Chiller_02 a cim-equip:Chiller ;
+    rdfs:label "离心式冷水机组 CHL-02 (约克YK)"@zh-CN ;
+    cim-d:designTag "CHL-02" ;
+    cim-d:ratedCapacity "1200.0"^^xsd:decimal ;
+    cim-d:ratedPower "192.0"^^xsd:decimal ;
+    cim-d:coolingCOP "6.25"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-d:minValue "5.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom ;
+    cim-c:hasConnectionPoint inst:CHL02_CHW_in ;
+    cim-c:hasConnectionPoint inst:CHL02_CHW_out ;
+    cim-c:hasConnectionPoint inst:CHL02_CW_in ;
+    cim-c:hasConnectionPoint inst:CHL02_CW_out .
+
+inst:Chiller_03 a cim-equip:Chiller ;
+    rdfs:label "离心式冷水机组 CHL-03 (特灵CVHE)"@zh-CN ;
+    cim-d:designTag "CHL-03" ;
+    cim-d:ratedCapacity "1200.0"^^xsd:decimal ;
+    cim-d:ratedPower "200.0"^^xsd:decimal ;
+    cim-d:coolingCOP "6.00"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-d:minValue "5.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom ;
+    cim-c:hasConnectionPoint inst:CHL03_CHW_in ;
+    cim-c:hasConnectionPoint inst:CHL03_CHW_out ;
+    cim-c:hasConnectionPoint inst:CHL03_CW_in ;
+    cim-c:hasConnectionPoint inst:CHL03_CW_out .
+
+# ── 螺杆式冷水机组 × 1 (备用) ────────────────────────────────────────────────
+inst:Chiller_04 a cim-equip:Chiller ;
+    rdfs:label "螺杆式冷水机组 CHL-04 (麦克维尔WCC)"@zh-CN ;
+    cim-d:designTag "CHL-04" ;
+    cim-d:ratedCapacity "500.0"^^xsd:decimal ;
+    cim-d:ratedPower "95.0"^^xsd:decimal ;
+    cim-d:coolingCOP "5.26"^^xsd:decimal ;
+    cim-d:redundancyStrategy "备用" ;
+    cim-d:minValue "4.5"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom ;
+    cim-c:hasConnectionPoint inst:CHL04_CHW_in ;
+    cim-c:hasConnectionPoint inst:CHL04_CHW_out ;
+    cim-c:hasConnectionPoint inst:CHL04_CW_in ;
+    cim-c:hasConnectionPoint inst:CHL04_CW_out .
+
+# ── 冷机连接点 ────────────────────────────────────────────────────────────────
+inst:CHL01_CHW_in  a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Return .
+inst:CHL01_CHW_out a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Supply .
+inst:CHL01_CW_in   a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Return .
+inst:CHL01_CW_out  a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Supply .
+
+inst:CHL02_CHW_in  a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Return .
+inst:CHL02_CHW_out a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Supply .
+inst:CHL02_CW_in   a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Return .
+inst:CHL02_CW_out  a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Supply .
+
+inst:CHL03_CHW_in  a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Return .
+inst:CHL03_CHW_out a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Supply .
+inst:CHL03_CW_in   a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Return .
+inst:CHL03_CW_out  a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Supply .
+
+inst:CHL04_CHW_in  a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Return .
+inst:CHL04_CHW_out a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:ChilledWater  ; cim-c:connectsTo inst:FP_CHW_Supply .
+inst:CHL04_CW_in   a cim-c:InletConnectionPoint  ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Return .
+inst:CHL04_CW_out  a cim-c:OutletConnectionPoint ; cim-c:hasMedium cim-med:CondenserWater ; cim-c:connectsTo inst:FP_CW_Supply .
+
+# =============================================================================
+# 冷冻水泵 (Chilled Water Pump) × 4 (N+1)
+# =============================================================================
+
+inst:CHWP_01 a cim-equip:Pump ;
+    rdfs:label "冷冻水一次泵 CHWP-01"@zh-CN ;
+    cim-d:designTag "CHWP-01" ;
+    cim-d:ratedCapacity "200.0"^^xsd:decimal ;
+    cim-d:ratedPower "37.0"^^xsd:decimal ;
+    cim-d:minValue "30.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+inst:CHWP_02 a cim-equip:Pump ;
+    rdfs:label "冷冻水一次泵 CHWP-02"@zh-CN ;
+    cim-d:designTag "CHWP-02" ;
+    cim-d:ratedCapacity "200.0"^^xsd:decimal ;
+    cim-d:ratedPower "37.0"^^xsd:decimal ;
+    cim-d:minValue "30.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+inst:CHWP_03 a cim-equip:Pump ;
+    rdfs:label "冷冻水一次泵 CHWP-03"@zh-CN ;
+    cim-d:designTag "CHWP-03" ;
+    cim-d:ratedCapacity "200.0"^^xsd:decimal ;
+    cim-d:ratedPower "37.0"^^xsd:decimal ;
+    cim-d:minValue "30.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+inst:CHWP_04 a cim-equip:Pump ;
+    rdfs:label "冷冻水一次泵 CHWP-04 (备用)"@zh-CN ;
+    cim-d:designTag "CHWP-04" ;
+    cim-d:ratedCapacity "200.0"^^xsd:decimal ;
+    cim-d:ratedPower "37.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-d:minValue "30.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+# =============================================================================
+# 冷却水泵 (Condenser Water Pump) × 4 (N+1)
+# =============================================================================
+
+inst:CWP_01 a cim-equip:Pump ;
+    rdfs:label "冷却水泵 CWP-01"@zh-CN ;
+    cim-d:designTag "CWP-01" ;
+    cim-d:ratedCapacity "250.0"^^xsd:decimal ;
+    cim-d:ratedPower "45.0"^^xsd:decimal ;
+    cim-d:minValue "35.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+inst:CWP_02 a cim-equip:Pump ;
+    rdfs:label "冷却水泵 CWP-02"@zh-CN ;
+    cim-d:designTag "CWP-02" ;
+    cim-d:ratedCapacity "250.0"^^xsd:decimal ;
+    cim-d:ratedPower "45.0"^^xsd:decimal ;
+    cim-d:minValue "35.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+inst:CWP_03 a cim-equip:Pump ;
+    rdfs:label "冷却水泵 CWP-03"@zh-CN ;
+    cim-d:designTag "CWP-03" ;
+    cim-d:ratedCapacity "250.0"^^xsd:decimal ;
+    cim-d:ratedPower "45.0"^^xsd:decimal ;
+    cim-d:minValue "35.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+inst:CWP_04 a cim-equip:Pump ;
+    rdfs:label "冷却水泵 CWP-04 (备用)"@zh-CN ;
+    cim-d:designTag "CWP-04" ;
+    cim-d:ratedCapacity "250.0"^^xsd:decimal ;
+    cim-d:ratedPower "45.0"^^xsd:decimal ;
+    cim-d:redundancyStrategy "N+1" ;
+    cim-d:minValue "35.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:ChillerRoom .
+
+# =============================================================================
+# 冷却塔 (Cooling Tower) × 3
+# =============================================================================
+
+inst:CT_01 a cim-equip:CoolingTower ;
+    rdfs:label "冷却塔 CT-01"@zh-CN ;
+    cim-d:designTag "CT-01" ;
+    cim-d:ratedCapacity "1500.0"^^xsd:decimal ;
+    cim-d:ratedPower "22.0"^^xsd:decimal ;
+    cim-d:minValue "15.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:CoolingTowerYard .
+
+inst:CT_02 a cim-equip:CoolingTower ;
+    rdfs:label "冷却塔 CT-02"@zh-CN ;
+    cim-d:designTag "CT-02" ;
+    cim-d:ratedCapacity "1500.0"^^xsd:decimal ;
+    cim-d:ratedPower "22.0"^^xsd:decimal ;
+    cim-d:minValue "15.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:CoolingTowerYard .
+
+inst:CT_03 a cim-equip:CoolingTower ;
+    rdfs:label "冷却塔 CT-03"@zh-CN ;
+    cim-d:designTag "CT-03" ;
+    cim-d:ratedCapacity "1500.0"^^xsd:decimal ;
+    cim-d:ratedPower "22.0"^^xsd:decimal ;
+    cim-d:minValue "15.0"^^xsd:decimal ;
+    cim-space:locatedIn inst:CoolingTowerYard .
+
+# =============================================================================
+# FlowPath — 冷冻水/冷却水回路
+# =============================================================================
+
+inst:FP_CHW_Supply a cim-flow:ChilledWaterFlow ;
+    rdfs:label "冷冻水供水干管"@zh-CN ;
+    cim-c:hasMedium cim-med:ChilledWater .
+
+inst:FP_CHW_Return a cim-flow:ChilledWaterFlow ;
+    rdfs:label "冷冻水回水干管"@zh-CN ;
+    cim-c:hasMedium cim-med:ChilledWater .
+
+inst:FP_CW_Supply a cim-flow:CondenserWaterFlow ;
+    rdfs:label "冷却水供水干管"@zh-CN ;
+    cim-c:hasMedium cim-med:CondenserWater .
+
+inst:FP_CW_Return a cim-flow:CondenserWaterFlow ;
+    rdfs:label "冷却水回水干管"@zh-CN ;
+    cim-c:hasMedium cim-med:CondenserWater .
+
+# =============================================================================
+# 设施生命周期过程声明
+# =============================================================================
+
+inst:Project_ConceptualDesign a cim-f:ConceptualDesignProcess ;
+    rdfs:label "冷站方案设计过程"@zh-CN ;
+    cim-f:processStageCode "CONCEPT" ;
+    cim-f:processStartDate "2025-06-01"^^xsd:date ;
+    cim-f:processEndDate   "2025-08-31"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Concept .
+
+inst:Milestone_Concept a cim-f:DesignApprovalMilestone ;
+    rdfs:label "冷站方案审批通过"@zh-CN .
+
+inst:Project_SchematicDesign a cim-f:SchematicDesignProcess ;
+    rdfs:label "冷站初步设计过程"@zh-CN ;
+    cim-f:processStageCode "SD" ;
+    cim-f:processStartDate "2025-09-01"^^xsd:date ;
+    cim-f:processEndDate   "2025-11-30"^^xsd:date .
+
+inst:Project_DetailedDesign a cim-f:DetailedDesignProcess ;
+    rdfs:label "冷站施工图设计过程"@zh-CN ;
+    cim-f:processStageCode "DD" ;
+    cim-f:processStartDate "2025-12-01"^^xsd:date ;
+    cim-f:processEndDate   "2026-02-28"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_IDM_DD .
+
+inst:Milestone_IDM_DD a cim-f:InformationDeliveryMilestone ;
+    rdfs:label "冷站施工图信息交付里程碑"@zh-CN .
+
+inst:Project_Tendering a cim-f:TenderingProcess ;
+    rdfs:label "冷站招投标过程"@zh-CN ;
+    cim-f:processStageCode "TENDER" ;
+    cim-f:processStartDate "2026-03-01"^^xsd:date ;
+    cim-f:processEndDate   "2026-04-30"^^xsd:date .
+
+inst:Project_Construction a cim-f:ConstructionProcess ;
+    rdfs:label "冷站施工安装过程"@zh-CN ;
+    cim-f:processStageCode "CONST" ;
+    cim-f:processStartDate "2026-05-01"^^xsd:date ;
+    cim-f:processEndDate   "2026-12-31"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Complete .
+
+inst:Milestone_Complete a cim-f:ConstructionCompletionMilestone ;
+    rdfs:label "冷站竣工验收"@zh-CN .
+
+inst:Project_Commissioning a cim-f:CommissioningProcess ;
+    rdfs:label "冷站调试验收过程"@zh-CN ;
+    cim-f:processStageCode "COMM" ;
+    cim-f:processStartDate "2027-01-01"^^xsd:date ;
+    cim-f:processEndDate   "2027-03-31"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Handover .
+
+inst:Milestone_Handover a cim-f:HandoverMilestone ;
+    rdfs:label "冷站PIM→AIM移交"@zh-CN .
+
+# ── 时序链 ──────────────────────────────────────────────────────────────────
+inst:Project_ConceptualDesign cim-f:temporallyPrecedes inst:Project_SchematicDesign .
+inst:Project_SchematicDesign  cim-f:temporallyPrecedes inst:Project_DetailedDesign .
+inst:Project_DetailedDesign   cim-f:temporallyPrecedes inst:Project_Tendering .
+inst:Project_Tendering        cim-f:temporallyPrecedes inst:Project_Construction .
+inst:Project_Construction     cim-f:temporallyPrecedes inst:Project_Commissioning .
+inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_MedGasValidation .
+inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_CleanroomQual .
+
+inst:Project_MedGasValidation a cim-f:MedicalGasValidationProcess ;
+    rdfs:label "冷站医用气体系统验证(不适用,占位)"@zh-CN ;
+    cim-f:processStageCode "MEDGAS-VAL" ;
+    cim-f:processStartDate "2027-02-01"^^xsd:date .
+
+inst:Project_CleanroomQual a cim-f:CleanroomQualificationProcess ;
+    rdfs:label "冷站洁净室验收(不适用,占位)"@zh-CN ;
+    cim-f:processStageCode "CR-QUAL" ;
+    cim-f:processStartDate "2027-02-15"^^xsd:date .
+
+# ── 信息制品 ────────────────────────────────────────────────────────────────
+inst:SchematicModel a cim-f:DesignModel ;
+    rdfs:label "冷站初步设计模型"@zh-CN ;
+    cim-f:isoLoD "LOD200" ;
+    cim-f:producedBy inst:Project_SchematicDesign .
+
+inst:DetailedModel a cim-f:DesignModel ;
+    rdfs:label "冷站施工图模型"@zh-CN ;
+    cim-f:isoLoD "LOD300" ;
+    cim-f:producedBy inst:Project_DetailedDesign .
+
+# =============================================================================
+# END OF CHILLER PLANT SCENARIO v1.0
+# =============================================================================
