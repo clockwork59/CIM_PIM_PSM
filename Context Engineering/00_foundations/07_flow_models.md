@@ -425,7 +425,7 @@ c: 比热容 (kJ/kg·K)
 **示例**: 冷机季度维护
 ```yaml
 维护工单:
-  工单编号: WO-2025-Q4-CH-001
+  工单编号: WO-2025-Q4- CHL-19XR-001
   设备: CH-3F-01 (1号冷机)
   维护类型: PM (Preventive Maintenance)
   维护周期: QUARTERLY (季度)

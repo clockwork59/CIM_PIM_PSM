@@ -76,7 +76,7 @@ Unified_ID_Convention:
       
       - rule_id: "ID-R02"
         description: "层级分隔符使用连字符(-)"
-        example_valid: "EQP-HVAC-CH-001"
+        example_valid: "EQP-HVAC- CHL-19XR-001"
         example_invalid: "EQP_HVAC_CH_001"
       
       - rule_id: "ID-R03"
@@ -89,7 +89,7 @@ Unified_ID_Convention:
       
       - rule_id: "ID-R05"
         description: "跨域引用使用完整ID路径"
-        example: "@Agent-03.EQP-HVAC-CH-001"
+        example: "@Agent-03.EQP-HVAC- CHL-19XR-001"
       
   # ─────────────────────────────────────────────────────────────────────────────
   # A.1.2 各Agent专用ID前缀
@@ -188,7 +188,7 @@ Unified_ID_Convention:
         TERM: "终端 (Terminal)"
       
       examples:
-        - id: "EQP-HVAC-CH-001"
+        - id: "EQP-HVAC- CHL-19XR-001"
           description: "冷水机组001"
         
         - id: "EQP-HVAC-AHU-OR-001"
@@ -342,7 +342,7 @@ Unified_ID_Convention:
         - id: "OM-ALM-TEMP-HIGH-001"
           description: "高温告警规则001"
         
-        - id: "OM-WO-PM-CH-001"
+        - id: "OM-WO-PM- CHL-19XR-001"
           description: "冷机预防性维护工单模板001"
         
         - id: "OM-MP-HVAC-Q-001"
@@ -362,7 +362,7 @@ Unified_ID_Convention:
         - ref: "@Agent-01.SYS-HVAC-CHP-SRC-001"
           meaning: "引用Agent-01定义的HVAC冷源系统源节点001"
         
-        - ref: "@Agent-03.EQP-HVAC-CH-001"
+        - ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
           meaning: "引用Agent-03定义的冷水机组001"
         
         - ref: "@Agent-02.SPC-L4-SURG-OR1-001"
@@ -1092,8 +1092,8 @@ Platform_Data_Dictionary_Alignment:
       input_format: "@Agent-NN.{ID}"
       output_format: "{ID}"
       example:
-        input: "@Agent-03.EQP-HVAC-CH-001"
-        output: "EQP-HVAC-CH-001"
+        input: "@Agent-03.EQP-HVAC- CHL-19XR-001"
+        output: "EQP-HVAC- CHL-19XR-001"
       
     enum_mapping:
       description: "枚举值转换"
@@ -1549,7 +1549,7 @@ Agent04_Flow_Model_v2:
         nodes:
           - flow_id: "FLW-CHW-SRC-001"
             topology_ref: "@Agent-01.SYS-HVAC-CHP-SRC-001"
-            equipment_ref: "@Agent-03.EQP-HVAC-CH-001"
+            equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
             equipment_type: "离心式冷水机组"
             specifications:
               capacity_RT: 1200
@@ -1560,7 +1560,7 @@ Agent04_Flow_Model_v2:
             
           - flow_id: "FLW-CHW-SRC-002"
             topology_ref: "@Agent-01.SYS-HVAC-CHP-SRC-002"
-            equipment_ref: "@Agent-03.EQP-HVAC-CH-002"
+            equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-002"
             equipment_type: "离心式冷水机组"
             specifications:
               capacity_RT: 1200
@@ -1568,7 +1568,7 @@ Agent04_Flow_Model_v2:
             
           - flow_id: "FLW-CHW-SRC-003"
             topology_ref: "@Agent-01.SYS-HVAC-CHP-SRC-003"
-            equipment_ref: "@Agent-03.EQP-HVAC-CH-003"
+            equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-003"
             equipment_type: "螺杆式冷水机组"
             specifications:
               capacity_RT: 500
@@ -2238,9 +2238,9 @@ Agent07_Metering_System_Verified:
           L4_equipment:
             count: 25
             sample:
-              - id: "MTR-ELEC-L4-CH-001"
+              - id: "MTR-ELEC-L4- CHL-19XR-001"
                 name: "冷机001电表"
-                equipment_ref: "@Agent-03.EQP-HVAC-CH-001"
+                equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
                 accuracy_class: "B"
               
         virtual_meters:
@@ -2498,8 +2498,8 @@ Agent07_Metering_System_Verified:
         - "设备类型必须与计量介质匹配"
       
       sample_verification:
-        - meter_id: "MTR-ELEC-L4-CH-001"
-          equipment_ref: "@Agent-03.EQP-HVAC-CH-001"
+        - meter_id: "MTR-ELEC-L4- CHL-19XR-001"
+          equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
           type_match: "✅"
         
         - meter_id: "MTR-CHW-L1-001"
@@ -2650,7 +2650,7 @@ Agent_Normalization_Patches:
       equipment_reference_format:
         description: "设备引用格式规范化"
         before: "equipment_type: 冷水机组"
-        after: "equipment_ref: @Agent-03.EQP-HVAC-CH-001"
+        after: "equipment_ref: @Agent-03.EQP-HVAC- CHL-19XR-001"
       
   # ─────────────────────────────────────────────────────────────────────────────
   # D.2 Agent-02 空间本体建模师 归一化补丁
@@ -2702,7 +2702,7 @@ Agent_Normalization_Patches:
       
         examples:
           before: "CH-001"
-          after: "EQP-HVAC-CH-001"
+          after: "EQP-HVAC- CHL-19XR-001"
         
       topology_reference_addition:
         description: "添加到拓扑节点的引用"
@@ -2724,7 +2724,7 @@ Agent_Normalization_Patches:
             - id: "DI_RUN"
               name: "运行状态"
               type: "DI"
-              control_ref: "@Agent-06.CTL-SNS-HVAC-RUN-CH-001"
+              control_ref: "@Agent-06.CTL-SNS-HVAC-RUN- CHL-19XR-001"
             
   # ─────────────────────────────────────────────────────────────────────────────
   # D.4 Agent-05 系统-空间耦合建模师 归一化补丁
@@ -2847,7 +2847,7 @@ Agent_Normalization_Patches:
         
         workorder_examples:
           before: "WO-PM-CHILLER-001"
-          after: "OM-WO-PM-CH-001"
+          after: "OM-WO-PM- CHL-19XR-001"
         
       equipment_reference_format:
         before:
@@ -2855,8 +2855,8 @@ Agent_Normalization_Patches:
         
         after:
           applicable_equipment:
-            - ref: "@Agent-03.EQP-HVAC-CH-001"
-            - ref: "@Agent-03.EQP-HVAC-CH-002"
+            - ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
+            - ref: "@Agent-03.EQP-HVAC- CHL-19XR-002"
           
       control_point_reference:
         before: "trigger_point: 冷冻水供水温度"
@@ -2867,9 +2867,9 @@ Agent_Normalization_Patches:
       
         added:
           energy_data_source:
-            - ref: "@Agent-07.MTR-ELEC-L4-CH-001"
+            - ref: "@Agent-07.MTR-ELEC-L4- CHL-19XR-001"
               usage: "冷机耗电量"
-            - ref: "@Agent-07.MTR-CHW-L4-CH-001"
+            - ref: "@Agent-07.MTR-CHW-L4- CHL-19XR-001"
               usage: "冷机制冷量"
             
   # ─────────────────────────────────────────────────────────────────────────────

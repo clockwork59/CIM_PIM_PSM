@@ -367,7 +367,7 @@ Unified_Output_Format:
         - ref: "@Agent-01.SYS-HVAC-CHP-SRC-001"
           meaning: "引用Agent-01的HVAC冷源系统源节点001"
           
-        - ref: "@Agent-03.EQP-HVAC-CH-001"
+        - ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
           meaning: "引用Agent-03的冷水机组001"
           
         - ref: "@Agent-05.CU-HVAC-OR-001"
@@ -973,8 +973,8 @@ Platform_Data_Dictionary_Alignment:
       input_format: "@Agent-NN.{ID}"
       output_format: "{ID}"
       example:
-        input: "@Agent-03.EQP-HVAC-CH-001"
-        output: "EQP-HVAC-CH-001"
+        input: "@Agent-03.EQP-HVAC- CHL-19XR-001"
+        output: "EQP-HVAC- CHL-19XR-001"
         
     enum_mapping:
       description: "枚举值转换"

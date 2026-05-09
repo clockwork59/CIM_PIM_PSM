@@ -403,7 +403,7 @@ Physical_Metering_Network:
       # 冷站分项
       chiller_plant_submeters:
       
-        - meter_id: "METER-ELEC-L3-CH-001"
+        - meter_id: "METER-ELEC-L3- CHL-19XR-001"
           name: "1号冷机电表"
           meter_type: "PHYSICAL"
           accuracy_class: "B"
@@ -415,7 +415,7 @@ Physical_Metering_Network:
           rated_power: 520  # kW
           data_point_ref: "Agent-06.AI_ENERGY_CH1"
         
-        - meter_id: "METER-ELEC-L3-CH-002"
+        - meter_id: "METER-ELEC-L3- CHL-19XR-002"
           name: "2号冷机电表"
           meter_type: "PHYSICAL"
           accuracy_class: "B"
@@ -423,7 +423,7 @@ Physical_Metering_Network:
           equipment_ref: "Agent-03.EQP-CH-CENT-002"
           rated_power: 520
         
-        - meter_id: "METER-ELEC-L3-CH-003"
+        - meter_id: "METER-ELEC-L3- CHL-19XR-003"
           name: "3号冷机电表"
           meter_type: "PHYSICAL"
           accuracy_class: "B"
@@ -720,7 +720,7 @@ Physical_Metering_Network:
           name: "冷站电力平衡"
           equation: |
             METER-ELEC-L2-CHP ≥ 
-            (METER-ELEC-L3-CH-001 + CH-002 + CH-003 + CH-004
+            (METER-ELEC-L3- CHL-19XR-001 + CH-002 + CH-003 + CH-004
              + METER-ELEC-L3-CHWP + CWP + CT) × 0.98
           loss_factor: "2%"
         

@@ -71,7 +71,7 @@
       "validationFlags": ["PASS"]
     },
     {
-      "@id": "cim:EQP-HVAC-CH-001",
+      "@id": "cim:EQP-HVAC- CHL-19XR-001",
       "@type": "EquipmentNode",
       "ratedPower": 850,
       "isConnectedTo": "cim:SYS-HVAC-CHP",

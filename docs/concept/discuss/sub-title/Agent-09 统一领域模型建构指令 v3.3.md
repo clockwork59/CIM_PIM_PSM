@@ -143,7 +143,7 @@ serialization_strategy:
         jsonld_pattern: "{base_uri}EQP-{system}-{type}-{seq:03d}"
         example:
           yaml: "node_id: CH-1"
-          jsonld: "@id": "EQP-HVAC-CH-001"
+          jsonld: "@id": "EQP-HVAC- CHL-19XR-001"
         
       system:
         yaml_source: "system_id"
@@ -456,7 +456,7 @@ complete_conversion_example:
   target_jsonld: |
     {
       "@context": "ontology/cim_context.jsonld",
-      "@id": "EQP-HVAC-CH-001",
+      "@id": "EQP-HVAC- CHL-19XR-001",
       "@type": ["cim-equip:Chiller", "brick:Chiller", "fso:Supplier"],
       
       "rdfs:label": {"@value": "冷水机组1号", "@language": "zh"},
@@ -538,7 +538,7 @@ entity_resolution_strategy:
     equipment:
       key_field: "equipment_id | node_id | device_code"
       sources: ["Agent-01", "Agent-03", "Agent-06"]
-      example: "CH-1 → EQP-HVAC-CH-001"
+      example: "CH-1 → EQP-HVAC- CHL-19XR-001"
     
     space:
       key_field: "room_code | space_id"
@@ -654,7 +654,7 @@ entity_resolution_strategy:
       description: "记录所有冲突及其解决方式"
       format: |
         {
-          "entity_id": "EQP-HVAC-CH-001",
+          "entity_id": "EQP-HVAC- CHL-19XR-001",
           "property": "cim-equip:ratedCapacity",
           "conflicts": [
             {"source": "Agent-03", "value": 1200, "timestamp": "2025-01-15"},
@@ -740,7 +740,7 @@ entity_resolution_strategy:
       # 输出：合并后的单一实体
       
       {
-        "@id": "EQP-HVAC-CH-001",
+        "@id": "EQP-HVAC- CHL-19XR-001",
         "@type": ["cim-equip:Chiller", "brick:Chiller", "fso:Supplier"],
         
         "rdfs:label": {"@value": "冷水机组1号", "@language": "zh"},
@@ -838,7 +838,7 @@ global_index_specification:
           "subtypes": {
             "cim-equip:Chiller": {
               "count": 4,
-              "ids": ["EQP-HVAC-CH-001", "EQP-HVAC-CH-002", ...]
+              "ids": ["EQP-HVAC- CHL-19XR-001", "EQP-HVAC- CHL-19XR-002", ...]
             },
             "cim-equip:AHU": {
               "count": 45,
@@ -866,7 +866,7 @@ global_index_specification:
           "system_type": "cim-system:ChilledWaterSystem",
           "component_count": 45,
           "components": {
-            "cim-equip:Chiller": ["EQP-HVAC-CH-001", "EQP-HVAC-CH-002", ...],
+            "cim-equip:Chiller": ["EQP-HVAC- CHL-19XR-001", "EQP-HVAC- CHL-19XR-002", ...],
             "cim-equip:Pump": ["EQP-HVAC-CHWP-PRI-001", "EQP-HVAC-CHWP-SEC-001", ...],
             "cim-flow:FlowNode": ["NODE-CHW-HEADER-S", "NODE-CHW-HEADER-R", ...]
           }
@@ -891,7 +891,7 @@ global_index_specification:
           "space_count": 20,
           "equipment_count": 180,
           "spaces": [...],
-          "equipment": ["EQP-HVAC-CH-001", "EQP-HVAC-CH-002", ...]
+          "equipment": ["EQP-HVAC- CHL-19XR-001", "EQP-HVAC- CHL-19XR-002", ...]
         },
         "L1": {...},
         "L2": {...},
@@ -908,7 +908,7 @@ global_index_specification:
           "relationship_count": 850,
           "by_target": {
             "SPC-L3-OR-001": {
-              "served_by": ["EQP-HVAC-AHU-001", "EQP-HVAC-CH-001", "EQP-MGAS-O2-001", ...]
+              "served_by": ["EQP-HVAC-AHU-001", "EQP-HVAC- CHL-19XR-001", "EQP-MGAS-O2-001", ...]
             },
             "SPC-L3-OR-002": {...}
           },
@@ -964,7 +964,7 @@ global_index_specification:
         },
         
         "equipment_to_systems": {
-          "EQP-HVAC-CH-001": ["SYS-HVAC-CHW-PLANT"],
+          "EQP-HVAC- CHL-19XR-001": ["SYS-HVAC-CHW-PLANT"],
           "EQP-HVAC-AHU-001": ["SYS-HVAC-CHW-PLANT", "SYS-HVAC-AHU-OR"]
         },
         

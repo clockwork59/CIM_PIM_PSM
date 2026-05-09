@@ -305,22 +305,22 @@ Step2_GraphConstruction:
         
       merge_examples:
         - original_entities:
-            - "@Agent-03.EQP-HVAC-CH-001"  (设备本体)
+            - "@Agent-03.EQP-HVAC- CHL-19XR-001"  (设备本体)
             - "@Agent-01.SYS-HVAC-CHP-SRC-001"  (拓扑位置)
-            - "@Agent-06.CTL-SNS-HVAC-TEMP-CH-001"  (温度传感器)
-            - "@Agent-08.OM-MP-HVAC-Q-CH-001"  (维保计划)
+            - "@Agent-06.CTL-SNS-HVAC-TEMP- CHL-19XR-001"  (温度传感器)
+            - "@Agent-08.OM-MP-HVAC-Q- CHL-19XR-001"  (维保计划)
             
           merged_node:
-            node_id: "CIM-EQP-HVAC-CH-001"
+            node_id: "CIM-EQP-HVAC- CHL-19XR-001"
             node_type: "EquipmentNode"
             properties:
-              equipment_id: "EQP-HVAC-CH-001"
+              equipment_id: "EQP-HVAC- CHL-19XR-001"
               equipment_type: "CENTRIFUGAL_CHILLER"
               capacity_RT: 1200
               rated_power_kW: 850
               system_ref: "@Agent-01.SYS-HVAC-CHP-SRC-001"
-              has_sensor_temp: "CTL-SNS-HVAC-TEMP-CH-001"
-              maintenance_plan: "OM-MP-HVAC-Q-CH-001"
+              has_sensor_temp: "CTL-SNS-HVAC-TEMP- CHL-19XR-001"
+              maintenance_plan: "OM-MP-HVAC-Q- CHL-19XR-001"
               
   relationship_semantic_mapping:
     
@@ -847,7 +847,7 @@ Step4_CIM_Certification:
             line: 456
             context: "space meter allocation"
             
-      - entity_id: "EQP-HVAC-CH-001"
+      - entity_id: "EQP-HVAC- CHL-19XR-001"
         entity_type: "Equipment"
         defined_in:
           agent: "Agent-03"

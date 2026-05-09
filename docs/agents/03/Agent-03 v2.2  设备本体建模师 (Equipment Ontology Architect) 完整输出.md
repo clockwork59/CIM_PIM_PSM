@@ -145,24 +145,46 @@ agent01_to_agent03_mapping:
                   type_name: "离心式冷水机组"
                   medical_grade: "CRITICAL"
                   typical_capacity: "500-2000RT"
+                  typical_cop: "5.7-7.0"
+                  typical_brands: ["Carrier 19XR/19XV/19DV", "York YK", "Trane CVHE/CVHF", "McQuay WSC"]
+                  system_reference:
+                    primary_system: "HVAC-CHP-01"
+                    system_role: "冷源设备"
                 - type_id: "EQP-CH-SCREW"
                   type_name: "螺杆式冷水机组"
                   medical_grade: "CRITICAL"
                   typical_capacity: "100-500RT"
+                  typical_cop: "5.5-6.5"
+                  typical_brands: ["York YD/YMC2", "Trane ACLASS/RTAE", "McQuay WCC/WME"]
+                  system_reference:
+                    primary_system: "HVAC-CHP-01"
+                    system_role: "冷源设备"
             - node_id: "HVAC-CHP-CT"
               node_type: "AUXILIARY"
               equipment_types:
                 - type_id: "EQP-CT-OPEN"
                   type_name: "开式冷却塔"
+                  system_reference:
+                    primary_system: "HVAC-CHP-01"
+                    system_role: "辅助设备"
                 - type_id: "EQP-CT-CLOSED"
                   type_name: "闭式冷却塔"
+                  system_reference:
+                    primary_system: "HVAC-CHP-01"
+                    system_role: "辅助设备"
             - node_id: "HVAC-CHP-PUMP"
               node_type: "DISTRIBUTION"
               equipment_types:
                 - type_id: "EQP-PUMP-CHW"
                   type_name: "冷冻水泵"
+                  system_reference:
+                    primary_system: "HVAC-CHWP"
+                    system_role: "分配设备"
                 - type_id: "EQP-PUMP-CW"
                   type_name: "冷却水泵"
+                  system_reference:
+                    primary_system: "HVAC-CWP"
+                    system_role: "分配设备"
                 
         HVAC_HWP:  # 热源系统
           topology_nodes:
@@ -172,14 +194,23 @@ agent01_to_agent03_mapping:
                 - type_id: "EQP-BOILER-GAS"
                   type_name: "燃气锅炉"
                   medical_grade: "IMPORTANT"
+                  system_reference:
+                    primary_system: "HVAC-HWS"
+                    system_role: "热源设备"
                 - type_id: "EQP-BOILER-STEAM"
                   type_name: "蒸汽锅炉"
                   medical_grade: "CRITICAL"
+                  system_reference:
+                    primary_system: "HVAC-HWS"
+                    system_role: "热源设备"
             - node_id: "HVAC-HWP-PUMP"
               node_type: "DISTRIBUTION"
               equipment_types:
                 - type_id: "EQP-PUMP-HW"
                   type_name: "热水循环泵"
+                  system_reference:
+                    primary_system: "HVAC-HWP"
+                    system_role: "分配设备"
                 
         HVAC_AHU:  # 空调机组系统
           topology_nodes:
@@ -190,12 +221,18 @@ agent01_to_agent03_mapping:
                   type_name: "洁净空调机组"
                   medical_grade: "LIFE_SAFETY"
                   application: ["手术室", "ICU", "洁净实验室"]
+                  system_reference:
+                    primary_system: "HVAC-AHU-MAIN"
+                    system_role: "末端设备"
             - node_id: "HVAC-AHU-COMBO"
               node_type: "TERMINAL"
               equipment_types:
                 - type_id: "EQP-AHU-COMBO"
                   type_name: "组合式空调机组"
                   medical_grade: "IMPORTANT"
+                  system_reference:
+                    primary_system: "HVAC-AHU-MAIN"
+                    system_role: "末端设备"
             - node_id: "HVAC-FILTER-HEPA"
               node_type: "COMPONENT"
               equipment_types:
@@ -203,6 +240,9 @@ agent01_to_agent03_mapping:
                   type_name: "HEPA高效过滤器"
                   medical_grade: "LIFE_SAFETY"
                   efficiency: "H13/H14"
+                  system_reference:
+                    primary_system: "HVAC-AHU-MAIN"
+                    system_role: "组件设备"
                 
         HVAC_VAV:  # 变风量系统
           topology_nodes:
@@ -212,6 +252,9 @@ agent01_to_agent03_mapping:
                 - type_id: "EQP-VAV-BOX"
                   type_name: "变风量末端"
                   medical_grade: "IMPORTANT"
+                  system_reference:
+                    primary_system: "HVAC-VAV"
+                    system_role: "末端设备"
                 
         HVAC_FCU:  # 风机盘管系统
           topology_nodes:
@@ -220,8 +263,14 @@ agent01_to_agent03_mapping:
               equipment_types:
                 - type_id: "EQP-FCU-CEILING"
                   type_name: "吊顶式风机盘管"
+                  system_reference:
+                    primary_system: "HVAC-FCU"
+                    system_role: "末端设备"
                 - type_id: "EQP-FCU-CASSETTE"
                   type_name: "卡式风机盘管"
+                  system_reference:
+                    primary_system: "HVAC-FCU"
+                    system_role: "末端设备"
                 
         HVAC_EXH:  # 排风系统
           topology_nodes:
@@ -230,10 +279,16 @@ agent01_to_agent03_mapping:
               equipment_types:
                 - type_id: "EQP-FAN-EXH"
                   type_name: "排风机"
+                  system_reference:
+                    primary_system: "HVAC-EXH"
+                    system_role: "末端设备"
                 - type_id: "EQP-FAN-NEG"
                   type_name: "负压排风机"
                   medical_grade: "LIFE_SAFETY"
                   application: ["负压隔离病房", "传染病区"]
+                  system_reference:
+                    primary_system: "HVAC-EXH"
+                    system_role: "末端设备"
                 
         HVAC_PAU:  # 新风系统
           topology_nodes:
@@ -315,14 +370,23 @@ agent01_to_agent03_mapping:
                 - type_id: "EQP-HV-SWITCHGEAR"
                   type_name: "高压开关柜"
                   medical_grade: "CRITICAL"
+                  system_reference:
+                    primary_system: "ELEC-HV"
+                    system_role: "分配设备"
             - node_id: "ELEC-HV-TRANS"
               node_type: "CONVERSION"
               equipment_types:
                 - type_id: "EQP-TRANS-DRY"
                   type_name: "干式变压器"
                   medical_grade: "CRITICAL"
+                  system_reference:
+                    primary_system: "ELEC-TRF"
+                    system_role: "变压设备"
                 - type_id: "EQP-TRANS-OIL"
                   type_name: "油浸式变压器"
+                  system_reference:
+                    primary_system: "ELEC-TRF"
+                    system_role: "变压设备"
                 
         ELEC_LV:  # 低压配电
           topology_nodes:
@@ -331,16 +395,28 @@ agent01_to_agent03_mapping:
               equipment_types:
                 - type_id: "EQP-LV-SWITCHGEAR"
                   type_name: "低压开关柜"
+                  system_reference:
+                    primary_system: "ELEC-LV"
+                    system_role: "分配设备"
                 - type_id: "EQP-LV-MCC"
                   type_name: "电动机控制中心"
+                  system_reference:
+                    primary_system: "ELEC-LV"
+                    system_role: "分配设备"
             - node_id: "ELEC-LV-PANEL"
               node_type: "TERMINAL"
               equipment_types:
                 - type_id: "EQP-PANEL-DIST"
                   type_name: "配电箱"
+                  system_reference:
+                    primary_system: "ELEC-LV"
+                    system_role: "末端设备"
                 - type_id: "EQP-PANEL-MEDICAL"
                   type_name: "医疗配电箱"
                   medical_grade: "PATIENT_SAFETY"
+                  system_reference:
+                    primary_system: "ELEC-LV"
+                    system_role: "末端设备"
                 
         ELEC_EMERG:  # 应急电源
           topology_nodes:
@@ -351,21 +427,33 @@ agent01_to_agent03_mapping:
                   type_name: "柴油发电机组"
                   medical_grade: "LIFE_SAFETY"
                   startup_time: "≤10s"
+                  system_reference:
+                    primary_system: "ELEC-GEN"
+                    system_role: "应急电源"
             - node_id: "ELEC-EMERG-UPS"
               node_type: "SOURCE"
               equipment_types:
                 - type_id: "EQP-UPS-ONLINE"
                   type_name: "在线式UPS"
                   medical_grade: "LIFE_SAFETY"
+                  system_reference:
+                    primary_system: "ELEC-UPS"
+                    system_role: "应急电源"
                 - type_id: "EQP-UPS-MEDICAL"
                   type_name: "医用隔离UPS"
                   medical_grade: "LIFE_SAFETY"
+                  system_reference:
+                    primary_system: "ELEC-UPS"
+                    system_role: "应急电源"
             - node_id: "ELEC-EMERG-ATS"
               node_type: "SWITCHING"
               equipment_types:
                 - type_id: "EQP-ATS"
                   type_name: "自动转换开关"
                   medical_grade: "LIFE_SAFETY"
+                  system_reference:
+                    primary_system: "ELEC-ATS"
+                    system_role: "切换设备"
                 
         ELEC_IT:  # IT配电(医疗隔离电源)
           topology_nodes:
@@ -376,9 +464,15 @@ agent01_to_agent03_mapping:
                   type_name: "医用隔离变压器"
                   medical_grade: "LIFE_SAFETY"
                   application: ["手术室", "ICU", "CCU"]
+                  system_reference:
+                    primary_system: "ELEC-ISO"
+                    system_role: "隔离设备"
                 - type_id: "EQP-ISO-MONITOR"
                   type_name: "绝缘监测仪"
                   medical_grade: "LIFE_SAFETY"
+                  system_reference:
+                    primary_system: "ELEC-ISO"
+                    system_role: "监测设备"
 
     # 4. 医疗气体系统
     MEDICAL_GAS:
@@ -398,15 +492,24 @@ agent01_to_agent03_mapping:
                   type_name: "液氧储罐系统"
                   medical_grade: "LIFE_SAFETY"
                   capacity: "5-20m³"
+                  system_reference:
+                    primary_system: "MG-O2"
+                    system_role: "气源设备"
                 - type_id: "EQP-O2-MANIFOLD"
                   type_name: "氧气汇流排"
                   medical_grade: "LIFE_SAFETY"
+                  system_reference:
+                    primary_system: "MG-O2"
+                    system_role: "分配设备"
             - node_id: "MG-O2-OUTLET"
               node_type: "TERMINAL"
               equipment_types:
                 - type_id: "EQP-O2-OUTLET"
                   type_name: "氧气终端"
                   medical_grade: "PATIENT_SAFETY"
+                  system_reference:
+                    primary_system: "MG-O2"
+                    system_role: "末端设备"
                 
         MG_VAC:  # 真空系统
           topology_nodes:
@@ -417,11 +520,17 @@ agent01_to_agent03_mapping:
                   type_name: "医用真空泵组"
                   medical_grade: "LIFE_SAFETY"
                   redundancy: "N+1"
+                  system_reference:
+                    primary_system: "MG-VAC"
+                    system_role: "气源设备"
             - node_id: "MG-VAC-OUTLET"
               node_type: "TERMINAL"
               equipment_types:
                 - type_id: "EQP-VAC-OUTLET"
                   type_name: "负压吸引终端"
+                  system_reference:
+                    primary_system: "MG-VAC"
+                    system_role: "末端设备"
                 
         MG_AIR:  # 压缩空气系统
           topology_nodes:
@@ -1093,6 +1202,161 @@ agent02_to_agent03_mapping:
               outlet: 1
             - type_id: "EQP-NC-PANEL"
               quantity: 1
+          
+          pressure_differential_monitoring:
+            - sensor_type: "微压差变送器 (Differential Pressure Transducer)"
+              quantity_per_room: 2
+              sensor_id_format: "SNS-P-{Floor}{Room}-{Index}"
+              examples:
+                - "SNS-P-3F301-01"
+                - "SNS-P-3F301-02"
+              specification:
+                - sensor_index: "01"
+                  position: "门上方气流方向"
+                  measurement_range: "0-±25 Pa"
+                  accuracy: "±0.25 Pa"
+                  purpose: "ICU正压/负压监控 - 主传感器"
+                
+                - sensor_index: "02"
+                  position: "回风侧补充监控"
+                  measurement_range: "0-±25 Pa"
+                  accuracy: "±0.25 Pa"
+                  purpose: "备用/补充压差监控"
+              
+              alarm_configuration:
+                alarm_threshold: "±2.5 Pa偏差报警"
+                high_pressure_alarm: "+5Pa"
+                low_pressure_alarm: "-5Pa"
+                response_time: "≤10秒"
+              
+              system_integration:
+                - connection: "BACnet/Modbus protocol"
+                - reporting_to: "BMS中央控制系统"
+                - display_location: "床头墙面数字显示器"
+        
+        NICU_房间_(新生儿重症监护):
+          environmental_class: "ISO 7"
+          equipment_per_bed:
+            - type_id: "EQP-O2-OUTLET"
+              quantity: 2
+            - type_id: "EQP-VAC-OUTLET"
+              quantity: 2
+            - type_id: "EQP-COMP-MEDICAL"
+              outlet: 1
+            - type_id: "EQP-NC-PANEL"
+              quantity: 1
+          
+          pressure_differential_monitoring:
+            description: "新生儿ICU房间压差监控配置"
+            sensor_configuration:
+              - sensor_id: "SNS-P-{Floor}{NICU_RoomNo}-01"
+                type: "微压差变送器"
+                location: "门上方气流方向"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "NICU正压监控"
+              
+              - sensor_id: "SNS-P-{Floor}{NICU_RoomNo}-02"
+                type: "微压差变送器"
+                location: "回风侧补充监控"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "NICU备用监控"
+              
+              alarm_setpoint: "±2.5 Pa偏差报警"
+        
+        PICU_房间_(儿童重症监护):
+          environmental_class: "ISO 7"
+          equipment_per_bed:
+            - type_id: "EQP-O2-OUTLET"
+              quantity: 2
+            - type_id: "EQP-VAC-OUTLET"
+              quantity: 2
+            - type_id: "EQP-COMP-MEDICAL"
+              outlet: 1
+            - type_id: "EQP-NC-PANEL"
+              quantity: 1
+          
+          pressure_differential_monitoring:
+            description: "儿童ICU房间压差监控配置"
+            sensor_configuration:
+              - sensor_id: "SNS-P-{Floor}{PICU_RoomNo}-01"
+                type: "微压差变送器"
+                location: "门上方气流方向"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "PICU正压监控"
+              
+              - sensor_id: "SNS-P-{Floor}{PICU_RoomNo}-02"
+                type: "微压差变送器"
+                location: "回风侧补充监控"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "PICU备用监控"
+              
+              alarm_setpoint: "±2.5 Pa偏差报警"
+        
+        RICU_房间_(呼吸重症监护):
+          environmental_class: "ISO 7"
+          equipment_per_bed:
+            - type_id: "EQP-O2-OUTLET"
+              quantity: 2
+            - type_id: "EQP-VAC-OUTLET"
+              quantity: 2
+            - type_id: "EQP-COMP-MEDICAL"
+              outlet: 1
+            - type_id: "EQP-NC-PANEL"
+              quantity: 1
+          
+          pressure_differential_monitoring:
+            description: "呼吸重症监护室房间压差监控配置"
+            sensor_configuration:
+              - sensor_id: "SNS-P-{Floor}{RICU_RoomNo}-01"
+                type: "微压差变送器"
+                location: "门上方气流方向"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "RICU正压监控"
+              
+              - sensor_id: "SNS-P-{Floor}{RICU_RoomNo}-02"
+                type: "微压差变送器"
+                location: "回风侧补充监控"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "RICU备用监控"
+              
+              alarm_setpoint: "±2.5 Pa偏差报警"
+        
+        神外ICU_房间_(神经外科重症监护):
+          environmental_class: "ISO 7"
+          equipment_per_bed:
+            - type_id: "EQP-O2-OUTLET"
+              quantity: 2
+            - type_id: "EQP-VAC-OUTLET"
+              quantity: 2
+            - type_id: "EQP-COMP-MEDICAL"
+              outlet: 1
+            - type_id: "EQP-NC-PANEL"
+              quantity: 1
+          
+          pressure_differential_monitoring:
+            description: "神经外科ICU房间压差监控配置"
+            sensor_configuration:
+              - sensor_id: "SNS-P-{Floor}{NeuroICU_RoomNo}-01"
+                type: "微压差变送器"
+                location: "门上方气流方向"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "神外ICU正压监控"
+              
+              - sensor_id: "SNS-P-{Floor}{NeuroICU_RoomNo}-02"
+                type: "微压差变送器"
+                location: "回风侧补充监控"
+                range: "0-±25 Pa"
+                accuracy: "±0.25 Pa"
+                purpose: "神外ICU备用监控"
+              
+              alarm_setpoint: "±2.5 Pa偏差报警"
             
         普通病房:
           equipment_per_bed:
@@ -1879,7 +2143,7 @@ predictive_maintenance_model:
             f1_score: ">82%"
           
         EQP-CH-CENT:
-          model_id: "PM-CH-001"
+          model_id: "PM- CHL-19XR-001"
           features:
             cooling_performance:
               cop_degradation: "COP下降率"

@@ -133,7 +133,7 @@ equipment_model:
 
   # 7. 计量点
   meters:
-    - meter_id: "METER-CH-001-PWR"
+    - meter_id: "METER- CHL-19XR-001-PWR"
       meter_type: "ELECTRICITY"
       description: "冷机电表"
       measurements:

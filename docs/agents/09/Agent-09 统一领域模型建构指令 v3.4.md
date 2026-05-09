@@ -260,7 +260,7 @@ hyperedge_reification_pattern:
       "cim:hasParticipation": [
         {
           "@type": "cim:Participation",
-          "cim:participant": {"@id": "EQP-HVAC-CH-001"},
+          "cim:participant": {"@id": "EQP-HVAC- CHL-19XR-001"},
           "cim:participantRole": {"@id": "cim:SourceRole"},
           "cim:participantOrder": 1,
           "rdfs:comment": "冷水机组作为冷源"
@@ -1653,14 +1653,14 @@ undefined_property_handling:
       example: |
         # 输入（含未定义属性）
         {
-          "@id": "EQP-HVAC-CH-001",
+          "@id": "EQP-HVAC- CHL-19XR-001",
           "cim-equip:ratedCapacity": 1200,
           "vendor_custom_field_A": "some_value"  # 未定义
         }
       
         # 输出（宽松模式）
         {
-          "@id": "EQP-HVAC-CH-001",
+          "@id": "EQP-HVAC- CHL-19XR-001",
           "cim-equip:ratedCapacity": 1200,
           "cim:customProperties": [
             {
@@ -1737,7 +1737,7 @@ index_performance_and_consistency:
       description: "索引与数据的版本对齐"
       implementation: |
         {
-          "@id": "EQP-HVAC-CH-001",
+          "@id": "EQP-HVAC- CHL-19XR-001",
           "cim:dataVersion": "2025-01-17T12:00:00Z#v1"
         }
       
@@ -1865,9 +1865,9 @@ index_query_api:
             "total_count": 4,
             "returned_count": 4,
             "ids": [
-              "EQP-HVAC-CH-001",
-              "EQP-HVAC-CH-002",
-              "EQP-HVAC-CH-003",
+              "EQP-HVAC- CHL-19XR-001",
+              "EQP-HVAC- CHL-19XR-002",
+              "EQP-HVAC- CHL-19XR-003",
               "EQP-HVAC-CH-004"
             ]
           }
@@ -3078,7 +3078,7 @@ error_handling_strategy:
           "success_entities": [...],
           "failed_entities": [
             {
-              "entity_id": "EQP-HVAC-CH-001",
+              "entity_id": "EQP-HVAC- CHL-19XR-001",
               "error_type": "MergeConflict",
               "error_message": "Unresolvable conflict on cim-equip:ratedCapacity",
               "details": {
@@ -3104,7 +3104,7 @@ error_handling_strategy:
       review_checklist_format: |
         | 实体ID | 冲突属性 | Agent-A值 | Agent-B值 | 规则建议 | 人工决策 |
         |--------|---------|----------|----------|---------|---------|
-        | EQP-CH-001 | capacity | 1200 | 1000 | 选A(权威高) | __ |
+        | EQP- CHL-19XR-001 | capacity | 1200 | 1000 | 选A(权威高) | __ |
         | SPC-OR-01 | area | 45 | 50 | 选B(更新) | __ |
     
       api_for_decision_input: |

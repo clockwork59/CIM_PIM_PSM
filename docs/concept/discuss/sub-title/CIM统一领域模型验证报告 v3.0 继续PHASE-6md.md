@@ -772,9 +772,9 @@ cat > entities/systems.jsonld << 'SYSTEMS_EOF'
       "cim-system:operatingMode": "变频调节",
       "cim-system:redundancyLevel": "N+1",
       "hasComponent": [
-        {"@id": "inst:EQP-HVAC-CH-001"},
-        {"@id": "inst:EQP-HVAC-CH-002"},
-        {"@id": "inst:EQP-HVAC-CH-003"},
+        {"@id": "inst:EQP-HVAC- CHL-19XR-001"},
+        {"@id": "inst:EQP-HVAC- CHL-19XR-002"},
+        {"@id": "inst:EQP-HVAC- CHL-19XR-003"},
         {"@id": "inst:EQP-HVAC-CH-004"},
         {"@id": "inst:EQP-HVAC-CHWP-PRI-001"},
         {"@id": "inst:EQP-HVAC-CHWP-PRI-002"},

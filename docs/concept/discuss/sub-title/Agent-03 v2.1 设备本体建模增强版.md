@@ -1502,7 +1502,7 @@ Agent03_Output_v21:
       
       fault_trees:
         
-        - fault_id: FAULT-CH-001
+        - fault_id: FAULT- CHL-19XR-001
           fault_symptom: "机组无法启动"
           diagnosis_tree:
             
@@ -1542,7 +1542,7 @@ Agent03_Output_v21:
                 - "控制信号是否正确"
               if_abnormal: "检修控制器或联系厂家"
               
-        - fault_id: FAULT-CH-002
+        - fault_id: FAULT- CHL-19XR-002
           fault_symptom: "制冷量不足"
           diagnosis_tree:
             
@@ -1593,7 +1593,7 @@ Agent03_Output_v21:
                 - "过热度是否正常"
               if_abnormal: "检漏并补充制冷剂"
               
-        - fault_id: FAULT-CH-003
+        - fault_id: FAULT- CHL-19XR-003
           fault_symptom: "机组喘振"
           diagnosis_tree:
             

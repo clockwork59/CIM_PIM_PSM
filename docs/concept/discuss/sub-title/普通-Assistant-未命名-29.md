@@ -58,7 +58,7 @@
         "lastCertified": "2025-01-10"
       },
       {
-        "@id": "cim:EQP-HVAC-CH-001",
+        "@id": "cim:EQP-HVAC- CHL-19XR-001",
         "@type": "cim:ClinicEquipment",
         "name": "真空蒸汽冷水机组",
         "equipType": "HVAC_CHILLER",

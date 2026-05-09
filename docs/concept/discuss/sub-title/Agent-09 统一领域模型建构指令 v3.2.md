@@ -477,7 +477,7 @@ v32_enhancements:
       "@id": "inst:STEP-CHW-001",
       "@type": "cim-flow:FlowSequenceStep",
       "cim-flow:sequencePosition": 1,
-      "cim-flow:component": {"@id": "inst:EQP-HVAC-CH-001"},
+      "cim-flow:component": {"@id": "inst:EQP-HVAC- CHL-19XR-001"},
       "cim-flow:roleInCircuit": "cim-flow:SourceNode",
       "cim-flow:flowPath": "cim-flow:MAIN_PATH",
       "cim-flow:stepParameters": {

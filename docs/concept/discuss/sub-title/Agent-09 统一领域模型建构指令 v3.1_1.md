@@ -724,7 +724,7 @@ v31_enhancements:
   "rdfs:label": "三层冷冻水循环（一二次泵系统）",
   "cim:version": "3.1.0",
   
-  "cim-flow:sourceComponent": {"@id": "inst:EQP-HVAC-CH-001"},
+  "cim-flow:sourceComponent": {"@id": "inst:EQP-HVAC- CHL-19XR-001"},
   "cim-flow:circulationType": "cim-flow:PRIMARY_SECONDARY_LOOP",
   "cim-flow:closedLoop": true,
   "cim-flow:medium": "cim-flow:ChilledWaterFlow",
@@ -736,7 +736,7 @@ v31_enhancements:
       "@id": "inst:STEP-CHW-001",
       "@type": "cim-flow:FlowSequenceStep",
       "cim-flow:sequencePosition": 1,
-      "cim-flow:component": {"@id": "inst:EQP-HVAC-CH-001"},
+      "cim-flow:component": {"@id": "inst:EQP-HVAC- CHL-19XR-001"},
       "cim-flow:roleInCircuit": "cim-flow:SourceNode",
       "cim-flow:stepParameters": {
         "cim-flow:flowRate": 400,

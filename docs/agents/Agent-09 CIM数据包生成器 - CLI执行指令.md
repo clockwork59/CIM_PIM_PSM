@@ -583,9 +583,9 @@ cat >> entities/cim_entities.jsonld << 'EOF'
       "cim:designCapacity": {"@value": 4000, "@type": "xsd:decimal", "qudt:unit": "unit:KiloW"},
       "cim:operatingMode": "变频调节",
       "cim:hasMember": [
-        {"@id": "cim:EQP-HVAC-CH-001"},
-        {"@id": "cim:EQP-HVAC-CH-002"},
-        {"@id": "cim:EQP-HVAC-CH-003"},
+        {"@id": "cim:EQP-HVAC- CHL-19XR-001"},
+        {"@id": "cim:EQP-HVAC- CHL-19XR-002"},
+        {"@id": "cim:EQP-HVAC- CHL-19XR-003"},
         {"@id": "cim:EQP-HVAC-CH-004"}
       ],
       "cim:sourceAgent": ["Agent-03"]
@@ -966,7 +966,7 @@ cat >> relationships/cim_relationships.jsonld << 'EOF'
     {
       "@id": "cim:REL-MEMBER-CH-CHW",
       "@type": "cim:memberOf",
-      "cim:source": {"@id": "cim:EQP-HVAC-CH-001"},
+      "cim:source": {"@id": "cim:EQP-HVAC- CHL-19XR-001"},
       "cim:target": {"@id": "cim:SYS-HVAC-CHW-PLANT"},
       "cim:role": "PRIMARY",
       "cim:sourceAgent": "Agent-03"
@@ -1081,7 +1081,7 @@ done
 
 # 生成设备索引
 cat >> index/global_xref_index.json << 'EOF'
-    "cim:EQP-HVAC-CH-001": {
+    "cim:EQP-HVAC- CHL-19XR-001": {
       "entityType": "Chiller",
       "primarySource": {
         "agent": "Agent-03",
@@ -1138,9 +1138,9 @@ cat >> index/global_xref_index.json << 'EOF'
     "cim:SYS-HVAC-CHW-PLANT": {
       "systemType": "ChilledWaterSystem",
       "members": [
-        "cim:EQP-HVAC-CH-001",
-        "cim:EQP-HVAC-CH-002",
-        "cim:EQP-HVAC-CH-003",
+        "cim:EQP-HVAC- CHL-19XR-001",
+        "cim:EQP-HVAC- CHL-19XR-002",
+        "cim:EQP-HVAC- CHL-19XR-003",
         "cim:EQP-HVAC-CH-004"
       ],
       "serves": 45,
@@ -1226,7 +1226,7 @@ cat >> index/global_xref_index.json << 'EOF'
         {"entity": "cim:SYS-MGAS-VAC", "type": "vacuum", "criticality": "HIGH"}
       ],
       "impactedBy": [
-        {"entity": "cim:EQP-HVAC-CH-001", "path": "CHW->AHU->OR1"},
+        {"entity": "cim:EQP-HVAC- CHL-19XR-001", "path": "CHW->AHU->OR1"},
         {"entity": "cim:EQP-ELEC-TR-001", "path": "TR->DP->UPS->OR1"}
       ]
     }

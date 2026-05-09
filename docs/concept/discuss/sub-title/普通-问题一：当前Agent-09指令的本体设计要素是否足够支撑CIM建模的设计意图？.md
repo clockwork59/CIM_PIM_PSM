@@ -221,7 +221,7 @@ entity_generation_directive:
       
       equipment:
         pattern: "EQP-{system}-{type}-{seq:03d}"
-        example: "EQP-HVAC-CH-001"
+        example: "EQP-HVAC- CHL-19XR-001"
       
       system:
         pattern: "SYS-{domain}-{subsystem}"
@@ -578,7 +578,7 @@ index_structure:
  structure: |
  {
  "cim-space:SurgeryRoom": ["SPC-L3-OR-001", "SPC-L3-OR-002", ...],
- "cim-equip:Chiller": ["EQP-HVAC-CH-001", "EQP-HVAC-CH-002", ...],
+ "cim-equip:Chiller": ["EQP-HVAC- CHL-19XR-001", "EQP-HVAC- CHL-19XR-002", ...],
  ...
  }
 

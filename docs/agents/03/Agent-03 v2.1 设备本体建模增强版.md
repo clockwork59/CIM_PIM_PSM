@@ -1483,7 +1483,7 @@ Agent03_Output_v21:
     
       fault_trees:
       
-        - fault_id: FAULT-CH-001
+        - fault_id: FAULT- CHL-19XR-001
           fault_symptom: "机组无法启动"
           diagnosis_tree:
           
@@ -1523,7 +1523,7 @@ Agent03_Output_v21:
                 - "控制信号是否正确"
               if_abnormal: "检修控制器或联系厂家"
             
-        - fault_id: FAULT-CH-002
+        - fault_id: FAULT- CHL-19XR-002
           fault_symptom: "制冷量不足"
           diagnosis_tree:
           
@@ -1574,7 +1574,7 @@ Agent03_Output_v21:
                 - "过热度是否正常"
               if_abnormal: "检漏并补充制冷剂"
             
-        - fault_id: FAULT-CH-003
+        - fault_id: FAULT- CHL-19XR-003
           fault_symptom: "机组喘振"
           diagnosis_tree:
           
@@ -1853,7 +1853,13 @@ Agent03_Output_v21:
         - brand: "约克 (YORK)"
           manufacturer: "江森自控"
           origin: "美国"
-          typical_models: ["YK", "YKEP", "YKEM"]
+          typical_models:
+            - model: "YK"
+              cop: 6.5
+            - model: "YKEP"
+              cop: 6.0
+            - model: "YKEM"
+              cop: 5.8
           capacity_range: "350-6000 RT"
           strengths: "技术成熟，医疗行业经验丰富"
           lead_time: "12-16周"
@@ -1861,20 +1867,38 @@ Agent03_Output_v21:
         - brand: "开利 (Carrier)"
           manufacturer: "开利空调"
           origin: "美国"
-          typical_models: ["19XR", "19XV", "19DV"]
+          typical_models:
+            - model: "19XR"
+              cop: 6.2
+            - model: "19XV"
+              cop: 6.5
+            - model: "19DV"
+              cop: 6.1
           capacity_range: "300-5000 RT"
           strengths: "变频技术领先，能效高"
         
         - brand: "特灵 (Trane)"
           manufacturer: "英格索兰"
           origin: "美国"
-          typical_models: ["CVHE", "CVHF", "CVGF"]
+          typical_models:
+            - model: "CVHE"
+              cop: 6.0
+            - model: "CVHF"
+              cop: 6.3
+            - model: "CVGF"
+              cop: 5.9
           capacity_range: "350-5000 RT"
         
         - brand: "麦克维尔 (McQuay)"
           manufacturer: "大金工业"
           origin: "日本/美国"
-          typical_models: ["WMC", "WSC", "PFS"]
+          typical_models:
+            - model: "WMC"
+              cop: 5.5
+            - model: "WSC"
+              cop: 5.8
+            - model: "PFS"
+              cop: 5.9
         
       tier_2_domestic:
         - brand: "格力"

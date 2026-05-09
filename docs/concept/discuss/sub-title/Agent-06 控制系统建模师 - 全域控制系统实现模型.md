@@ -86,7 +86,7 @@ Agent06_Output:
 # ═══════════════════════════════════════════════════════════════════════════
 
 Control_Object:
-  id: "CO-HVAC-CHP-CH-001"
+  id: "CO-HVAC-CHP- CHL-19XR-001"
   name: "1#离心式冷水机组控制对象"
   target_node_ref: "HVAC-CHP_SRC_CHILLER_1"
   equipment_ref: "EQP-CH-CENT"
@@ -2578,9 +2578,9 @@ Control_State_Machine:
     inputs:
       - source: "CO-HVAC-CHP-FLOW-001.AI_FLOW"
         name: "系统总流量"
-      - source: "CO-HVAC-CHP-CH-001.AI_CHWR_TEMP (averaged)"
+      - source: "CO-HVAC-CHP- CHL-19XR-001.AI_CHWR_TEMP (averaged)"
         name: "系统回水温度"
-      - source: "CO-HVAC-CHP-CH-001.AI_CHWS_TEMP (averaged)"
+      - source: "CO-HVAC-CHP- CHL-19XR-001.AI_CHWS_TEMP (averaged)"
         name: "系统供水温度"
         
     output:

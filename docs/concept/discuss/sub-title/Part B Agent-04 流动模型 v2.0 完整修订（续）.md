@@ -836,16 +836,16 @@ Agent07_Metering_System_Verified:
           L4_equipment:
             count: 25
             sample_meters:
-              - id: "MTR-ELEC-L4-CH-001"
+              - id: "MTR-ELEC-L4- CHL-19XR-001"
                 name: "冷机001电表"
                 type: "PHYSICAL"
-                equipment_ref: "@Agent-03.EQP-HVAC-CH-001"
+                equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
                 accuracy_class: "B"
                 
-              - id: "MTR-ELEC-L4-CH-002"
+              - id: "MTR-ELEC-L4- CHL-19XR-002"
                 name: "冷机002电表"
                 type: "PHYSICAL"
-                equipment_ref: "@Agent-03.EQP-HVAC-CH-002"
+                equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-002"
                 accuracy_class: "B"
                 
         virtual_meters:
@@ -1320,8 +1320,8 @@ Agent07_Metering_System_Verified:
         - "设备类型必须与计量介质匹配"
         
       sample_verification:
-        - meter_id: "MTR-ELEC-L4-CH-001"
-          equipment_ref: "@Agent-03.EQP-HVAC-CH-001"
+        - meter_id: "MTR-ELEC-L4- CHL-19XR-001"
+          equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
           equipment_name: "离心式冷水机组001"
           type_match: "✅ 电表-电气设备"
           verified: true
@@ -1599,7 +1599,7 @@ Agent_Normalization_Patches:
           equipment_name: "1#离心式冷机"
           
         after:
-          equipment_ref: "@Agent-03.EQP-HVAC-CH-001"
+          equipment_ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
           equipment_type: "CENTRIFUGAL_CHILLER"
           
   # ─────────────────────────────────────────────────────────────────────────────
@@ -1698,7 +1698,7 @@ Agent_Normalization_Patches:
             - "TR-001"
             
           after:
-            - "EQP-HVAC-CH-001"
+            - "EQP-HVAC- CHL-19XR-001"
             - "EQP-HVAC-AHU-OR-001"
             - "EQP-ELEC-TR-001"
             
@@ -1711,7 +1711,7 @@ Agent_Normalization_Patches:
             system: "HVAC冷源系统"
             
           after:
-            id: "EQP-HVAC-CH-001"
+            id: "EQP-HVAC- CHL-19XR-001"
             topology_ref: "@Agent-01.SYS-HVAC-CHP-SRC-001"
             
       space_reference_addition:
@@ -1739,7 +1739,7 @@ Agent_Normalization_Patches:
             - id: "DI_RUN"
               name: "运行状态"
               type: "DI"
-              control_ref: "@Agent-06.CTL-SNS-HVAC-RUN-CH-001"
+              control_ref: "@Agent-06.CTL-SNS-HVAC-RUN- CHL-19XR-001"
               
             - id: "AI_TEMP_CHWST"
               name: "冷冻水出水温度"
@@ -1929,7 +1929,7 @@ Agent_Normalization_Patches:
             - "WO-CM-AHU-001"
             
           after:
-            - "OM-WO-PM-CH-001"
+            - "OM-WO-PM- CHL-19XR-001"
             - "OM-WO-CM-AHU-001"
             
         maintenance_plan_patterns:
@@ -1949,9 +1949,9 @@ Agent_Normalization_Patches:
             
         after:
           applicable_equipment:
-            - ref: "@Agent-03.EQP-HVAC-CH-001"
-            - ref: "@Agent-03.EQP-HVAC-CH-002"
-            - ref: "@Agent-03.EQP-HVAC-CH-003"
+            - ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
+            - ref: "@Agent-03.EQP-HVAC- CHL-19XR-002"
+            - ref: "@Agent-03.EQP-HVAC- CHL-19XR-003"
             - ref: "@Agent-03.EQP-HVAC-CH-004"
             
       control_point_reference:
@@ -1969,10 +1969,10 @@ Agent_Normalization_Patches:
         
         added_content:
           energy_data_source:
-            - ref: "@Agent-07.MTR-ELEC-L4-CH-001"
+            - ref: "@Agent-07.MTR-ELEC-L4- CHL-19XR-001"
               usage: "冷机耗电量"
               
-            - ref: "@Agent-07.MTR-CHW-L4-CH-001"
+            - ref: "@Agent-07.MTR-CHW-L4- CHL-19XR-001"
               usage: "冷机制冷量"
               
           efficiency_calculation: |

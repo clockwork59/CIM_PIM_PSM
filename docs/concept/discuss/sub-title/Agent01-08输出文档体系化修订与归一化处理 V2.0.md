@@ -325,7 +325,7 @@ Unified_ID_Convention:
         PANEL: "配电柜"
         
       examples:
-        - id: "EQP-HVAC-CH-001"
+        - id: "EQP-HVAC- CHL-19XR-001"
           description: "冷水机组001"
         - id: "EQP-ELEC-TR-001"
           description: "变压器001"
@@ -452,7 +452,7 @@ Unified_ID_Convention:
       - ref: "@Agent-01.SYS-HVAC-CHP-SRC-001"
         meaning: "引用Agent-01定义的HVAC冷源系统源节点001"
         
-      - ref: "@Agent-03.EQP-HVAC-CH-001"
+      - ref: "@Agent-03.EQP-HVAC- CHL-19XR-001"
         meaning: "引用Agent-03定义的冷水机组001"
         
       - ref: "@Agent-02.SPC-L4-SURG-OR1-001"

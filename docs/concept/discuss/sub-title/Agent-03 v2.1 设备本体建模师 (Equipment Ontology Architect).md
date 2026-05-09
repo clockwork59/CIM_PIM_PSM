@@ -1920,7 +1920,7 @@ predictive_maintenance_model:
             f1_score: ">82%"
             
         EQP-CH-CENT:
-          model_id: "PM-CH-001"
+          model_id: "PM- CHL-19XR-001"
           features:
             cooling_performance:
               cop_degradation: "COP下降率"
