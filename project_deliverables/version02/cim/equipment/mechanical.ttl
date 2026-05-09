@@ -80,6 +80,106 @@ cim-equip:FCU
     cim:sourceAgent "Agent-03" ;
     skos:note "风机盘管机组，通常用于房间级空调"@zh-CN .
 
+cim-equip:Fan
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Fan"@en ;
+    rdfs:label "风机"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "送风机/排风机，含轴流风机和离心风机"@zh-CN .
+
+cim-equip:Boiler
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Boiler"@en ;
+    rdfs:label "锅炉/热水机组"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "燃气锅炉或电热水机组，用于热水供暖系统"@zh-CN .
+
+cim-equip:HeatExchanger
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Heat Exchanger"@en ;
+    rdfs:label "换热器"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "板式或管式换热器，用于冷/热源侧热交换"@zh-CN .
+
+# ── 医用气体设备 ────────────────────────────────────────────────────────────
+
+cim-equip:MedicalGasOutlet
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Medical Gas Outlet"@en ;
+    rdfs:label "医用气体末端接口"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    cim:topologyRole "SINK"^^xsd:string ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "手术室/ICU床头医用气体终端（氧气、负压、压缩空气接口）"@zh-CN .
+
+cim-equip:MedGasCompressor
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Medical Gas Compressor"@en ;
+    rdfs:label "医用气体压缩机"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    cim:topologyRole "SRC"^^xsd:string ;
+    skos:note "医用压缩空气机组，输出压力 0.4-0.8 MPa"@zh-CN .
+
+cim-equip:LiquidOxygenStation
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Liquid Oxygen Station"@en ;
+    rdfs:label "液氧站"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    cim:topologyRole "SRC"^^xsd:string ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "低温液氧储罐及汽化设备，为全院供氧"@zh-CN .
+
+cim-equip:VacuumPumpUnit
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Vacuum Pump Unit"@en ;
+    rdfs:label "真空泵机组"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    cim:topologyRole "SRC"^^xsd:string ;
+    skos:note "医用负压中心机组，产生 -0.04 MPa 负压"@zh-CN .
+
+# ── 管网分布元件 ────────────────────────────────────────────────────────────
+
+cim-equip:Pipe
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:DistributionComponent ;
+    rdfs:label "Pipe"@en ;
+    rdfs:label "管道"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    cim:topologyRole "DIST"^^xsd:string ;
+    skos:note "对应 IFC IfcFlowSegment"@zh-CN .
+
+cim-equip:PipeFitting
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:DistributionComponent ;
+    rdfs:label "Pipe Fitting"@en ;
+    rdfs:label "管件"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    cim:topologyRole "DIST"^^xsd:string ;
+    skos:note "弯头、三通、异径管等，对应 IFC IfcFlowFitting"@zh-CN .
+
+cim-equip:FlowControlValve
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Flow Control Valve"@en ;
+    rdfs:label "控制阀"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    skos:note "电动调节阀、电磁阀等，对应 IFC IfcFlowController"@zh-CN .
+
+cim-equip:DistributionComponent
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Distribution Component"@en ;
+    rdfs:label "分配网络元件"@zh-CN ;
+    cim:sourceAgent "Agent-03" ;
+    rdfs:comment "管道、管件等分配网络的基础元件（非独立设备）"@zh-CN .
+
 # ============================================================================
 # END OF HVAC EQUIPMENT MODULE
 # ============================================================================

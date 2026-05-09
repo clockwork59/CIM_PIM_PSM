@@ -5,8 +5,10 @@
 meta:
   file_id: "DD-CIM-20260405"
   version: "1.0.0"
-  total_properties: 160
+  total_properties: 167
   domains: [SPACE, EQUIP, CTRL, METER, OM, FLOW, TOPO]
+  last_updated: "2026-05-06"
+  changelog: "v1.0.1 — EQ-016~022 补充管道/分配元件属性（G-06修复）"
 
 # ===================================================================
 # 空间域属性 (~50条)
@@ -47,6 +49,14 @@ equipment_properties:
   - {id: EQ-013, label_cn: 风量, label_en: airFlowRate, type: decimal, unit: "m³/h", class: AHU, agent: Agent-03}
   - {id: EQ-014, label_cn: 扬程, label_en: pumpHead, type: decimal, unit: kPa, class: Pump, agent: Agent-03}
   - {id: EQ-015, label_cn: 变频范围, label_en: vfdRange, type: string, unit: Hz, class: Equipment, agent: Agent-03}
+  # G-06 补充：管道/管网分布元件属性（来自 IFC Pset_DistributionFlowElementCommon）
+  - {id: EQ-016, label_cn: 公称直径, label_en: nominalDiameter, type: decimal, unit: mm, class: Pipe, agent: Agent-03, ifc_source: "Pset_PipeConnectionProperties.NominalDiameter", standard: "GB/T 17393"}
+  - {id: EQ-017, label_cn: 壁厚, label_en: wallThickness, type: decimal, unit: mm, class: Pipe, agent: Agent-03, ifc_source: "Pset_PipeConnectionProperties.WallThickness"}
+  - {id: EQ-018, label_cn: 管道材质, label_en: pipeMaterial, type: string, values: [copper, steel, stainless_steel, CPVC, PVC, PPR, cast_iron], class: Pipe, agent: Agent-03, ifc_source: "Pset_MaterialProperties.Material"}
+  - {id: EQ-019, label_cn: 管道压力等级, label_en: pressureRating, type: decimal, unit: MPa, class: Pipe, agent: Agent-03, note: "设计压力，对应 ISO 6708 压力等级"}
+  - {id: EQ-020, label_cn: 流体介质, label_en: flowMedium, type: string, values: [chilled_water, hot_water, condenser_water, oxygen, vacuum, compressed_air, medical_gas, sanitary, supply_air, exhaust_air], class: DistributionComponent, agent: Agent-03, note: "G-04: 用于区分 SV 系统歧义"}
+  - {id: EQ-021, label_cn: Revit族引用, label_en: revitFamilyReference, type: string, class: Equipment, agent: Agent-03, ifc_source: "Pset_DistributionFlowElementCommon.Reference", note: "G-01: 用于基于族名的设备类推断"}
+  - {id: EQ-022, label_cn: 拓扑角色, label_en: topologyRole, type: string, values: [SRC, DIST, SINK, UNKNOWN], class: Equipment, agent: Agent-01, note: "设备在系统拓扑中的角色"}
 
 # ===================================================================
 # 控制域属性 (~30条)

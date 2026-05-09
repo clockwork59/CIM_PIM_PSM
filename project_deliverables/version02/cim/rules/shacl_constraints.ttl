@@ -258,32 +258,60 @@ cim:BSL3_Lab_Shape
 
 # ============================================================================
 # 设备必须有位置 Shape
+# 注: 仅适用于独立设备，不适用于管道/管件等分配网络元件（DistributionComponent）
 # ============================================================================
 
 cim:EquipmentLocation_Shape
     a sh:NodeShape ;
-    sh:targetClass cim-equip:Equipment ;
     rdfs:label "设备位置约束"@zh-CN ;
-
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "cim-equip" ;
+                sh:namespace "https://cim.medical/ontology/v3.4/equipment#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT ?this WHERE {
+                ?this a cim-equip:Equipment .
+                FILTER NOT EXISTS { ?this a cim-equip:DistributionComponent }
+            }
+        """
+    ] ;
     sh:property [
         sh:path cim:locatedIn ;
         sh:minCount 1 ;
-        sh:message "每个设备必须有位置信息 (locatedIn)"
+        sh:message "每个独立设备必须有位置信息 (locatedIn)；管道/管件等 DistributionComponent 豁免"
     ] .
 
 # ============================================================================
 # 设备节点映射 Shape
+# 注: 仅适用于独立设备，DistributionComponent 本身即为网络节点，豁免此约束
 # ============================================================================
 
 cim:EquipmentNodeMapping_Shape
     a sh:NodeShape ;
-    sh:targetClass cim-equip:Equipment ;
     rdfs:label "设备-节点映射约束"@zh-CN ;
-
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "cim-equip" ;
+                sh:namespace "https://cim.medical/ontology/v3.4/equipment#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT ?this WHERE {
+                ?this a cim-equip:Equipment .
+                FILTER NOT EXISTS { ?this a cim-equip:DistributionComponent }
+            }
+        """
+    ] ;
     sh:property [
         sh:path cim:mapsToNode ;
         sh:minCount 1 ;
-        sh:message "设备应有拓扑节点映射 (mapsToNode)"
+        sh:message "独立设备应有拓扑节点映射 (mapsToNode)；DistributionComponent 豁免"
     ] .
 
 # ============================================================================

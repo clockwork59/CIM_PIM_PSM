@@ -6,24 +6,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **CIM Unified Domain Model for Healthcare Buildings (医疗建筑统一领域模型)**
 
-A knowledge engineering project that applies multi-agent AI methodologies to healthcare building domain modeling. The project creates a Common Information Model (CIM) for medical building technical systems, enabling digital twin implementation from design to operations.
+A knowledge engineering project applying multi-agent AI methodologies to healthcare building domain modeling. Creates a Common Information Model (CIM) for medical building technical systems to enable digital twin implementation from design to operations.
+
+The three-layer architecture is **CIM → PIM → PSM** (platform-independent → platform-specific). See `Context Engineering/00_foundations/04_cim_pim_psm_architecture.md` for details.
 
 ## Project Structure
 
 ```
-统一领域模型（CIM）/
-├── Context Engineering/       # Main documentation (35+ documents)
+/
+├── Context Engineering/       # 35+ documentation files (theory, guides, templates, examples, references)
 │   ├── 00_foundations/       # 12 theoretical foundation docs
-│   ├── 10_guides/            # 6 practical guides
+│   ├── 10_guides/            # 6 role-specific implementation guides
 │   ├── 20_templates/         # 5 modeling templates
 │   ├── 30_examples/          # 5 case studies
-│   └── 40_reference/         # 6 reference docs
-├── codex/                     # Code assets and visualizations (HTML)
-├── docs/                      # Agent definitions and concept docs
-│   ├── agents/               # 9 Agent definitions (01-09)
+│   └── 40_reference/         # 6 reference catalogs
+├── codex/                     # HTML visualizations for each agent domain
+├── docs/
+│   ├── agents/               # 9 agent definition files (Agent-01 through Agent-09)
 │   ├── concept/              # Concept documentation
 │   └── issues/               # Issue tracking
-├── plans/                     # Project plans and milestones
+├── plans/                     # Project milestones (M1–M7 in 项目总控计划.md)
 ├── project_deliverables/      # Generated CIM bundles (version01, version02, etc.)
 └── generate_cim_bundle.sh     # CIM data package generator
 ```
@@ -45,18 +47,26 @@ All documents follow the naming convention: `CIMU-分类-编号-标题`
 ```
 
 Generates a complete CIM data package in `project_deliverables/CIM_Bundle/` containing:
-- `ontology/cim_medical_ontology.jsonld` - JSON-LD ontology definition
-- `entities/` - Entity instances
-- `relationships/` - Relationship definitions
-- `index/` - Entity indexes
-- `Validation_Report/` - Validation reports
-- `Raw_Agent_Outputs/` - Agent outputs organized by Agent-01 to Agent-08
-- `Design_Documents/` - Design documentation
-- `Deployment_Scripts/` - Deployment scripts
+- `ontology/cim_medical_ontology.jsonld` — JSON-LD ontology (156 class definitions)
+- `entities/` — 2000+ entity instances
+- `relationships/` — topology relationships (upstreamOf, downstreamOf, powers, etc.)
+- `index/` — entity indexes
+- `Validation_Report/` — validation reports
+- `Raw_Agent_Outputs/` — outputs by Agent-01 to Agent-08
+- `Design_Documents/` and `Deployment_Scripts/`
+
+### Inspect current deliverables
+
+The most complete deliverable is `project_deliverables/version02/cim/`, which includes:
+- `ontology_skeleton.ttl` — RDF/Turtle ontology
+- `equipment/mechanical.ttl`, `equipment/electrical.ttl` — equipment hierarchies
+- `rules/shacl_constraints.ttl` — SHACL validation constraints
+- `rules/cross_agent_validation.sparql` — SPARQL validation queries
+- `data_dictionary.yaml`, `global_id_registry.yaml` — structured metadata
 
 ## Multi-Agent Architecture
 
-The project uses 9 specialized agents for collaborative modeling:
+9 specialized agents produce outputs that are integrated by Agent-09. Agent definitions are in `docs/agents/`.
 
 | Agent | Role | Responsibility |
 |-------|------|----------------|
@@ -70,13 +80,11 @@ The project uses 9 specialized agents for collaborative modeling:
 | Agent-08 | O&M Management Architect | Alarms, work orders, maintenance |
 | Agent-09 | Model Integration Validator | Integrates and validates all models |
 
-Agent definitions are in `docs/agents/` with detailed CLI instructions in `Agent-09 CIM数据包生成器 - CLI执行指令.md`.
+Each agent has a defined input/output contract; outputs are written to `docs/agents/` and `docs/cim/`. CLI execution instructions for Agent-09 are in `docs/agents/Agent-09 CIM数据包生成器 - CLI执行指令.md`.
 
 ## Core Ontology Classes
 
-Key entity classes defined in the CIM ontology:
-
-**Space Hierarchy**: `Space` → `Building` → `Floor` → `Zone` → `Room` (with specialized types like `SurgeryRoom`, `ICU`, `EmergencyRoom`)
+**Space Hierarchy**: `Space` → `Building` → `Floor` → `Zone` → `Room` (with specialized types: `SurgeryRoom`, `ICU`, `EmergencyRoom`)
 
 **Equipment Categories**:
 - `HVACEquipment`: `AirHandlingUnit`, `Chiller`, `CoolingTower`, `Boiler`, `HeatExchanger`, `Fan`, `Pump`, `VAVBox`, `FCU`
@@ -89,37 +97,38 @@ Key entity classes defined in the CIM ontology:
 
 ## Key Documents
 
-**Entry Points**:
-- `Context Engineering/README.md` - Document navigation
-- `EVALUATION_REPORT.md` - Project evaluation and progress tracking
-- `docs/agents/README.md` - Agent system overview
+**Navigation hubs**:
+- `Context Engineering/README.md` — full document map with links
+- `EVALUATION_REPORT.md` — progress metrics and agent completion status
+- `plans/项目总控计划.md` — M1–M7 milestone plan
 
-**Core Foundations**:
-- `Context Engineering/00_foundations/01_vision_and_goals.md` - Project vision
-- `Context Engineering/00_foundations/03_cim_ontology_introduction.md` - CIM ontology intro
-- `Context Engineering/00_foundations/04_cim_pim_psm_architecture.md` - CIM-PIM-PSM three-layer architecture
+**Core theory**:
+- `Context Engineering/00_foundations/01_vision_and_goals.md` — project vision and strategic goals
+- `Context Engineering/00_foundations/04_cim_pim_psm_architecture.md` — three-layer MDA architecture (622 lines)
+- `Context Engineering/00_foundations/10_ontology_integration.md` — IFC/Brick/ASHRAE/Haystack alignment
 
-**Implementation Guide**:
-- `Context Engineering/10_guides/02_bim_engineer_guide.md` - BIM engineer implementation guide with code examples
+**Role-specific guides** (`Context Engineering/10_guides/`):
+- `02_bim_engineer_guide.md` — IFC-to-CIM mapping with Python pseudocode
+- `03_data_engineer_guide.md` — data pipeline and integration
+- `04_architect_guide.md` — system design perspective
+- `06_knowledge_contributor_guide.md` — how to author and extend the model
 
-## Current Phase
-
-**M1: CIM Basic Schema and Examples** (65% complete as of 2025-12-07)
-
-Planned completion: 2025-12-31
-
-## Standards Alignment
-
-The CIM model aligns with:
-- **IFC** (Industry Foundation Classes) - for BIM compatibility
-- **Brick Schema** - for building energy modeling
-- **ASHRAE** standards - for HVAC systems
-- **Project Haystack** - for semantic tagging
+**Case studies** (`Context Engineering/30_examples/`):
+- `cim_operating_room_modeling.md` — end-to-end OR room example
+- `cim_pim_psm_transformation_chain.md` — full transformation chain walkthrough
 
 ## Output Formats
 
-Agent outputs are generated in:
-- **Markdown** (.md) - Documentation and reports
-- **YAML** (.yaml) - Structured data and templates
-- **JSON-LD** (.jsonld) - Ontology definitions and entity graphs
-- **HTML** (.html) - Visualizations in `codex/`
+- **Markdown** (.md) — documentation and reports
+- **YAML** (.yaml) — structured data (data dictionary, ID registry, schedules)
+- **JSON-LD** (.jsonld) — ontology definitions and entity graphs
+- **Turtle/RDF** (.ttl) — formal ontology (equipment hierarchies, SHACL constraints)
+- **SPARQL** (.sparql) — cross-agent validation queries
+- **HTML** (.html) — interactive visualizations in `codex/`
+
+## Standards Alignment
+
+- **IFC** (Industry Foundation Classes) — BIM compatibility
+- **Brick Schema** — building energy modeling
+- **ASHRAE** — HVAC systems
+- **Project Haystack** — semantic tagging
