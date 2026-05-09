@@ -1,0 +1,1058 @@
+# =============================================================================
+# CIM Layer 1 — Conceptual Ontology
+# 医疗建筑统一领域模型 · 概念本体
+#
+# 设计原则:
+#   - 融合 Brick Schema (~600类) 和 ASHRAE 223P (~400类) 的核心语义
+#   - 对 ISO 19650 信息管理框架中"概念本体"层的实现
+#   - 平台无关、标准中立的领域概念定义
+#
+# Version : 4.0.0
+# Date    : 2026-05-06
+# Extends : CIM M1 (v3.4) ontology_skeleton.ttl
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix sh:       <http://www.w3.org/ns/shacl#> .
+
+# ── CIM 核心命名空间 (向后兼容 v3.4) ──────────────────────────────────────
+@prefix cim:      <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-ctrl:  <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+
+# ── 新增概念层命名空间 ─────────────────────────────────────────────────────
+@prefix cim-c:    <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-med:  <https://cim.medical/ontology/v4.0/medium#> .
+@prefix cim-pt:   <https://cim.medical/ontology/v4.0/point#> .
+
+<https://cim.medical/ontology/v4.0/conceptual>
+    a owl:Ontology ;
+    rdfs:label "CIM Conceptual Ontology — Layer 1"@en ;
+    rdfs:label "CIM概念本体 — 第1层"@zh-CN ;
+    rdfs:comment """
+        ISO 19650 信息管理框架中的概念本体层。
+        融合 Brick Schema 和 ASHRAE 223P 的核心语义，
+        定义医疗建筑技术系统的平台无关领域概念。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v3.4> .
+
+# =============================================================================
+# PART A — 流体介质层级 (Medium Hierarchy)
+# 来源: ASHRAE 223P s223:Medium 体系
+# 说明: 这是 M1 最大的缺口之一，系统拓扑依赖介质类型区分
+# =============================================================================
+
+cim-med:Medium
+    a owl:Class ;
+    rdfs:label "Medium"@en ;
+    rdfs:label "介质"@zh-CN ;
+    rdfs:comment "流经分配网络的物质或能量载体的抽象基类"@zh-CN ;
+    skos:note "ASHRAE 223P: s223:Medium"@en .
+
+cim-med:FluidMedium
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Medium ;
+    rdfs:label "Fluid Medium"@en ;
+    rdfs:label "流体介质"@zh-CN .
+
+cim-med:ElectricalMedium
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Medium ;
+    rdfs:label "Electrical Medium"@en ;
+    rdfs:label "电能介质"@zh-CN .
+
+cim-med:InformationMedium
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Medium ;
+    rdfs:label "Information Medium"@en ;
+    rdfs:label "信息介质"@zh-CN .
+
+# ── 空气介质 ────────────────────────────────────────────────────────────────
+cim-med:Air
+    a owl:Class ;
+    rdfs:subClassOf cim-med:FluidMedium ;
+    rdfs:label "Air"@en ; rdfs:label "空气"@zh-CN .
+
+cim-med:SupplyAir
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Air ;
+    rdfs:label "Supply Air"@en ; rdfs:label "送风"@zh-CN ;
+    skos:note "典型温度 14-18°C，正压送入空调区域"@zh-CN .
+
+cim-med:ReturnAir
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Air ;
+    rdfs:label "Return Air"@en ; rdfs:label "回风"@zh-CN .
+
+cim-med:ExhaustAir
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Air ;
+    rdfs:label "Exhaust Air"@en ; rdfs:label "排风"@zh-CN .
+
+cim-med:OutdoorAir
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Air ;
+    rdfs:label "Outdoor Air"@en ; rdfs:label "新风"@zh-CN .
+
+cim-med:MixedAir
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Air ;
+    rdfs:label "Mixed Air"@en ; rdfs:label "混合风（新回风混合）"@zh-CN .
+
+# ── 水系统介质 ───────────────────────────────────────────────────────────────
+cim-med:Water
+    a owl:Class ;
+    rdfs:subClassOf cim-med:FluidMedium ;
+    rdfs:label "Water"@en ; rdfs:label "水"@zh-CN .
+
+cim-med:ChilledWater
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Chilled Water"@en ; rdfs:label "冷冻水"@zh-CN ;
+    skos:note "典型供水温度 7°C，回水温度 12°C"@zh-CN .
+
+cim-med:HotWater
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Hot Water"@en ; rdfs:label "热水"@zh-CN ;
+    skos:note "典型供水温度 60°C，回水温度 50°C"@zh-CN .
+
+cim-med:CondenserWater
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Condenser Water"@en ; rdfs:label "冷却水"@zh-CN ;
+    skos:note "典型供水温度 32°C，回水温度 37°C"@zh-CN .
+
+cim-med:DomesticHotWater
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Domestic Hot Water"@en ; rdfs:label "生活热水"@zh-CN ;
+    skos:note "卫生热水系统，≥55°C 防军团菌"@zh-CN .
+
+cim-med:DomesticColdWater
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Domestic Cold Water"@en ; rdfs:label "生活冷水"@zh-CN .
+
+cim-med:SanitaryDrainage
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Sanitary Drainage"@en ; rdfs:label "污/废水"@zh-CN .
+
+cim-med:SteamCondensate
+    a owl:Class ;
+    rdfs:subClassOf cim-med:Water ;
+    rdfs:label "Steam Condensate"@en ; rdfs:label "蒸汽冷凝水"@zh-CN .
+
+# ── 医用气体 ─────────────────────────────────────────────────────────────────
+cim-med:MedicalGas
+    a owl:Class ;
+    rdfs:subClassOf cim-med:FluidMedium ;
+    rdfs:label "Medical Gas"@en ; rdfs:label "医用气体"@zh-CN ;
+    skos:note "符合 WS 435 及 ISO 7396 标准的管道气体"@zh-CN .
+
+cim-med:Oxygen
+    a owl:Class ;
+    rdfs:subClassOf cim-med:MedicalGas ;
+    rdfs:label "Oxygen (O₂)"@en ; rdfs:label "医用氧气"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "管道供氧压力 0.4–0.5 MPa，纯度 ≥99.5%"@zh-CN .
+
+cim-med:MedicalVacuum
+    a owl:Class ;
+    rdfs:subClassOf cim-med:MedicalGas ;
+    rdfs:label "Medical Vacuum (VAC)"@en ; rdfs:label "医用负压（吸引）"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "管道负压 −0.04 MPa（相对压力）"@zh-CN .
+
+cim-med:MedicalCompressedAir
+    a owl:Class ;
+    rdfs:subClassOf cim-med:MedicalGas ;
+    rdfs:label "Medical Compressed Air (CAIR)"@en ; rdfs:label "医用压缩空气"@zh-CN ;
+    skos:note "压力 0.4–0.5 MPa，露点 ≤−3°C"@zh-CN .
+
+cim-med:NitrousOxide
+    a owl:Class ;
+    rdfs:subClassOf cim-med:MedicalGas ;
+    rdfs:label "Nitrous Oxide (N₂O)"@en ; rdfs:label "氧化亚氮（笑气）"@zh-CN .
+
+cim-med:Nitrogen
+    a owl:Class ;
+    rdfs:subClassOf cim-med:MedicalGas ;
+    rdfs:label "Nitrogen (N₂)"@en ; rdfs:label "医用氮气（手术气动工具）"@zh-CN .
+
+cim-med:CarbonDioxide
+    a owl:Class ;
+    rdfs:subClassOf cim-med:MedicalGas ;
+    rdfs:label "Carbon Dioxide (CO₂)"@en ; rdfs:label "医用二氧化碳（腔镜手术充气）"@zh-CN .
+
+# ── 电能介质 ─────────────────────────────────────────────────────────────────
+cim-med:ACPower
+    a owl:Class ;
+    rdfs:subClassOf cim-med:ElectricalMedium ;
+    rdfs:label "AC Power"@en ; rdfs:label "交流电"@zh-CN .
+
+cim-med:DCPower
+    a owl:Class ;
+    rdfs:subClassOf cim-med:ElectricalMedium ;
+    rdfs:label "DC Power"@en ; rdfs:label "直流电"@zh-CN .
+
+cim-med:EmergencyPower
+    a owl:Class ;
+    rdfs:subClassOf cim-med:ACPower ;
+    rdfs:label "Emergency Power"@en ; rdfs:label "应急电源"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "切换时间 ≤0.5s（UPS）或 ≤10s（发电机）"@zh-CN .
+
+# =============================================================================
+# PART B — 连接点模型 (ConnectionPoint)
+# 来源: ASHRAE 223P s223:ConnectionPoint
+# 说明: M1 缺失此模型；是流体网络拓扑的基础
+# =============================================================================
+
+cim-c:ConnectionPoint
+    a owl:Class ;
+    rdfs:label "Connection Point"@en ;
+    rdfs:label "连接点"@zh-CN ;
+    rdfs:comment "设备或系统边界上的流体/电气/信息连接接口"@zh-CN ;
+    skos:note "ASHRAE 223P: s223:ConnectionPoint"@en .
+
+cim-c:InletConnectionPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-c:ConnectionPoint ;
+    rdfs:label "Inlet Connection Point"@en ; rdfs:label "入口连接点"@zh-CN .
+
+cim-c:OutletConnectionPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-c:ConnectionPoint ;
+    rdfs:label "Outlet Connection Point"@en ; rdfs:label "出口连接点"@zh-CN .
+
+cim-c:BidirectionalConnectionPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-c:ConnectionPoint ;
+    rdfs:label "Bidirectional Connection Point"@en ;
+    rdfs:label "双向连接点"@zh-CN ;
+    skos:note "用于可逆流向场景（如板换、蓄冷罐）"@zh-CN .
+
+# ── ConnectionPoint 属性 ─────────────────────────────────────────────────────
+cim-c:hasMedium
+    a owl:ObjectProperty ;
+    rdfs:domain cim-c:ConnectionPoint ;
+    rdfs:range cim-med:Medium ;
+    rdfs:label "has medium"@en ; rdfs:label "携带介质"@zh-CN ;
+    skos:note "ASHRAE 223P: s223:hasMedium"@en .
+
+cim-c:connectsTo
+    a owl:ObjectProperty ;
+    rdfs:domain cim-c:ConnectionPoint ;
+    rdfs:range cim-c:ConnectionPoint ;
+    rdfs:label "connects to"@en ; rdfs:label "连接至"@zh-CN ;
+    skos:note "ASHRAE 223P: s223:cnx"@en .
+
+cim-c:hasConnectionPoint
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-c:ConnectionPoint ;
+    rdfs:label "has connection point"@en ; rdfs:label "具有连接点"@zh-CN .
+
+# =============================================================================
+# PART C — 点层级 (Point Hierarchy)
+# 来源: Brick Schema brick:Point 体系
+# 说明: M1 只有粗粒度传感器类，缺少 Command/Setpoint/Status/Parameter
+# =============================================================================
+
+cim-pt:Point
+    a owl:Class ;
+    rdfs:label "Point"@en ;
+    rdfs:label "数据点"@zh-CN ;
+    rdfs:comment "关联物理实体的可测量/可控制的最小数据单元"@zh-CN ;
+    skos:note "Brick Schema: brick:Point"@en .
+
+# ── 传感器点 (Sensor Points) ────────────────────────────────────────────────
+cim-pt:SensorPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-pt:Point ;
+    rdfs:label "Sensor Point"@en ; rdfs:label "传感点（测量值）"@zh-CN .
+
+cim-pt:TemperaturePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Temperature Point"@en ; rdfs:label "温度点"@zh-CN .
+
+cim-pt:SupplyAirTemperaturePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:TemperaturePoint ;
+    rdfs:label "Supply Air Temperature"@en ; rdfs:label "送风温度"@zh-CN ;
+    skos:note "Brick: brick:Supply_Air_Temperature_Sensor"@en .
+
+cim-pt:ReturnAirTemperaturePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:TemperaturePoint ;
+    rdfs:label "Return Air Temperature"@en ; rdfs:label "回风温度"@zh-CN .
+
+cim-pt:ZoneAirTemperaturePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:TemperaturePoint ;
+    rdfs:label "Zone Air Temperature"@en ; rdfs:label "区域温度"@zh-CN .
+
+cim-pt:ChilledWaterSupplyTemperaturePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:TemperaturePoint ;
+    rdfs:label "Chilled Water Supply Temperature"@en ; rdfs:label "冷冻水供水温度"@zh-CN .
+
+cim-pt:HumidityPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Humidity Point"@en ; rdfs:label "湿度点"@zh-CN .
+
+cim-pt:ZoneAirHumidityPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:HumidityPoint ;
+    rdfs:label "Zone Air Humidity"@en ; rdfs:label "区域相对湿度"@zh-CN .
+
+cim-pt:PressurePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Pressure Point"@en ; rdfs:label "压力/压差点"@zh-CN .
+
+cim-pt:DifferentialPressurePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:PressurePoint ;
+    rdfs:label "Differential Pressure"@en ; rdfs:label "压差"@zh-CN .
+
+cim-pt:StaticPressurePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:PressurePoint ;
+    rdfs:label "Static Pressure"@en ; rdfs:label "静压"@zh-CN .
+
+cim-pt:RoomPressureDifferentialPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:DifferentialPressurePoint ;
+    rdfs:label "Room Pressure Differential"@en ; rdfs:label "房间压差（正/负压监控）"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-pt:MedicalGasPressurePoint
+    a owl:Class ; rdfs:subClassOf cim-pt:PressurePoint ;
+    rdfs:label "Medical Gas Pressure"@en ; rdfs:label "医用气体压力"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-pt:FlowPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Flow Point"@en ; rdfs:label "流量点"@zh-CN .
+
+cim-pt:AirFlowPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:FlowPoint ;
+    rdfs:label "Air Flow"@en ; rdfs:label "风量"@zh-CN .
+
+cim-pt:WaterFlowPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:FlowPoint ;
+    rdfs:label "Water Flow"@en ; rdfs:label "水流量"@zh-CN .
+
+cim-pt:CO2Point
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "CO₂ Concentration"@en ; rdfs:label "二氧化碳浓度"@zh-CN .
+
+cim-pt:PM25Point
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "PM2.5 Concentration"@en ; rdfs:label "PM2.5浓度"@zh-CN .
+
+cim-pt:VOCPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "VOC Concentration"@en ; rdfs:label "挥发性有机物浓度"@zh-CN .
+
+cim-pt:OccupancyPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Occupancy"@en ; rdfs:label "占用状态"@zh-CN .
+
+cim-pt:PowerPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Power"@en ; rdfs:label "电功率"@zh-CN .
+
+cim-pt:EnergyPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Energy"@en ; rdfs:label "电能（累计）"@zh-CN .
+
+cim-pt:LevelPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Level"@en ; rdfs:label "液位"@zh-CN .
+
+cim-pt:VibrationPoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SensorPoint ;
+    rdfs:label "Vibration"@en ; rdfs:label "振动"@zh-CN ;
+    skos:note "用于轴承状态监测（预测性维护）"@zh-CN .
+
+# ── 命令点 (Command Points) ─────────────────────────────────────────────────
+cim-pt:CommandPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-pt:Point ;
+    rdfs:label "Command Point"@en ; rdfs:label "命令点（控制输出）"@zh-CN ;
+    skos:note "Brick: brick:Command"@en .
+
+cim-pt:OnOffCommand
+    a owl:Class ; rdfs:subClassOf cim-pt:CommandPoint ;
+    rdfs:label "On/Off Command"@en ; rdfs:label "启停命令"@zh-CN .
+
+cim-pt:SpeedCommand
+    a owl:Class ; rdfs:subClassOf cim-pt:CommandPoint ;
+    rdfs:label "Speed Command"@en ; rdfs:label "转速/频率命令"@zh-CN .
+
+cim-pt:PositionCommand
+    a owl:Class ; rdfs:subClassOf cim-pt:CommandPoint ;
+    rdfs:label "Position Command"@en ; rdfs:label "阀门/风门开度命令"@zh-CN .
+
+# ── 设定点 (Setpoints) ───────────────────────────────────────────────────────
+cim-pt:SetpointPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-pt:Point ;
+    rdfs:label "Setpoint"@en ; rdfs:label "设定点"@zh-CN ;
+    skos:note "Brick: brick:Setpoint"@en .
+
+cim-pt:TemperatureSetpoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SetpointPoint ;
+    rdfs:label "Temperature Setpoint"@en ; rdfs:label "温度设定值"@zh-CN .
+
+cim-pt:HumiditySetpoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SetpointPoint ;
+    rdfs:label "Humidity Setpoint"@en ; rdfs:label "湿度设定值"@zh-CN .
+
+cim-pt:PressureSetpoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SetpointPoint ;
+    rdfs:label "Pressure Setpoint"@en ; rdfs:label "压力/压差设定值"@zh-CN .
+
+cim-pt:FlowSetpoint
+    a owl:Class ; rdfs:subClassOf cim-pt:SetpointPoint ;
+    rdfs:label "Flow Setpoint"@en ; rdfs:label "流量设定值"@zh-CN .
+
+# ── 状态点 (Status Points) ───────────────────────────────────────────────────
+cim-pt:StatusPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-pt:Point ;
+    rdfs:label "Status Point"@en ; rdfs:label "状态点"@zh-CN ;
+    skos:note "Brick: brick:Status"@en .
+
+cim-pt:RunStatus
+    a owl:Class ; rdfs:subClassOf cim-pt:StatusPoint ;
+    rdfs:label "Run Status"@en ; rdfs:label "运行状态"@zh-CN .
+
+cim-pt:FaultStatus
+    a owl:Class ; rdfs:subClassOf cim-pt:StatusPoint ;
+    rdfs:label "Fault Status"@en ; rdfs:label "故障状态"@zh-CN .
+
+cim-pt:ModeStatus
+    a owl:Class ; rdfs:subClassOf cim-pt:StatusPoint ;
+    rdfs:label "Mode Status"@en ; rdfs:label "运行模式状态"@zh-CN .
+
+cim-pt:AlarmStatus
+    a owl:Class ; rdfs:subClassOf cim-pt:StatusPoint ;
+    rdfs:label "Alarm Status"@en ; rdfs:label "报警状态"@zh-CN .
+
+cim-pt:ValvePositionStatus
+    a owl:Class ; rdfs:subClassOf cim-pt:StatusPoint ;
+    rdfs:label "Valve Position Status"@en ; rdfs:label "阀门位置反馈"@zh-CN .
+
+# ── 参数点 (Parameter Points) ────────────────────────────────────────────────
+cim-pt:ParameterPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-pt:Point ;
+    rdfs:label "Parameter Point"@en ; rdfs:label "参数点（设计/运行参数）"@zh-CN ;
+    skos:note "Brick: brick:Parameter"@en .
+
+cim-pt:DesignParameter
+    a owl:Class ; rdfs:subClassOf cim-pt:ParameterPoint ;
+    rdfs:label "Design Parameter"@en ; rdfs:label "设计参数"@zh-CN .
+
+cim-pt:OperatingParameter
+    a owl:Class ; rdfs:subClassOf cim-pt:ParameterPoint ;
+    rdfs:label "Operating Parameter"@en ; rdfs:label "运行参数"@zh-CN .
+
+# ── Point 关联属性 ───────────────────────────────────────────────────────────
+cim-pt:hasPoint
+    a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range cim-pt:Point ;
+    rdfs:label "has point"@en ; rdfs:label "关联数据点"@zh-CN ;
+    skos:note "Brick: brick:hasPoint"@en .
+
+cim-pt:isPointOf
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-pt:hasPoint ;
+    rdfs:label "is point of"@en ; rdfs:label "属于"@zh-CN .
+
+cim-pt:measurementUnit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-pt:Point ;
+    rdfs:range xsd:string ;
+    rdfs:label "measurement unit"@en ; rdfs:label "计量单位"@zh-CN ;
+    skos:note "建议使用 QUDT unit URI，如 unit:DEG_C"@zh-CN .
+
+cim-pt:sampleInterval_s
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-pt:Point ;
+    rdfs:range xsd:integer ;
+    rdfs:label "sample interval (seconds)"@en ; rdfs:label "采样间隔（秒）"@zh-CN .
+
+# =============================================================================
+# PART D — 扩展设备分类 (Equipment Extensions)
+# 补充 M1 缺失的子类，与 Brick/ASHRAE 223P 对齐
+# =============================================================================
+
+# ── 末端机组细化 (Terminal Units) ────────────────────────────────────────────
+cim-equip:TerminalUnit
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Terminal Unit"@en ; rdfs:label "末端机组"@zh-CN ;
+    skos:note "ASHRAE 223P: s223:TerminalUnit; Brick: brick:Terminal_Unit"@en .
+
+cim-equip:PIU
+    a owl:Class ; rdfs:subClassOf cim-equip:TerminalUnit ;
+    rdfs:label "Powered Induction Unit (PIU)"@en ;
+    rdfs:label "动力型诱导机组"@zh-CN .
+
+cim-equip:Radiator
+    a owl:Class ; rdfs:subClassOf cim-equip:TerminalUnit ;
+    rdfs:label "Radiator"@en ; rdfs:label "散热器/暖气片"@zh-CN .
+
+cim-equip:UnderfloorAirTerminal
+    a owl:Class ; rdfs:subClassOf cim-equip:TerminalUnit ;
+    rdfs:label "Underfloor Air Terminal"@en ; rdfs:label "地板送风末端"@zh-CN .
+
+# ── 热回收设备 ───────────────────────────────────────────────────────────────
+cim-equip:HeatRecoveryUnit
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Heat Recovery Unit"@en ; rdfs:label "热回收机组"@zh-CN .
+
+cim-equip:ERV
+    a owl:Class ; rdfs:subClassOf cim-equip:HeatRecoveryUnit ;
+    rdfs:label "Energy Recovery Ventilator (ERV)"@en ;
+    rdfs:label "全热回收新风机"@zh-CN ;
+    skos:note "全热（温度+湿度）交换效率 ≥75%"@zh-CN .
+
+cim-equip:HRV
+    a owl:Class ; rdfs:subClassOf cim-equip:HeatRecoveryUnit ;
+    rdfs:label "Heat Recovery Ventilator (HRV)"@en ;
+    rdfs:label "显热回收新风机"@zh-CN .
+
+# ── 给排水设备补充 ───────────────────────────────────────────────────────────
+cim-equip:PressureReducingValve
+    a owl:Class ; rdfs:subClassOf cim-equip:FlowControlValve ;
+    rdfs:label "Pressure Reducing Valve (PRV)"@en ;
+    rdfs:label "减压阀"@zh-CN .
+
+cim-equip:WaterTreatmentUnit
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Water Treatment Unit"@en ;
+    rdfs:label "水处理装置"@zh-CN .
+
+cim-equip:RO_Unit
+    a owl:Class ; rdfs:subClassOf cim-equip:WaterTreatmentUnit ;
+    rdfs:label "Reverse Osmosis Unit"@en ;
+    rdfs:label "反渗透纯水机"@zh-CN ;
+    skos:note "手术室/血透/内镜等用水纯化"@zh-CN .
+
+cim-equip:WaterSoftener
+    a owl:Class ; rdfs:subClassOf cim-equip:WaterTreatmentUnit ;
+    rdfs:label "Water Softener"@en ; rdfs:label "软化水装置"@zh-CN .
+
+# ── 医用气体系统细化 ─────────────────────────────────────────────────────────
+cim-equip:ZoneValveBox
+    a owl:Class ; rdfs:subClassOf cim-equip:FlowControlValve ;
+    rdfs:label "Medical Gas Zone Valve Box"@en ;
+    rdfs:label "医用气体区域阀箱"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "用于隔离楼层/区域医用气体管网"@zh-CN .
+
+cim-equip:MedGasAlarmPanel
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Medical Gas Alarm Panel"@en ;
+    rdfs:label "医用气体报警装置"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-equip:ManifoldSystem
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Medical Gas Manifold System"@en ;
+    rdfs:label "汇流排（备用气源）"@zh-CN ;
+    skos:note "高压气瓶汇流排，LOX 液氧站备用切换"@zh-CN .
+
+# ── 电气系统补充 ─────────────────────────────────────────────────────────────
+cim-equip:ATS
+    a owl:Class ; rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Automatic Transfer Switch (ATS)"@en ;
+    rdfs:label "自动切换开关"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "市电/发电机双电源自动切换，切换时间 ≤0.5s"@zh-CN .
+
+cim-equip:CircuitBreaker
+    a owl:Class ; rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Circuit Breaker"@en ; rdfs:label "断路器"@zh-CN .
+
+cim-equip:IsolatedPowerSystem
+    a owl:Class ; rdfs:subClassOf cim-equip:Electrical_Equipment ;
+    rdfs:label "Isolated Power System (IT System)"@en ;
+    rdfs:label "IT 隔离电源系统"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "手术室防止漏电意外，符合 IEC 60364-7-710"@zh-CN .
+
+cim-equip:PowerQualityMeter
+    a owl:Class ; rdfs:subClassOf cim-equip:Meter ;
+    rdfs:label "Power Quality Meter"@en ; rdfs:label "电能质量分析仪"@zh-CN ;
+    skos:note "监测谐波、功率因数、电压偏差等"@zh-CN .
+
+# ── 消防系统 ─────────────────────────────────────────────────────────────────
+cim-equip:FirePump
+    a owl:Class ; rdfs:subClassOf cim-equip:Pump ;
+    rdfs:label "Fire Pump"@en ; rdfs:label "消防泵"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string .
+
+cim-equip:SprinklerHead
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Sprinkler Head"@en ; rdfs:label "洒水喷头"@zh-CN ;
+    cim:topologyRole "SINK"^^xsd:string .
+
+cim-equip:FireDamper
+    a owl:Class ; rdfs:subClassOf cim-equip:MotorizedDamper ;
+    rdfs:label "Fire Damper"@en ; rdfs:label "防火阀"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "70°C 熔断关闭；GB 15930"@zh-CN .
+
+cim-equip:SmokeExhaustDamper
+    a owl:Class ; rdfs:subClassOf cim-equip:MotorizedDamper ;
+    rdfs:label "Smoke Exhaust Damper"@en ; rdfs:label "排烟防火阀"@zh-CN ;
+    skos:note "280°C 熔断关闭；GB 15930"@zh-CN .
+
+# ── 医疗专用空间设备 ─────────────────────────────────────────────────────────
+cim-equip:UV_Disinfection
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "UV Disinfection Unit"@en ; rdfs:label "紫外线消毒装置"@zh-CN .
+
+cim-equip:UVGI_InDuct
+    a owl:Class ; rdfs:subClassOf cim-equip:UV_Disinfection ;
+    rdfs:label "In-Duct UVGI System"@en ; rdfs:label "管道内紫外线灯"@zh-CN ;
+    skos:note "用于空调系统杀菌，特别是隔离病房和 ICU"@zh-CN .
+
+cim-equip:AirPurifier
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Air Purifier / HEPA Scrubber"@en ;
+    rdfs:label "空气净化器"@zh-CN .
+
+# =============================================================================
+# PART E — 空间功能类型扩展 (Space Function Extension)
+# 来源: Brick Schema 空间分类 + 医疗建筑设计规范
+# =============================================================================
+
+cim-space:WardRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Ward Room"@en ; rdfs:label "病房"@zh-CN .
+
+cim-space:SingleBedWard
+    a owl:Class ; rdfs:subClassOf cim-space:WardRoom ;
+    rdfs:label "Single-Bed Ward"@en ; rdfs:label "单床病房"@zh-CN .
+
+cim-space:MultiPatientWard
+    a owl:Class ; rdfs:subClassOf cim-space:WardRoom ;
+    rdfs:label "Multi-Patient Ward"@en ; rdfs:label "多床病房"@zh-CN .
+
+cim-space:Corridor
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Corridor"@en ; rdfs:label "走廊"@zh-CN .
+
+cim-space:MedEquipRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Medical Equipment Room"@en ; rdfs:label "医疗设备间"@zh-CN .
+
+cim-space:CTRoom
+    a owl:Class ; rdfs:subClassOf cim-space:RadiologyRoom ;
+    rdfs:label "CT Room"@en ; rdfs:label "CT机房"@zh-CN ;
+    skos:note "GB Z 130-2020: 辐射防护≥2.0 mmPb，楼板荷载≥10 kN/m²"@zh-CN .
+
+cim-space:MRIRoom
+    a owl:Class ; rdfs:subClassOf cim-space:RadiologyRoom ;
+    rdfs:label "MRI Room"@en ; rdfs:label "磁共振机房"@zh-CN ;
+    skos:note "5 Gauss 线外磁场屏蔽；RF 屏蔽笼；振动隔离"@zh-CN .
+
+cim-space:BloodBank
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Blood Bank"@en ; rdfs:label "血库"@zh-CN .
+
+cim-space:Pharmacy
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Pharmacy"@en ; rdfs:label "药房/药库"@zh-CN .
+
+cim-space:CentralSterilization
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Central Sterile Supply Department"@en ;
+    rdfs:label "消毒供应室（CSSD）"@zh-CN .
+
+cim-space:HemodialysisRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Hemodialysis Room"@en ; rdfs:label "血透室"@zh-CN ;
+    skos:note "需要 RO 纯水系统供水"@zh-CN .
+
+cim-space:EndoscopyRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Endoscopy Room"@en ; rdfs:label "内镜室"@zh-CN .
+
+cim-space:HVAC_Zone
+    a owl:Class ; rdfs:subClassOf cim-space:Zone ;
+    rdfs:label "HVAC Zone"@en ; rdfs:label "空调区域"@zh-CN ;
+    skos:note "Brick: brick:HVAC_Zone"@en .
+
+cim-space:FireProtectionZone
+    a owl:Class ; rdfs:subClassOf cim-space:Zone ;
+    rdfs:label "Fire Protection Zone"@en ; rdfs:label "消防分区"@zh-CN .
+
+cim-space:LightingZone
+    a owl:Class ; rdfs:subClassOf cim-space:Zone ;
+    rdfs:label "Lighting Zone"@en ; rdfs:label "照明控制区域"@zh-CN ;
+    skos:note "Brick: brick:Lighting_Zone"@en .
+
+# ── 空间功能属性 ──────────────────────────────────────────────────────────────
+cim-space:spaceFunctionCode
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:string ;
+    rdfs:label "space function code"@en ; rdfs:label "房间功能代码"@zh-CN ;
+    skos:note "参照 Uniclass Ss 表或 OmniClass Table 13"@zh-CN .
+
+cim-space:infectionRiskLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-space:Room ;
+    rdfs:range xsd:string ;
+    rdfs:label "infection risk level"@en ; rdfs:label "感染风险等级"@zh-CN ;
+    skos:note "E类(极高)-A类(低), 依据 GB 15982-2012"@zh-CN .
+
+# =============================================================================
+# PART F — 流动模型 (Flow Model)
+#
+# 设计说明:
+#   流动层是 CIM 概念模型的核心纽带，将三个子系统串联成完整拓扑:
+#     ① 设备/管网构件 (cim-equip:)  ——→ 连接点 (cim-c:ConnectionPoint)
+#     ② 连接点         ←——→         流路 (cim-flow:FlowPath)
+#     ③ 流路                  携带   介质 (cim-med:Medium)
+#
+#   三类流动对应建筑技术系统的三种本质:
+#     - MassFlow      (物质流): 流体、医用气体、电流载体
+#     - EnergyFlow    (能量流): 热能、电能（以功率/能量为载荷）
+#     - InformationFlow (信息流): 控制信号、BAS 数据
+#
+#   与 ASHRAE 223P 的对应:
+#     FlowPath → s223:Connection / s223:SystemsConnection
+#     FlowPath.hasMedium → s223:hasMedium
+#     FlowSegment → s223:ConnectionPoint（管段是连接点的物理实现）
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+# ── 根类 ─────────────────────────────────────────────────────────────────────
+cim-flow:FlowPath
+    a owl:Class ;
+    rdfs:label "Flow Path"@en ; rdfs:label "流动路径"@zh-CN ;
+    rdfs:comment """
+        两个连接点之间的有向/无向流动通道抽象。
+        一条 FlowPath 连接 sourcePoint → sinkPoint，
+        并携带 (hasMedium) 至少一种介质。
+    """@zh-CN ;
+    skos:note "ASHRAE 223P: s223:Connection / s223:SystemsConnection"@en .
+
+# ── 三类流动 ─────────────────────────────────────────────────────────────────
+cim-flow:MassFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:FlowPath ;
+    rdfs:label "Mass Flow"@en ; rdfs:label "物质流"@zh-CN ;
+    rdfs:comment "携带可量化质量/体积流量的流动，如管道内流体、医用气体管路"@zh-CN .
+
+cim-flow:EnergyFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:FlowPath ;
+    rdfs:label "Energy Flow"@en ; rdfs:label "能量流"@zh-CN ;
+    rdfs:comment "以热量或电功率为传输载荷的流动，描述系统间的能量交换"@zh-CN .
+
+cim-flow:InformationFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:FlowPath ;
+    rdfs:label "Information Flow"@en ; rdfs:label "信息流"@zh-CN ;
+    rdfs:comment "携带控制信号、传感数据或状态反馈的逻辑通道"@zh-CN .
+
+# =============================================================================
+# F.1 — 物质流细分 (MassFlow Subtypes)
+# =============================================================================
+
+# ── 空气流动 ─────────────────────────────────────────────────────────────────
+cim-flow:AirFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MassFlow ;
+    rdfs:label "Air Flow"@en ; rdfs:label "气流"@zh-CN ;
+    rdfs:comment "空调/通风管道中的空气流动，介质为 cim-med:Air 子类"@zh-CN .
+
+cim-flow:SupplyAirFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:AirFlow ;
+    rdfs:label "Supply Air Flow"@en ; rdfs:label "送风气流"@zh-CN ;
+    cim-c:hasMedium cim-med:SupplyAir .
+
+cim-flow:ReturnAirFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:AirFlow ;
+    rdfs:label "Return Air Flow"@en ; rdfs:label "回风气流"@zh-CN ;
+    cim-c:hasMedium cim-med:ReturnAir .
+
+cim-flow:ExhaustAirFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:AirFlow ;
+    rdfs:label "Exhaust Air Flow"@en ; rdfs:label "排风气流"@zh-CN ;
+    cim-c:hasMedium cim-med:ExhaustAir .
+
+cim-flow:OutdoorAirFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:AirFlow ;
+    rdfs:label "Outdoor Air Flow"@en ; rdfs:label "新风气流"@zh-CN ;
+    cim-c:hasMedium cim-med:OutdoorAir .
+
+# ── 水系统流动 ────────────────────────────────────────────────────────────────
+cim-flow:WaterFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MassFlow ;
+    rdfs:label "Water Flow"@en ; rdfs:label "水流"@zh-CN ;
+    rdfs:comment "HVAC 水系统或给排水管路中的液态水流动"@zh-CN .
+
+cim-flow:ChilledWaterFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:WaterFlow ;
+    rdfs:label "Chilled Water Flow"@en ; rdfs:label "冷冻水流"@zh-CN ;
+    cim-c:hasMedium cim-med:ChilledWater .
+
+cim-flow:HotWaterFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:WaterFlow ;
+    rdfs:label "Hot Water Flow"@en ; rdfs:label "热水流"@zh-CN ;
+    cim-c:hasMedium cim-med:HotWater .
+
+cim-flow:CondenserWaterFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:WaterFlow ;
+    rdfs:label "Condenser Water Flow"@en ; rdfs:label "冷却水流"@zh-CN ;
+    cim-c:hasMedium cim-med:CondenserWater .
+
+cim-flow:DomesticWaterFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:WaterFlow ;
+    rdfs:label "Domestic Water Flow"@en ; rdfs:label "生活用水流"@zh-CN ;
+    cim-c:hasMedium cim-med:DomesticColdWater .
+
+cim-flow:DrainageFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:WaterFlow ;
+    rdfs:label "Drainage Flow"@en ; rdfs:label "排水流"@zh-CN ;
+    rdfs:comment "污水/废水重力或压力排放，通常单向，无回路"@zh-CN .
+
+# ── 医用气体流动 ──────────────────────────────────────────────────────────────
+cim-flow:MedicalGasFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MassFlow ;
+    rdfs:label "Medical Gas Flow"@en ; rdfs:label "医用气体流"@zh-CN ;
+    rdfs:comment "医院医用气体管路中的气体流动，介质为 cim-med:MedicalGas 子类"@zh-CN .
+
+cim-flow:OxygenFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MedicalGasFlow ;
+    rdfs:label "Oxygen Flow"@en ; rdfs:label "氧气流"@zh-CN ;
+    cim-c:hasMedium cim-med:Oxygen .
+
+cim-flow:MedicalVacuumFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MedicalGasFlow ;
+    rdfs:label "Medical Vacuum Flow"@en ; rdfs:label "医用负压流"@zh-CN ;
+    cim-c:hasMedium cim-med:MedicalVacuum .
+
+cim-flow:MedicalAirFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MedicalGasFlow ;
+    rdfs:label "Medical Air Flow"@en ; rdfs:label "医用压缩空气流"@zh-CN ;
+    cim-c:hasMedium cim-med:MedicalAir .
+
+cim-flow:NitrousOxideFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:MedicalGasFlow ;
+    rdfs:label "Nitrous Oxide Flow"@en ; rdfs:label "氧化亚氮流"@zh-CN ;
+    cim-c:hasMedium cim-med:NitrousOxide .
+
+# ── 消防水流 ──────────────────────────────────────────────────────────────────
+cim-flow:FireWaterFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:WaterFlow ;
+    rdfs:label "Fire Water Flow"@en ; rdfs:label "消防水流"@zh-CN ;
+    rdfs:comment "消火栓系统和自动喷淋系统中的消防供水流动"@zh-CN .
+
+# =============================================================================
+# F.2 — 能量流细分 (EnergyFlow Subtypes)
+# =============================================================================
+
+cim-flow:ThermalEnergyFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:EnergyFlow ;
+    rdfs:label "Thermal Energy Flow"@en ; rdfs:label "热能流"@zh-CN ;
+    rdfs:comment "以热量（kW/kJ）为载荷的能量传递，如蒸发器/冷凝器换热量"@zh-CN .
+
+cim-flow:ElectricalEnergyFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:EnergyFlow ;
+    rdfs:label "Electrical Energy Flow"@en ; rdfs:label "电能流"@zh-CN ;
+    rdfs:comment "沿配电网路的电功率传输，方向从电源到负荷"@zh-CN ;
+    cim-c:hasMedium cim-med:ElectricalMedium .
+
+cim-flow:ACPowerFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:ElectricalEnergyFlow ;
+    rdfs:label "AC Power Flow"@en ; rdfs:label "交流电流"@zh-CN ;
+    cim-c:hasMedium cim-med:ACPower .
+
+cim-flow:DCPowerFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:ElectricalEnergyFlow ;
+    rdfs:label "DC Power Flow"@en ; rdfs:label "直流电流"@zh-CN ;
+    cim-c:hasMedium cim-med:DCPower .
+
+cim-flow:EmergencyPowerFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:ACPowerFlow ;
+    rdfs:label "Emergency Power Flow"@en ; rdfs:label "应急电源流"@zh-CN ;
+    rdfs:comment "来自 UPS/柴发的应急供电回路，医疗关键负荷专用"@zh-CN ;
+    cim-c:hasMedium cim-med:EmergencyPower .
+
+# =============================================================================
+# F.3 — 信息流细分 (InformationFlow Subtypes)
+# =============================================================================
+
+cim-flow:ControlSignalFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:InformationFlow ;
+    rdfs:label "Control Signal Flow"@en ; rdfs:label "控制信号流"@zh-CN ;
+    rdfs:comment "BAS/DDC 控制器向执行机构发出的模拟或数字控制指令"@zh-CN .
+
+cim-flow:SensorDataFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:InformationFlow ;
+    rdfs:label "Sensor Data Flow"@en ; rdfs:label "传感数据流"@zh-CN ;
+    rdfs:comment "传感器测量值向控制器或数据采集系统的上行传输"@zh-CN .
+
+cim-flow:AlarmSignalFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:InformationFlow ;
+    rdfs:label "Alarm Signal Flow"@en ; rdfs:label "报警信号流"@zh-CN ;
+    rdfs:comment "告警/故障信号从现场传感器到报警主机的传输路径"@zh-CN .
+
+cim-flow:BACnetFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:ControlSignalFlow ;
+    rdfs:label "BACnet Flow"@en ; rdfs:label "BACnet 通信流"@zh-CN ;
+    skos:note "协议: BACnet/IP (ANSI/ASHRAE 135)"@en .
+
+cim-flow:ModbusFlow
+    a owl:Class ;
+    rdfs:subClassOf cim-flow:ControlSignalFlow ;
+    rdfs:label "Modbus Flow"@en ; rdfs:label "Modbus 通信流"@zh-CN .
+
+# =============================================================================
+# F.4 — 流动模型属性 (Flow Model Properties)
+# =============================================================================
+
+# ── 与连接点的关联 ────────────────────────────────────────────────────────────
+cim-flow:sourcePoint
+    a owl:ObjectProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-c:ConnectionPoint ;
+    rdfs:label "source connection point"@en ; rdfs:label "流动起点"@zh-CN ;
+    rdfs:comment "流动方向的上游连接点（Outlet of upstream equipment）"@zh-CN .
+
+cim-flow:sinkPoint
+    a owl:ObjectProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-c:ConnectionPoint ;
+    rdfs:label "sink connection point"@en ; rdfs:label "流动终点"@zh-CN ;
+    rdfs:comment "流动方向的下游连接点（Inlet of downstream equipment）"@zh-CN .
+
+# ── 介质关联（从 Part A/B 复用） ──────────────────────────────────────────────
+cim-flow:carriesMedium
+    a owl:ObjectProperty ;
+    owl:equivalentProperty cim-c:hasMedium ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-med:Medium ;
+    rdfs:label "carries medium"@en ; rdfs:label "携带介质"@zh-CN ;
+    rdfs:comment "FlowPath 的首选介质属性（与 cim-c:hasMedium 等价，语义更明确）"@zh-CN .
+
+# ── 流动路径穿越的构件 ────────────────────────────────────────────────────────
+cim-flow:flowsThrough
+    a owl:ObjectProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "flows through"@en ; rdfs:label "流经"@zh-CN ;
+    rdfs:comment "流动路径经过的管段/构件/设备（允许多跳）"@zh-CN .
+
+# ── 流向 ─────────────────────────────────────────────────────────────────────
+cim-flow:flowDirection
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range xsd:string ;
+    rdfs:label "flow direction"@en ; rdfs:label "流向"@zh-CN ;
+    skos:note "取值: supply / return / exhaust / discharge / bidirectional"@en .
+
+# ── 设计流量 ──────────────────────────────────────────────────────────────────
+cim-flow:designFlowRate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:MassFlow ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "design flow rate"@en ; rdfs:label "设计流量"@zh-CN ;
+    rdfs:comment "单位依介质类型: 空气 m³/h, 水 m³/h 或 L/s, 气体 L/min"@zh-CN .
+
+cim-flow:designFlowRateUnit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:MassFlow ;
+    rdfs:range xsd:string ;
+    rdfs:label "design flow rate unit"@en ; rdfs:label "设计流量单位"@zh-CN .
+
+cim-flow:designPower
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:EnergyFlow ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "design power (kW)"@en ; rdfs:label "设计功率（kW）"@zh-CN .
+
+# ── 载体类型/荷载类型（M1 保留兼容） ─────────────────────────────────────────
+cim-flow:carrierType
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range xsd:string ;
+    rdfs:label "carrier type"@en ; rdfs:label "载体类型"@zh-CN ;
+    rdfs:comment "物理载体描述，如: duct / pipe / wire / wireless / gravity"@zh-CN .
+
+cim-flow:payloadType
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range xsd:string ;
+    rdfs:label "payload type"@en ; rdfs:label "荷载类型"@zh-CN ;
+    rdfs:comment "传输的实质内容类型，如: chilled-water / exhaust-air / BACnet-data"@zh-CN .
+
+# ── 测量关联 ──────────────────────────────────────────────────────────────────
+cim-flow:measuredBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-ctrl:Sensor ;
+    rdfs:label "measured by"@en ; rdfs:label "由...测量"@zh-CN ;
+    rdfs:comment "关联到监测该流路参数的传感器（流量计/能量表等）"@zh-CN .
+
+# =============================================================================
+# F.5 — 流动系统关联 (Flow-System Linkage)
+# FlowPath 归属于系统，系统为设备服务
+# =============================================================================
+
+cim-flow:belongsToSystem
+    a owl:ObjectProperty ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim:System ;
+    rdfs:label "belongs to system"@en ; rdfs:label "归属系统"@zh-CN ;
+    rdfs:comment "将流路关联到其所在的建筑技术系统（如冷冻水系统、送风系统）"@zh-CN .
+
+cim-flow:hasFlowPath
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-flow:belongsToSystem ;
+    rdfs:domain cim:System ;
+    rdfs:range cim-flow:FlowPath ;
+    rdfs:label "has flow path"@en ; rdfs:label "包含流路"@zh-CN .
+
+# =============================================================================
+# END OF LAYER 1 CONCEPTUAL ONTOLOGY
+# =============================================================================

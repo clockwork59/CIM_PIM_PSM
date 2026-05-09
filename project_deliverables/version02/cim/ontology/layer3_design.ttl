@@ -1,0 +1,503 @@
+# =============================================================================
+# CIM Layer 3 — 设计本体 (Design Ontology / PIM Layer)
+# ISO 19650 Layer 3: Design Information
+#
+# 覆盖范围:
+#   - 设计需求与性能准则 (DesignRequirement / PerformanceCriterion)
+#   - 系统规格说明 (SystemSpecification)
+#   - 设备选型规格 (EquipmentSpecification)
+#   - 空间计划 (SpaceProgram)
+#   - 工程依据文件 (EngineeringBasis)
+#   - 设计提交文件 (DesignDocument / SubmittalPackage)
+#   - 系统设计实例 (DesignedSystem)
+#   - 负荷计算 (LoadCalculation)
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-d:     <https://cim.medical/ontology/v4.0/design#> .
+@prefix cim-ref:   <https://cim.medical/ontology/v4.0/reference#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+
+<https://cim.medical/ontology/v4.0/design>
+    a owl:Ontology ;
+    rdfs:label "CIM Design Ontology"@en ;
+    rdfs:label "CIM设计本体"@zh-CN ;
+    rdfs:comment """
+        ISO 19650 第三层设计本体，覆盖医疗建筑从设计策划到施工图出图阶段的
+        信息模型需求。包括性能准则、系统规格、设备选型、空间计划及工程文件。
+        本体实例对应 PIM（工程信息模型）阶段数据。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> ;
+    owl:imports <https://cim.medical/ontology/v4.0/reference> .
+
+# =============================================================================
+# SECTION A — 设计需求与性能准则 (Design Requirements & Performance Criteria)
+# =============================================================================
+
+cim-d:DesignRequirement
+    a owl:Class ;
+    rdfs:label "Design Requirement"@en ; rdfs:label "设计需求"@zh-CN ;
+    rdfs:comment "一项必须被满足的功能或性能要求，通常源自标准、甲方任务书或医疗工艺需求"@zh-CN ;
+    skos:note "映射 ISO 19650 Exchange Information Requirement (EIR)"@en .
+
+cim-d:PerformanceCriterion
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignRequirement ;
+    rdfs:label "Performance Criterion"@en ; rdfs:label "性能准则"@zh-CN ;
+    rdfs:comment "可量化的设计性能指标，如送风量、温度精度、过滤效率"@zh-CN .
+
+cim-d:RegulatoryRequirement
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignRequirement ;
+    rdfs:label "Regulatory Requirement"@en ; rdfs:label "法规要求"@zh-CN ;
+    rdfs:comment "来自强制性国家/行业标准或政府批复文件的约束条件"@zh-CN .
+
+cim-d:ClientRequirement
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignRequirement ;
+    rdfs:label "Client Requirement"@en ; rdfs:label "业主需求"@zh-CN ;
+    rdfs:comment "业主任务书（OPR / Owner's Project Requirements）中的要求"@zh-CN .
+
+# ── 医疗洁净性能准则 ──────────────────────────────────────────────────────────
+cim-d:CleanroomPerformanceCriterion
+    a owl:Class ;
+    rdfs:subClassOf cim-d:PerformanceCriterion ;
+    rdfs:label "Cleanroom Performance Criterion"@en ; rdfs:label "洁净性能准则"@zh-CN ;
+    rdfs:comment "按 GB 50333-2013 及 ISO 14644 定义的洁净室指标"@zh-CN .
+
+cim-d:AirChangeRateCriterion
+    a owl:Class ;
+    rdfs:subClassOf cim-d:CleanroomPerformanceCriterion ;
+    rdfs:label "Air Change Rate Criterion"@en ; rdfs:label "换气次数准则"@zh-CN .
+
+cim-d:PressureDifferentialCriterion
+    a owl:Class ;
+    rdfs:subClassOf cim-d:CleanroomPerformanceCriterion ;
+    rdfs:label "Pressure Differential Criterion"@en ; rdfs:label "压差准则"@zh-CN .
+
+cim-d:TemperatureRangeCriterion
+    a owl:Class ;
+    rdfs:subClassOf cim-d:CleanroomPerformanceCriterion ;
+    rdfs:label "Temperature Range Criterion"@en ; rdfs:label "温度范围准则"@zh-CN .
+
+cim-d:HumidityRangeCriterion
+    a owl:Class ;
+    rdfs:subClassOf cim-d:CleanroomPerformanceCriterion ;
+    rdfs:label "Humidity Range Criterion"@en ; rdfs:label "湿度范围准则"@zh-CN .
+
+# =============================================================================
+# SECTION B — 系统规格说明 (System Specifications)
+# =============================================================================
+
+cim-d:SystemSpecification
+    a owl:Class ;
+    rdfs:label "System Specification"@en ; rdfs:label "系统规格说明"@zh-CN ;
+    rdfs:comment "描述一个建筑技术系统的设计方案与技术要求"@zh-CN .
+
+cim-d:HVACSystemSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SystemSpecification ;
+    rdfs:label "HVAC System Specification"@en ; rdfs:label "暖通系统规格"@zh-CN .
+
+cim-d:MedicalGasSystemSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SystemSpecification ;
+    rdfs:label "Medical Gas System Specification"@en ; rdfs:label "医用气体系统规格"@zh-CN .
+
+cim-d:ElectricalSystemSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SystemSpecification ;
+    rdfs:label "Electrical System Specification"@en ; rdfs:label "电气系统规格"@zh-CN .
+
+cim-d:PlumbingSystemSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SystemSpecification ;
+    rdfs:label "Plumbing System Specification"@en ; rdfs:label "给排水系统规格"@zh-CN .
+
+cim-d:FireProtectionSystemSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SystemSpecification ;
+    rdfs:label "Fire Protection System Specification"@en ; rdfs:label "消防系统规格"@zh-CN .
+
+cim-d:BASSystemSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SystemSpecification ;
+    rdfs:label "Building Automation System Specification"@en ; rdfs:label "楼宇自控系统规格"@zh-CN .
+
+# =============================================================================
+# SECTION C — 设备选型规格 (Equipment Specifications)
+# =============================================================================
+
+cim-d:EquipmentSpecification
+    a owl:Class ;
+    rdfs:label "Equipment Specification"@en ; rdfs:label "设备规格"@zh-CN ;
+    rdfs:comment "对一台/类设备的技术选型要求，包含额定参数、效率、认证等"@zh-CN .
+
+cim-d:ChillerSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:EquipmentSpecification ;
+    rdfs:label "Chiller Specification"@en ; rdfs:label "冷水机组规格"@zh-CN .
+
+cim-d:AHUSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:EquipmentSpecification ;
+    rdfs:label "AHU Specification"@en ; rdfs:label "空调箱规格"@zh-CN .
+
+cim-d:PumpSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:EquipmentSpecification ;
+    rdfs:label "Pump Specification"@en ; rdfs:label "水泵规格"@zh-CN .
+
+cim-d:MedicalGasOutletSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:EquipmentSpecification ;
+    rdfs:label "Medical Gas Outlet Specification"@en ; rdfs:label "医用气体终端规格"@zh-CN .
+
+cim-d:TransformerSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:EquipmentSpecification ;
+    rdfs:label "Transformer Specification"@en ; rdfs:label "变压器规格"@zh-CN .
+
+cim-d:UPSSpec
+    a owl:Class ;
+    rdfs:subClassOf cim-d:EquipmentSpecification ;
+    rdfs:label "UPS Specification"@en ; rdfs:label "UPS规格"@zh-CN .
+
+# =============================================================================
+# SECTION D — 空间计划 (Space Program)
+# =============================================================================
+
+cim-d:SpaceProgram
+    a owl:Class ;
+    rdfs:label "Space Program"@en ; rdfs:label "空间计划"@zh-CN ;
+    rdfs:comment "描述建筑空间需求的文件，包括功能要求、面积指标、相邻关系"@zh-CN .
+
+cim-d:SpaceProgramItem
+    a owl:Class ;
+    rdfs:label "Space Program Item"@en ; rdfs:label "空间计划条目"@zh-CN ;
+    rdfs:comment "空间计划中的单个空间需求条目"@zh-CN .
+
+cim-d:DepartmentProgram
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SpaceProgram ;
+    rdfs:label "Department Program"@en ; rdfs:label "科室空间计划"@zh-CN ;
+    rdfs:comment "针对一个医院科室的整体空间计划（如手术部、ICU、急诊）"@zh-CN .
+
+cim-d:CleanroomProgram
+    a owl:Class ;
+    rdfs:subClassOf cim-d:SpaceProgramItem ;
+    rdfs:label "Cleanroom Program"@en ; rdfs:label "洁净室计划"@zh-CN .
+
+# =============================================================================
+# SECTION E — 负荷计算 (Load Calculations)
+# =============================================================================
+
+cim-d:LoadCalculation
+    a owl:Class ;
+    rdfs:label "Load Calculation"@en ; rdfs:label "负荷计算"@zh-CN ;
+    rdfs:comment "工程计算文件，用于确定系统设计容量"@zh-CN .
+
+cim-d:CoolingLoadCalculation
+    a owl:Class ;
+    rdfs:subClassOf cim-d:LoadCalculation ;
+    rdfs:label "Cooling Load Calculation"@en ; rdfs:label "冷负荷计算"@zh-CN .
+
+cim-d:HeatingLoadCalculation
+    a owl:Class ;
+    rdfs:subClassOf cim-d:LoadCalculation ;
+    rdfs:label "Heating Load Calculation"@en ; rdfs:label "热负荷计算"@zh-CN .
+
+cim-d:ElectricalLoadCalculation
+    a owl:Class ;
+    rdfs:subClassOf cim-d:LoadCalculation ;
+    rdfs:label "Electrical Load Calculation"@en ; rdfs:label "电气负荷计算"@zh-CN .
+
+cim-d:VentilationLoadCalculation
+    a owl:Class ;
+    rdfs:subClassOf cim-d:LoadCalculation ;
+    rdfs:label "Ventilation Load Calculation"@en ; rdfs:label "通风量计算"@zh-CN .
+
+cim-d:MedicalGasFlowCalculation
+    a owl:Class ;
+    rdfs:subClassOf cim-d:LoadCalculation ;
+    rdfs:label "Medical Gas Flow Calculation"@en ; rdfs:label "医用气体流量计算"@zh-CN .
+
+# =============================================================================
+# SECTION F — 设计文件与提交 (Design Documents & Submittals)
+# =============================================================================
+
+cim-d:DesignDocument
+    a owl:Class ;
+    rdfs:label "Design Document"@en ; rdfs:label "设计文件"@zh-CN ;
+    rdfs:comment "设计过程中生成的文件，包括图纸、说明书、计算书"@zh-CN .
+
+cim-d:DesignDrawing
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignDocument ;
+    rdfs:label "Design Drawing"@en ; rdfs:label "设计图纸"@zh-CN .
+
+cim-d:DesignSpecificationDoc
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignDocument ;
+    rdfs:label "Design Specification Document"@en ; rdfs:label "设计说明书"@zh-CN .
+
+cim-d:CalculationReport
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignDocument ;
+    rdfs:label "Calculation Report"@en ; rdfs:label "计算报告"@zh-CN .
+
+cim-d:SubmittalPackage
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignDocument ;
+    rdfs:label "Submittal Package"@en ; rdfs:label "报批/提交包"@zh-CN ;
+    rdfs:comment "设计阶段向业主、审图机构或主管部门提交的文件集合"@zh-CN .
+
+cim-d:ModelDeliverableIFC
+    a owl:Class ;
+    rdfs:subClassOf cim-d:DesignDocument ;
+    rdfs:label "IFC Model Deliverable"@en ; rdfs:label "IFC模型交付物"@zh-CN ;
+    rdfs:comment "基于 ISO 19650 LOD/LOI 要求的 IFC 模型文件"@zh-CN .
+
+# =============================================================================
+# SECTION G — 设计系统实例关联 (Designed System Instances)
+# =============================================================================
+
+cim-d:DesignedSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:label "Designed System"@en ; rdfs:label "已设计系统"@zh-CN ;
+    rdfs:comment "具有完整设计参数的系统实例，连接 SystemSpecification 和 LoadCalculation"@zh-CN .
+
+cim-d:DesignedEquipment
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Designed Equipment"@en ; rdfs:label "已选型设备"@zh-CN ;
+    rdfs:comment "已完成选型的设备实例，具有型号、厂商、额定参数等设计属性"@zh-CN .
+
+# =============================================================================
+# SECTION H — 设计本体数据属性 (Design Datatype Properties)
+# =============================================================================
+
+# ── DesignRequirement 属性 ────────────────────────────────────────────────────
+cim-d:requirementSource
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:DesignRequirement ;
+    rdfs:range xsd:string ;
+    rdfs:label "requirement source"@en ; rdfs:label "需求来源"@zh-CN ;
+    rdfs:comment "标准编号或文件编号，如 'GB50333-2013 第5.1.3条'"@zh-CN .
+
+cim-d:requirementStatus
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:DesignRequirement ;
+    rdfs:range xsd:string ;
+    rdfs:label "requirement status"@en ; rdfs:label "需求状态"@zh-CN ;
+    skos:note "取值: proposed / approved / verified / waived"@en .
+
+# ── PerformanceCriterion 量化属性 ──────────────────────────────────────────────
+cim-d:minValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:PerformanceCriterion ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "minimum value"@en ; rdfs:label "最小值"@zh-CN .
+
+cim-d:maxValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:PerformanceCriterion ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "maximum value"@en ; rdfs:label "最大值"@zh-CN .
+
+cim-d:nominalValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:PerformanceCriterion ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "nominal value"@en ; rdfs:label "额定值"@zh-CN .
+
+cim-d:unit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:PerformanceCriterion ;
+    rdfs:range xsd:string ;
+    rdfs:label "unit"@en ; rdfs:label "单位"@zh-CN ;
+    skos:note "QUDT 单位集成规划于 CIM v5.0"@zh-CN .
+
+# ── EquipmentSpecification 属性 ───────────────────────────────────────────────
+cim-d:ratedCapacity
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:EquipmentSpecification ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "rated capacity"@en ; rdfs:label "额定容量"@zh-CN .
+
+cim-d:ratedPower
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:EquipmentSpecification ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "rated power (kW)"@en ; rdfs:label "额定功率（kW）"@zh-CN .
+
+cim-d:efficiencyRating
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:EquipmentSpecification ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "efficiency rating"@en ; rdfs:label "效率等级"@zh-CN ;
+    rdfs:comment "如 COP/EER for chillers, BEP for pumps"@zh-CN .
+
+cim-d:redundancyStrategy
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:EquipmentSpecification ;
+    rdfs:range xsd:string ;
+    rdfs:label "redundancy strategy"@en ; rdfs:label "冗余策略"@zh-CN ;
+    skos:note "如: N, N+1, 2N, 2(N+1)"@en .
+
+# ── SpaceProgramItem 属性 ─────────────────────────────────────────────────────
+cim-d:requiredAreaSqm
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:SpaceProgramItem ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "required area (sqm)"@en ; rdfs:label "要求面积（㎡）"@zh-CN .
+
+cim-d:cleanroomClass
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:SpaceProgramItem ;
+    rdfs:range xsd:string ;
+    rdfs:label "cleanroom class"@en ; rdfs:label "洁净级别"@zh-CN ;
+    skos:note "按 GB50333-2013: 100级/1000级/10000级/100000级 或 ISO Class 5-8"@en .
+
+cim-d:airChangesPerHour
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:SpaceProgramItem ;
+    rdfs:range xsd:integer ;
+    rdfs:label "air changes per hour"@en ; rdfs:label "换气次数（次/h）"@zh-CN .
+
+cim-d:pressureClass
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:SpaceProgramItem ;
+    rdfs:range xsd:string ;
+    rdfs:label "pressure class"@en ; rdfs:label "压差类别"@zh-CN ;
+    skos:note "取值: positive / neutral / negative / ultra-negative"@en .
+
+# ── DesignedEquipment 属性 ────────────────────────────────────────────────────
+cim-d:modelNumber
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:DesignedEquipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "model number"@en ; rdfs:label "型号"@zh-CN .
+
+cim-d:manufacturer
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:DesignedEquipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "manufacturer"@en ; rdfs:label "制造商"@zh-CN .
+
+cim-d:designTag
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-d:DesignedEquipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "design tag"@en ; rdfs:label "设计位号"@zh-CN ;
+    rdfs:comment "设计图纸上的设备位号，如 AHU-B1-01"@zh-CN .
+
+# =============================================================================
+# SECTION I — 设计本体对象属性 (Design Object Properties)
+# =============================================================================
+
+cim-d:hasRequirement
+    a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (cim:System cim-equip:Equipment cim-space:Space) ] ;
+    rdfs:range cim-d:DesignRequirement ;
+    rdfs:label "has requirement"@en ; rdfs:label "具有需求"@zh-CN .
+
+cim-d:satisfiedBy
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-d:hasRequirement ;
+    rdfs:label "satisfied by"@en ; rdfs:label "由...满足"@zh-CN .
+
+cim-d:hasSpecification
+    a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (cim:System cim-equip:Equipment) ] ;
+    rdfs:range [ owl:unionOf (cim-d:SystemSpecification cim-d:EquipmentSpecification) ] ;
+    rdfs:label "has specification"@en ; rdfs:label "具有规格"@zh-CN .
+
+cim-d:supportedBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-d:SystemSpecification ;
+    rdfs:range cim-d:LoadCalculation ;
+    rdfs:label "supported by"@en ; rdfs:label "由...支撑"@zh-CN .
+
+cim-d:associatedWithSpace
+    a owl:ObjectProperty ;
+    rdfs:domain cim-d:SpaceProgramItem ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "associated with space"@en ; rdfs:label "关联空间"@zh-CN .
+
+cim-d:producedBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-d:DesignDocument ;
+    rdfs:range cim-d:DesignedSystem ;
+    rdfs:label "produced by"@en ; rdfs:label "由...产出"@zh-CN .
+
+cim-d:conformsToSpec
+    a owl:ObjectProperty ;
+    rdfs:domain cim-d:DesignedEquipment ;
+    rdfs:range cim-d:EquipmentSpecification ;
+    rdfs:label "conforms to specification"@en ; rdfs:label "符合规格"@zh-CN .
+
+# =============================================================================
+# SECTION J — 关键设计准则实例 (Key Criterion Instances — GB50333 Hand-Coded)
+# =============================================================================
+
+<https://cim.medical/ontology/v4.0/design/criteria/OR_ClassI_AirChanges>
+    a cim-d:AirChangeRateCriterion ;
+    rdfs:label "I级洁净手术室换气次数"@zh-CN ;
+    cim-d:minValue "36"^^xsd:decimal ;
+    cim-d:unit "次/h" ;
+    cim-d:requirementSource "GB50333-2013 表6.4.1" .
+
+<https://cim.medical/ontology/v4.0/design/criteria/OR_ClassI_PressureDiff>
+    a cim-d:PressureDifferentialCriterion ;
+    rdfs:label "I级洁净手术室正压差"@zh-CN ;
+    cim-d:minValue "8"^^xsd:decimal ;
+    cim-d:unit "Pa" ;
+    cim-d:requirementSource "GB50333-2013 第6.5.2条" .
+
+<https://cim.medical/ontology/v4.0/design/criteria/OR_Temperature>
+    a cim-d:TemperatureRangeCriterion ;
+    rdfs:label "手术室温度范围"@zh-CN ;
+    cim-d:minValue "21"^^xsd:decimal ;
+    cim-d:maxValue "25"^^xsd:decimal ;
+    cim-d:unit "°C" ;
+    cim-d:requirementSource "GB50333-2013 第6.6条" .
+
+<https://cim.medical/ontology/v4.0/design/criteria/OR_Humidity>
+    a cim-d:HumidityRangeCriterion ;
+    rdfs:label "手术室相对湿度范围"@zh-CN ;
+    cim-d:minValue "30"^^xsd:decimal ;
+    cim-d:maxValue "60"^^xsd:decimal ;
+    cim-d:unit "%" ;
+    cim-d:requirementSource "GB50333-2013 第6.6条" .
+
+<https://cim.medical/ontology/v4.0/design/criteria/ICU_AirChanges>
+    a cim-d:AirChangeRateCriterion ;
+    rdfs:label "ICU换气次数"@zh-CN ;
+    cim-d:minValue "12"^^xsd:decimal ;
+    cim-d:unit "次/h" ;
+    cim-d:requirementSource "GB50333-2013 / WS435-2013" .
+
+<https://cim.medical/ontology/v4.0/design/criteria/IsolationRoom_NegativePressure>
+    a cim-d:PressureDifferentialCriterion ;
+    rdfs:label "隔离病房负压差"@zh-CN ;
+    cim-d:maxValue "-8"^^xsd:decimal ;
+    cim-d:unit "Pa" ;
+    cim-d:requirementSource "WS/T 311 感控标准" .
+
+# =============================================================================
+# END OF DESIGN ONTOLOGY
+# =============================================================================

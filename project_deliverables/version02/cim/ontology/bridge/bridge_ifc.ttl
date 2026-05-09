@@ -1,0 +1,257 @@
+# =============================================================================
+# CIM ↔ IFC 桥接本体
+# Bridge Ontology: CIM ↔ IFC4 (ISO 16739-1:2018)
+#
+# 基于 WestRiverSide Hospital IFC 验证结果构建
+# 覆盖已确认的映射关系 + 已知缺口标注
+#
+# IFC4 OWL 命名空间: https://standards.buildingsmart.org/IFC/DEV/IFC4/ADD2/OWL#
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-med:   <https://cim.medical/ontology/v4.0/medium#> .
+
+# IFC4 OWL namespace (external — alignment reference only)
+@prefix ifc:       <https://standards.buildingsmart.org/IFC/DEV/IFC4/ADD2/OWL#> .
+@prefix ifc2x3:    <https://standards.buildingsmart.org/IFC/RELEASE/IFC2X3/TC1/OWL#> .
+
+<https://cim.medical/ontology/v4.0/bridge/ifc>
+    a owl:Ontology ;
+    rdfs:label "CIM–IFC Bridge Ontology"@en ;
+    rdfs:label "CIM–IFC桥接本体"@zh-CN ;
+    rdfs:comment """
+        建立 CIM 医疗建筑领域模型 与 IFC4/IFC2X3 之间的语义映射。
+        基于 WestRiverSide Hospital 5专业IFC联合验证（2026-05-06）结果。
+        覆盖: 系统、设备、空间、管网构件 的双向映射规则。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# SECTION 1 — 空间层级对齐 (Spatial Hierarchy)
+# =============================================================================
+
+cim-space:Site
+    skos:exactMatch ifc:IfcSite ;
+    skos:exactMatch ifc2x3:IfcSite .
+
+cim-space:Building
+    skos:exactMatch ifc:IfcBuilding ;
+    skos:exactMatch ifc2x3:IfcBuilding .
+
+cim-space:Floor
+    skos:exactMatch ifc:IfcBuildingStorey ;
+    skos:exactMatch ifc2x3:IfcBuildingStorey .
+
+cim-space:Room
+    skos:exactMatch ifc:IfcSpace ;
+    skos:exactMatch ifc2x3:IfcSpace ;
+    rdfs:comment """
+        G-03 注记: WestRiverSide IFC 数据集（7个文件）均未导出 IfcSpace。
+        Revit 导出配置需启用 'Export rooms and areas' 选项。
+        当前验证以 IfcBuildingStorey 作为楼层级代理空间。
+    """@zh-CN .
+
+cim-space:Zone
+    skos:exactMatch ifc:IfcZone ;
+    skos:exactMatch ifc2x3:IfcZone .
+
+# =============================================================================
+# SECTION 2 — MEP 系统对齐 (MEP System Mapping)
+# 基于 WestRiverSide 验证: 466 个 IfcSystem → 449 个 CIM 系统（96.4% 覆盖率）
+# =============================================================================
+
+cim:System
+    skos:broadMatch ifc:IfcSystem ;
+    skos:broadMatch ifc2x3:IfcSystem .
+
+cim:HVACSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:label "HVAC System"@en ; rdfs:label "暖通空调系统"@zh-CN ;
+    skos:note "IFC2X3: IfcSystem; 系统前缀 SA/RA/EXH/HWS/HWR/CWS/CWR/CTS/CTR"@en .
+
+cim:MedicalGasSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:label "Medical Gas System"@en ; rdfs:label "医用气体系统"@zh-CN ;
+    skos:note "IFC2X3: IfcSystem; 系统前缀 OX/MG/SV"@en .
+
+cim:PlumbingSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:label "Plumbing System"@en ; rdfs:label "给排水系统"@zh-CN ;
+    skos:note "IFC4: IfcSystem; 系统前缀 Domestic/Sanitary"@en .
+
+cim:ElectricalSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:label "Electrical System"@en ; rdfs:label "电气系统"@zh-CN ;
+    skos:note "IFC4: IfcSystem; 照明回路（编号系统）"@en .
+
+cim:FireAlarmSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:label "Fire Alarm System"@en ; rdfs:label "火灾自动报警系统"@zh-CN ;
+    skos:note "IFC4: IfcSystem（21个防火分区）"@en .
+
+# =============================================================================
+# SECTION 3 — 设备构件对齐 (Equipment/Component Mapping)
+# 基于 IFC 实体类型 → CIM 类的映射规则（已在 ifc_cim_mapping_rules.yaml 实现）
+# =============================================================================
+
+# ── 有类型的 IFC 实体 ─────────────────────────────────────────────────────────
+cim-equip:Pipe
+    skos:exactMatch ifc:IfcPipeSegment ;
+    skos:exactMatch ifc2x3:IfcFlowSegment ;
+    skos:note "IFC2X3 中无 IfcPipeSegment，使用 IfcFlowSegment 代替"@en .
+
+cim-equip:PipeFitting
+    skos:exactMatch ifc:IfcPipeFitting ;
+    skos:exactMatch ifc2x3:IfcFlowFitting .
+
+cim-equip:FlowControlValve
+    skos:exactMatch ifc:IfcValve ;
+    skos:exactMatch ifc2x3:IfcFlowController .
+
+cim-equip:Fan
+    skos:exactMatch ifc:IfcFan ;
+    skos:broadMatch ifc2x3:IfcFlowMovingDevice .
+
+cim-equip:Pump
+    skos:exactMatch ifc:IfcPump ;
+    skos:broadMatch ifc2x3:IfcFlowMovingDevice .
+
+cim-equip:Chiller
+    skos:exactMatch ifc:IfcChiller ;
+    skos:broadMatch ifc2x3:IfcEnergyConversionDevice .
+
+cim-equip:Boiler
+    skos:exactMatch ifc:IfcBoiler ;
+    skos:broadMatch ifc2x3:IfcEnergyConversionDevice .
+
+cim-equip:CoolingTower
+    skos:exactMatch ifc:IfcCoolingTower ;
+    skos:broadMatch ifc2x3:IfcEnergyConversionDevice .
+
+cim-equip:AHU
+    skos:exactMatch ifc:IfcAirHandlingUnit ;
+    skos:broadMatch ifc2x3:IfcEnergyConversionDevice .
+
+cim-equip:FCU
+    skos:exactMatch ifc:IfcFanCoilUnit ;
+    skos:broadMatch ifc2x3:IfcFlowTerminal .
+
+cim-equip:LightFixture
+    skos:exactMatch ifc:IfcLightFixture ;
+    skos:note "IFC4 有专用类型；IFC2X3 通常为 IfcBuildingElementProxy"@en .
+
+# ── IfcBuildingElementProxy 映射（需名称模式规则）─────────────────────────────
+cim-equip:MedicalGasOutlet
+    skos:broadMatch ifc2x3:IfcBuildingElementProxy ;
+    skos:note "Revit 族名模式: 'MedGas*', 'MedGasOutlet*'"@en .
+
+cim-equip:SanitaryFixture
+    skos:broadMatch ifc:IfcSanitaryTerminal ;
+    skos:broadMatch ifc2x3:IfcBuildingElementProxy ;
+    skos:note "IFC4: IfcSanitaryTerminal; IFC2X3/Revit: Proxy 族名含 'Toilet/Sink/Basin'"@en .
+
+cim-equip:ElecReceptacle
+    skos:broadMatch ifc:IfcElectricAppliance ;
+    skos:broadMatch ifc2x3:IfcBuildingElementProxy ;
+    skos:note "Revit 族名模式: 'M_Duplex Receptacle*'"@en .
+
+cim-equip:ElecPanel
+    skos:broadMatch ifc:IfcElectricDistributionBoard ;
+    skos:broadMatch ifc2x3:IfcBuildingElementProxy ;
+    skos:note "Revit 族名模式: '*Panelboard*'"@en .
+
+# ── 消防设备 ──────────────────────────────────────────────────────────────────
+cim-equip:SmokeDetector
+    skos:exactMatch ifc:IfcAlarm ;
+    skos:broadMatch ifc:IfcDistributionControlElement ;
+    skos:note "WestRiverSide: 401个，均为 IfcDistributionControlElement 基类"@en .
+
+cim-equip:FireAlarmSounder
+    skos:broadMatch ifc:IfcDistributionControlElement ;
+    skos:note "WestRiverSide: 353个 Horn Strobe"@en .
+
+cim-equip:FireAlarmPullStation
+    skos:broadMatch ifc:IfcDistributionControlElement ;
+    skos:note "WestRiverSide: 106个 Pull Station"@en .
+
+# ── 连接端口 ──────────────────────────────────────────────────────────────────
+cim-c:ConnectionPoint
+    skos:exactMatch ifc:IfcDistributionPort ;
+    skos:exactMatch ifc2x3:IfcDistributionPort .
+
+# =============================================================================
+# SECTION 4 — IFC 属性集 → CIM 数据属性映射
+# 基于 WestRiverSide G-06 gap 分析结果
+# =============================================================================
+
+# PropertySet 映射声明（信息性，非 OWL 公理）
+
+# Pset_DistributionFlowElementCommon.Reference → cim:revitFamilyReference
+# Pset_PipeConnectionProperties.NominalDiameter → cim:nominalDiameter (EQ-016)
+# Pset_PipeConnectionProperties.WallThickness   → cim:wallThickness   (EQ-017)
+# Pset_MaterialProperties.Material              → cim:pipeMaterial    (EQ-018)
+# Pset_BuildingStoreyCommon.AboveGround         → (CIM floor属性)
+# Pset_SpaceCommon.GrossPlannedArea             → cim-space:areaSqm   (SP-014)
+# Pset_SpaceCommon.NetPlannedArea               → cim-space:areaSqm   (SP-014, net)
+
+cim:revitFamilyReference
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "Revit family reference"@en ;
+    rdfs:label "Revit族参照"@zh-CN ;
+    skos:note "来自 Pset_DistributionFlowElementCommon.Reference，用于族名分类规则"@en .
+
+cim:ifcGlobalId
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "IFC GlobalId"@en ; rdfs:label "IFC全局标识符"@zh-CN ;
+    skos:note "IFC IfcRoot.GlobalId，22字符base64编码"@en .
+
+cim:nominalDiameter
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Pipe ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "nominal diameter (mm)"@en ; rdfs:label "公称直径（mm）"@zh-CN .
+
+cim:pipeMaterial
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Pipe ;
+    rdfs:range xsd:string ;
+    rdfs:label "pipe material"@en ; rdfs:label "管道材质"@zh-CN .
+
+# =============================================================================
+# SECTION 5 — 已知 IFC↔CIM 映射缺口（来自验证报告）
+# =============================================================================
+
+# ┌────────────────────────────────────────────────────────────────────────────┐
+# │ Gap   │ IFC 侧                    │ CIM 侧          │ 解决路径            │
+# ├────────────────────────────────────────────────────────────────────────────┤
+# │ G-01  │ IfcFlowMovingDevice=0     │ Pump/Fan/Chiller│ Revit 族名模式规则  │
+# │ G-02  │ 1182 IfcBuildingProxy     │ 多类型          │ name-pattern rules  │
+# │ G-03  │ IfcSpace=0（所有文件）    │ Room/Zone       │ Revit 重新导出      │
+# │ G-06  │ NominalDiameter 未导出    │ EQ-016          │ Revit Schedule 导出 │
+# │ G-07  │ 无变压器/UPS/发电机       │ 电气设备        │ 补充 Electrical Power │
+# │ G-08  │ 无消防泵/喷淋主管         │ 消防水系统      │ 补充 Fire Suppression │
+# └────────────────────────────────────────────────────────────────────────────┘
+
+# =============================================================================
+# END OF IFC BRIDGE ONTOLOGY
+# =============================================================================

@@ -1,0 +1,301 @@
+# =============================================================================
+# CIM ↔ ASHRAE 223P 桥接本体
+# Bridge Ontology: CIM ↔ ASHRAE Standard 223P
+#
+# ASHRAE 223P 核心贡献:
+#   1. 系统-设备-连接点拓扑模型 (System-Equipment-ConnectionPoint)
+#   2. 流体介质语义层级 (Medium hierarchy)
+#   3. 功能描述与物理描述分离 (FunctionBlock vs. PhysicalEquipment)
+#   4. 空间-系统功能映射 (DomainSpace)
+#
+# ASHRAE 223P 官方命名空间: http://data.ashrae.org/standard223#
+# 参考版本: ASHRAE 223P Public Review Draft 2 (2022)
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-med:   <https://cim.medical/ontology/v4.0/medium#> .
+
+# ASHRAE 223P namespace (external — alignment reference only)
+@prefix s223:      <http://data.ashrae.org/standard223#> .
+
+<https://cim.medical/ontology/v4.0/bridge/ashrae223p>
+    a owl:Ontology ;
+    rdfs:label "CIM–ASHRAE 223P Bridge Ontology"@en ;
+    rdfs:label "CIM–ASHRAE 223P桥接本体"@zh-CN ;
+    rdfs:comment """
+        对齐 CIM 医疗建筑领域模型 与 ASHRAE Standard 223P（建筑设施系统语义标准）。
+        ASHRAE 223P 提供了严格的拓扑-介质-功能分离模型，
+        CIM 在此基础上增加医疗专业约束和运营管理语义。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# SECTION 1 — 顶层概念对齐 (Top-Level Concept Alignments)
+# =============================================================================
+
+# ── 系统 (System) ─────────────────────────────────────────────────────────────
+cim:System
+    a owl:Class ;
+    rdfs:subClassOf s223:System ;
+    rdfs:label "System"@en ; rdfs:label "系统"@zh-CN ;
+    rdfs:comment "CIM系统 ⊆ ASHRAE 223P系统；CIM增加了医疗建筑的系统分类约束"@zh-CN ;
+    skos:broadMatch s223:System .
+
+# ── 设备 (Equipment) ─────────────────────────────────────────────────────────
+cim-equip:Equipment
+    rdfs:subClassOf s223:Equipment ;
+    skos:broadMatch s223:Equipment .
+
+# ── 连接点 (ConnectionPoint) ─────────────────────────────────────────────────
+cim-c:ConnectionPoint
+    owl:equivalentClass s223:ConnectionPoint ;
+    skos:exactMatch s223:ConnectionPoint .
+
+cim-c:InletConnectionPoint
+    owl:equivalentClass s223:InletConnectionPoint ;
+    skos:exactMatch s223:InletConnectionPoint .
+
+cim-c:OutletConnectionPoint
+    owl:equivalentClass s223:OutletConnectionPoint ;
+    skos:exactMatch s223:OutletConnectionPoint .
+
+# ── 流路 (Flow) ───────────────────────────────────────────────────────────────
+cim-flow:FlowPath
+    rdfs:subClassOf s223:Connection ;
+    skos:broadMatch s223:Connection ;
+    rdfs:comment "CIM流路 ⊆ s223:Connection，增加了物质/能量/信息流的区分"@zh-CN .
+
+cim-flow:MassFlow
+    rdfs:subClassOf s223:FluidConnectionPoint ;
+    skos:broadMatch s223:FluidConnectionPoint .
+
+# =============================================================================
+# SECTION 2 — 流体介质对齐 (Medium Hierarchy Alignments)
+# ASHRAE 223P 介质模型是其最独特的贡献
+# =============================================================================
+
+cim-med:Medium
+    owl:equivalentClass s223:Medium ;
+    skos:exactMatch s223:Medium .
+
+cim-med:FluidMedium
+    owl:equivalentClass s223:Fluid ;
+    skos:exactMatch s223:Fluid .
+
+# ── 空气介质 ──────────────────────────────────────────────────────────────────
+cim-med:Air
+    owl:equivalentClass s223:Air ;
+    skos:exactMatch s223:Air .
+
+cim-med:SupplyAir
+    owl:equivalentClass s223:Supply-Air ;
+    skos:exactMatch s223:Supply-Air .
+
+cim-med:ReturnAir
+    owl:equivalentClass s223:Return-Air ;
+    skos:exactMatch s223:Return-Air .
+
+cim-med:ExhaustAir
+    owl:equivalentClass s223:Exhaust-Air ;
+    skos:exactMatch s223:Exhaust-Air .
+
+cim-med:OutdoorAir
+    owl:equivalentClass s223:Outside-Air ;
+    skos:exactMatch s223:Outside-Air .
+
+cim-med:MixedAir
+    owl:equivalentClass s223:Mixed-Air ;
+    skos:exactMatch s223:Mixed-Air .
+
+# ── 水系统 ───────────────────────────────────────────────────────────────────
+cim-med:Water
+    owl:equivalentClass s223:Water ;
+    skos:exactMatch s223:Water .
+
+cim-med:ChilledWater
+    owl:equivalentClass s223:Chilled-Water ;
+    skos:exactMatch s223:Chilled-Water .
+
+cim-med:HotWater
+    owl:equivalentClass s223:Hot-Water ;
+    skos:exactMatch s223:Hot-Water .
+
+cim-med:CondenserWater
+    owl:equivalentClass s223:Condenser-Water ;
+    skos:exactMatch s223:Condenser-Water .
+
+cim-med:DomesticColdWater
+    owl:equivalentClass s223:Domestic-Water ;
+    skos:exactMatch s223:Domestic-Water .
+
+# ── 电能 ─────────────────────────────────────────────────────────────────────
+cim-med:ElectricalMedium
+    owl:equivalentClass s223:Electricity ;
+    skos:exactMatch s223:Electricity .
+
+cim-med:ACPower
+    owl:equivalentClass s223:AC-Electricity ;
+    skos:exactMatch s223:AC-Electricity .
+
+cim-med:DCPower
+    owl:equivalentClass s223:DC-Electricity ;
+    skos:exactMatch s223:DC-Electricity .
+
+# ── 信息介质 ─────────────────────────────────────────────────────────────────
+cim-med:InformationMedium
+    owl:equivalentClass s223:EnumeratedObservableProperty ;
+    skos:broadMatch s223:EnumeratedObservableProperty .
+
+# ── 医用气体 (CIM专有扩展，ASHRAE 223P无对应子类) ─────────────────────────────
+cim-med:MedicalGas
+    rdfs:subClassOf s223:Fluid ;
+    skos:broadMatch s223:Fluid ;
+    rdfs:comment "ASHRAE 223P未定义医用气体子类，CIM为医疗建筑专有扩展"@zh-CN .
+
+cim-med:Oxygen
+    rdfs:subClassOf s223:Fluid ;
+    skos:note "ASHRAE 223P gap: 医用氧气无标准URI，CIM自定义"@zh-CN .
+
+cim-med:MedicalVacuum
+    rdfs:subClassOf s223:Fluid ;
+    skos:note "ASHRAE 223P gap: 医用负压无标准URI，CIM自定义"@zh-CN .
+
+# =============================================================================
+# SECTION 3 — HVAC 设备拓扑对齐
+# =============================================================================
+
+cim-equip:Chiller
+    rdfs:subClassOf s223:Chiller ;
+    skos:exactMatch s223:Chiller .
+
+cim-equip:CoolingTower
+    rdfs:subClassOf s223:CoolingTower ;
+    skos:exactMatch s223:CoolingTower .
+
+cim-equip:AHU
+    rdfs:subClassOf s223:AirHandlingUnit ;
+    skos:exactMatch s223:AirHandlingUnit .
+
+cim-equip:FCU
+    rdfs:subClassOf s223:FanCoilUnit ;
+    skos:exactMatch s223:FanCoilUnit .
+
+cim-equip:VAV_Terminal
+    rdfs:subClassOf s223:VariableAirVolumeBox ;
+    skos:exactMatch s223:VariableAirVolumeBox .
+
+cim-equip:Pump
+    rdfs:subClassOf s223:Pump ;
+    skos:exactMatch s223:Pump .
+
+cim-equip:Fan
+    rdfs:subClassOf s223:Fan ;
+    skos:exactMatch s223:Fan .
+
+cim-equip:HeatExchanger
+    rdfs:subClassOf s223:HeatExchanger ;
+    skos:exactMatch s223:HeatExchanger .
+
+cim-equip:HEPA_Filter
+    rdfs:subClassOf s223:Filter ;
+    skos:broadMatch s223:Filter ;
+    rdfs:comment "CIM:HEPA_Filter 是 s223:Filter 的医疗特化（效率≥99.97%@0.3μm）"@zh-CN .
+
+cim-equip:FlowControlValve
+    rdfs:subClassOf s223:Valve ;
+    skos:broadMatch s223:Valve .
+
+cim-equip:MotorizedDamper
+    rdfs:subClassOf s223:Damper ;
+    skos:broadMatch s223:Damper .
+
+cim-equip:VFD
+    rdfs:subClassOf s223:VariableFrequencyDrive ;
+    skos:exactMatch s223:VariableFrequencyDrive .
+
+cim-equip:TerminalUnit
+    rdfs:subClassOf s223:TerminalUnit ;
+    skos:exactMatch s223:TerminalUnit .
+
+# =============================================================================
+# SECTION 4 — 空间-系统功能对齐
+# ASHRAE 223P 的 DomainSpace 概念：一个物理空间对应多个功能域
+# =============================================================================
+
+cim-space:Space
+    rdfs:subClassOf s223:PhysicalSpace ;
+    skos:broadMatch s223:PhysicalSpace .
+
+cim-space:Zone
+    rdfs:subClassOf s223:DomainSpace ;
+    skos:broadMatch s223:DomainSpace ;
+    rdfs:comment """
+        s223:DomainSpace 表示一个空间在特定工程领域（HVAC/照明/消防）的功能视角。
+        CIM Zone 是多域功能区的综合表示。
+    """@zh-CN .
+
+cim-space:HVAC_Zone
+    rdfs:subClassOf s223:HVACDomainSpace ;
+    skos:exactMatch s223:HVACDomainSpace .
+
+# =============================================================================
+# SECTION 5 — 属性与关系对齐 (Property Alignments)
+# =============================================================================
+
+cim-c:hasMedium
+    owl:equivalentProperty s223:hasMedium ;
+    skos:exactMatch s223:hasMedium .
+
+cim-c:connectsTo
+    owl:equivalentProperty s223:cnx ;
+    skos:exactMatch s223:cnx .
+
+cim-c:hasConnectionPoint
+    owl:equivalentProperty s223:hasConnectionPoint ;
+    skos:exactMatch s223:hasConnectionPoint .
+
+cim:serves
+    rdfs:subPropertyOf s223:serves ;
+    skos:broadMatch s223:serves .
+
+# ── 新增: ASHRAE 223P 的 hasProperty (量化属性关联) ──────────────────────────
+cim-c:hasProperty
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf s223:hasProperty ;
+    rdfs:label "has property"@en ; rdfs:label "具有属性"@zh-CN ;
+    skos:note "ASHRAE 223P: s223:hasProperty — 将物理属性关联到设备或空间"@en .
+
+# =============================================================================
+# SECTION 6 — ASHRAE 223P 未被 CIM M1 覆盖的关键概念（待补充清单）
+# =============================================================================
+
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ ASHRAE 223P 关键概念      CIM 状态         建议                        │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ s223:FunctionBlock        未实现           CIM 暂用 ControlLoop 替代   │
+# │ s223:QuantifiableProperty 未实现           需配合 QUDT 单位体系        │
+# │ s223:EnumeratedProperty   未实现           CIM 用 DatatypeProperty替代 │
+# │ s223:SystemsConnection    部分实现         FlowPath 近似替代            │
+# │ s223:Process              未实现           适合描述制冷循环、制热循环   │
+# │ s223:ObservableProperty   未实现           Point 层级已部分覆盖        │
+# │ s223:Sensor (OWL)         已实现(Brick)   cim-ctrl:Sensor ≈ s223:Sensor │
+# └─────────────────────────────────────────────────────────────────────────┘
+
+# 上述待补充概念在 CIM v5.0 中规划实现 (QUDT 单位体系集成)
+
+# =============================================================================
+# END OF ASHRAE 223P BRIDGE ONTOLOGY
+# =============================================================================

@@ -1,0 +1,344 @@
+# =============================================================================
+# CIM Layer 2 — Reference Ontology
+# 参考本体 (ISO 19650 信息管理框架 — 参考层)
+#
+# 职责:
+#   - 存储标准规范要求（GB/ASHRAE/JCI/ISO）
+#   - 定义分类系统对应关系（Uniclass/OmniClass/分部分项）
+#   - 管理 ISO 19650 信息需求文件（EIR/AIR）
+#   - 提供产品数据模板（PDT）
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-ref:   <https://cim.medical/ontology/v4.0/reference#> .
+
+<https://cim.medical/ontology/v4.0/reference>
+    a owl:Ontology ;
+    rdfs:label "CIM Reference Ontology — Layer 2"@en ;
+    rdfs:label "CIM参考本体 — 第2层"@zh-CN ;
+    rdfs:comment """
+        ISO 19650 信息管理框架中的参考本体层。
+        存储标准规范、分类体系、信息需求文件，
+        为概念层（L1）提供规范约束的引用基础。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# PART A — ISO 19650 信息管理概念
+# =============================================================================
+
+cim-ref:InformationRequirement
+    a owl:Class ;
+    rdfs:label "Information Requirement"@en ;
+    rdfs:label "信息需求"@zh-CN ;
+    rdfs:comment "ISO 19650-1: 对特定目的所需信息的说明"@zh-CN .
+
+cim-ref:ExchangeInformationRequirement
+    a owl:Class ;
+    rdfs:subClassOf cim-ref:InformationRequirement ;
+    rdfs:label "Exchange Information Requirement (EIR)"@en ;
+    rdfs:label "交换信息需求（EIR）"@zh-CN ;
+    skos:note "ISO 19650-2: 由委托方定义，规定交付物的信息要求"@zh-CN .
+
+cim-ref:AssetInformationRequirement
+    a owl:Class ;
+    rdfs:subClassOf cim-ref:InformationRequirement ;
+    rdfs:label "Asset Information Requirement (AIR)"@en ;
+    rdfs:label "资产信息需求（AIR）"@zh-CN ;
+    skos:note "ISO 19650-3: 运营阶段的信息需求，用于管理资产生命周期"@zh-CN .
+
+cim-ref:BIMExecutionPlan
+    a owl:Class ;
+    rdfs:label "BIM Execution Plan (BEP)"@en ;
+    rdfs:label "BIM执行计划（BEP）"@zh-CN ;
+    skos:note "ISO 19650-2: 说明如何实现EIR的供应方响应文件"@zh-CN .
+
+cim-ref:InformationDeliveryMilestone
+    a owl:Class ;
+    rdfs:label "Information Delivery Milestone (IDM)"@en ;
+    rdfs:label "信息交付里程碑"@zh-CN ;
+    skos:note "ISO 19650-2: 定义何时、向谁、交付何种信息"@zh-CN .
+
+cim-ref:CommonDataEnvironment
+    a owl:Class ;
+    rdfs:label "Common Data Environment (CDE)"@en ;
+    rdfs:label "公共数据环境（CDE）"@zh-CN ;
+    skos:note "ISO 19650-1: 用于收集、管理、传播项目信息的系统"@zh-CN .
+
+# ── 信息需求实例（医疗建筑 CIM 项目专用）────────────────────────────────────
+cim-ref:CIM_EIR_HVAC
+    a cim-ref:ExchangeInformationRequirement ;
+    rdfs:label "HVAC System EIR"@en ;
+    rdfs:label "暖通空调系统信息交换需求"@zh-CN ;
+    cim-ref:requiredEntities "IfcSystem(SA/RA/EXH/HWS/CWS), IfcFlowSegment, AHU, Chiller, Pump, VAV, FCU" ;
+    cim-ref:requiredPropertySets "Pset_AirTerminalTypeCommon, Pset_ChillerTypeCommon" ;
+    cim-ref:deliveryFormat "IFC4 + JSON-LD CIM映射" ;
+    cim-ref:purpose "支持 Agent-01/03/04 建模验证" .
+
+cim-ref:CIM_AIR_MedGas
+    a cim-ref:AssetInformationRequirement ;
+    rdfs:label "Medical Gas System AIR"@en ;
+    rdfs:label "医用气体系统资产信息需求"@zh-CN ;
+    cim-ref:requiredEntities "MedicalGasOutlet, ZoneValveBox, LOX_Station, VacuumPump, MedGasAlarmPanel" ;
+    cim-ref:inspectionFrequency "每月（WS/T 311-2009）" ;
+    cim-ref:purpose "支持 Agent-08 运维告警体系" .
+
+# =============================================================================
+# PART B — 分类体系对应 (Classification System Mapping)
+# =============================================================================
+
+cim-ref:ClassificationSystem
+    a owl:Class ;
+    rdfs:label "Classification System"@en ;
+    rdfs:label "分类体系"@zh-CN .
+
+cim-ref:ClassificationCode
+    a owl:Class ;
+    rdfs:label "Classification Code"@en ;
+    rdfs:label "分类编码"@zh-CN .
+
+# ── Uniclass 2015 ─────────────────────────────────────────────────────────────
+cim-ref:Uniclass2015
+    a cim-ref:ClassificationSystem ;
+    rdfs:label "Uniclass 2015"@en ;
+    dcterms:publisher "RIBA Enterprises Ltd" ;
+    skos:note "英国建筑信息分类体系，Ss表(系统)和Pr表(产品)与CIM直接对应"@zh-CN .
+
+# ── OmniClass ─────────────────────────────────────────────────────────────────
+cim-ref:OmniClass
+    a cim-ref:ClassificationSystem ;
+    rdfs:label "OmniClass Construction Classification System"@en ;
+    dcterms:publisher "CSI / CSC" ;
+    skos:note "北美建筑信息分类体系，Table 23(产品)/Table 13(空间)与CIM对应"@zh-CN .
+
+# ── 中国分部分项工程 ──────────────────────────────────────────────────────────
+cim-ref:ChineseGBClassification
+    a cim-ref:ClassificationSystem ;
+    rdfs:label "GB/T 51269-2017 建筑信息模型分类和编码标准"@zh-CN ;
+    rdfs:label "Chinese BIM Classification (GB/T 51269)"@en ;
+    dcterms:publisher "住房和城乡建设部" .
+
+# ── 分类属性 ─────────────────────────────────────────────────────────────────
+cim-ref:uniclassCode
+    a owl:DatatypeProperty ;
+    rdfs:label "Uniclass code"@en ; rdfs:label "Uniclass编码"@zh-CN .
+
+cim-ref:omniclassCode
+    a owl:DatatypeProperty ;
+    rdfs:label "OmniClass code"@en ; rdfs:label "OmniClass编码"@zh-CN .
+
+cim-ref:gbClassCode
+    a owl:DatatypeProperty ;
+    rdfs:label "GB/T 51269 code"@en ; rdfs:label "国标分类编码"@zh-CN .
+
+# ── 关键设备类的分类编码 ─────────────────────────────────────────────────────
+cim-equip:Chiller
+    cim-ref:uniclassCode "Ss_65_70_11" ;
+    cim-ref:omniclassCode "23-17 13 11 11" .
+
+cim-equip:AHU
+    cim-ref:uniclassCode "Ss_65_70_23" ;
+    cim-ref:omniclassCode "23-17 13 11 13" .
+
+cim-equip:MedicalGasOutlet
+    cim-ref:uniclassCode "Ss_75_80_87" ;
+    skos:note "医用气体终端接口，Uniclass医用气体系统分类"@zh-CN .
+
+# =============================================================================
+# PART C — 标准规范引用库 (Standards Reference Library)
+# =============================================================================
+
+cim-ref:Standard
+    a owl:Class ;
+    rdfs:label "Standard"@en ; rdfs:label "标准规范"@zh-CN .
+
+cim-ref:StandardRequirement
+    a owl:Class ;
+    rdfs:label "Standard Requirement"@en ;
+    rdfs:label "标准条文要求"@zh-CN ;
+    rdfs:comment "可追溯到具体条文的规范要求，用于 SHACL 约束的规范性来源"@zh-CN .
+
+# ── 医疗建筑核心规范 ─────────────────────────────────────────────────────────
+cim-ref:GB50333
+    a cim-ref:Standard ;
+    rdfs:label "GB 50333-2013 医院洁净手术部建筑技术规范"@zh-CN ;
+    cim-ref:jurisdiction "中国" ;
+    cim-ref:scope "洁净手术室环境参数、气流组织、过滤等级" .
+
+cim-ref:GB50736
+    a cim-ref:Standard ;
+    rdfs:label "GB 50736-2012 民用建筑供暖通风与空气调节设计规范"@zh-CN ;
+    cim-ref:scope "HVAC设计参数、系统划分、设备选型" .
+
+cim-ref:GB50034
+    a cim-ref:Standard ;
+    rdfs:label "GB 50034-2013 建筑照明设计标准"@zh-CN ;
+    cim-ref:scope "照度标准值、统一眩光值UGR、功率密度LPD" .
+
+cim-ref:JGJ49
+    a cim-ref:Standard ;
+    rdfs:label "JGJ 49-88 综合医院建筑设计规范"@zh-CN ;
+    skos:note "现行已由 GB 51039-2014 替代"@zh-CN .
+
+cim-ref:GB51039
+    a cim-ref:Standard ;
+    rdfs:label "GB 51039-2014 综合医院建筑设计规范"@zh-CN ;
+    cim-ref:scope "医院建筑总体布局、功能分区、科室面积" .
+
+cim-ref:WS435
+    a cim-ref:Standard ;
+    rdfs:label "WS 435-2013 医用气体工程技术规范"@zh-CN ;
+    cim-ref:scope "医用气体系统设计、施工、验收" .
+
+cim-ref:WS_T311
+    a cim-ref:Standard ;
+    rdfs:label "WS/T 311-2009 医院隔离技术规范"@zh-CN ;
+    cim-ref:scope "隔离病房压差、换气次数、气流方向要求" .
+
+cim-ref:GB15982
+    a cim-ref:Standard ;
+    rdfs:label "GB 15982-2012 医院消毒卫生标准"@zh-CN ;
+    cim-ref:scope "医院各区域感染控制等级（E/A/B/C/D类）" .
+
+cim-ref:GBZ130
+    a cim-ref:Standard ;
+    rdfs:label "GBZ 130-2020 放射诊断放射防护要求"@zh-CN ;
+    cim-ref:scope "CT/DR/透视机房辐射防护，铅当量要求" .
+
+# ── 国际标准 ─────────────────────────────────────────────────────────────────
+cim-ref:ASHRAE170
+    a cim-ref:Standard ;
+    rdfs:label "ASHRAE 170-2021 Ventilation of Health Care Facilities"@en ;
+    cim-ref:scope "美国医疗建筑通风标准，换气次数、压差、温湿度" .
+
+cim-ref:ISO7396
+    a cim-ref:Standard ;
+    rdfs:label "ISO 7396-1:2016 Medical gas pipeline systems"@en ;
+    cim-ref:scope "医用气体管道系统设计安装验收" .
+
+cim-ref:IEC60364_710
+    a cim-ref:Standard ;
+    rdfs:label "IEC 60364-7-710:2021 医疗场所电气装置"@en ;
+    cim-ref:scope "手术室IT隔离电源系统，等电位联结" .
+
+# ── 标准要求实例（用于 SHACL 扩展）─────────────────────────────────────────
+cim-ref:OR_ClassI_ACH_Requirement
+    a cim-ref:StandardRequirement ;
+    rdfs:label "I级手术室换气次数要求"@zh-CN ;
+    cim-ref:basedOnStandard cim-ref:GB50333 ;
+    cim-ref:standardClause "表3.1.1" ;
+    cim-ref:parameterName "airChangesPerHour" ;
+    cim-ref:minValue "36"^^xsd:decimal ;
+    cim-ref:maxValue "44"^^xsd:decimal ;
+    cim-ref:unit "ACH" ;
+    cim-ref:appliesToClass "cim-space:OperatingRoom" .
+
+cim-ref:ICU_PressureDiff_Requirement
+    a cim-ref:StandardRequirement ;
+    rdfs:label "ICU压差要求"@zh-CN ;
+    cim-ref:basedOnStandard cim-ref:WS_T311 ;
+    cim-ref:standardClause "6.3" ;
+    cim-ref:parameterName "pressureDifferential" ;
+    cim-ref:minValue "8"^^xsd:decimal ;
+    cim-ref:unit "Pa" .
+
+# ── StandardRequirement 属性 ──────────────────────────────────────────────────
+cim-ref:basedOnStandard
+    a owl:ObjectProperty ;
+    rdfs:domain cim-ref:StandardRequirement ;
+    rdfs:range cim-ref:Standard .
+
+cim-ref:standardClause
+    a owl:DatatypeProperty ;
+    rdfs:label "standard clause"@en ; rdfs:label "标准条文编号"@zh-CN .
+
+cim-ref:minValue
+    a owl:DatatypeProperty ;
+    rdfs:label "minimum value"@en ; rdfs:label "最小值"@zh-CN .
+
+cim-ref:maxValue
+    a owl:DatatypeProperty ;
+    rdfs:label "maximum value"@en ; rdfs:label "最大值"@zh-CN .
+
+cim-ref:requiredEntities
+    a owl:DatatypeProperty ;
+    rdfs:label "required entity types"@en .
+
+cim-ref:requiredPropertySets
+    a owl:DatatypeProperty ;
+    rdfs:label "required IFC property sets"@en .
+
+cim-ref:deliveryFormat
+    a owl:DatatypeProperty ;
+    rdfs:label "delivery format"@en .
+
+cim-ref:purpose
+    a owl:DatatypeProperty ;
+    rdfs:label "purpose"@en .
+
+cim-ref:jurisdiction
+    a owl:DatatypeProperty ;
+    rdfs:label "jurisdiction"@en .
+
+cim-ref:scope
+    a owl:DatatypeProperty ;
+    rdfs:label "scope"@en .
+
+cim-ref:inspectionFrequency
+    a owl:DatatypeProperty ;
+    rdfs:label "inspection frequency"@en .
+
+# =============================================================================
+# PART D — 产品数据模板 (Product Data Template, PDT)
+# 参考 ISO 23386 / ISO 23387 BIM 属性框架
+# =============================================================================
+
+cim-ref:ProductDataTemplate
+    a owl:Class ;
+    rdfs:label "Product Data Template (PDT)"@en ;
+    rdfs:label "产品数据模板"@zh-CN ;
+    skos:note "ISO 23387: 定义产品属性的结构化模板，用于采购和施工阶段"@zh-CN .
+
+cim-ref:Chiller_PDT
+    a cim-ref:ProductDataTemplate ;
+    rdfs:label "Chiller Product Data Template"@en ;
+    rdfs:label "冷水机组产品数据模板"@zh-CN ;
+    cim-ref:appliesToClass "cim-equip:Chiller" ;
+    cim-ref:mandatoryProperties "coolingCapacity, COP, refrigerantType, powerRating, noiseLevel" ;
+    cim-ref:uniclassCode "Ss_65_70_11" .
+
+cim-ref:MedGasOutlet_PDT
+    a cim-ref:ProductDataTemplate ;
+    rdfs:label "Medical Gas Outlet PDT"@en ;
+    rdfs:label "医用气体终端产品数据模板"@zh-CN ;
+    cim-ref:appliesToClass "cim-equip:MedicalGasOutlet" ;
+    cim-ref:mandatoryProperties "gasType, outletPressure_MPa, flowRate_Lmin, connectorType, reliabilityLevel" ;
+    cim-ref:certificationRequired "ISO 9170-1" .
+
+cim-ref:certificationRequired
+    a owl:DatatypeProperty ;
+    rdfs:label "certification required"@en ; rdfs:label "认证要求"@zh-CN .
+
+cim-ref:mandatoryProperties
+    a owl:DatatypeProperty ;
+    rdfs:label "mandatory properties"@en ; rdfs:label "必填属性"@zh-CN .
+
+cim-ref:appliesToClass
+    a owl:DatatypeProperty ;
+    rdfs:label "applies to class"@en ; rdfs:label "适用类"@zh-CN .
+
+# =============================================================================
+# END OF LAYER 2 REFERENCE ONTOLOGY
+# =============================================================================

@@ -1,0 +1,117 @@
+# =============================================================================
+# CIM Medical Building Ontology — Master Index v4.0
+# ISO 19650 四层本体框架总入口
+#
+# 层次结构:
+#   Layer 1: 概念本体 (Conceptual)  — 介质/连接点/数据点/设备/空间抽象层
+#   Layer 2: 参考本体 (Reference)   — ISO 19650信息需求/标准库/分类体系
+#   Layer 3: 设计本体 (Design/PIM)  — 需求/规格/负荷计算/设计文件
+#   Layer 4: 运营本体 (Operational/AIM) — 资产台账/时序/维护/告警/能耗
+#   Bridge:  桥接本体               — IFC / Brick / ASHRAE 223P 语义对齐
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://cim.medical/ontology/v4.0>
+    a owl:Ontology ;
+    rdfs:label "CIM Medical Building Ontology v4.0"@en ;
+    rdfs:label "医疗建筑统一领域模型（CIM）v4.0"@zh-CN ;
+    rdfs:comment """
+        基于 ISO 19650 四层架构的医疗建筑 CIM 本体框架。
+        融合 Brick Schema 1.3（600+ 类）和 ASHRAE 223P（400+ 类）标准语义，
+        在 CIM v3.4 M1 基础上扩展概念/参考/设计/运营四层及三个桥接本体。
+
+        覆盖领域:
+        - 医疗建筑 MEP 系统（HVAC/给排水/电气/医用气体/消防）
+        - 洁净室与医疗专用空间
+        - 全生命周期资产信息管理（设计→施工→运营）
+        - 传感器/BAS/能源管理/CMMS 集成语义
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    dcterms:created "2026-05-06"^^xsd:date ;
+    dcterms:subject "Medical Building Digital Twin Ontology"@en ;
+
+    # =========================================================================
+    # Layer 0 — CIM v3.4 核心模块（M1 基础，保持向后兼容）
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v3.4/core/base_entities> ;
+    owl:imports <https://cim.medical/ontology/v3.4/topology/node_types> ;
+    owl:imports <https://cim.medical/ontology/v3.4/spaces/spatial_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/spaces/medical_special_spaces> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/equipment_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/mechanical> ;
+    owl:imports <https://cim.medical/ontology/v3.4/equipment/electrical> ;
+    owl:imports <https://cim.medical/ontology/v3.4/coupling/equipment_location> ;
+    owl:imports <https://cim.medical/ontology/v3.4/control/sensors> ;
+    owl:imports <https://cim.medical/ontology/v3.4/metering/metering_hierarchy> ;
+    owl:imports <https://cim.medical/ontology/v3.4/rules/shacl_constraints> ;
+
+    # =========================================================================
+    # Layer 0 — 基础本体 (Foundational Ontology / BFO Alignment)
+    # 持续体/发生体/独立实体区分 + 设施生命周期过程 + ISO 19650 四维过程
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/foundational> ;
+
+    # =========================================================================
+    # Layer 1 — 概念本体 (Conceptual Ontology)
+    # 介质层级 · 连接点模型 · 数据点层级 · 设备/空间扩展抽象
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> ;
+
+    # =========================================================================
+    # Layer 2 — 参考本体 (Reference Ontology)
+    # ISO 19650 信息需求 · 标准库 · Uniclass/OmniClass/GB分类体系
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/reference> ;
+
+    # =========================================================================
+    # Layer 3 — 设计本体 (Design Ontology / PIM Layer)
+    # 设计需求 · 性能准则 · 系统规格 · 设备选型 · 空间计划 · 负荷计算
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/design> ;
+
+    # =========================================================================
+    # Layer 4 — 运营本体 (Operational Ontology / AIM-PSM Layer)
+    # 资产台账 · 时序数据 · 维护管理 · 告警记录 · 能耗统计
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/operational> ;
+
+    # =========================================================================
+    # Bridge Ontologies — 外部标准桥接
+    # =========================================================================
+    # Brick Schema 1.3 对齐（设备/空间/传感点 ~50个 owl:equivalentClass）
+    owl:imports <https://cim.medical/ontology/v4.0/bridge/brick> ;
+
+    # ASHRAE Standard 223P 对齐（系统/介质/连接点/属性 全层级对齐）
+    owl:imports <https://cim.medical/ontology/v4.0/bridge/ashrae223p> ;
+
+    # IFC4 + IFC2X3 对齐（空间/MEP系统/设备/属性集 基于 WestRiverSide 验证）
+    owl:imports <https://cim.medical/ontology/v4.0/bridge/ifc> ;
+
+    # FSO (Flow System Ontology) v0.1.0 对齐
+    # Kukkonen et al. (2022) Automation in Construction 134, 104067
+    # 组件类型(Segment/Fitting/Terminal/FlowMovingDevice/...) + 关系拓扑对齐
+    owl:imports <https://cim.medical/ontology/v4.0/bridge/fso> .
+
+# =============================================================================
+# 版本历史 (Version History)
+# =============================================================================
+# v4.0.0 (2026-05-06)
+#   - 新增 ISO 19650 四层框架: conceptual / reference / design / operational
+#   - 融合 Brick Schema 1.3 (~50 owl:equivalentClass 对齐)
+#   - 融合 ASHRAE 223P (介质层级/连接点模型/拓扑属性 全面对齐)
+#   - 新增 IFC 桥接本体（基于 WestRiverSide Hospital 7个IFC文件验证）
+#   - 扩展设备类: Fan/Boiler/HeatExchanger/MedicalGasOutlet/FirePump/...
+#   - 扩展空间类: WardRoom/CTRoom/MRIRoom/BloodBank/HemodialysisRoom/...
+#   - 新增数据字典属性 EQ-016~EQ-022
+#   - SHACL 约束更新: DistributionComponent 排除规则（消除28个误报）
+#
+# v3.4 / v2.0 (M1 基础版本, 2025-12)
+#   - Agent-01~08 输出集成
+#   - 核心本体: 系统/设备/空间/流路/控制/计量/耦合
+# =============================================================================

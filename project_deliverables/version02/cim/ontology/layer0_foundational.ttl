@@ -1,0 +1,717 @@
+# =============================================================================
+# CIM Layer 0 — 基础本体 (Foundational Ontology / BFO Alignment)
+# ISO 19650 四维本体过程特征 × BFO 2020 持续体/发生体/独立实体
+#
+# 核心设计原则:
+#   ┌──────────────────────────────────────────────────────────────┐
+#   │  BFO 范畴       CIM 对应实体                                  │
+#   ├──────────────────────────────────────────────────────────────┤
+#   │  Object         Equipment / Pipe / Duct (物质对象)            │
+#   │  Site           Space / Room / Zone (空间场所)                 │
+#   │  Quality        Temperature / Pressure / FlowRate (属性)      │
+#   │  Function       CoolingFunction / PumpingFunction (功能)      │
+#   │  Disposition    DesignCapacity / RatedPower (潜在能力)         │
+#   │  Role           SupplyRole / ReturnRole (角色)                 │
+#   │  GDC            DesignDocument / IFCModel (信息制品)           │
+#   │  Process        FluidFlowProcess / FacilityLifecycle (过程)   │
+#   │  ProcessBndry   InformationDeliveryMilestone (里程碑)          │
+#   │  History        FacilityHistory (全过程历史)                   │
+#   └──────────────────────────────────────────────────────────────┘
+#
+# 关键区分 (流动层):
+#   FlowNetwork    — 持续体 (管网拓扑，设施的物理特征，随时间持续存在)
+#   FluidFlowProcess — 发生体 (实际流动过程，在时间中展开，有开始和终止)
+#   FlowRate       — 依赖持续体·性质 (流速是流动过程在某时刻的性质量)
+#
+# BFO 2020 命名空间: http://purl.obolibrary.org/obo/BFO_
+# 关系本体 RO:      http://purl.obolibrary.org/obo/RO_
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix time:     <http://www.w3.org/2006/time#> .
+
+# ── CIM 命名空间 ──────────────────────────────────────────────────────────────
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-med:   <https://cim.medical/ontology/v4.0/medium#> .
+@prefix cim-f:     <https://cim.medical/ontology/v4.0/foundational#> .
+
+# ── BFO 2020 (external — alignment only, not imported) ────────────────────────
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+# ── Relation Ontology RO (external) ──────────────────────────────────────────
+@prefix ro:  <http://purl.obolibrary.org/obo/RO_> .
+
+<https://cim.medical/ontology/v4.0/foundational>
+    a owl:Ontology ;
+    rdfs:label "CIM Foundational Ontology — Layer 0 (BFO Alignment)"@en ;
+    rdfs:label "CIM基础本体 — 第0层（BFO对齐）"@zh-CN ;
+    rdfs:comment """
+        基于 BFO 2020 的 CIM 基础本体层。
+        区分持续体（Continuant）与发生体（Occurrent）：
+        - 物理设备、空间、管网是持续体（Objects / Sites）
+        - 流动过程、设计过程、建造过程是发生体（Processes）
+        - 温度、流速、功能是依赖持续体（Qualities / Functions）
+        - 信息文档、模型是通用依赖持续体（Generically Dependent Continuants）
+        对应 ISO 19650 四维本体的过程性表达需求。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# PART A — BFO 顶层范畴声明 (BFO Top-Level Category Declarations)
+# 说明性声明，使推理器了解 CIM 类的 BFO 归属
+# =============================================================================
+
+# ── A.1 持续体 (Continuant / BFO_0000002) ────────────────────────────────────
+# 特征: 在时间中完整持续存在，无时间部分，在任何时刻都完整呈现
+
+cim-equip:Equipment
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000030> ;  # Object
+    rdfs:comment "[BFO] 物理设备是物质对象(Object)，是独立持续体"@zh-CN .
+
+cim-space:Space
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000029> ;  # Site
+    rdfs:comment "[BFO] 建筑空间是场所(Site)，是无质量独立持续体"@zh-CN .
+
+cim-equip:DistributionComponent
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000030> ;  # Object
+    rdfs:comment "[BFO] 管段/风管/管件是物质对象，管网的物理组成部分"@zh-CN .
+
+# ── A.2 发生体 (Occurrent / BFO_0000003) ─────────────────────────────────────
+# 特征: 在时间中展开，有时间部分，"发生"而不是"持续"
+
+cim-flow:FlowPath
+    rdfs:comment """
+        [BFO 澄清] FlowPath 作为管网拓扑结构是持续体(Continuant/Site)；
+        但"流体在FlowPath中流动"这一事件是发生体(Occurrent/Process)。
+        参见 cim-f:FluidFlowProcess。
+    """@zh-CN .
+
+# =============================================================================
+# PART B — 发生体层级：流动过程 (Occurrent Hierarchy: Flow Processes)
+# =============================================================================
+
+cim-f:FlowProcess
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000015> ;  # Process
+    rdfs:label "Flow Process"@en ; rdfs:label "流动过程"@zh-CN ;
+    rdfs:comment """
+        [BFO:Process] 流体/能量/信息在管网中实际流动的过程。
+        区别于 cim-flow:FlowPath（拓扑持续体），FlowProcess 是在时间中展开的发生体。
+        具有开始时刻、终止时刻和时间延展。
+    """@zh-CN .
+
+cim-f:FluidFlowProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FlowProcess ;
+    rdfs:label "Fluid Flow Process"@en ; rdfs:label "流体流动过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 流体（水/空气/医用气体）在管网中的实际流动，有流速、温度、压力等性质"@zh-CN .
+
+cim-f:AirFlowProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FluidFlowProcess ;
+    rdfs:label "Air Flow Process"@en ; rdfs:label "气流过程"@zh-CN .
+
+cim-f:WaterFlowProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FluidFlowProcess ;
+    rdfs:label "Water Flow Process"@en ; rdfs:label "水流过程"@zh-CN .
+
+cim-f:MedicalGasFlowProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FluidFlowProcess ;
+    rdfs:label "Medical Gas Flow Process"@en ; rdfs:label "医用气体流动过程"@zh-CN .
+
+cim-f:ElectricalFlowProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FlowProcess ;
+    rdfs:label "Electrical Flow Process"@en ; rdfs:label "电能传输过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 电能在配电网络中的传输，发生体而非拓扑结构"@zh-CN .
+
+cim-f:InformationTransferProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FlowProcess ;
+    rdfs:label "Information Transfer Process"@en ; rdfs:label "信息传输过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 控制信号、传感数据的传输过程（BAS/DDC通信）"@zh-CN .
+
+# ── 热交换过程 ────────────────────────────────────────────────────────────────
+cim-f:HeatTransferProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FlowProcess ;
+    rdfs:label "Heat Transfer Process"@en ; rdfs:label "热量传递过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 设备间或介质间的热量交换过程（如换热器换热）"@zh-CN .
+
+# =============================================================================
+# PART C — 发生体层级：设施演化过程 (Occurrent: Facility Lifecycle Processes)
+# 对应 ISO 19650 四维本体过程维度
+# =============================================================================
+
+cim-f:FacilityLifecycleProcess
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000015> ;  # Process
+    rdfs:label "Facility Lifecycle Process"@en ; rdfs:label "设施生命周期过程"@zh-CN ;
+    rdfs:comment """
+        [BFO:Process] 医疗建筑从策划到废弃的全过程。
+        对应 ISO 19650 的项目信息生产流程（Project/Asset Information Process）。
+        整个设施的历史是 bfo:History，各阶段是其时间部分（Process）。
+    """@zh-CN .
+
+# ── C.1 设计过程 ──────────────────────────────────────────────────────────────
+cim-f:DesignProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FacilityLifecycleProcess ;
+    rdfs:label "Design Process"@en ; rdfs:label "设计过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 设计过程，产出信息制品（GenericallyDependentContinuant）：图纸、模型、规格"@zh-CN .
+
+cim-f:ConceptualDesignProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:DesignProcess ;
+    rdfs:label "Conceptual Design Process"@en ; rdfs:label "方案设计过程"@zh-CN .
+
+cim-f:SchematicDesignProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:DesignProcess ;
+    rdfs:label "Schematic Design Process"@en ; rdfs:label "初步设计过程"@zh-CN .
+
+cim-f:DetailedDesignProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:DesignProcess ;
+    rdfs:label "Detailed Design Process"@en ; rdfs:label "施工图设计过程"@zh-CN .
+
+# ── C.2 招投标过程 ────────────────────────────────────────────────────────────
+cim-f:ProcurementProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FacilityLifecycleProcess ;
+    rdfs:label "Procurement Process"@en ; rdfs:label "招投标/采购过程"@zh-CN ;
+    rdfs:comment """
+        [BFO:Process] 包含招标文件发布、投标、评标、合同签订的全采购过程。
+        ISO 19650: 对应信息需求(EIR)向施工信息需求的转化阶段。
+    """@zh-CN .
+
+cim-f:TenderingProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:ProcurementProcess ;
+    rdfs:label "Tendering Process"@en ; rdfs:label "招投标过程"@zh-CN .
+
+cim-f:ContractingProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:ProcurementProcess ;
+    rdfs:label "Contracting Process"@en ; rdfs:label "合同签订过程"@zh-CN .
+
+# ── C.3 施工建造过程 ──────────────────────────────────────────────────────────
+cim-f:ConstructionProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FacilityLifecycleProcess ;
+    rdfs:label "Construction Process"@en ; rdfs:label "施工建造过程"@zh-CN ;
+    rdfs:comment """
+        [BFO:Process] 物理设施从"设计意图"向"物质实体"转化的过程。
+        过程的参与者(hasParticipant)包括承包商、材料、设备和施工场地。
+        产出物: 已建设施 (IndependentContinuant)，竣工图 (GenericallyDependentContinuant)。
+    """@zh-CN .
+
+cim-f:MEPInstallationProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:ConstructionProcess ;
+    rdfs:label "MEP Installation Process"@en ; rdfs:label "机电安装过程"@zh-CN .
+
+cim-f:StructuralConstructionProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:ConstructionProcess ;
+    rdfs:label "Structural Construction Process"@en ; rdfs:label "结构施工过程"@zh-CN .
+
+# ── C.4 调试过程 ──────────────────────────────────────────────────────────────
+cim-f:CommissioningProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FacilityLifecycleProcess ;
+    rdfs:label "Commissioning Process"@en ; rdfs:label "调试/试运行过程"@zh-CN ;
+    rdfs:comment """
+        [BFO:Process] 系统从安装完成到正常运行状态的验证过程。
+        参与者: 调试工程师、BAS系统、各机电系统实体。
+        产出: 调试报告(GenericallyDependentContinuant)，
+              系统运行状态转变(StateChange/ProcessBoundary)。
+    """@zh-CN .
+
+cim-f:CleanroomQualificationProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:CommissioningProcess ;
+    rdfs:label "Cleanroom Qualification Process"@en ; rdfs:label "洁净室验收过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 按 GB50333-2013 进行的洁净度检测与验收"@zh-CN .
+
+cim-f:MedicalGasValidationProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:CommissioningProcess ;
+    rdfs:label "Medical Gas Validation Process"@en ; rdfs:label "医用气体系统验证过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 按 WS435 对医用气体系统进行的压力测试和纯度验证"@zh-CN .
+
+# ── C.5 运营过程 ──────────────────────────────────────────────────────────────
+cim-f:OperationProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FacilityLifecycleProcess ;
+    rdfs:label "Operation Process"@en ; rdfs:label "运营过程"@zh-CN ;
+    rdfs:comment """
+        [BFO:Process] 设施交付后持续进行的运营活动集合。
+        包含所有实际的流动过程(FluidFlowProcess)、维护过程和监测过程。
+    """@zh-CN .
+
+cim-f:NormalOperationProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:OperationProcess ;
+    rdfs:label "Normal Operation Process"@en ; rdfs:label "正常运营过程"@zh-CN .
+
+cim-f:EmergencyOperationProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:OperationProcess ;
+    rdfs:label "Emergency Operation Process"@en ; rdfs:label "应急运营过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 启动应急电源、灾害处置等非常规运营状态"@zh-CN .
+
+cim-f:MaintenanceProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:OperationProcess ;
+    rdfs:label "Maintenance Process"@en ; rdfs:label "维护过程"@zh-CN .
+
+# ── C.6 拆除/废弃过程 ─────────────────────────────────────────────────────────
+cim-f:DecommissioningProcess
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FacilityLifecycleProcess ;
+    rdfs:label "Decommissioning Process"@en ; rdfs:label "拆除/废弃过程"@zh-CN ;
+    rdfs:comment "[BFO:Process] 设施使用寿命终止后的系统停用和拆除过程"@zh-CN .
+
+# =============================================================================
+# PART D — 过程边界（里程碑）(ProcessBoundary / Information Delivery Milestones)
+# BFO ProcessBoundary 对应 ISO 19650 信息交付里程碑
+# =============================================================================
+
+cim-f:LifecycleMilestone
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000035> ;  # ProcessBoundary
+    rdfs:label "Lifecycle Milestone"@en ; rdfs:label "生命周期里程碑"@zh-CN ;
+    rdfs:comment """
+        [BFO:ProcessBoundary] 设施生命周期中两个阶段的边界时刻。
+        对应 ISO 19650 的信息交付里程碑(Information Delivery Milestone)。
+    """@zh-CN .
+
+cim-f:DesignApprovalMilestone
+    a owl:Class ;
+    rdfs:subClassOf cim-f:LifecycleMilestone ;
+    rdfs:label "Design Approval Milestone"@en ; rdfs:label "设计审批里程碑"@zh-CN ;
+    rdfs:comment "方案/初步/施工图设计审批通过，触发下一阶段过程"@zh-CN .
+
+cim-f:InformationDeliveryMilestone
+    a owl:Class ;
+    rdfs:subClassOf cim-f:LifecycleMilestone ;
+    rdfs:label "Information Delivery Milestone"@en ; rdfs:label "信息交付里程碑"@zh-CN ;
+    rdfs:comment "ISO 19650: 信息容器(IFC/COBie)按约定时间点交付"@zh-CN .
+
+cim-f:ConstructionCompletionMilestone
+    a owl:Class ;
+    rdfs:subClassOf cim-f:LifecycleMilestone ;
+    rdfs:label "Construction Completion Milestone"@en ; rdfs:label "竣工验收里程碑"@zh-CN .
+
+cim-f:HandoverMilestone
+    a owl:Class ;
+    rdfs:subClassOf cim-f:LifecycleMilestone ;
+    rdfs:label "Handover Milestone"@en ; rdfs:label "移交里程碑"@zh-CN ;
+    rdfs:comment "ISO 19650: PIM(工程信息模型)移交为AIM(资产信息模型)的边界时刻"@zh-CN .
+
+cim-f:FlowStartBoundary
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000035> ;  # ProcessBoundary
+    rdfs:label "Flow Start Boundary"@en ; rdfs:label "流动过程起始边界"@zh-CN ;
+    rdfs:comment "[BFO:ProcessBoundary] 某次流动过程的开始时刻（如泵启动）"@zh-CN .
+
+cim-f:FlowEndBoundary
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000035> ;  # ProcessBoundary
+    rdfs:label "Flow End Boundary"@en ; rdfs:label "流动过程终止边界"@zh-CN ;
+    rdfs:comment "[BFO:ProcessBoundary] 某次流动过程的结束时刻（如泵停机）"@zh-CN .
+
+# =============================================================================
+# PART E — 设施历史 (Facility History / BFO:History)
+# =============================================================================
+
+cim-f:FacilityHistory
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000182> ;  # History
+    rdfs:label "Facility History"@en ; rdfs:label "设施历史"@zh-CN ;
+    rdfs:comment """
+        [BFO:History] 一个医疗建筑设施从策划到废弃的全过程总和。
+        是该设施所有 FacilityLifecycleProcess 的聚合。
+        History 是 Occurrent，其在每一时刻的"快照"对应该时刻的 PIM 或 AIM 信息模型。
+    """@zh-CN .
+
+# =============================================================================
+# PART F — 依赖持续体：性质、功能与角色
+# (Specifically Dependent Continuants: Qualities, Functions, Roles)
+# =============================================================================
+
+# ── F.1 性质 (Quality / BFO_0000019) ─────────────────────────────────────────
+cim-f:FlowQuality
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000019> ;  # Quality
+    rdfs:label "Flow Quality"@en ; rdfs:label "流动性质"@zh-CN ;
+    rdfs:comment "[BFO:Quality] 附着于流动过程或流路上的量化性质（流量、压力等）"@zh-CN .
+
+cim-f:FlowRateQuality
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FlowQuality ;
+    rdfs:label "Flow Rate Quality"@en ; rdfs:label "流量"@zh-CN ;
+    rdfs:comment "[BFO:Quality] 单位时间内通过截面的介质量，依赖于 FluidFlowProcess"@zh-CN .
+
+cim-f:PressureQuality
+    a owl:Class ;
+    rdfs:subClassOf cim-f:FlowQuality ;
+    rdfs:label "Pressure Quality"@en ; rdfs:label "压力"@zh-CN .
+
+cim-f:TemperatureQuality
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000019> ;
+    rdfs:label "Temperature Quality"@en ; rdfs:label "温度"@zh-CN ;
+    rdfs:comment "[BFO:Quality] 附着于物质实体（流体、设备、空气）的温度性质"@zh-CN .
+
+# ── F.2 功能 (Function / BFO_0000034) ────────────────────────────────────────
+cim-f:EquipmentFunction
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000034> ;  # Function
+    rdfs:label "Equipment Function"@en ; rdfs:label "设备功能"@zh-CN ;
+    rdfs:comment """
+        [BFO:Function] 设备所具有的功能（实现时对应一个过程）。
+        函数与其实现过程的关系: Function --realizes--> Process。
+        设备功能是依赖持续体，依附于设备（Object）。
+    """@zh-CN .
+
+cim-f:CoolingFunction
+    a owl:Class ;
+    rdfs:subClassOf cim-f:EquipmentFunction ;
+    rdfs:label "Cooling Function"@en ; rdfs:label "制冷功能"@zh-CN .
+
+cim-f:HeatingFunction
+    a owl:Class ;
+    rdfs:subClassOf cim-f:EquipmentFunction ;
+    rdfs:label "Heating Function"@en ; rdfs:label "制热功能"@zh-CN .
+
+cim-f:PumpingFunction
+    a owl:Class ;
+    rdfs:subClassOf cim-f:EquipmentFunction ;
+    rdfs:label "Pumping Function"@en ; rdfs:label "泵送功能"@zh-CN .
+
+cim-f:VentilationFunction
+    a owl:Class ;
+    rdfs:subClassOf cim-f:EquipmentFunction ;
+    rdfs:label "Ventilation Function"@en ; rdfs:label "通风功能"@zh-CN .
+
+cim-f:GasSupplyFunction
+    a owl:Class ;
+    rdfs:subClassOf cim-f:EquipmentFunction ;
+    rdfs:label "Gas Supply Function"@en ; rdfs:label "供气功能"@zh-CN .
+
+cim-f:FilteringFunction
+    a owl:Class ;
+    rdfs:subClassOf cim-f:EquipmentFunction ;
+    rdfs:label "Filtering Function"@en ; rdfs:label "过滤功能"@zh-CN .
+
+# ── F.3 能力/配置 (Disposition / BFO_0000016) ────────────────────────────────
+cim-f:DesignCapacity
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000016> ;  # Disposition
+    rdfs:label "Design Capacity"@en ; rdfs:label "设计能力/配置"@zh-CN ;
+    rdfs:comment """
+        [BFO:Disposition] 设备在特定条件下具有的潜在能力（额定冷量、额定流量等）。
+        与 Function 的区别: Function 描述设备"做什么"，Disposition 描述"能做多少"。
+    """@zh-CN .
+
+# ── F.4 角色 (Role / BFO_0000023) ───────────────────────────────────────────
+cim-f:SystemRole
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000023> ;  # Role
+    rdfs:label "System Role"@en ; rdfs:label "系统角色"@zh-CN ;
+    rdfs:comment """
+        [BFO:Role] 设备在特定系统或过程中扮演的角色（非本质属性）。
+        同一设备可在不同系统中扮演不同角色。
+        如: 板换在冷冻水系统中扮演"热源"角色，在热水系统中扮演"冷源"角色。
+    """@zh-CN .
+
+cim-f:SourceRole
+    a owl:Class ;
+    rdfs:subClassOf cim-f:SystemRole ;
+    rdfs:label "Source Role"@en ; rdfs:label "能量/介质来源角色"@zh-CN .
+
+cim-f:ConsumerRole
+    a owl:Class ;
+    rdfs:subClassOf cim-f:SystemRole ;
+    rdfs:label "Consumer Role"@en ; rdfs:label "能量/介质消费角色"@zh-CN .
+
+cim-f:DistributorRole
+    a owl:Class ;
+    rdfs:subClassOf cim-f:SystemRole ;
+    rdfs:label "Distributor Role"@en ; rdfs:label "分配角色"@zh-CN .
+
+# =============================================================================
+# PART G — 通用依赖持续体：信息制品
+# (Generically Dependent Continuants: Information Artifacts)
+# =============================================================================
+
+cim-f:InformationArtifact
+    a owl:Class ;
+    rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000031> ;  # GDC
+    rdfs:label "Information Artifact"@en ; rdfs:label "信息制品"@zh-CN ;
+    rdfs:comment """
+        [BFO:GenericallyDependentContinuant] 可以被复制和传播的信息，
+        可承载于任意物理介质（数字文件、纸质图纸等）。
+        ISO 19650: 对应信息容器(Information Container)的语义类别。
+    """@zh-CN .
+
+cim-f:DesignModel
+    a owl:Class ;
+    rdfs:subClassOf cim-f:InformationArtifact ;
+    rdfs:label "Design Model"@en ; rdfs:label "设计模型"@zh-CN ;
+    rdfs:comment "在设计过程(DesignProcess)中产出的信息制品，如 IFC PIM 模型"@zh-CN .
+
+cim-f:AsBuiltModel
+    a owl:Class ;
+    rdfs:subClassOf cim-f:InformationArtifact ;
+    rdfs:label "As-Built Model"@en ; rdfs:label "竣工模型"@zh-CN ;
+    rdfs:comment "施工完成后更新的信息制品，是 PIM→AIM 移交的核心内容"@zh-CN .
+
+cim-f:OperationalInformationModel
+    a owl:Class ;
+    rdfs:subClassOf cim-f:InformationArtifact ;
+    rdfs:label "Operational Information Model (AIM)"@en ;
+    rdfs:label "运营信息模型（AIM）"@zh-CN ;
+    rdfs:comment "ISO 19650 AIM: 运营阶段的资产信息模型，包含实时和历史数据"@zh-CN .
+
+cim-f:StandardRequirementDoc
+    a owl:Class ;
+    rdfs:subClassOf cim-f:InformationArtifact ;
+    rdfs:label "Standard Requirement Document"@en ; rdfs:label "标准要求文件"@zh-CN ;
+    rdfs:comment "强制性规范或标准（GB50333, WS435等），是设计约束的信息来源"@zh-CN .
+
+# =============================================================================
+# PART H — BFO 关键关系属性 (BFO/RO Key Object Properties)
+# =============================================================================
+
+# ── 过程参与关系 ──────────────────────────────────────────────────────────────
+cim-f:hasParticipant
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0000057> ;  # BFO hasParticipant
+    rdfs:domain cim-f:FlowProcess ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "has participant"@en ; rdfs:label "具有参与者"@zh-CN ;
+    rdfs:comment "流动过程的参与者是相关设备（泵、管道、末端）"@zh-CN .
+
+cim-f:participatesIn
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0000056> ;  # BFO participatesIn
+    owl:inverseOf cim-f:hasParticipant ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-f:FlowProcess ;
+    rdfs:label "participates in"@en ; rdfs:label "参与过程"@zh-CN .
+
+# ── 过程发生地点 ──────────────────────────────────────────────────────────────
+cim-f:occursIn
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000066> ;
+    rdfs:domain cim-f:FlowProcess ;
+    rdfs:range [ owl:unionOf (cim-space:Space cim-equip:DistributionComponent) ] ;
+    rdfs:label "occurs in"@en ; rdfs:label "发生于"@zh-CN ;
+    rdfs:comment "流动过程发生在管网或空间中（物质场所）"@zh-CN .
+
+# ── 功能实现关系 ──────────────────────────────────────────────────────────────
+cim-f:realizes
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/BFO_0000055> ;
+    rdfs:domain cim-f:FlowProcess ;
+    rdfs:range cim-f:EquipmentFunction ;
+    rdfs:label "realizes"@en ; rdfs:label "实现"@zh-CN ;
+    rdfs:comment "过程实现设备功能（如制冷过程实现冷水机组的制冷功能）"@zh-CN .
+
+cim-f:hasRealization
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-f:realizes ;
+    rdfs:domain cim-f:EquipmentFunction ;
+    rdfs:range cim-f:FlowProcess ;
+    rdfs:label "has realization"@en ; rdfs:label "通过...实现"@zh-CN .
+
+# ── 功能归属 ──────────────────────────────────────────────────────────────────
+cim-f:bearerOf
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0000053> ;  # bearer of
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range [ owl:unionOf (cim-f:EquipmentFunction cim-f:DesignCapacity cim-f:SystemRole) ] ;
+    rdfs:label "bearer of"@en ; rdfs:label "承载"@zh-CN ;
+    rdfs:comment "设备承载其功能、能力和角色（这些是依赖持续体，依附于设备）"@zh-CN .
+
+cim-f:inheresIn
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0000052> ;  # inheres in
+    owl:inverseOf cim-f:bearerOf ;
+    rdfs:label "inheres in"@en ; rdfs:label "附着于"@zh-CN .
+
+# ── 过程时序关系 ──────────────────────────────────────────────────────────────
+cim-f:temporallyPrecedes
+    a owl:ObjectProperty ;
+    rdfs:domain cim-f:FacilityLifecycleProcess ;
+    rdfs:range cim-f:FacilityLifecycleProcess ;
+    rdfs:label "temporally precedes"@en ; rdfs:label "时序先于"@zh-CN ;
+    rdfs:comment "一个生命周期阶段在时序上先于另一阶段（设计→施工→运营）"@zh-CN .
+
+cim-f:hasMilestone
+    a owl:ObjectProperty ;
+    rdfs:domain cim-f:FacilityLifecycleProcess ;
+    rdfs:range cim-f:LifecycleMilestone ;
+    rdfs:label "has milestone"@en ; rdfs:label "具有里程碑"@zh-CN .
+
+# ── FlowPath 与 FlowProcess 的关联 ────────────────────────────────────────────
+cim-f:flowOccursIn
+    a owl:ObjectProperty ;
+    rdfs:domain cim-f:FluidFlowProcess ;
+    rdfs:range cim-flow:FlowPath ;
+    rdfs:label "flow occurs in"@en ; rdfs:label "流动发生于"@zh-CN ;
+    rdfs:comment """
+        [核心关联] 流动过程（发生体）发生在流动路径（持续体）中。
+        FlowPath 是空间性的持续体（管网特征），
+        FluidFlowProcess 是时间性的发生体（实际流动事件）。
+    """@zh-CN .
+
+cim-f:flowPathSupportedBy
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-f:flowOccursIn ;
+    rdfs:domain cim-flow:FlowPath ;
+    rdfs:range cim-f:FluidFlowProcess ;
+    rdfs:label "supports flow process"@en ; rdfs:label "承载流动过程"@zh-CN .
+
+# ── 信息制品与过程的关联 ──────────────────────────────────────────────────────
+cim-f:producedBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-f:InformationArtifact ;
+    rdfs:range cim-f:FacilityLifecycleProcess ;
+    rdfs:label "produced by"@en ; rdfs:label "由...产出"@zh-CN ;
+    rdfs:comment "信息制品（图纸/模型）由某个生命周期过程产出"@zh-CN .
+
+cim-f:informsProcess
+    a owl:ObjectProperty ;
+    rdfs:domain cim-f:InformationArtifact ;
+    rdfs:range cim-f:FacilityLifecycleProcess ;
+    rdfs:label "informs process"@en ; rdfs:label "作为...的信息依据"@zh-CN ;
+    rdfs:comment "信息制品作为某个后续过程的输入依据（如设计图纸指导施工）"@zh-CN .
+
+# ── 过程历史关系 ──────────────────────────────────────────────────────────────
+cim-f:hasHistory
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-f:FacilityHistory ;
+    rdfs:label "has history"@en ; rdfs:label "具有历史"@zh-CN ;
+    rdfs:comment "[BFO] 独立持续体（设施/设备）具有一段历史（Occurrent）"@zh-CN .
+
+# =============================================================================
+# PART I — 生命周期阶段属性 (Lifecycle Stage Properties)
+# =============================================================================
+
+cim-f:processStageCode
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FacilityLifecycleProcess ;
+    rdfs:range xsd:string ;
+    rdfs:label "process stage code"@en ; rdfs:label "阶段代码"@zh-CN ;
+    skos:note "取值: CONCEPT / SD / DD / CD / TENDER / CONSTRUCT / COMMISSION / OPERATION"@en .
+
+cim-f:isoLoD
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:InformationArtifact ;
+    rdfs:range xsd:string ;
+    rdfs:label "ISO Level of Detail"@en ; rdfs:label "信息详细程度"@zh-CN ;
+    skos:note "ISO 19650 LOD: LOD100 / LOD200 / LOD300 / LOD350 / LOD400 / LOD500"@en .
+
+cim-f:isoLoI
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:InformationArtifact ;
+    rdfs:range xsd:string ;
+    rdfs:label "ISO Level of Information"@en ; rdfs:label "信息丰富程度"@zh-CN ;
+    skos:note "ISO 19650 LOI: 各阶段信息需求详细程度"@en .
+
+cim-f:processStartDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FacilityLifecycleProcess ;
+    rdfs:range xsd:date ;
+    rdfs:label "process start date"@en ; rdfs:label "过程开始日期"@zh-CN .
+
+cim-f:processEndDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FacilityLifecycleProcess ;
+    rdfs:range xsd:date ;
+    rdfs:label "process end date"@en ; rdfs:label "过程结束日期"@zh-CN .
+
+# ── 流动过程量化属性 ──────────────────────────────────────────────────────────
+cim-f:instantaneousFlowRate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FluidFlowProcess ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "instantaneous flow rate"@en ; rdfs:label "瞬时流量"@zh-CN ;
+    rdfs:comment "流动过程在某观测时刻的瞬时流量（L/s 或 m³/h）"@zh-CN .
+
+cim-f:inletTemperature
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FluidFlowProcess ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "inlet temperature (°C)"@en ; rdfs:label "进口温度（°C）"@zh-CN .
+
+cim-f:outletTemperature
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FluidFlowProcess ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "outlet temperature (°C)"@en ; rdfs:label "出口温度（°C）"@zh-CN .
+
+cim-f:differentialPressure
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-f:FluidFlowProcess ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "differential pressure (Pa)"@en ; rdfs:label "压差（Pa）"@zh-CN .
+
+# =============================================================================
+# PART J — ISO 19650 四维本体：生命周期阶段与信息状态对应
+# (4D Ontology: Lifecycle Stage × Information State)
+# =============================================================================
+
+# 关键设计模式:
+# 每个生命周期阶段（Process）产出特定 LOD/LOI 的信息制品（GDC）
+# 并将 PIM/AIM 从一个版本状态推进到下一个
+#
+# 阶段-产出-LOD 对应关系（实例化在具体项目文件中）:
+#   ConceptualDesign  → DesignModel LOD100 (质量/体量模型)
+#   SchematicDesign   → DesignModel LOD200 (系统方案)
+#   DetailedDesign    → DesignModel LOD300 (施工图)
+#   Construction      → AsBuiltModel LOD400 (安装信息)
+#   Commissioning     → AsBuiltModel LOD500 (运营就绪)
+#   Handover          → OperationalInformationModel (AIM)
+#   Operation         → AIM 持续更新（传感数据、维护记录）
+
+# 阶段间关系公理
+cim-f:ConceptualDesignProcess
+    cim-f:temporallyPrecedes cim-f:SchematicDesignProcess .
+
+cim-f:SchematicDesignProcess
+    cim-f:temporallyPrecedes cim-f:DetailedDesignProcess .
+
+cim-f:DetailedDesignProcess
+    cim-f:temporallyPrecedes cim-f:ProcurementProcess .
+
+cim-f:ProcurementProcess
+    cim-f:temporallyPrecedes cim-f:ConstructionProcess .
+
+cim-f:ConstructionProcess
+    cim-f:temporallyPrecedes cim-f:CommissioningProcess .
+
+cim-f:CommissioningProcess
+    cim-f:temporallyPrecedes cim-f:OperationProcess .
+
+# =============================================================================
+# END OF FOUNDATIONAL ONTOLOGY (BFO ALIGNMENT)
+# =============================================================================

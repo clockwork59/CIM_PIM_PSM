@@ -1,0 +1,475 @@
+# =============================================================================
+# CIM ↔ FSO 桥接本体
+# Bridge Ontology: CIM ↔ Flow System Ontology (FSO) v0.1.0
+#
+# 参考文献:
+#   Kukkonen, V., Kücükavci, A., Seidenschnur, M., Rasmussen, M. H.,
+#   Smith, K. M., & Hviid, C. A. (2022). An ontology to support flow
+#   system descriptions from design to operation of buildings.
+#   Automation in Construction, 134, 104067.
+#   https://doi.org/10.1016/j.autcon.2021.104067
+#
+# FSO 命名空间: https://w3id.org/fso#
+# FSO 版本: 0.1.0 | 作者: Kücükavci, Rasmussen, Kukkonen
+#
+# 拓扑模型差异说明 (见 SECTION 0):
+#   FSO   — 设备间直接关系模型 (feedsFluidTo / exchangesFluidWith)
+#   CIM   — 连接点中间模型 (FlowPath + ConnectionPoint，对齐 ASHRAE 223P)
+#   两种模型不矛盾，互为补充：FSO 属性可通过 SPARQL 从 CIM 拓扑推导
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+
+# FSO namespace (external — alignment reference only)
+@prefix fso: <https://w3id.org/fso#> .
+
+<https://cim.medical/ontology/v4.0/bridge/fso>
+    a owl:Ontology ;
+    rdfs:label "CIM–FSO Bridge Ontology"@en ;
+    rdfs:label "CIM–FSO桥接本体"@zh-CN ;
+    rdfs:comment """
+        对齐 CIM 医疗建筑领域模型 与 Flow System Ontology (FSO) v0.1.0。
+        FSO 提供了建筑流体系统的轻量级关系拓扑模型，
+        是连接设计阶段（IFC）与运营阶段（BAS/BMS）的标准化语义桥梁。
+        CIM 与 FSO 的拓扑模型互补：CIM 采用连接点中间模型（对齐 ASHRAE 223P），
+        FSO 采用设备间直接关系，两者可通过属性链公理推导互换。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# SECTION 0 — 拓扑模型对比说明 (Topology Paradigm Comparison)
+# =============================================================================
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ 模型特征         FSO (关系直联)        CIM/ASHRAE 223P (连接点中介)     │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ 组件间关系       feedsFluidTo(A,B)     FlowPath.sourcePoint→A.outlet    │
+# │                                       FlowPath.sinkPoint→B.inlet       │
+# │ 拓扑查询         SPARQL 1-hop          SPARQL 2-hop (via FlowPath)      │
+# │ 属性支持         双向 (symmetric)       有向 (inlet/outlet区分)          │
+# │ 适用场景         系统级连通分析         详细管网/设备级建模               │
+# │ 设计依据         ISO 19650 信息简化     ASHRAE 223P 严格拓扑             │
+# └─────────────────────────────────────────────────────────────────────────┘
+#
+# 推导规则示例 (SPARQL 可实现):
+#   若: equipA cim-flow:FlowPath_X ; FlowPath_X cim-flow:sinkPoint CP_in ;
+#       CP_in cim-c:belongsTo equipB
+#   则: equipA fso:feedsFluidTo equipB  (可自动推导)
+
+# =============================================================================
+# SECTION 1 — 顶层概念对齐 (Top-Level Concept Alignments)
+# =============================================================================
+
+# ── System 对齐 ───────────────────────────────────────────────────────────────
+cim:System
+    rdfs:subClassOf fso:System ;
+    skos:broadMatch fso:System ;
+    rdfs:comment "CIM:System ⊆ fso:System；CIM 增加了医疗建筑的系统分类约束"@zh-CN .
+
+cim:DistributionSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:System ;
+    rdfs:subClassOf fso:DistributionSystem ;
+    skos:exactMatch fso:DistributionSystem ;
+    rdfs:label "Distribution System"@en ; rdfs:label "分配系统"@zh-CN ;
+    rdfs:comment "包含供应和回路两个子系统的分配型建筑技术系统"@zh-CN .
+
+cim:SupplySystem
+    a owl:Class ;
+    rdfs:subClassOf cim:DistributionSystem ;
+    rdfs:subClassOf fso:SupplySystem ;
+    skos:exactMatch fso:SupplySystem ;
+    rdfs:label "Supply System"@en ; rdfs:label "供应系统"@zh-CN ;
+    rdfs:comment "向末端用户输送能量或介质的子系统（如冷冻水供水系统、送风系统）"@zh-CN .
+
+cim:ReturnSystem
+    a owl:Class ;
+    rdfs:subClassOf cim:DistributionSystem ;
+    rdfs:subClassOf fso:ReturnSystem ;
+    skos:exactMatch fso:ReturnSystem ;
+    rdfs:label "Return System"@en ; rdfs:label "回路系统"@zh-CN ;
+    rdfs:comment "从末端用户收集回流介质的子系统（如冷冻水回水系统、回风系统）"@zh-CN .
+
+# ── Component 根类对齐 ────────────────────────────────────────────────────────
+cim-equip:Equipment
+    rdfs:subClassOf fso:Component ;
+    skos:broadMatch fso:Component .
+
+# =============================================================================
+# SECTION 2 — FSO 组件类型 → CIM 设备类 映射
+# FSO 定义了8个组件功能类型，CIM 在此基础上细化到具体设备
+# =============================================================================
+
+# ── fso:Segment (管段/风管) ────────────────────────────────────────────────────
+cim-equip:Pipe
+    rdfs:subClassOf fso:Segment ;
+    skos:exactMatch fso:Segment ;
+    rdfs:comment "液态介质管段（水管/医用气体管），fso:Segment 的流体特化"@zh-CN .
+
+cim-equip:Duct
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:DistributionComponent ;
+    rdfs:subClassOf fso:Segment ;
+    rdfs:label "Duct"@en ; rdfs:label "风管"@zh-CN ;
+    skos:exactMatch fso:Segment ;
+    rdfs:comment "空气输送风管，fso:Segment 的气态介质特化"@zh-CN .
+
+cim-equip:CableTray
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:DistributionComponent ;
+    rdfs:subClassOf fso:Segment ;
+    rdfs:label "Cable Tray"@en ; rdfs:label "电缆桥架"@zh-CN ;
+    skos:broadMatch fso:Segment ;
+    rdfs:comment "电气配线载体，是电能流的物理路径（fso:Segment 的电气特化）"@zh-CN .
+
+# ── fso:Fitting (管件/管配件) ─────────────────────────────────────────────────
+cim-equip:PipeFitting
+    rdfs:subClassOf fso:Fitting ;
+    skos:exactMatch fso:Fitting ;
+    rdfs:comment "弯头/三通/异径管等，fso:Fitting 的液态管路特化"@zh-CN .
+
+cim-equip:DuctFitting
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:DistributionComponent ;
+    rdfs:subClassOf fso:Fitting ;
+    rdfs:label "Duct Fitting"@en ; rdfs:label "风管配件"@zh-CN ;
+    skos:exactMatch fso:Fitting ;
+    rdfs:comment "风管弯头、三通、变径，fso:Fitting 的风管特化"@zh-CN .
+
+# ── fso:Terminal (末端装置) ───────────────────────────────────────────────────
+cim-equip:TerminalUnit
+    rdfs:subClassOf fso:Terminal ;
+    skos:broadMatch fso:Terminal .
+
+cim-equip:FCU
+    rdfs:subClassOf fso:Terminal ;
+    skos:exactMatch fso:Terminal ;
+    rdfs:comment "风机盘管作为 HVAC 水-空气系统的末端装置"@zh-CN .
+
+cim-equip:VAV_Terminal
+    rdfs:subClassOf fso:Terminal ;
+    skos:exactMatch fso:Terminal ;
+    rdfs:comment "变风量末端装置"@zh-CN .
+
+cim-equip:MedicalGasOutlet
+    rdfs:subClassOf fso:Terminal ;
+    skos:broadMatch fso:Terminal ;
+    rdfs:comment "医用气体末端接口（氧气、负压、医用空气终端）"@zh-CN .
+
+# ── fso:FlowMovingDevice (流动驱动装置) ───────────────────────────────────────
+cim-equip:Pump
+    rdfs:subClassOf fso:FlowMovingDevice ;
+    skos:exactMatch fso:FlowMovingDevice ;
+    rdfs:comment "液体泵，fso:FlowMovingDevice 的液体特化"@zh-CN .
+
+cim-equip:Fan
+    rdfs:subClassOf fso:FlowMovingDevice ;
+    skos:exactMatch fso:FlowMovingDevice ;
+    rdfs:comment "风机/风扇，fso:FlowMovingDevice 的气体特化"@zh-CN .
+
+cim-equip:Compressor
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:subClassOf fso:FlowMovingDevice ;
+    rdfs:label "Compressor"@en ; rdfs:label "压缩机"@zh-CN ;
+    skos:exactMatch fso:FlowMovingDevice ;
+    rdfs:comment "气体压缩机（医用空气压缩机/冷媒压缩机），fso:FlowMovingDevice"@zh-CN .
+
+# ── fso:FlowController (流量控制装置) ─────────────────────────────────────────
+cim-equip:FlowControlValve
+    rdfs:subClassOf fso:FlowController ;
+    skos:exactMatch fso:FlowController ;
+    rdfs:comment "电动调节阀/电磁阀等，fso:FlowController 的液体特化"@zh-CN .
+
+cim-equip:MotorizedDamper
+    rdfs:subClassOf fso:FlowController ;
+    skos:exactMatch fso:FlowController ;
+    rdfs:comment "电动风阀，fso:FlowController 的气体特化"@zh-CN .
+
+cim-equip:FireDamper
+    rdfs:subClassOf fso:FlowController ;
+    skos:broadMatch fso:FlowController ;
+    rdfs:comment "防火阀（正常开，火灾时关闭）"@zh-CN .
+
+# ── fso:EnergyConversionDevice (能量转换装置) ─────────────────────────────────
+cim-equip:Chiller
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:exactMatch fso:EnergyConversionDevice ;
+    rdfs:comment "冷水机组：电能→冷量，fso:EnergyConversionDevice"@zh-CN .
+
+cim-equip:Boiler
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:exactMatch fso:EnergyConversionDevice ;
+    rdfs:comment "锅炉：燃料→热量，fso:EnergyConversionDevice"@zh-CN .
+
+cim-equip:CoolingTower
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:exactMatch fso:EnergyConversionDevice ;
+    rdfs:comment "冷却塔：热量→散热，fso:EnergyConversionDevice"@zh-CN .
+
+cim-equip:HeatExchanger
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:exactMatch fso:EnergyConversionDevice ;
+    rdfs:comment "板换/换热器：系统间热量转移，fso:EnergyConversionDevice"@zh-CN .
+
+cim-equip:AHU
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:broadMatch fso:EnergyConversionDevice ;
+    rdfs:comment "组合式空调箱：热湿处理（含 TreatmentDevice 功能），优先映射 EnergyConversionDevice"@zh-CN .
+
+cim-equip:Transformer
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:exactMatch fso:EnergyConversionDevice ;
+    rdfs:comment "电力变压器：高压→低压，fso:EnergyConversionDevice 的电气特化"@zh-CN .
+
+cim-equip:UPS
+    rdfs:subClassOf fso:EnergyConversionDevice ;
+    skos:broadMatch fso:EnergyConversionDevice ;
+    rdfs:comment "不间断电源：AC→DC→AC，兼具 StorageDevice 特征"@zh-CN .
+
+# ── fso:TreatmentDevice (介质处理装置) ───────────────────────────────────────
+cim-equip:HEPA_Filter
+    rdfs:subClassOf fso:TreatmentDevice ;
+    skos:exactMatch fso:TreatmentDevice ;
+    rdfs:comment "HEPA 过滤器：去除颗粒物，fso:TreatmentDevice"@zh-CN .
+
+cim-equip:AirPurifier
+    rdfs:subClassOf fso:TreatmentDevice ;
+    skos:exactMatch fso:TreatmentDevice ;
+    rdfs:comment "空气净化器，fso:TreatmentDevice"@zh-CN .
+
+cim-equip:UV_Disinfection
+    rdfs:subClassOf fso:TreatmentDevice ;
+    skos:exactMatch fso:TreatmentDevice ;
+    rdfs:comment "紫外线消毒装置：空气/水消杀，fso:TreatmentDevice"@zh-CN .
+
+cim-equip:WaterSoftener
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:subClassOf fso:TreatmentDevice ;
+    rdfs:label "Water Softener"@en ; rdfs:label "软水器"@zh-CN ;
+    skos:exactMatch fso:TreatmentDevice .
+
+cim-equip:RO_Unit
+    rdfs:subClassOf fso:TreatmentDevice ;
+    skos:exactMatch fso:TreatmentDevice ;
+    rdfs:comment "反渗透纯水系统，fso:TreatmentDevice"@zh-CN .
+
+# ── fso:StorageDevice (储存装置) ──────────────────────────────────────────────
+cim-equip:WaterTank
+    rdfs:subClassOf fso:StorageDevice ;
+    skos:exactMatch fso:StorageDevice ;
+    rdfs:comment "生活储水箱/消防水箱，fso:StorageDevice"@zh-CN .
+
+cim-equip:ChilledWaterBuffer
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:subClassOf fso:StorageDevice ;
+    rdfs:label "Chilled Water Buffer Tank"@en ; rdfs:label "冷冻水缓冲罐"@zh-CN ;
+    skos:exactMatch fso:StorageDevice .
+
+cim-equip:DieselGenerator
+    rdfs:subClassOf fso:StorageDevice ;
+    skos:broadMatch fso:StorageDevice ;
+    rdfs:comment "柴油发电机：燃料储能→电能，兼具 EnergyConversionDevice 特征"@zh-CN .
+
+# =============================================================================
+# SECTION 3 — FSO 关系属性 → CIM 属性映射
+# FSO 关系模型：设备间直接关系（无中间 FlowPath）
+# CIM 关系模型：FlowPath + ConnectionPoint 中介（ASHRAE 223P 风格）
+# =============================================================================
+
+# ── 核心流体关系 ──────────────────────────────────────────────────────────────
+cim:feedsFluidTo
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:feedsFluidTo ;
+    owl:inverseOf cim:hasFluidFedBy ;
+    rdfs:label "feeds fluid to"@en ; rdfs:label "向...供给流体"@zh-CN ;
+    rdfs:comment """
+        设备间直接流体供给关系（FSO 风格），可从 CIM FlowPath 拓扑推导:
+        equipA feedsFluidTo equipB ⟺
+        ∃ fp: FlowPath, fp.sourcePoint.equipment = equipA ∧ fp.sinkPoint.equipment = equipB
+    """@zh-CN .
+
+cim:hasFluidFedBy
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasFluidFedBy ;
+    owl:inverseOf cim:feedsFluidTo ;
+    rdfs:label "has fluid fed by"@en ; rdfs:label "接收来自...的流体"@zh-CN .
+
+cim:suppliesFluidTo
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:suppliesFluidTo ;
+    rdfs:subPropertyOf cim:feedsFluidTo ;
+    rdfs:label "supplies fluid to"@en ; rdfs:label "供水/供风至"@zh-CN ;
+    rdfs:comment "供给系统向末端的单向供给关系（对应 fso:SupplySystem 内的流向）"@zh-CN .
+
+cim:returnsFluidTo
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:returnsFluidTo ;
+    rdfs:subPropertyOf cim:feedsFluidTo ;
+    rdfs:label "returns fluid to"@en ; rdfs:label "回水/回风至"@zh-CN ;
+    rdfs:comment "末端向源端的回路关系（对应 fso:ReturnSystem 内的流向）"@zh-CN .
+
+# ── 热交换关系 ────────────────────────────────────────────────────────────────
+cim:transfersHeatTo
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:transfersHeatTo ;
+    rdfs:label "transfers heat to"@en ; rdfs:label "向...传热"@zh-CN ;
+    rdfs:comment "有向热量传递关系，如冷凝器向冷却水传热"@zh-CN .
+
+cim:transfersHeatFrom
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:transfersHeatFrom ;
+    owl:inverseOf cim:transfersHeatTo ;
+    rdfs:label "transfers heat from"@en ; rdfs:label "从...吸热"@zh-CN .
+
+cim:exchangesHeatWith
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:exchangesHeatWith ;
+    a owl:SymmetricProperty ;
+    rdfs:label "exchanges heat with"@en ; rdfs:label "与...换热"@zh-CN .
+
+# ── 电气关系 ──────────────────────────────────────────────────────────────────
+cim:exchangesElectricChargeWith
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:exchangesElectricChargeWith ;
+    rdfs:label "exchanges electric charge with"@en ; rdfs:label "与...电气连接"@zh-CN .
+
+# ── 通用连接关系 ──────────────────────────────────────────────────────────────
+cim:connectedWith
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:connectedWith ;
+    a owl:SymmetricProperty ;
+    rdfs:label "connected with"@en ; rdfs:label "与...相连"@zh-CN .
+
+# ── 系统-组件归属关系 ─────────────────────────────────────────────────────────
+cim:hasComponent
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasComponent ;
+    rdfs:domain cim:System ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "has component"@en ; rdfs:label "包含组件"@zh-CN .
+
+cim:isComponentOf
+    a owl:ObjectProperty ;
+    owl:inverseOf cim:hasComponent ;
+    rdfs:subPropertyOf fso:isComponentOf ;
+    rdfs:label "is component of"@en ; rdfs:label "属于系统"@zh-CN .
+
+cim:hasSourceComponent
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasSourceComponent ;
+    rdfs:subPropertyOf cim:hasComponent ;
+    rdfs:label "has source component"@en ; rdfs:label "具有源组件"@zh-CN ;
+    rdfs:comment "系统的能量/介质来源设备，如冷水机组是冷冻水系统的源组件"@zh-CN .
+
+cim:hasConsumerComponent
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasConsumerComponent ;
+    rdfs:subPropertyOf cim:hasComponent ;
+    rdfs:label "has consumer component"@en ; rdfs:label "具有用能组件"@zh-CN ;
+    rdfs:comment "系统的末端消费设备，如FCU是冷冻水系统的消费组件"@zh-CN .
+
+# ── 子系统关系 ────────────────────────────────────────────────────────────────
+cim:hasSubSystem
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasSubSystem ;
+    rdfs:domain cim:System ;
+    rdfs:range cim:System ;
+    rdfs:label "has sub-system"@en ; rdfs:label "包含子系统"@zh-CN .
+
+cim:isSubSystemOf
+    a owl:ObjectProperty ;
+    owl:inverseOf cim:hasSubSystem ;
+    rdfs:subPropertyOf fso:isSubSystemOf ;
+    rdfs:label "is sub-system of"@en ; rdfs:label "是...的子系统"@zh-CN .
+
+cim:hasSupplySystem
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasSupplySystem ;
+    rdfs:subPropertyOf cim:hasSubSystem ;
+    rdfs:range cim:SupplySystem ;
+    rdfs:label "has supply system"@en ; rdfs:label "具有供给子系统"@zh-CN .
+
+cim:hasReturnSystem
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf fso:hasReturnSystem ;
+    rdfs:subPropertyOf cim:hasSubSystem ;
+    rdfs:range cim:ReturnSystem ;
+    rdfs:label "has return system"@en ; rdfs:label "具有回路子系统"@zh-CN .
+
+# =============================================================================
+# SECTION 4 — FSO 属性链公理对应 (Property Chain Equivalents)
+# FSO 定义了通过系统层级传递连接关系的属性链，CIM 同样支持
+# =============================================================================
+
+# FSO 定义: hasComponent o hasComponent ⊑ hasComponent
+# (如果系统A包含子系统B，子系统B包含组件C，则系统A也包含组件C)
+# CIM 实现: 同一公理，通过 rdfs:subPropertyOf 继承
+
+# FSO 定义: hasComponent o feedsFluidTo o isComponentOf ⊑ feedsFluidTo
+# (如果系统A的组件C1向系统B的组件C2供液，则A向B供液)
+# CIM SPARQL 等价:
+#   SELECT ?sysA ?sysB WHERE {
+#     ?sysA cim:hasComponent ?eq1 .
+#     ?eq1 cim:feedsFluidTo ?eq2 .
+#     ?eq2 cim:isComponentOf ?sysB .
+#   }
+
+# =============================================================================
+# SECTION 5 — FSO 未覆盖的 CIM 专有扩展
+# =============================================================================
+
+# ┌──────────────────────────────────────────────────────────────────────────┐
+# │ CIM 扩展                       FSO 状态         说明                    │
+# ├──────────────────────────────────────────────────────────────────────────┤
+# │ cim-med: 介质层级              未定义           FSO 不建模流体类型       │
+# │ cim-c:ConnectionPoint          未定义           FSO 使用直接关系         │
+# │ cim-flow:FlowPath              未对应           FSO 用 feedsFluidTo 替代  │
+# │ cim-equip:MedicalGasOutlet     无对应           医疗专有终端             │
+# │ cim-equip:IsolatedPowerSystem  无对应           医疗电气专有             │
+# │ cim-space:OperatingRoom        无对应           FSO 不建模医疗空间       │
+# │ cim:hasSubSystem               等价 fso:        已对齐                  │
+# │ cim:DistributionSystem         等价 fso:        已对齐                  │
+# └──────────────────────────────────────────────────────────────────────────┘
+
+# =============================================================================
+# SECTION 6 — FlowPath ↔ FSO 推导关系说明 (SPARQL Derivation)
+# =============================================================================
+
+# 以下 SPARQL 查询可从 CIM FlowPath 拓扑中推导 fso:feedsFluidTo 关系:
+#
+# CONSTRUCT { ?eq1 cim:feedsFluidTo ?eq2 }
+# WHERE {
+#   ?fp a cim-flow:FlowPath ;
+#       cim-flow:sourcePoint ?src ;
+#       cim-flow:sinkPoint   ?snk .
+#   ?src cim-c:belongsToEquipment ?eq1 .
+#   ?snk cim-c:belongsToEquipment ?eq2 .
+# }
+#
+# 反向：从 fso:feedsFluidTo 实例化 CIM FlowPath（设计导入场景）:
+# CONSTRUCT {
+#   ?fp a cim-flow:FlowPath ;
+#       cim-flow:sourcePoint [ a cim-c:OutletConnectionPoint ; cim-c:belongsToEquipment ?eq1 ] ;
+#       cim-flow:sinkPoint   [ a cim-c:InletConnectionPoint  ; cim-c:belongsToEquipment ?eq2 ] .
+# }
+# WHERE { ?eq1 fso:feedsFluidTo ?eq2 . BIND(IRI(CONCAT(str(?eq1),"_to_",str(?eq2))) AS ?fp) }
+
+# =============================================================================
+# END OF FSO BRIDGE ONTOLOGY
+# =============================================================================

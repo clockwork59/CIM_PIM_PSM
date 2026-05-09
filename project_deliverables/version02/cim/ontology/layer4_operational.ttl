@@ -1,0 +1,646 @@
+# =============================================================================
+# CIM Layer 4 — 运营本体 (Operational Ontology / AIM-PSM Layer)
+# ISO 19650 Layer 4: Asset Information Model (AIM) / Operational Phase
+#
+# 覆盖范围:
+#   - 资产信息模型 (DeployedAsset / AssetRegister)
+#   - 传感器观测与时序数据 (SensorObservation / Timeseries)
+#   - 维护管理 (MaintenanceActivity: PM/CM/PdM)
+#   - 告警与故障管理 (AlarmRecord / FaultEvent)
+#   - 能耗记录与基准 (EnergyConsumptionRecord / EnergyBaseline)
+#   - 资产文件管理 (AssetDocument: manual/warranty/drawing/certificate)
+#   - 竣工模型关联 (AsBuiltModel)
+#   - 工单管理 (WorkOrder)
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix sosa:     <http://www.w3.org/ns/sosa/> .
+@prefix ssn:      <http://www.w3.org/ns/ssn/> .
+@prefix time:     <http://www.w3.org/2006/time#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-ctrl:  <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-pt:    <https://cim.medical/ontology/v4.0/point#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-d:     <https://cim.medical/ontology/v4.0/design#> .
+@prefix cim-o:     <https://cim.medical/ontology/v4.0/operational#> .
+
+<https://cim.medical/ontology/v4.0/operational>
+    a owl:Ontology ;
+    rdfs:label "CIM Operational Ontology"@en ;
+    rdfs:label "CIM运营本体"@zh-CN ;
+    rdfs:comment """
+        ISO 19650 第四层运营本体（AIM 阶段），覆盖医疗建筑竣工交付后的
+        全生命周期资产信息管理。包括资产台账、实时传感数据、维护工单、
+        告警记录和能耗统计。与 SOSA/SSN 传感观测标准对齐。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> ;
+    owl:imports <https://cim.medical/ontology/v4.0/design> .
+
+# =============================================================================
+# SECTION A — 资产信息模型 (Asset Information Model)
+# =============================================================================
+
+cim-o:DeployedAsset
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Deployed Asset"@en ; rdfs:label "已部署资产"@zh-CN ;
+    rdfs:comment """
+        施工完成并交付运营的物理资产实例。继承 DesignedEquipment 的选型信息，
+        同时具有安装位置、调试参数、运行状态等运营属性。
+    """@zh-CN .
+
+cim-o:AssetRegister
+    a owl:Class ;
+    rdfs:label "Asset Register"@en ; rdfs:label "资产台账"@zh-CN ;
+    rdfs:comment "建筑中所有 DeployedAsset 的集合视图，对应 ISO 19650 Asset Information Model"@zh-CN .
+
+cim-o:AsBuiltModel
+    a owl:Class ;
+    rdfs:label "As-Built Model"@en ; rdfs:label "竣工模型"@zh-CN ;
+    rdfs:comment "施工完成后更新的建筑信息模型，作为运营阶段的数字基准"@zh-CN .
+
+# ── 资产状态 ──────────────────────────────────────────────────────────────────
+cim-o:AssetLifecycleState
+    a owl:Class ;
+    rdfs:label "Asset Lifecycle State"@en ; rdfs:label "资产生命周期状态"@zh-CN .
+
+cim-o:CommissioningState
+    a cim-o:AssetLifecycleState ;
+    rdfs:label "Commissioning"@en ; rdfs:label "调试中"@zh-CN .
+
+cim-o:OperationalState
+    a cim-o:AssetLifecycleState ;
+    rdfs:label "Operational"@en ; rdfs:label "运行中"@zh-CN .
+
+cim-o:MaintenanceState
+    a cim-o:AssetLifecycleState ;
+    rdfs:label "Under Maintenance"@en ; rdfs:label "维护中"@zh-CN .
+
+cim-o:FaultState
+    a cim-o:AssetLifecycleState ;
+    rdfs:label "Fault"@en ; rdfs:label "故障"@zh-CN .
+
+cim-o:RetiredState
+    a cim-o:AssetLifecycleState ;
+    rdfs:label "Retired"@en ; rdfs:label "已退役"@zh-CN .
+
+# =============================================================================
+# SECTION B — 传感器观测与时序数据 (Sensor Observations & Timeseries)
+# 与 W3C SOSA/SSN 本体对齐
+# =============================================================================
+
+cim-o:SensorObservation
+    a owl:Class ;
+    rdfs:subClassOf sosa:Observation ;
+    rdfs:label "Sensor Observation"@en ; rdfs:label "传感器观测"@zh-CN ;
+    rdfs:comment "单次传感器读数，对应 SOSA/SSN Observation 模式"@zh-CN ;
+    skos:note "通过 sosa:hasFeatureOfInterest 关联到 DeployedAsset 或 Space"@en .
+
+cim-o:Timeseries
+    a owl:Class ;
+    rdfs:label "Timeseries"@en ; rdfs:label "时序数据集"@zh-CN ;
+    rdfs:comment "与某个传感点关联的连续时间序列数据引用（外部存储指针）"@zh-CN .
+
+cim-o:TimeseriesPoint
+    a owl:Class ;
+    rdfs:label "Timeseries Point"@en ; rdfs:label "时序数据点"@zh-CN ;
+    rdfs:comment "时序数据集中的单个时间戳-值对"@zh-CN .
+
+# ── 实时数据快照 ──────────────────────────────────────────────────────────────
+cim-o:LiveReading
+    a owl:Class ;
+    rdfs:label "Live Reading"@en ; rdfs:label "实时读数"@zh-CN ;
+    rdfs:comment "BAS/BMS 从现场设备采集的最新数据点快照（非历史归档）"@zh-CN .
+
+# =============================================================================
+# SECTION C — 维护管理 (Maintenance Management)
+# =============================================================================
+
+cim-o:MaintenanceActivity
+    a owl:Class ;
+    rdfs:label "Maintenance Activity"@en ; rdfs:label "维护活动"@zh-CN ;
+    rdfs:comment "针对资产的维护操作记录，包括预防性/修复性/预测性三类"@zh-CN .
+
+cim-o:PreventiveMaintenance
+    a owl:Class ;
+    rdfs:subClassOf cim-o:MaintenanceActivity ;
+    rdfs:label "Preventive Maintenance"@en ; rdfs:label "预防性维护（PM）"@zh-CN ;
+    rdfs:comment "按计划周期执行的定期保养，如年度冷水机组清洗"@zh-CN .
+
+cim-o:CorrectiveMaintenance
+    a owl:Class ;
+    rdfs:subClassOf cim-o:MaintenanceActivity ;
+    rdfs:label "Corrective Maintenance"@en ; rdfs:label "修复性维护（CM）"@zh-CN ;
+    rdfs:comment "设备故障后的修复操作"@zh-CN .
+
+cim-o:PredictiveMaintenance
+    a owl:Class ;
+    rdfs:subClassOf cim-o:MaintenanceActivity ;
+    rdfs:label "Predictive Maintenance"@en ; rdfs:label "预测性维护（PdM）"@zh-CN ;
+    rdfs:comment "基于传感器数据和算法预测故障，提前介入维修"@zh-CN .
+
+cim-o:InspectionActivity
+    a owl:Class ;
+    rdfs:subClassOf cim-o:MaintenanceActivity ;
+    rdfs:label "Inspection Activity"@en ; rdfs:label "巡检活动"@zh-CN .
+
+# ── 工单 ─────────────────────────────────────────────────────────────────────
+cim-o:WorkOrder
+    a owl:Class ;
+    rdfs:label "Work Order"@en ; rdfs:label "工单"@zh-CN ;
+    rdfs:comment "CMMS（计算机化维护管理系统）中生成的任务指令"@zh-CN .
+
+cim-o:PMWorkOrder
+    a owl:Class ;
+    rdfs:subClassOf cim-o:WorkOrder ;
+    rdfs:label "PM Work Order"@en ; rdfs:label "预防性维护工单"@zh-CN .
+
+cim-o:CMWorkOrder
+    a owl:Class ;
+    rdfs:subClassOf cim-o:WorkOrder ;
+    rdfs:label "CM Work Order"@en ; rdfs:label "故障维修工单"@zh-CN .
+
+cim-o:InspectionWorkOrder
+    a owl:Class ;
+    rdfs:subClassOf cim-o:WorkOrder ;
+    rdfs:label "Inspection Work Order"@en ; rdfs:label "巡检工单"@zh-CN .
+
+# ── 维护计划 ─────────────────────────────────────────────────────────────────
+cim-o:MaintenancePlan
+    a owl:Class ;
+    rdfs:label "Maintenance Plan"@en ; rdfs:label "维护计划"@zh-CN ;
+    rdfs:comment "一个资产的标准化维护策略，规定维护频率、检查项目和所需备件"@zh-CN .
+
+cim-o:MaintenanceChecklistItem
+    a owl:Class ;
+    rdfs:label "Maintenance Checklist Item"@en ; rdfs:label "维护检查项"@zh-CN .
+
+# =============================================================================
+# SECTION D — 告警与故障管理 (Alarm & Fault Management)
+# =============================================================================
+
+cim-o:AlarmRecord
+    a owl:Class ;
+    rdfs:label "Alarm Record"@en ; rdfs:label "告警记录"@zh-CN ;
+    rdfs:comment "BAS/BMS 产生的告警事件记录，包括告警类型、发生时间、确认信息"@zh-CN .
+
+cim-o:FaultEvent
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AlarmRecord ;
+    rdfs:label "Fault Event"@en ; rdfs:label "故障事件"@zh-CN ;
+    rdfs:comment "设备或系统发生的确认故障事件，通常触发 CM 工单"@zh-CN .
+
+cim-o:LifeSafetyAlarm
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AlarmRecord ;
+    rdfs:label "Life Safety Alarm"@en ; rdfs:label "生命安全告警"@zh-CN ;
+    rdfs:comment "涉及患者安全的关键告警（医用气体压力失常、手术室压差异常等）"@zh-CN .
+
+cim-o:ProcessAlarm
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AlarmRecord ;
+    rdfs:label "Process Alarm"@en ; rdfs:label "工艺告警"@zh-CN ;
+    rdfs:comment "系统参数超出设计范围的告警，如冷冻水温度偏高"@zh-CN .
+
+cim-o:AlarmSeverity
+    a owl:Class ;
+    rdfs:label "Alarm Severity"@en ; rdfs:label "告警等级"@zh-CN .
+
+cim-o:Critical   a cim-o:AlarmSeverity ; rdfs:label "Critical"@en ; rdfs:label "紧急"@zh-CN .
+cim-o:High       a cim-o:AlarmSeverity ; rdfs:label "High"@en    ; rdfs:label "高"@zh-CN .
+cim-o:Medium     a cim-o:AlarmSeverity ; rdfs:label "Medium"@en  ; rdfs:label "中"@zh-CN .
+cim-o:Low        a cim-o:AlarmSeverity ; rdfs:label "Low"@en     ; rdfs:label "低"@zh-CN .
+
+# =============================================================================
+# SECTION E — 能耗记录与基准 (Energy Consumption Records & Baseline)
+# =============================================================================
+
+cim-o:EnergyConsumptionRecord
+    a owl:Class ;
+    rdfs:label "Energy Consumption Record"@en ; rdfs:label "能耗记录"@zh-CN ;
+    rdfs:comment "某时间段内的能耗计量数据，来自智能电表或能源管理系统"@zh-CN .
+
+cim-o:EnergyBaseline
+    a owl:Class ;
+    rdfs:label "Energy Baseline"@en ; rdfs:label "能耗基准"@zh-CN ;
+    rdfs:comment "用于对比评估的历史基准能耗，通常为月度/年度统计值"@zh-CN .
+
+cim-o:CarbonEmissionRecord
+    a owl:Class ;
+    rdfs:subClassOf cim-o:EnergyConsumptionRecord ;
+    rdfs:label "Carbon Emission Record"@en ; rdfs:label "碳排放记录"@zh-CN .
+
+cim-o:WaterConsumptionRecord
+    a owl:Class ;
+    rdfs:label "Water Consumption Record"@en ; rdfs:label "用水记录"@zh-CN .
+
+cim-o:SubMeterReading
+    a owl:Class ;
+    rdfs:subClassOf cim-o:EnergyConsumptionRecord ;
+    rdfs:label "Sub-Meter Reading"@en ; rdfs:label "分表读数"@zh-CN ;
+    rdfs:comment "区域/科室级分项计量数据，用于医院内部能耗分摊"@zh-CN .
+
+# =============================================================================
+# SECTION F — 资产文件管理 (Asset Document Management)
+# =============================================================================
+
+cim-o:AssetDocument
+    a owl:Class ;
+    rdfs:label "Asset Document"@en ; rdfs:label "资产文件"@zh-CN ;
+    rdfs:comment "与特定资产关联的运营支持文件"@zh-CN .
+
+cim-o:OperationManual
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AssetDocument ;
+    rdfs:label "Operation Manual"@en ; rdfs:label "操作手册"@zh-CN .
+
+cim-o:MaintenanceManual
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AssetDocument ;
+    rdfs:label "Maintenance Manual"@en ; rdfs:label "维护手册"@zh-CN .
+
+cim-o:WarrantyDocument
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AssetDocument ;
+    rdfs:label "Warranty Document"@en ; rdfs:label "质保文件"@zh-CN .
+
+cim-o:AsBuiltDrawing
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AssetDocument ;
+    rdfs:label "As-Built Drawing"@en ; rdfs:label "竣工图纸"@zh-CN .
+
+cim-o:InspectionCertificate
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AssetDocument ;
+    rdfs:label "Inspection Certificate"@en ; rdfs:label "检测证书"@zh-CN ;
+    rdfs:comment "政府或第三方机构出具的设备/系统合格证明，如电梯、压力容器检验报告"@zh-CN .
+
+cim-o:CommissioningReport
+    a owl:Class ;
+    rdfs:subClassOf cim-o:AssetDocument ;
+    rdfs:label "Commissioning Report"@en ; rdfs:label "调试报告"@zh-CN .
+
+cim-o:CleanroomCertificate
+    a owl:Class ;
+    rdfs:subClassOf cim-o:InspectionCertificate ;
+    rdfs:label "Cleanroom Certificate"@en ; rdfs:label "洁净度检测证书"@zh-CN ;
+    rdfs:comment "按 GB50333-2013 要求，手术室/ICU 洁净等级的第三方检测结论"@zh-CN .
+
+# =============================================================================
+# SECTION G — 运营本体数据属性 (Operational Datatype Properties)
+# =============================================================================
+
+# ── DeployedAsset 属性 ────────────────────────────────────────────────────────
+cim-o:assetId
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:string ;
+    rdfs:label "asset ID"@en ; rdfs:label "资产编号"@zh-CN ;
+    rdfs:comment "与 CMMS/EAM 系统同步的资产唯一编号"@zh-CN .
+
+cim-o:serialNumber
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:string ;
+    rdfs:label "serial number"@en ; rdfs:label "出厂序列号"@zh-CN .
+
+cim-o:installationDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:date ;
+    rdfs:label "installation date"@en ; rdfs:label "安装日期"@zh-CN .
+
+cim-o:commissioningDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:date ;
+    rdfs:label "commissioning date"@en ; rdfs:label "调试完成日期"@zh-CN .
+
+cim-o:warrantyExpiryDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:date ;
+    rdfs:label "warranty expiry date"@en ; rdfs:label "质保到期日"@zh-CN .
+
+cim-o:expectedLifeYears
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:integer ;
+    rdfs:label "expected life (years)"@en ; rdfs:label "预期寿命（年）"@zh-CN .
+
+cim-o:replacementCost
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "replacement cost (CNY)"@en ; rdfs:label "重置成本（元）"@zh-CN .
+
+# ── AlarmRecord 属性 ──────────────────────────────────────────────────────────
+cim-o:alarmCode
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "alarm code"@en ; rdfs:label "告警代码"@zh-CN .
+
+cim-o:alarmTimestamp
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "alarm timestamp"@en ; rdfs:label "告警时间戳"@zh-CN .
+
+cim-o:acknowledgedBy
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "acknowledged by"@en ; rdfs:label "确认人"@zh-CN .
+
+cim-o:acknowledgedAt
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "acknowledged at"@en ; rdfs:label "确认时间"@zh-CN .
+
+cim-o:resolvedAt
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "resolved at"@en ; rdfs:label "消除时间"@zh-CN .
+
+cim-o:alarmDescription
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "alarm description"@en ; rdfs:label "告警描述"@zh-CN .
+
+# ── WorkOrder 属性 ────────────────────────────────────────────────────────────
+cim-o:workOrderId
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range xsd:string ;
+    rdfs:label "work order ID"@en ; rdfs:label "工单编号"@zh-CN .
+
+cim-o:workOrderStatus
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range xsd:string ;
+    rdfs:label "work order status"@en ; rdfs:label "工单状态"@zh-CN ;
+    skos:note "取值: open / in-progress / completed / cancelled"@en .
+
+cim-o:scheduledDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range xsd:date ;
+    rdfs:label "scheduled date"@en ; rdfs:label "计划日期"@zh-CN .
+
+cim-o:completedDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range xsd:date ;
+    rdfs:label "completed date"@en ; rdfs:label "完成日期"@zh-CN .
+
+cim-o:assignedTechnician
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range xsd:string ;
+    rdfs:label "assigned technician"@en ; rdfs:label "执行人"@zh-CN .
+
+cim-o:laborHours
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:MaintenanceActivity ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "labor hours"@en ; rdfs:label "工时（小时）"@zh-CN .
+
+# ── EnergyConsumptionRecord 属性 ──────────────────────────────────────────────
+cim-o:recordingPeriodStart
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:EnergyConsumptionRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "recording period start"@en ; rdfs:label "计量起始时间"@zh-CN .
+
+cim-o:recordingPeriodEnd
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:EnergyConsumptionRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "recording period end"@en ; rdfs:label "计量结束时间"@zh-CN .
+
+cim-o:consumptionValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:EnergyConsumptionRecord ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "consumption value"@en ; rdfs:label "消耗量"@zh-CN .
+
+cim-o:consumptionUnit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:EnergyConsumptionRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "consumption unit"@en ; rdfs:label "计量单位"@zh-CN ;
+    skos:note "典型值: kWh / m³ / kg"@en .
+
+# ── SensorObservation 属性 ────────────────────────────────────────────────────
+cim-o:observationValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:SensorObservation ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observation value"@en ; rdfs:label "观测值"@zh-CN .
+
+cim-o:observationUnit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:SensorObservation ;
+    rdfs:range xsd:string ;
+    rdfs:label "observation unit"@en ; rdfs:label "观测单位"@zh-CN .
+
+cim-o:observationTimestamp
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:SensorObservation ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "observation timestamp"@en ; rdfs:label "观测时间戳"@zh-CN .
+
+# ── Timeseries 属性 ──────────────────────────────────────────────────────────
+cim-o:timeseriesId
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:Timeseries ;
+    rdfs:range xsd:string ;
+    rdfs:label "timeseries ID"@en ; rdfs:label "时序数据集ID"@zh-CN ;
+    rdfs:comment "外部时序数据库（InfluxDB/TSDB）中的存储键"@zh-CN .
+
+cim-o:samplingInterval
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:Timeseries ;
+    rdfs:range xsd:integer ;
+    rdfs:label "sampling interval (seconds)"@en ; rdfs:label "采样间隔（秒）"@zh-CN .
+
+cim-o:retentionPolicy
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-o:Timeseries ;
+    rdfs:range xsd:string ;
+    rdfs:label "retention policy"@en ; rdfs:label "数据保留策略"@zh-CN ;
+    rdfs:comment "如: raw-7d / hourly-1y / daily-10y"@zh-CN .
+
+# =============================================================================
+# SECTION H — 运营本体对象属性 (Operational Object Properties)
+# =============================================================================
+
+cim-o:hasLifecycleState
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-o:AssetLifecycleState ;
+    rdfs:label "has lifecycle state"@en ; rdfs:label "具有生命周期状态"@zh-CN .
+
+cim-o:trackedBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-o:Timeseries ;
+    rdfs:label "tracked by"@en ; rdfs:label "由时序数据追踪"@zh-CN .
+
+cim-o:triggeredAlarm
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-o:AlarmRecord ;
+    rdfs:label "triggered alarm"@en ; rdfs:label "触发告警"@zh-CN .
+
+cim-o:hasSeverity
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range cim-o:AlarmSeverity ;
+    rdfs:label "has severity"@en ; rdfs:label "告警等级"@zh-CN .
+
+cim-o:generatedWorkOrder
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:AlarmRecord ;
+    rdfs:range cim-o:WorkOrder ;
+    rdfs:label "generated work order"@en ; rdfs:label "生成工单"@zh-CN .
+
+cim-o:targetAsset
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range cim-o:DeployedAsset ;
+    rdfs:label "target asset"@en ; rdfs:label "维护对象"@zh-CN .
+
+cim-o:executedActivity
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range cim-o:MaintenanceActivity ;
+    rdfs:label "executed activity"@en ; rdfs:label "执行活动"@zh-CN .
+
+cim-o:followsPlan
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:WorkOrder ;
+    rdfs:range cim-o:MaintenancePlan ;
+    rdfs:label "follows plan"@en ; rdfs:label "按照计划"@zh-CN .
+
+cim-o:hasDocument
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-o:AssetDocument ;
+    rdfs:label "has document"@en ; rdfs:label "具有文件"@zh-CN .
+
+cim-o:isDocumentFor
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-o:hasDocument ;
+    rdfs:label "is document for"@en ; rdfs:label "是...的文件"@zh-CN .
+
+cim-o:metersAsset
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;  # e.g. ElectricMeter, WaterMeter
+    rdfs:range cim-o:DeployedAsset ;
+    rdfs:label "meters asset"@en ; rdfs:label "计量对象"@zh-CN .
+
+cim-o:hasEnergyRecord
+    a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (cim-space:Space cim-o:DeployedAsset) ] ;
+    rdfs:range cim-o:EnergyConsumptionRecord ;
+    rdfs:label "has energy record"@en ; rdfs:label "具有能耗记录"@zh-CN .
+
+cim-o:observes
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf sosa:observes ;
+    rdfs:domain cim-ctrl:Sensor ;
+    rdfs:range cim-o:Timeseries ;
+    rdfs:label "observes (timeseries)"@en ; rdfs:label "观测（时序）"@zh-CN .
+
+# =============================================================================
+# SECTION I — 与 SOSA/SSN 标准对齐 (W3C SOSA/SSN Alignment)
+# =============================================================================
+
+# SOSA 对齐 (informational — not owl:equivalentClass since SOSA classes are external)
+cim-o:SensorObservation
+    rdfs:subClassOf sosa:Observation .
+
+cim-ctrl:Sensor
+    rdfs:subClassOf sosa:Sensor .
+
+cim-ctrl:Actuator
+    rdfs:subClassOf sosa:Actuator .
+
+cim-o:observationValue
+    rdfs:subPropertyOf sosa:hasSimpleResult .
+
+cim-o:observationTimestamp
+    rdfs:subPropertyOf sosa:resultTime .
+
+# =============================================================================
+# SECTION J — KPI 与运营指标 (KPIs & Operational Metrics)
+# =============================================================================
+
+cim-o:OperationalKPI
+    a owl:Class ;
+    rdfs:label "Operational KPI"@en ; rdfs:label "运营KPI"@zh-CN ;
+    rdfs:comment "建筑运营管理中追踪的关键绩效指标"@zh-CN .
+
+cim-o:MTBF
+    a cim-o:OperationalKPI ;
+    rdfs:label "Mean Time Between Failures"@en ; rdfs:label "平均无故障间隔时间"@zh-CN .
+
+cim-o:MTTR
+    a cim-o:OperationalKPI ;
+    rdfs:label "Mean Time To Repair"@en ; rdfs:label "平均修复时间"@zh-CN .
+
+cim-o:EUI
+    a cim-o:OperationalKPI ;
+    rdfs:label "Energy Use Intensity (kWh/m²/yr)"@en ; rdfs:label "单位面积能耗强度"@zh-CN .
+
+cim-o:SystemUptime
+    a cim-o:OperationalKPI ;
+    rdfs:label "System Uptime (%)"@en ; rdfs:label "系统可用率（%）"@zh-CN .
+
+cim-o:CleanroomComplianceRate
+    a cim-o:OperationalKPI ;
+    rdfs:label "Cleanroom Compliance Rate"@en ; rdfs:label "洁净室合规率"@zh-CN ;
+    rdfs:comment "医疗洁净区年度合规检测通过率"@zh-CN .
+
+# =============================================================================
+# SECTION K — 竣工模型关联 (As-Built Model Linkage)
+# =============================================================================
+
+cim-o:implementsDesign
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-d:DesignedEquipment ;
+    rdfs:label "implements design"@en ; rdfs:label "实施设计"@zh-CN ;
+    rdfs:comment "将已安装资产链接回其对应的设计规格"@zh-CN .
+
+cim-o:instantiatesSpec
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-d:EquipmentSpecification ;
+    rdfs:label "instantiates specification"@en ; rdfs:label "实例化规格"@zh-CN .
+
+cim-o:containedInAsBuilt
+    a owl:ObjectProperty ;
+    rdfs:domain cim-o:DeployedAsset ;
+    rdfs:range cim-o:AsBuiltModel ;
+    rdfs:label "contained in as-built model"@en ; rdfs:label "包含于竣工模型"@zh-CN .
+
+# =============================================================================
+# END OF OPERATIONAL ONTOLOGY
+# =============================================================================

@@ -1,0 +1,326 @@
+# =============================================================================
+# CIM ↔ Brick Schema 桥接本体
+# Bridge Ontology: CIM ↔ Brick Schema 1.3+
+#
+# 策略:
+#   - owl:equivalentClass: 语义完全等价（双向可替换）
+#   - rdfs:subClassOf: CIM 类是 Brick 类的特化（医疗场景约束更严格）
+#   - skos:exactMatch: 概念等价但语用不同（推荐用于跨标准引用）
+#   - skos:broadMatch: Brick 类比 CIM 类更宽泛
+#
+# Brick Schema 官方命名空间: https://brickschema.org/schema/Brick#
+# 参考版本: Brick 1.3.0
+#
+# Version : 4.0.0  |  2026-05-06
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-ctrl:  <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-pt:    <https://cim.medical/ontology/v4.0/point#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+
+# Brick Schema namespace (external — not dereferenced, used for alignment only)
+@prefix brick:     <https://brickschema.org/schema/Brick#> .
+@prefix bsh:       <https://brickschema.org/schema/BrickShape#> .
+
+<https://cim.medical/ontology/v4.0/bridge/brick>
+    a owl:Ontology ;
+    rdfs:label "CIM–Brick Schema Bridge Ontology"@en ;
+    rdfs:label "CIM–Brick Schema桥接本体"@zh-CN ;
+    rdfs:comment """
+        为 CIM 医疗建筑领域模型提供与 Brick Schema 1.3 的语义对齐。
+        Brick Schema 专注于建筑能耗监测（~600类），CIM 在此基础上
+        增加了医疗专业系统和中国规范约束。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# SECTION 1 — 设备类对齐 (Equipment Alignments)
+# =============================================================================
+
+# ── HVAC 主机设备 ─────────────────────────────────────────────────────────────
+cim-equip:Chiller
+    owl:equivalentClass brick:Chiller ;
+    skos:exactMatch brick:Chiller .
+
+cim-equip:CoolingTower
+    owl:equivalentClass brick:Cooling_Tower ;
+    skos:exactMatch brick:Cooling_Tower .
+
+cim-equip:Boiler
+    owl:equivalentClass brick:Boiler ;
+    skos:exactMatch brick:Boiler .
+
+cim-equip:HeatExchanger
+    owl:equivalentClass brick:Heat_Exchanger ;
+    skos:exactMatch brick:Heat_Exchanger .
+
+cim-equip:Pump
+    owl:equivalentClass brick:Pump ;
+    skos:exactMatch brick:Pump .
+
+cim-equip:Fan
+    owl:equivalentClass brick:Fan ;
+    skos:exactMatch brick:Fan .
+
+cim-equip:AHU
+    owl:equivalentClass brick:AHU ;
+    skos:exactMatch brick:AHU .
+
+cim-equip:Clean_AHU
+    rdfs:subClassOf brick:AHU ;
+    skos:broadMatch brick:AHU ;
+    rdfs:comment "洁净AHU是普通AHU的医疗特化版本（更严格的过滤和压差控制）"@zh-CN .
+
+cim-equip:FCU
+    owl:equivalentClass brick:FCU ;
+    skos:exactMatch brick:FCU .
+
+cim-equip:VAV_Terminal
+    owl:equivalentClass brick:VAV ;
+    skos:exactMatch brick:VAV .
+
+cim-equip:HEPA_Filter
+    owl:equivalentClass brick:HEPA_Filter ;
+    skos:exactMatch brick:HEPA_Filter .
+
+cim-equip:VFD
+    owl:equivalentClass brick:VFD ;
+    skos:exactMatch brick:VFD .
+
+cim-equip:ERV
+    owl:equivalentClass brick:Heat_Wheel ;
+    skos:broadMatch brick:Heat_Wheel .
+
+# ── 电气设备 ──────────────────────────────────────────────────────────────────
+cim-equip:Transformer
+    owl:equivalentClass brick:Transformer ;
+    skos:exactMatch brick:Transformer .
+
+cim-equip:UPS
+    owl:equivalentClass brick:UPS ;
+    skos:exactMatch brick:UPS .
+
+cim-equip:DieselGenerator
+    owl:equivalentClass brick:Emergency_Generator ;
+    skos:exactMatch brick:Emergency_Generator .
+
+cim-equip:ElectricMeter
+    owl:equivalentClass brick:Electrical_Meter ;
+    skos:exactMatch brick:Electrical_Meter .
+
+cim-equip:LightFixture
+    owl:equivalentClass brick:Luminaire ;
+    skos:exactMatch brick:Luminaire .
+
+# ── 给排水 ───────────────────────────────────────────────────────────────────
+cim-equip:WaterMeter
+    owl:equivalentClass brick:Water_Meter ;
+    skos:exactMatch brick:Water_Meter .
+
+cim-equip:FirePump
+    owl:equivalentClass brick:Fire_Pump ;
+    skos:exactMatch brick:Fire_Pump .
+
+# =============================================================================
+# SECTION 2 — 空间类对齐 (Location/Space Alignments)
+# =============================================================================
+
+cim-space:Site
+    owl:equivalentClass brick:Site ;
+    skos:exactMatch brick:Site .
+
+cim-space:Building
+    owl:equivalentClass brick:Building ;
+    skos:exactMatch brick:Building .
+
+cim-space:Floor
+    owl:equivalentClass brick:Floor ;
+    skos:exactMatch brick:Floor .
+
+cim-space:Zone
+    owl:equivalentClass brick:Zone ;
+    skos:exactMatch brick:Zone .
+
+cim-space:Room
+    owl:equivalentClass brick:Room ;
+    skos:exactMatch brick:Room .
+
+cim-space:HVAC_Zone
+    owl:equivalentClass brick:HVAC_Zone ;
+    skos:exactMatch brick:HVAC_Zone .
+
+cim-space:LightingZone
+    owl:equivalentClass brick:Lighting_Zone ;
+    skos:exactMatch brick:Lighting_Zone .
+
+cim-space:OperatingRoom
+    rdfs:subClassOf brick:Room ;
+    skos:broadMatch brick:Room ;
+    rdfs:comment "Brick 无手术室子类，CIM 为医疗专用扩展"@zh-CN .
+
+cim-space:ICU
+    rdfs:subClassOf brick:Room ;
+    skos:broadMatch brick:Room .
+
+# =============================================================================
+# SECTION 3 — 传感器/数据点对齐 (Sensor & Point Alignments)
+# Brick 有极细的传感器层级，此处对齐关键节点
+# =============================================================================
+
+cim-pt:TemperaturePoint
+    owl:equivalentClass brick:Temperature_Sensor ;
+    skos:exactMatch brick:Temperature_Sensor .
+
+cim-pt:SupplyAirTemperaturePoint
+    owl:equivalentClass brick:Supply_Air_Temperature_Sensor ;
+    skos:exactMatch brick:Supply_Air_Temperature_Sensor .
+
+cim-pt:ReturnAirTemperaturePoint
+    owl:equivalentClass brick:Return_Air_Temperature_Sensor ;
+    skos:exactMatch brick:Return_Air_Temperature_Sensor .
+
+cim-pt:ZoneAirTemperaturePoint
+    owl:equivalentClass brick:Zone_Air_Temperature_Sensor ;
+    skos:exactMatch brick:Zone_Air_Temperature_Sensor .
+
+cim-pt:ChilledWaterSupplyTemperaturePoint
+    owl:equivalentClass brick:Chilled_Water_Supply_Temperature_Sensor ;
+    skos:exactMatch brick:Chilled_Water_Supply_Temperature_Sensor .
+
+cim-pt:HumidityPoint
+    owl:equivalentClass brick:Humidity_Sensor ;
+    skos:exactMatch brick:Humidity_Sensor .
+
+cim-pt:ZoneAirHumidityPoint
+    owl:equivalentClass brick:Zone_Air_Humidity_Sensor ;
+    skos:exactMatch brick:Zone_Air_Humidity_Sensor .
+
+cim-pt:DifferentialPressurePoint
+    owl:equivalentClass brick:Differential_Pressure_Sensor ;
+    skos:exactMatch brick:Differential_Pressure_Sensor .
+
+cim-pt:StaticPressurePoint
+    owl:equivalentClass brick:Static_Pressure_Sensor ;
+    skos:exactMatch brick:Static_Pressure_Sensor .
+
+cim-pt:CO2Point
+    owl:equivalentClass brick:CO2_Sensor ;
+    skos:exactMatch brick:CO2_Sensor .
+
+cim-pt:AirFlowPoint
+    owl:equivalentClass brick:Air_Flow_Sensor ;
+    skos:exactMatch brick:Air_Flow_Sensor .
+
+cim-pt:WaterFlowPoint
+    owl:equivalentClass brick:Water_Flow_Sensor ;
+    skos:exactMatch brick:Water_Flow_Sensor .
+
+cim-pt:OccupancyPoint
+    owl:equivalentClass brick:Occupancy_Sensor ;
+    skos:exactMatch brick:Occupancy_Sensor .
+
+cim-pt:PowerPoint
+    owl:equivalentClass brick:Power_Sensor ;
+    skos:exactMatch brick:Power_Sensor .
+
+cim-pt:EnergyPoint
+    owl:equivalentClass brick:Energy_Sensor ;
+    skos:exactMatch brick:Energy_Sensor .
+
+cim-pt:PM25Point
+    owl:equivalentClass brick:PM25_Sensor ;
+    skos:exactMatch brick:PM25_Sensor .
+
+cim-pt:LevelPoint
+    owl:equivalentClass brick:Level_Sensor ;
+    skos:exactMatch brick:Level_Sensor .
+
+cim-pt:ValvePositionStatus
+    owl:equivalentClass brick:Valve_Position_Sensor ;
+    skos:exactMatch brick:Valve_Position_Sensor .
+
+# ── Point 类别对齐 ────────────────────────────────────────────────────────────
+cim-pt:SensorPoint
+    owl:equivalentClass brick:Sensor ;
+    skos:exactMatch brick:Sensor .
+
+cim-pt:CommandPoint
+    owl:equivalentClass brick:Command ;
+    skos:exactMatch brick:Command .
+
+cim-pt:SetpointPoint
+    owl:equivalentClass brick:Setpoint ;
+    skos:exactMatch brick:Setpoint .
+
+cim-pt:StatusPoint
+    owl:equivalentClass brick:Status ;
+    skos:exactMatch brick:Status .
+
+cim-pt:ParameterPoint
+    owl:equivalentClass brick:Parameter ;
+    skos:exactMatch brick:Parameter .
+
+# ── CIM 扩展（医疗特有，Brick 无对应）─────────────────────────────────────────
+cim-pt:RoomPressureDifferentialPoint
+    rdfs:comment "医疗特有：手术室/ICU/隔离病房正负压差监控，Brick 无对应类"@zh-CN ;
+    skos:broadMatch brick:Differential_Pressure_Sensor .
+
+cim-pt:MedicalGasPressurePoint
+    rdfs:comment "医疗特有：医用气体管道压力监控，Brick 无对应类"@zh-CN ;
+    skos:broadMatch brick:Pressure_Sensor .
+
+# =============================================================================
+# SECTION 4 — 关系/属性对齐 (Relationship Alignments)
+# =============================================================================
+
+cim-pt:hasPoint
+    owl:equivalentProperty brick:hasPoint .
+
+cim-pt:isPointOf
+    owl:equivalentProperty brick:isPointOf .
+
+cim:feeds
+    a owl:ObjectProperty ;
+    owl:equivalentProperty brick:feeds ;
+    rdfs:label "feeds"@en ; rdfs:label "供给"@zh-CN ;
+    skos:note "Brick: 设备A的输出连接到设备B的输入"@en .
+
+cim:hasPart
+    a owl:ObjectProperty ;
+    owl:equivalentProperty brick:hasPart ;
+    rdfs:label "has part"@en ; rdfs:label "包含部件"@zh-CN .
+
+cim:isPartOf
+    a owl:ObjectProperty ;
+    owl:equivalentProperty brick:isPartOf ;
+    owl:inverseOf cim:hasPart ;
+    rdfs:label "is part of"@en ; rdfs:label "属于"@zh-CN .
+
+# =============================================================================
+# SECTION 5 — CIM 医疗专有类（无 Brick 对应，记录缺口）
+# =============================================================================
+
+# 以下类在 Brick Schema 中无对应，是 CIM 对医疗建筑的专有扩展:
+# - cim-equip:MedicalGasOutlet        医用气体末端接口
+# - cim-equip:ZoneValveBox            医用气体区域阀箱
+# - cim-equip:MedGasAlarmPanel        医用气体报警装置
+# - cim-equip:LiquidOxygenStation     液氧站
+# - cim-equip:VacuumPumpUnit          真空泵机组
+# - cim-equip:IsolatedPowerSystem     IT 隔离电源系统（手术室）
+# - cim-equip:UV_Disinfection         紫外线消毒装置
+# - cim-space:OperatingRoom           手术室（Brick 无专业医疗空间）
+# - cim-pt:MedicalGasPressurePoint    医用气体压力点
+# - cim-pt:RoomPressureDifferentialPoint 房间压差点
+
+# =============================================================================
+# END OF BRICK BRIDGE ONTOLOGY
+# =============================================================================
