@@ -1,49 +1,40 @@
-# FMEA知识库 - 医疗建筑核心设备故障模式分析
+# =============================================================================
+# FMEA知识库 — 医疗建筑核心设备故障模式分析
+# FMEA Knowledge Base for Medical Building MEP Equipment
+#
 # 基于 ISO 14224 + HVAC行业经验 + Agent-03设备本体模型
+# Version: 2.0  |  2026-05-09
+# 条目数: 200+
 #
-# 评分标准 (基于FMEA方法):
-# - Severity (1-10): 故障影响严重程度
-#   * 10=Extreme: 系统完全失效，危及患者安全
-#   * 8-9=Very High: 设备完全停机，影响多个区域
-#   * 6-7=High: 性能严重下降，需要立即维修
-#   * 4-5=Moderate: 性能下降，可在下次计划维护处理
-#   * 2-3=Low: 轻微影响，不影响主要功能
-#   * 1=Minor: 无实际影响
+# 评分标准 (FMEA方法):
+#   Severity (1-10):   1=Minor → 10=Extreme(危及患者安全)
+#   Occurrence (1-10):  1=Rare(≤1次/10年) → 10=Very High(≥1次/月)
+#   Detection (1-10):   1=Very Easy(自动报警) → 10=Extremely Difficult
+#   RPN = Severity × Occurrence × Detection
+#   RPN ≥ 100: 立即行动 | 80-99: 优先 | 60-79: 备选 | <60: 监控
 #
-# - Occurrence (1-10): 故障发生频率
-#   * 10=Very High: ≥1次/月
-#   * 8-9=High: 1次/3-6个月
-#   * 6-7=Moderate: 1次/年
-#   * 4-5=Low: 1次/2-3年
-#   * 2-3=Very Low: 1次/5-10年
-#   * 1=Rare: ≤1次/10年
-#
-# - Detection (1-10): 故障可检测性
-#   * 10=Extremely Difficult: 无法检测，直到灾难性故障
-#   * 8-9=Very Difficult: 需要特殊检测设备和长时间
-#   * 6-7=Difficult: 需要仪表或经验判断
-#   * 4-5=Moderate: 可通过监控系统发现
-#   * 2-3=Easy: 明显可见或可测量
-#   * 1=Very Easy: 自动报警，实时检测
-#
-# RPN (Risk Priority Number) = Severity × Occurrence × Detection
-# RPN ≥ 100: 需要立即采取行动
-# 80 ≤ RPN < 100: 优先处理
-# 60 ≤ RPN < 80: 备选处理
-# < 60: 可接受，监控即可
+# 设备分类目录 (按行号快速导航):
+#   HVAC: 冷水机组 / AHU / 洁净空调 / VAV / FCU / 冷却塔
+#   电气: 变压器 / 发电机 / UPS / 配电柜 / IT隔离电源
+#   给排水: 水泵 / 水处理
+#   医用气体: LOX站 / 真空泵 / 医用空气压缩机
+#   消防: 消防泵
+#   其他: HEPA过滤 / BAS楼控 / 电梯
+# =============================================================================
 
 FMEA_Library:
-  # ===== 冷水机组 (Centrifugal / Screw / Scroll Chiller) =====
+
+  # =========================================================================
+  # HVAC — 冷水机组 (Centrifugal / Screw / Scroll Chiller)
+  # =========================================================================
   - equipment_type: "离心式冷水机组"
     manufacturer_examples: ["开利 19XR", "约克 YK", "特灵 CVHE"]
     specifications:
-      - cooling_capacity: "500-3000 kW"
-      - refrigerant: "R134a, R1233zd"
-      - power_supply: "380V/3Ph/50Hz"
-      - design_life: "20-25年"  # 工业标准值
-
+      cooling_capacity: "500-3000 kW"
+      refrigerant: "R134a, R1233zd"
+      power_supply: "380V/3Ph/50Hz"
+      design_life: "20-25年"
     failure_modes:
-      # 💎 压缩机系统故障
       - failure_id: "CHL-CMP-001"
         failure_mode: "压缩机喘振"
         severity: 9
@@ -51,366 +42,174 @@ FMEA_Library:
         detection: 2
         rpn: 54
         category: "压缩机系统"
-        symptoms:
-          - "异常低频喘鸣声（5-20Hz）"
-          - "运行电流剧烈波动（±20%额定值）"
-          - "制冷量急剧下降（30-50%）"
-          - "振动传感器警报"
-          - "冷凝压力快速升高"
-        causes:
-          - "冷凝器脏污导致冷凝压力过高"
-          - "冷却水流量不足或温度过高"
-          - "负荷过低（<40%额定负荷）"
-          - "制冷剂充注过多"
-          - "冷凝器风扇故障"
-          - "导叶开度过小"
-        immediate_actions:
-          - "紧急停止机组，防止机械损坏"
-          - "检查冷凝器和冷却塔运行状态"
-          - "监测轴承温度"
-        maintenance_actions:
-          - "清洗冷凝器管束和冷却塔填料"
-          - "检查冷却水流量和温度"
-          - "调整导叶最小开度设定"
-          - "校准制冷剂充注量"
-          - "检查并清洁冷凝器"
-        prevention:
-          - "每月清洗冷凝器"
-          - "维持冷却水温度 28-32°C"
-          - "避免长时间低负荷运行（<50%）"
-          - "安装喘振检测保护装置"
+        symptoms: ["异常低频喘鸣声(5-20Hz)", "运行电流剧烈波动(±20%)", "制冷量急剧下降(30-50%)", "振动传感器警报", "冷凝压力快速升高"]
+        causes: ["冷凝器结垢导致压头升高", "冷冻水流量不足", "导叶控制器故障", "制冷剂充注不足", "冷却水温过高"]
+        immediate_actions: ["立即关闭压缩机", "检查冷凝/蒸发压力", "检查冷却水温度"]
+        maintenance_actions: ["清洗冷凝器", "修复导叶控制器", "补充制冷剂", "调整防喘振控制参数"]
+        prevention: ["每季度清洗冷凝器", "冷却塔定期维护", "监控趋近温度", "导叶控制器定期校准"]
         typical_repair_time: "4-8小时"
-        impact_scope: "整个系统停机"
+        impact_scope: "整个冷冻水系统制冷能力下降"
 
       - failure_id: "CHL-CMP-002"
         failure_mode: "压缩机轴承磨损"
-        severity: 8
+        severity: 9
         occurrence: 2
         detection: 3
-        rpn: 48
+        rpn: 54
         category: "压缩机系统"
-        symptoms:
-          - "轴承温度升高（>85°C）"
-          - "振动值增大（>7.1mm/s RMS）"
-          - "运行噪音增大（>85dB）"
-          - "油液金属颗粒增加"
-          - "效率下降"
-        causes:
-          - "润滑油系统污染或油量不足"
-          - "长时间运行在高负荷状态"
-          - "制冷剂液体携带（液击）"
-          - "轴承质量问题"
-          - "润滑不良"
-        immediate_actions:
-          - "密切监测温度和振动"
-          - "准备备机切换"
-          - "检查润滑油状态"
-        maintenance_actions:
-          - "更换轴承组件"
-          - "清洗润滑系统"
-          - "更换润滑油（清洁度NAS 8级）"
-          - "检查油泵和油路"
-          - "动平衡校正"
-        prevention:
-          - "每季度油液分析"
-          - "每年更换润滑油"
-          - "控制吸气过热度（>5°C）"
-          - "安装曲轴箱加热器"
-        typical_repair_time: "8-16小时"
-        impact_scope: "单机停机"
+        symptoms: ["振动值升高(>7.1mm/s)", "轴承温度升高(>80°C)", "润滑油中含金属颗粒", "异常高频噪音"]
+        causes: ["润滑油不足或变质", "轴承自然磨损(使用年限)", "安装不当(轴向力过大)", "制冷剂液击冲洗润滑油"]
+        immediate_actions: ["增加振动监测频率", "检查润滑油品质", "准备备件"]
+        maintenance_actions: ["更换轴承", "更换润滑油", "检查转子平衡"]
+        prevention: ["每季度振动分析", "每年油液分析", "在线振动监测"]
+        typical_repair_time: "24-48小时"
+        impact_scope: "单台冷机停机"
 
       - failure_id: "CHL-CMP-003"
         failure_mode: "压缩机电机绕组短路"
-        severity: 10
-        occurrence: 1
-        detection: 8
-        rpn: 80
-        category: "压缩机系统"
-        symptoms:
-          - "机组无法启动"
-          - "断路器跳闸"
-          - "电机烧毁异味"
-          - "绝缘电阻<0.5MΩ"
-        causes:
-          - "电压不平衡（>2%）"
-          - "频繁启停"
-          - "制冷剂泄漏导致过热"
-          - "电机冷却不足"
-          - "绕组绝缘老化"
-        immediate_actions:
-          - "立即断电"
-          - "检查供电电压"
-          - "检查绝缘电阻"
-        maintenance_actions:
-          - "电机重绕或更换"
-          - "检查电压稳定性"
-          - "检查压缩机过热原因"
-          - "改善冷却系统"
-          - "更换启动装置"
-        prevention:
-          - "监测相电压不平衡"
-          - "限制每小时启动次数（≤6次）"
-          - "定期检查绝缘电阻"
-          - "保证电机冷却"
-        typical_repair_time: "24-48小时"
-        impact_scope: "单机长时间停机"
+        severity: 9
+        occurrence: 2
+        detection: 4
+        rpn: 72
+        category: "电机系统"
+        symptoms: ["电流不平衡(>5%)", "绝缘电阻下降(<5MΩ)", "电机温度异常", "保护跳闸"]
+        causes: ["绝缘老化", "制冷剂含水量过高", "过负荷运行", "电压不稳定"]
+        immediate_actions: ["立即停机", "绝缘测试", "启动备用冷机"]
+        maintenance_actions: ["电机返厂维修或更换", "检查制冷剂含水量", "检查电源质量"]
+        prevention: ["每年绝缘电阻测试", "制冷剂含水量检测", "电能质量监控"]
+        typical_repair_time: "1-2周(返厂)"
+        impact_scope: "单台冷机长期停机"
 
-      # 💎 冷凝器系统故障
       - failure_id: "CHL-CDS-001"
-        failure_mode: "冷凝器结垢/堵塞"
-        severity: 7
-        occurrence: 4
+        failure_mode: "冷凝器结垢堵塞"
+        severity: 6
+        occurrence: 7
         detection: 3
-        rpn: 84
-        category: "冷凝器系统"
-        symptoms:
-          - "冷凝压力升高（>1.5的设计压力）"
-          - "制冷效率下降（COP下降15-30%）"
-          - "压缩机电流增加"
-          - "冷凝器进出口温差增大"
-          - "冷却水流动阻力增加"
-        causes:
-          - "冷却水水质差（硬度高）"
-          - "水处理不当"
-          - "长时间未清洗（>6个月）"
-          - "微生物生长"
-          - "空气中的灰尘和杂物"
-        immediate_actions:
-          - "监测冷凝压力"
-          - "检查冷却水水质"
-          - "临时增加冷却水流量"
-        maintenance_actions:
-          - "化学清洗（酸洗）冷凝器管束"
-          - "机械清洗（海绵球）"
-          - "检查和更换水处理剂"
-          - "水质化验"
-          - "冷却塔清洗"
-        prevention:
-          - "每月水质化验"
-          - "每季度机械清洗"
-          - "每年化学清洗"
-          - "优化水处理加药"
-          - "安装在线清洗装置"
-        typical_repair_time: "4-8小时"
-        impact_scope: "系统效率下降"
+        rpn: 126
+        category: "换热系统"
+        symptoms: ["冷凝压力升高", "趋近温度增大(>5°C)", "COP下降", "压缩机电流增大"]
+        causes: ["冷却水水质差", "水处理失效", "长期未清洗", "生物膜附着"]
+        immediate_actions: ["检查冷却水水质", "增加排污"]
+        maintenance_actions: ["化学清洗冷凝器", "更换水处理药剂", "检查冷却塔"]
+        prevention: ["每月水质检测", "每半年清洗冷凝器", "水处理自动加药"]
+        typical_repair_time: "8-12小时"
+        impact_scope: "制冷效率下降20-30%"
 
       - failure_id: "CHL-CDS-002"
         failure_mode: "冷却水流量不足"
         severity: 7
-        occurrence: 5
+        occurrence: 4
         detection: 2
-        rpn: 70
-        category: "冷凝器系统"
-        symptoms:
-          - "冷却水流量 < 设计流量的90%"
-          - "冷凝压力高"
-          - "冷却水泵电流低"
-          - "冷却塔水位异常"
-        causes:
-          - "水泵叶轮磨损"
-          - "管路阻塞或阀门未完全打开"
-          - "水泵选型偏小"
-          - "水系统有空气"
-          - "过滤器堵塞"
-        immediate_actions:
-          - "检查水泵运行状态"
-          - "检查管路阀门开度"
-          - "检查过滤器"
-          - "排气处理"
-        maintenance_actions:
-          - "清洗或更换水泵叶轮"
-          - "清理管路"
-          - "更换过滤器"
-          - "调整水系统平衡"
-          - "水泵更换（如选型错误）"
-        prevention:
-          - "每周检查水泵电流"
-          - "每月清洗过滤器"
-          - "定期检查水系统平衡"
-          - "水系统排气"
-        typical_repair_time: "2-6小时"
-        impact_scope: "单机效率下降"
+        rpn: 56
+        category: "水系统"
+        symptoms: ["冷凝压力高", "冷却水温差增大", "高压保护跳闸"]
+        causes: ["冷却水泵故障", "阀门误关", "管道堵塞", "冷却塔问题"]
+        immediate_actions: ["检查冷却水泵运行状态", "检查阀门位置"]
+        maintenance_actions: ["修复水泵", "清洗管道", "检查阀门"]
+        prevention: ["流量监测", "定期冲洗管道", "阀门状态监测"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "冷机高压保护停机"
 
-      # 💎 蒸发器系统故障
       - failure_id: "CHL-EVS-001"
         failure_mode: "蒸发器结冰"
-        severity: 6
-        occurrence: 3
-        detection: 2
-        rpn: 36
-        category: "蒸发器系统"
-        symptoms:
-          - "蒸发器表面有冰层（视觉检查）"
-          - "蒸发压力下降（<3.5 bar）"
-          - "制冷量明显下降"
-          - "冷冻水出水温度低于设定值"
-          - "压缩机吸气温度过低"
-        causes:
-          - "冷冻水流量过低"
-          - "冷冻水温度过低（<6°C）"
-          - "制冷剂充注不足"
-          - "膨胀阀开度过小"
-          - "蒸发器脏堵"
-          - "低负荷运行时间过长"
-        immediate_actions:
-          - "停机化冰"
-          - "检查冷冻水流量"
-          - "检查制冷剂压力"
-        maintenance_actions:
-          - "解冻（热水或蒸汽）"
-          - "检查并调整冷冻水流量"
-          - "校准膨胀阀"
-          - "补充制冷剂"
-          - "清洗蒸发器"
-        prevention:
-          - "控制冷冻水出水温度 >6°C"
-          - "保证设计流量（>80%）"
-          - "避免<40%负荷长时间运行"
-          - "安装防冻保护装置"
-        typical_repair_time: "2-4小时"
-        impact_scope: "单机停机"
-
-      # 💎 制冷剂系统故障
-      - failure_id: "CHL-REF-001"
-        failure_mode: "制冷剂泄漏"
         severity: 8
         occurrence: 2
-        detection: 6
-        rpn: 96
-        category: "制冷剂系统"
-        symptoms:
-          - "系统制冷能力下降"
-          - "吸气压力低"
-          - "压缩机运行时间延长"
-          - "视液镜有气泡"
-          - "电子检漏仪报警"
-          - "冷量不足警报"
-        causes:
-          - "管路连接处松动"
-          - "密封件老化"
-          - "管路腐蚀"
-          - "维修不当"
-          - "振动导致磨损"
-        immediate_actions:
-          - "查找泄漏点"
-          - "监测制冷剂压力"
-          - "评估系统冷量"
-        maintenance_actions:
-          - "使用电子检漏仪定位"
-          - "修复泄漏点（焊接或更换）"
-          - "系统抽真空"
-          - "定量充注制冷剂"
-          - "保压测试"
-          - "系统性能测试"
-        prevention:
-          - "每季度检漏"
-          - "紧固管路连接"
-          - "更换老化密封"
-          - "安装泄漏监测系统"
-        typical_repair_time: "4-12小时"
-        impact_scope: "系统冷量下降"
-        environmental_impact: "制冷剂泄漏需环保处理"
+        detection: 2
+        rpn: 32
+        category: "换热系统"
+        symptoms: ["蒸发压力/温度异常低", "冷冻水出水温度<3°C", "低温保护跳闸"]
+        causes: ["低负荷运行", "冷冻水流量不足", "膨胀阀故障", "温度传感器失灵"]
+        immediate_actions: ["立即停机", "不要强制重启", "等待自然融冰"]
+        maintenance_actions: ["检查膨胀阀", "检查冷冻水流量", "校准传感器"]
+        prevention: ["低温保护设定(≥3°C)", "最小负荷限制(≥15%)", "流量监测"]
+        typical_repair_time: "4-8小时(含融冰)"
+        impact_scope: "蒸发器管束损坏风险"
 
-      # 💎 润滑油系统故障
+      - failure_id: "CHL-REF-001"
+        failure_mode: "制冷剂泄漏"
+        severity: 7
+        occurrence: 3
+        detection: 4
+        rpn: 84
+        category: "制冷系统"
+        symptoms: ["制冷剂液位下降", "蒸发压力下降", "制冷量不足", "压缩机吸气过热度增大"]
+        causes: ["管路焊接缺陷", "阀门密封老化", "振动疲劳裂纹", "腐蚀"]
+        immediate_actions: ["检查泄漏点(电子检漏仪)", "记录制冷剂量", "评估是否需停机"]
+        maintenance_actions: ["修复泄漏点", "补充制冷剂", "系统试压", "检查干燥过滤器"]
+        prevention: ["每年检漏", "管路支架检查", "振动控制"]
+        typical_repair_time: "4-12小时"
+        impact_scope: "制冷能力下降,环保合规风险"
+
       - failure_id: "CHL-OIL-001"
         failure_mode: "润滑油污染或劣化"
         severity: 6
         occurrence: 4
-        detection: 4
-        rpn: 96
-        category: "润滑油系统"
-        symptoms:
-          - "油液颜色变黑"
-          - "油压下降"
-          - "油过滤器压差增大"
-          - "轴承温度升高"
-          - "油分析显示酸值升高"
-        causes:
-          - "制冷剂携带进入油系统"
-          - "水分进入（系统泄漏）"
-          - "油冷却器泄漏"
-          - "长时间运行未更换"
-          - "系统污染"
-        immediate_actions:
-          - "检查油压"
-          - "油液取样分析"
-          - "检查油冷却器"
-        maintenance_actions:
-          - "更换全部润滑油"
-          - "清洗油系统"
-          - "更换油过滤器"
-          - "更换干燥剂"
-          - "系统抽真空脱水"
-        prevention:
-          - "每季度油液分析"
-          - "控制制冷剂携带"
-          - "防止系统泄漏"
-          - "每年更换润滑油"
-        typical_repair_time: "4-6小时"
-        impact_scope: "润滑系统性能下降"
+        detection: 5
+        rpn: 120
+        category: "润滑系统"
+        symptoms: ["油色发暗/异味", "含水量升高", "酸值超标", "轴承温度升高"]
+        causes: ["制冷剂泄漏混入", "长期未更换", "系统进水", "高温分解"]
+        immediate_actions: ["油液取样分析", "检查油温油压"]
+        maintenance_actions: ["更换润滑油", "更换油过滤器", "检查油分离器"]
+        prevention: ["每年油液分析", "控制系统含水量", "定期更换油过滤器"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "压缩机加速磨损"
 
-    failure_statistics:
-      # 基于行业平均数据和Agent-08运维日志
-      mtbf_hours: 87600  # 平均无故障时间 ~10年
-      critical_failures_per_year: 0.5
-      common_failures_top5:
-        - "冷凝器结垢"
-        - "制冷剂泄漏"
-        - "压缩机喘振"
-        - "冷却水流量异常"
-        - "控制系统故障"
-      preventive_maintenance_hours: 40  # 年维护工时
-      corrective_maintenance_hours: 16   # 年维修工时
+      - failure_id: "CHL-VFD-001"
+        failure_mode: "变频器故障"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "电气控制"
+        symptoms: ["变频器报警", "电机无法启动", "输出频率异常", "过温报警"]
+        causes: ["IGBT模块损坏", "散热风扇故障", "主板老化", "电源波动"]
+        immediate_actions: ["查看故障代码", "检查散热", "尝试复位"]
+        maintenance_actions: ["更换IGBT模块", "更换散热风扇", "检查电源质量"]
+        prevention: ["定期清洁散热通道", "红外测温", "UPS保护控制电源"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "单台冷机无法变频运行"
 
-  # ===== 空气处理机组 AHU =====
+      - failure_id: "CHL-CTL-001"
+        failure_mode: "控制系统通信故障"
+        severity: 5
+        occurrence: 4
+        detection: 2
+        rpn: 40
+        category: "控制系统"
+        symptoms: ["BAS无法读取参数", "本地面板显示通信错误", "无法远程启停"]
+        causes: ["通信线缆松动", "协议转换器故障", "控制器死机", "接地问题"]
+        immediate_actions: ["本地手动控制", "检查通信线缆", "重启控制器"]
+        maintenance_actions: ["修复线缆", "更换协议转换器", "升级固件"]
+        prevention: ["通信监测", "定期检查接线", "冗余通信"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "失去远程监控能力"
+
+  # =========================================================================
+  # HVAC — 空气处理机组 (Air Handling Unit)
+  # =========================================================================
   - equipment_type: "空气处理机组"
-    manufacturer_examples: ["美标 TFX", "开利 39M", "特灵 Climate Changer"]
+    manufacturer_examples: ["特灵 AHU", "开利 39系列", "美的 MDAH"]
     specifications:
-      - air_flow: "2000-50000 m³/h"
-      - cooling_capacity: "10-500 kW"
-      - heating_capacity: "10-300 kW"
-      - power_supply: "380V/3Ph/50Hz"
-      - design_life: "15-20年"
-
+      air_volume: "5000-60000 m3/h"
+      static_pressure: "800-1500 Pa"
+      motor_power: "5.5-75 kW"
+      design_life: "15-20年"
     failure_modes:
       - failure_id: "AHU-FAN-001"
         failure_mode: "风机皮带断裂/打滑"
         severity: 7
-        occurrence: 5
+        occurrence: 6
         detection: 2
-        rpn: 70
-        category: "风机系统"
-        symptoms:
-          - "风量显著下降（<80%设计值）"
-          - "风机转速降低"
-          - "电机空转"
-          - "摩擦噪音"
-          - "皮带粉尘"
-        causes:
-          - "皮带老化（橡胶硬化）"
-          - "张紧力不当（过紧或过松）"
-          - "皮带规格不匹配"
-          - "皮带轮不对中"
-          - "风机过载"
-          - "运行环境温度过高"
-        immediate_actions:
-          - "停止风机"
-          - "检查皮带张紧度"
-          - "检查皮带轮对中"
-        maintenance_actions:
-          - "更换皮带（建议3条同时更换）"
-          - "调整张紧力"
-          - "对中调整"
-          - "清洁皮带轮"
-          - "检查整机动平衡"
-        prevention:
-          - "每季度检查皮带张紧和磨损"
-          - "每2年更换皮带"
-          - "确保皮带轮对中"
-          - "控制过载运行"
-          - "改善通风环境"
-        typical_repair_time: "1-3小时"
-        impact_scope: "风量严重不足"
+        rpn: 84
+        category: "传动系统"
+        symptoms: ["送风量急剧下降", "皮带异响(尖叫声)", "风机转速不稳", "室内温度失控"]
+        causes: ["皮带老化磨损", "皮带张力不当", "皮带轮磨损", "过载运行"]
+        immediate_actions: ["停机更换皮带", "检查皮带轮"]
+        maintenance_actions: ["更换皮带(成对)", "调整张力", "检查皮带轮沟槽"]
+        prevention: ["每月检查皮带张力", "每年更换皮带", "备用皮带库存"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "单台AHU停机,影响区域送风"
 
       - failure_id: "AHU-FAN-002"
         failure_mode: "风机轴承故障"
@@ -418,175 +217,728 @@ FMEA_Library:
         occurrence: 3
         detection: 3
         rpn: 72
-        category: "风机系统"
-        symptoms:
-          - "异常振动（>7.1mm/s RMS）"
-          - "轴承温度升高（>80°C）"
-          - "尖锐金属摩擦声"
-          - "轴封泄漏"
-          - "润滑脂泄漏"
-        causes:
-          - "润滑脂不足或污染"
-          - "长期振动运行"
-          - "过载运行"
-          - "轴承安装不当"
-          - "转子不平衡"
-          - "轴弯曲"
-        immediate_actions:
-          - "监测振动和温度"
-          - "准备停机"
-          - "检查润滑系统"
-        maintenance_actions:
-          - "更换轴承"
-          - "补充或更换润滑脂"
-          - "动平衡校正"
-          - "检查轴对中"
-          - "更换密封件"
-        prevention:
-          - "每季度振动检测"
-          - "定期润滑（每6个月）"
-          - "每年动平衡检查"
-          - "确保轴对中"
+        category: "轴承系统"
+        symptoms: ["振动增大(>7.1mm/s)", "异常噪音", "轴承温度>80°C", "润滑脂泄漏"]
+        causes: ["润滑不良", "轴承老化", "叶轮不平衡", "安装不当"]
+        immediate_actions: ["增加监测频率", "准备备件"]
+        maintenance_actions: ["更换轴承", "动平衡校正", "检查轴对中"]
+        prevention: ["每季度振动检测", "定期润滑", "每5年更换轴承"]
         typical_repair_time: "4-8小时"
-        impact_scope: "单机停机"
+        impact_scope: "单台AHU停机"
 
-      # 💎 过滤系统故障
       - failure_id: "AHU-FLT-001"
         failure_mode: "过滤器堵塞"
         severity: 5
-        occurrence: 7
+        occurrence: 8
         detection: 2
-        rpn: 70
+        rpn: 80
         category: "过滤系统"
-        symptoms:
-          - "过滤器压差增大（>250 Pa）"
-          - "风量下降"
-          - "风机电流增加"
-          - "出风温度异常"
-          - "效率下降"
-        causes:
-          - "过滤器使用超时"
-          - "空气质量差（灰尘多）"
-          - "过滤器选型偏小"
-          - "旁路泄漏"
-          - "风速过高"
-        immediate_actions:
-          - "更换过滤器"
-          - "监测压差"
-          - "检查旁路"
-        maintenance_actions:
-          - "更换初效过滤器（每1-2个月）"
-          - "更换中效过滤器（每3-6个月）"
-          - "更换高效过滤器（每1-2年或按压差）"
-          - "检查过滤器安装密封"
-          - "清洁过滤器框架"
-        prevention:
-          - "每2周检查初效压差"
-          - "每4周检查中效压差"
-          - "安装压差报警"
-          - "根据实际使用情况调整更换周期"
-        typical_repair_time: "0.5-2小时"
-        impact_scope: "系统阻力增加"
+        symptoms: ["过滤器压差增大(>2×初阻)", "风量下降", "风机电流增大", "室内空气质量下降"]
+        causes: ["超期未更换", "空气污染严重", "施工期粉尘", "过滤器破损"]
+        immediate_actions: ["更换过滤器"]
+        maintenance_actions: ["更换过滤器", "清洗粗效过滤器(可水洗型)"]
+        prevention: ["压差报警设定", "定期更换(初效2月/中效6月/高效12月)", "施工期加强更换"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "空气质量下降,能耗增加"
 
-      # 💎 热交换故障
       - failure_id: "AHU-HTX-001"
         failure_mode: "表冷/表热盘管性能下降"
         severity: 6
-        occurrence: 4
+        occurrence: 5
         detection: 4
-        rpn: 96
-        category: "热交换系统"
-        symptoms:
-          - "冷却/加热能力下降"
-          - "进出水温差减小"
-          - "空气温差低于设计值"
-          - "盘管表面温度不均匀"
-          - "冷凝水排放异常"
-        causes:
-          - "盘管表面脏污或结垢"
-          - "水路阻塞或流量分配不均"
-          - "盘管腐蚀或泄漏"
-          - "放气不畅，有空气聚集"
-          - "阀门开度不当"
-        immediate_actions:
-          - "检查水路流量和温度"
-          - "检查阀门开度"
-          - "排气处理"
-        maintenance_actions:
-          - "清洗盘管（化学+机械）"
-          - "疏通水路"
-          - "更换腐蚀盘管"
-          - "调整阀门平衡"
-          - "检查放气阀"
-        prevention:
-          - "每季度清洗盘管"
-          - "定期水质处理"
-          - "每年检查盘管状况"
-          - "控制水处理"
-          - "正确放气"
+        rpn: 120
+        category: "换热系统"
+        symptoms: ["供冷/供热能力下降", "盘管温差缩小", "冷凝水盘溢水"]
+        causes: ["盘管翅片脏污", "盘管结垢", "冷凝水排水不畅", "盘管冻裂(冬季)"]
+        immediate_actions: ["检查水流量", "检查冷凝水排水"]
+        maintenance_actions: ["盘管清洗(化学/高压水)", "疏通冷凝水管", "修补冻裂管"]
+        prevention: ["每年盘管清洗", "冬季防冻保护", "冷凝水盘定期清洁"]
         typical_repair_time: "4-8小时"
-        impact_scope: "热交换效率下降"
+        impact_scope: "区域温度控制不稳定"
 
-      # 💎 控制系统故障
       - failure_id: "AHU-CTR-001"
         failure_mode: "送风温度控制失效"
+        severity: 6
+        occurrence: 5
+        detection: 3
+        rpn: 90
+        category: "控制系统"
+        symptoms: ["送风温度偏离设定值", "水阀全开/全关不调节", "温度波动大"]
+        causes: ["温度传感器漂移", "水阀执行器卡死", "控制器参数错误", "DDC通信中断"]
+        immediate_actions: ["手动调节水阀", "检查传感器读数"]
+        maintenance_actions: ["校准传感器", "修复/更换执行器", "重新整定PID参数"]
+        prevention: ["每半年校准传感器", "每季度检查执行器", "定期检查PID"]
+        typical_repair_time: "2-6小时"
+        impact_scope: "温湿度控制不稳定"
+
+      - failure_id: "AHU-DMP-001"
+        failure_mode: "风阀卡死/失灵"
+        severity: 6
+        occurrence: 4
+        detection: 3
+        rpn: 72
+        category: "风阀系统"
+        symptoms: ["新风量不足或过大", "风阀位置反馈异常", "执行器电流异常"]
+        causes: ["执行器电机老化", "阀叶锈蚀", "连杆松动", "弹簧疲劳"]
+        immediate_actions: ["手动操作风阀", "检查执行器电源"]
+        maintenance_actions: ["更换执行器", "润滑阀轴", "调整连杆"]
+        prevention: ["每季度全行程测试", "每年润滑阀轴"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "新风控制失效"
+
+      - failure_id: "AHU-VFD-001"
+        failure_mode: "风机变频器故障"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "电气控制"
+        symptoms: ["变频器报警停机", "风机无法调速", "过温保护"]
+        causes: ["IGBT损坏", "散热不良", "主板故障", "电磁干扰"]
+        immediate_actions: ["切换至工频运行", "记录故障代码"]
+        maintenance_actions: ["更换故障模块", "清洁散热系统"]
+        prevention: ["定期清洁", "红外测温", "独立接地"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "风机无法变频调节"
+
+      - failure_id: "AHU-HUM-001"
+        failure_mode: "加湿器故障"
+        severity: 5
+        occurrence: 5
+        detection: 3
+        rpn: 75
+        category: "加湿系统"
+        symptoms: ["湿度偏低", "加湿量不足", "水垢堵塞喷嘴", "蒸汽管漏气"]
+        causes: ["水质差结垢", "电极老化", "水阀故障", "蒸汽管路泄漏"]
+        immediate_actions: ["检查水源", "切换备用加湿器"]
+        maintenance_actions: ["清洗除垢", "更换电极", "修复管路"]
+        prevention: ["软化水处理", "每季度清洗", "每年更换电极"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "区域湿度偏低"
+
+      - failure_id: "AHU-MXB-001"
+        failure_mode: "混合段漏风"
+        severity: 4
+        occurrence: 3
+        detection: 5
+        rpn: 60
+        category: "箱体"
+        symptoms: ["新回风比例异常", "能耗增加", "送风温度不稳"]
+        causes: ["密封条老化", "箱体变形", "检修门未关严"]
+        immediate_actions: ["检查密封"]
+        maintenance_actions: ["更换密封条", "调整检修门"]
+        prevention: ["每年检查密封性", "箱体定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "能耗增加5-10%"
+
+  # =========================================================================
+  # HVAC — 洁净空调箱 (Clean AHU, 手术室/洁净室专用)
+  # =========================================================================
+  - equipment_type: "洁净空调箱"
+    manufacturer_examples: ["克莱门特 Clean AHU", "美的洁净型", "海尔洁净空调"]
+    specifications:
+      air_volume: "8000-25000 m3/h"
+      filtration: "G4+F7+H13/H14"
+      pressure_control: "正压/负压 ±2Pa"
+      standard: "GB50333-2013"
+    failure_modes:
+      - failure_id: "CAH-HEP-001"
+        failure_mode: "HEPA过滤器泄漏"
+        severity: 10
+        occurrence: 3
+        detection: 4
+        rpn: 120
+        category: "过滤系统"
+        symptoms: ["粒子计数超标(>35粒/L@0.5μm)", "洁净度不达标", "PAO扫描发现泄漏点"]
+        causes: ["HEPA密封老化", "安装时框架变形", "运输损坏", "压差过大撕裂"]
+        immediate_actions: ["立即停止手术", "隔离受影响区域", "启动应急方案"]
+        maintenance_actions: ["更换HEPA过滤器", "检查密封框架", "重新DOP测试"]
+        prevention: ["每年PAO/DOP检漏", "压差报警(>450Pa)", "更换周期≤2年"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "手术室洁净度失控,感染风险"
+
+      - failure_id: "CAH-HEP-002"
+        failure_mode: "HEPA堵塞(终阻力超标)"
+        severity: 7
+        occurrence: 5
+        detection: 2
+        rpn: 70
+        category: "过滤系统"
+        symptoms: ["HEPA压差>450Pa", "风量下降", "风机电流增大", "室内压差降低"]
+        causes: ["超期使用", "预过滤器失效", "施工粉尘", "空气污染"]
+        immediate_actions: ["准备更换HEPA"]
+        maintenance_actions: ["更换HEPA", "同时更换中效过滤器"]
+        prevention: ["压差报警", "按周期更换", "加强预过滤维护"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "送风量不足,洁净度下降"
+
+      - failure_id: "CAH-PRS-001"
+        failure_mode: "房间压差失控"
+        severity: 9
+        occurrence: 4
+        detection: 2
+        rpn: 72
+        category: "压差控制"
+        symptoms: ["压差低于设定值(<8Pa)", "压差报警", "门难以开启(压差过高)"]
+        causes: ["排风量变化", "门窗密封不严", "送风量调节故障", "压差传感器漂移"]
+        immediate_actions: ["检查门窗关闭状态", "手动调节送排风量"]
+        maintenance_actions: ["校准压差传感器", "调整送排风比", "修复门窗密封"]
+        prevention: ["每季度校准压差传感器", "压差连续监测", "门密封定期检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "手术室/洁净室不合格,感染风险"
+
+      - failure_id: "CAH-PRS-002"
+        failure_mode: "送风量不均匀"
+        severity: 7
+        occurrence: 3
+        detection: 5
+        rpn: 105
+        category: "气流组织"
+        symptoms: ["局部粒子计数偏高", "气流可视化显示涡流", "手术区域风速不达标"]
+        causes: ["送风口调节不当", "HEPA安装不平整", "回风口位置不合理"]
+        immediate_actions: ["气流可视化检查"]
+        maintenance_actions: ["调整送风口", "重新平衡气流", "修正HEPA安装"]
+        prevention: ["每年气流可视化测试", "送风均匀度检测"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "手术区域洁净度不均"
+
+      - failure_id: "CAH-TMP-001"
+        failure_mode: "送风温度超范围"
         severity: 7
         occurrence: 4
         detection: 2
         rpn: 56
+        category: "温控系统"
+        symptoms: ["送风温度偏离21-25°C", "手术室温度不舒适", "温度报警"]
+        causes: ["冷热水阀故障", "传感器失灵", "盘管结垢", "PID参数不当"]
+        immediate_actions: ["手动调节水阀", "检查传感器"]
+        maintenance_actions: ["校准传感器", "修复水阀", "调整PID"]
+        prevention: ["双传感器冗余", "每半年校准", "定期PID优化"]
+        typical_repair_time: "1-3小时"
+        impact_scope: "手术室温度不适,影响手术"
+
+      - failure_id: "CAH-HUM-001"
+        failure_mode: "洁净空调加湿不足"
+        severity: 6
+        occurrence: 5
+        detection: 3
+        rpn: 90
+        category: "加湿系统"
+        symptoms: ["相对湿度<30%", "静电问题", "患者/人员不适"]
+        causes: ["加湿器结垢", "蒸汽源不足", "控制失效"]
+        immediate_actions: ["检查加湿器运行", "检查蒸汽源"]
+        maintenance_actions: ["清洗除垢", "修复控制回路"]
+        prevention: ["纯水加湿", "定期除垢", "每季度检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "洁净室湿度不达标"
+
+      - failure_id: "CAH-FAN-001"
+        failure_mode: "洁净风机振动超标"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "风机系统"
+        symptoms: ["振动>5mm/s(RMS)", "异常噪音", "HEPA密封受损风险"]
+        causes: ["叶轮积灰不均", "轴承磨损", "基础松动", "管道共振"]
+        immediate_actions: ["降速运行", "增加振动监测"]
+        maintenance_actions: ["叶轮清洗+动平衡", "更换轴承", "紧固基础"]
+        prevention: ["在线振动监测", "每季度检查", "叶轮定期清洗"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "HEPA泄漏风险,手术室停用"
+
+      - failure_id: "CAH-UV-001"
+        failure_mode: "管道紫外杀菌灯失效"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "消毒系统"
+        symptoms: ["UV强度下降", "运行时间超寿命", "灯管发黑"]
+        causes: ["灯管老化(>8000h)", "电子镇流器故障", "灯管表面污染"]
+        immediate_actions: ["更换灯管"]
+        maintenance_actions: ["更换灯管和镇流器", "清洁反射面"]
+        prevention: ["运行小时计监控", "定期检测UV强度"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "消毒能力下降"
+
+      - failure_id: "CAH-SEN-001"
+        failure_mode: "粒子计数器/环境传感器故障"
+        severity: 7
+        occurrence: 3
+        detection: 3
+        rpn: 63
+        category: "监测系统"
+        symptoms: ["读数异常跳变", "与便携仪器读数不一致", "通信中断"]
+        causes: ["传感器老化", "采样管堵塞", "光源衰减", "EMI干扰"]
+        immediate_actions: ["使用便携仪器交叉验证"]
+        maintenance_actions: ["校准或更换传感器", "清洁采样管路"]
+        prevention: ["每年校准", "双传感器冗余"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "洁净度监测盲区"
+
+      - failure_id: "CAH-DRN-001"
+        failure_mode: "冷凝水盘排水故障(生物污染)"
+        severity: 8
+        occurrence: 5
+        detection: 4
+        rpn: 160
+        category: "排水系统"
+        symptoms: ["冷凝水溢出", "异味", "微生物超标", "水盘积水"]
+        causes: ["排水管堵塞", "水封干涸", "生物膜生长", "坡度不足"]
+        immediate_actions: ["手动清理排水", "消毒水盘"]
+        maintenance_actions: ["疏通排水管", "消毒冲洗", "补充水封"]
+        prevention: ["每月检查排水", "定期消毒", "安装排水报警"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "军团菌/霉菌风险,感染控制重大隐患"
+
+  # =========================================================================
+  # HVAC — VAV 变风量末端
+  # =========================================================================
+  - equipment_type: "变风量末端(VAV Box)"
+    manufacturer_examples: ["特灵 VAV", "江森 VAV", "西门子 VAV"]
+    specifications:
+      air_volume: "200-3000 m3/h"
+      control: "DDC/BACnet"
+      damper: "单叶/多叶"
+    failure_modes:
+      - failure_id: "VAV-ACT-001"
+        failure_mode: "风阀执行器失效"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "执行器"
+        symptoms: ["风量无法调节", "执行器无响应", "室温失控"]
+        causes: ["电机老化", "齿轮磨损", "控制信号丢失"]
+        immediate_actions: ["手动锁定阀位"]
+        maintenance_actions: ["更换执行器"]
+        prevention: ["每年全行程测试", "信号线检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "单区域温控失效"
+
+      - failure_id: "VAV-SEN-001"
+        failure_mode: "风量传感器漂移"
+        severity: 4
+        occurrence: 5
+        detection: 4
+        rpn: 80
+        category: "传感器"
+        symptoms: ["风量显示与实际不符", "房间温度偏差", "能耗异常"]
+        causes: ["差压传感器漂移", "皮托管堵塞", "温度补偿失效"]
+        immediate_actions: ["人工风量测量对比"]
+        maintenance_actions: ["校准传感器", "清洁皮托管"]
+        prevention: ["每年校准", "定期清洁"]
+        typical_repair_time: "1小时"
+        impact_scope: "单区域风量不准"
+
+      - failure_id: "VAV-RHC-001"
+        failure_mode: "再热盘管泄漏"
+        severity: 6
+        occurrence: 3
+        detection: 3
+        rpn: 54
+        category: "再热系统"
+        symptoms: ["天花板漏水", "再热能力不足", "水阀全开无效果"]
+        causes: ["盘管腐蚀", "冻裂", "接头松动"]
+        immediate_actions: ["关闭水阀", "放置接水容器"]
+        maintenance_actions: ["修补或更换盘管", "检查防冻保护"]
+        prevention: ["防冻保护联动", "水质管理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "区域供热中断+漏水损害"
+
+      - failure_id: "VAV-NSE-001"
+        failure_mode: "气流噪音超标"
+        severity: 4
+        occurrence: 4
+        detection: 2
+        rpn: 32
+        category: "声学"
+        symptoms: ["嘶嘶声或啸叫", "NC值超标", "投诉"]
+        causes: ["风速过高", "阀叶振动", "消声器失效"]
+        immediate_actions: ["降低风量设定"]
+        maintenance_actions: ["检查阀叶", "加装消声器"]
+        prevention: ["设计选型留余量", "定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "房间噪音投诉"
+
+      - failure_id: "VAV-DDC-001"
+        failure_mode: "DDC控制器死机"
+        severity: 5
+        occurrence: 3
+        detection: 2
+        rpn: 30
         category: "控制系统"
-        symptoms:
-          - "送风温度偏离设定值（>±2°C）"
-          - "温湿度波动大"
-          - "控制阀频繁动作"
-          - "现场设定与监控不一致"
-          - "温湿度报警"
-        causes:
-          - "温度传感器漂移或故障"
-          - "控制阀卡滞或泄漏"
-          - "控制器参数设置不当"
-          - "PID参数需要调整"
-          - "反馈信号回路问题"
-          - "执行机构故障"
-        immediate_actions:
-          - "检查传感器读数"
-          - "手动控制阀门"
-          - "检查控制回路"
-        maintenance_actions:
-          - "校准或更换温度传感器"
-          - "检修或更换控制阀"
-          - "重新设置控制器参数"
-          - "调整PID参数"
-          - "检查电气连接"
-          - "润滑执行机构"
-        prevention:
-          - "每6个月校准传感器"
-          - "每季度检查阀门"
-          - "定期检查和调整PID"
-          - "备份控制器参数"
-        typical_repair_time: "2-6小时"
-        impact_scope: "温湿度控制不稳定"
+        symptoms: ["控制器无响应", "BAS通信断开", "阀位锁定不动"]
+        causes: ["固件Bug", "电源波动", "内存溢出"]
+        immediate_actions: ["复位控制器"]
+        maintenance_actions: ["升级固件", "检查电源"]
+        prevention: ["看门狗定时重启", "UPS保护"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "单区域失去自控"
 
-    failure_statistics:
-      mtbf_hours: 43800  # 5年
-      common_failures_top5:
-        - "过滤器堵塞"
-        - "风机皮带问题"
-        - "盘管结垢"
-        - "控制传感器故障"
-        - "风机轴承磨损"
-      preventive_maintenance_hours: 24  # 年维护工时
-      corrective_maintenance_hours: 12   # 年维修工时
+      - failure_id: "VAV-LKG-001"
+        failure_mode: "箱体漏风"
+        severity: 3
+        occurrence: 3
+        detection: 5
+        rpn: 45
+        category: "箱体"
+        symptoms: ["吊顶空间温度异常", "能耗增加", "送风量偏差"]
+        causes: ["密封条老化", "安装不当", "风管接口松动"]
+        immediate_actions: ["标记位置"]
+        maintenance_actions: ["重新密封", "紧固接口"]
+        prevention: ["安装时漏风测试"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "能效损失"
 
-  # ===== 变压器 Transformers =====
+  # =========================================================================
+  # HVAC — FCU 风机盘管
+  # =========================================================================
+  - equipment_type: "风机盘管(FCU)"
+    manufacturer_examples: ["美的 FCU", "格力 FP系列", "麦克维尔 MFC"]
+    specifications:
+      cooling_capacity: "2.5-12 kW"
+      type: "卧式暗装/立式明装"
+      rows: "2排/3排"
+    failure_modes:
+      - failure_id: "FCU-MTR-001"
+        failure_mode: "风机电机烧毁"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "电机"
+        symptoms: ["无法启动", "焦糊气味", "跳闸"]
+        causes: ["过热运行", "绝缘老化", "电压不稳", "叶轮卡死"]
+        immediate_actions: ["断电", "准备更换"]
+        maintenance_actions: ["更换电机"]
+        prevention: ["定期检查电流", "清洁风道保证散热"]
+        typical_repair_time: "2-3小时"
+        impact_scope: "单房间空调失效"
+
+      - failure_id: "FCU-COL-001"
+        failure_mode: "盘管冻裂"
+        severity: 8
+        occurrence: 2
+        detection: 3
+        rpn: 48
+        category: "换热"
+        symptoms: ["天花板漏水", "地面水渍", "盘管压力为零"]
+        causes: ["冬季停暖", "防冻保护失效", "窗户未关"]
+        immediate_actions: ["关闭水阀", "排水"]
+        maintenance_actions: ["更换盘管", "修复防冻联动"]
+        prevention: ["防冻保护联锁", "冬季最低水温保证"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "漏水损坏+房间停用"
+
+      - failure_id: "FCU-VLV-001"
+        failure_mode: "水阀关不严"
+        severity: 4
+        occurrence: 5
+        detection: 4
+        rpn: 80
+        category: "水阀"
+        symptoms: ["停机后仍有冷/热量", "室温无法降到设定值", "能耗增加"]
+        causes: ["阀芯磨损", "异物卡住", "执行器力矩不足"]
+        immediate_actions: ["人工关闭手动阀"]
+        maintenance_actions: ["更换阀芯", "清洗阀体"]
+        prevention: ["定期全关测试", "水质管理"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "房间温控不精确"
+
+      - failure_id: "FCU-DRN-001"
+        failure_mode: "冷凝水排水堵塞"
+        severity: 6
+        occurrence: 6
+        detection: 3
+        rpn: 108
+        category: "排水"
+        symptoms: ["接水盘溢水", "天花板渗水", "异味"]
+        causes: ["排水管藻类/生物膜", "坡度不足", "排水管弯头积垢"]
+        immediate_actions: ["清理排水", "放置接水盘"]
+        maintenance_actions: ["疏通排水管", "消毒冲洗"]
+        prevention: ["每季度清洗排水", "排水管定期消毒"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "漏水损坏天花板/设备"
+
+      - failure_id: "FCU-FLT-001"
+        failure_mode: "过滤网堵塞"
+        severity: 3
+        occurrence: 7
+        detection: 2
+        rpn: 42
+        category: "过滤"
+        symptoms: ["风量减小", "噪音增大", "制冷/制热效果差"]
+        causes: ["长期未清洗", "灰尘大环境"]
+        immediate_actions: ["清洗过滤网"]
+        maintenance_actions: ["清洗或更换"]
+        prevention: ["每月清洗", "每季度检查"]
+        typical_repair_time: "0.5小时"
+        impact_scope: "房间舒适度下降"
+
+      - failure_id: "FCU-THS-001"
+        failure_mode: "温控器故障"
+        severity: 4
+        occurrence: 4
+        detection: 2
+        rpn: 32
+        category: "控制"
+        symptoms: ["无法调温", "显示异常", "风机不受控"]
+        causes: ["面板老化", "传感器故障", "通信故障"]
+        immediate_actions: ["手动开关风机"]
+        maintenance_actions: ["更换温控器"]
+        prevention: ["定期检查功能"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "单房间控制不便"
+
+  # =========================================================================
+  # HVAC — 冷却塔 (Cooling Tower)
+  # =========================================================================
+  - equipment_type: "冷却塔"
+    manufacturer_examples: ["良机 LBC", "马利 Marley", "BAC"]
+    specifications:
+      cooling_capacity: "500-5000 kW"
+      type: "逆流/横流"
+      fill: "PVC薄膜填料"
+    failure_modes:
+      - failure_id: "CLT-FAN-001"
+        failure_mode: "冷却塔风机故障"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "风机"
+        symptoms: ["冷却水温升高", "风机异常噪音/振动", "电流异常"]
+        causes: ["轴承磨损", "叶片损坏/不平衡", "减速器故障", "电机故障"]
+        immediate_actions: ["停风机", "检查冷却水温"]
+        maintenance_actions: ["更换轴承", "修复叶片", "维修减速器"]
+        prevention: ["每季度振动检测", "每年叶片检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "冷凝器散热能力下降"
+
+      - failure_id: "CLT-FIL-001"
+        failure_mode: "填料老化/坍塌"
+        severity: 6
+        occurrence: 2
+        detection: 5
+        rpn: 60
+        category: "填料"
+        symptoms: ["冷却效率下降", "进近温度增大", "不均匀布水"]
+        causes: ["紫外老化", "高温变形", "水质差腐蚀", "超过使用年限"]
+        immediate_actions: ["加大风量补偿"]
+        maintenance_actions: ["更换填料"]
+        prevention: ["每年检查填料状态", "5-8年更换"]
+        typical_repair_time: "2-3天"
+        impact_scope: "冷却能力下降20-40%"
+
+      - failure_id: "CLT-WTR-001"
+        failure_mode: "军团菌污染"
+        severity: 10
+        occurrence: 3
+        detection: 5
+        rpn: 150
+        category: "水质"
+        symptoms: ["水质检测超标", "生物膜可见", "水浑浊"]
+        causes: ["水温25-42°C滞留", "水处理失效", "死水区", "填料藏污"]
+        immediate_actions: ["超氯消毒", "通报卫生部门", "限制人员接近"]
+        maintenance_actions: ["全系统消毒", "清洗填料", "消除死水区"]
+        prevention: ["定期军团菌检测", "水温管理", "连续加药", "定期排污"]
+        typical_repair_time: "1-3天"
+        impact_scope: "公共卫生安全事故"
+
+      - failure_id: "CLT-DRF-001"
+        failure_mode: "飘水过量"
+        severity: 4
+        occurrence: 4
+        detection: 3
+        rpn: 48
+        category: "飘水"
+        symptoms: ["周围地面湿滑", "附近设备腐蚀", "水耗增加"]
+        causes: ["收水器损坏", "风速过高", "布水不均"]
+        immediate_actions: ["降低风机转速"]
+        maintenance_actions: ["修复收水器", "调整布水"]
+        prevention: ["选用高效收水器(飘水率<0.001%)", "风速控制"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "水耗+周围腐蚀"
+
+      - failure_id: "CLT-SCL-001"
+        failure_mode: "结垢堵塞"
+        severity: 5
+        occurrence: 5
+        detection: 3
+        rpn: 75
+        category: "水质"
+        symptoms: ["布水器堵塞", "水流不均", "冷却效率下降"]
+        causes: ["硬度高", "加药不足", "浓缩倍数过高"]
+        immediate_actions: ["增加排污"]
+        maintenance_actions: ["化学清洗", "调整水处理"]
+        prevention: ["控制浓缩倍数(3-5)", "定期加药", "电子除垢"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "冷却效率下降"
+
+      - failure_id: "CLT-STR-001"
+        failure_mode: "结构腐蚀"
+        severity: 7
+        occurrence: 2
+        detection: 4
+        rpn: 56
+        category: "结构"
+        symptoms: ["钢构件锈蚀", "螺栓松动", "支架变形"]
+        causes: ["湿热环境", "化学腐蚀", "缺少防腐"]
+        immediate_actions: ["安全检查", "限制上塔"]
+        maintenance_actions: ["防腐处理", "更换损坏构件"]
+        prevention: ["定期防腐涂装", "每年结构检查"]
+        typical_repair_time: "1-2天"
+        impact_scope: "安全隐患"
+
+  # =========================================================================
+  # HVAC — 锅炉/换热器 (Boiler / Heat Exchanger)
+  # =========================================================================
+  - equipment_type: "燃气热水锅炉"
+    manufacturer_examples: ["威能 Vaillant", "博世 Bosch", "力诺瑞特"]
+    specifications:
+      heating_capacity: "200-4000 kW"
+      fuel: "天然气"
+      efficiency: "≥95%(冷凝型)"
+    failure_modes:
+      - failure_id: "BLR-BUR-001"
+        failure_mode: "燃烧器故障(点火失败)"
+        severity: 8
+        occurrence: 4
+        detection: 2
+        rpn: 64
+        category: "燃烧系统"
+        symptoms: ["点火失败报警", "无法启动", "火焰检测器报警"]
+        causes: ["点火电极脏污", "燃气阀故障", "风压开关故障", "火焰检测器老化"]
+        immediate_actions: ["检查燃气供应", "检查报警代码", "手动复位"]
+        maintenance_actions: ["清洁/更换点火电极", "检查燃气阀", "更换火焰检测器"]
+        prevention: ["每年燃烧器保养", "定期清洁电极"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "供暖中断"
+
+      - failure_id: "BLR-HTX-001"
+        failure_mode: "换热器结垢/腐蚀"
+        severity: 7
+        occurrence: 4
+        detection: 4
+        rpn: 112
+        category: "换热系统"
+        symptoms: ["出水温度偏低", "烟气温度升高", "效率下降", "排烟冒白烟"]
+        causes: ["水质差", "长期未清洗", "冷凝水腐蚀", "回水温度过低"]
+        immediate_actions: ["检查进出水温差"]
+        maintenance_actions: ["化学清洗", "检查腐蚀程度", "必要时更换"]
+        prevention: ["水质管理", "每年清洗", "回水温度保护"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "供暖效率下降"
+
+      - failure_id: "BLR-SAF-001"
+        failure_mode: "安全阀起跳/泄漏"
+        severity: 9
+        occurrence: 2
+        detection: 1
+        rpn: 18
+        category: "安全系统"
+        symptoms: ["安全阀排放", "压力波动", "水溢出"]
+        causes: ["系统超压", "膨胀罐故障", "安全阀弹簧老化"]
+        immediate_actions: ["检查系统压力", "检查膨胀罐"]
+        maintenance_actions: ["更换安全阀", "检修膨胀罐"]
+        prevention: ["每年安全阀测试", "膨胀罐定期检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "安全风险"
+
+      - failure_id: "BLR-FLU-001"
+        failure_mode: "烟道堵塞/倒流"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "烟道"
+        symptoms: ["CO检测报警", "点火困难", "烟气倒灌", "效率急剧下降"]
+        causes: ["鸟巢/异物", "冷凝水积存", "烟道腐蚀坍塌"]
+        immediate_actions: ["立即停炉", "通风排气", "CO检测"]
+        maintenance_actions: ["清理烟道", "修复/更换烟道"]
+        prevention: ["烟道防鸟网", "每年烟道检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "CO中毒风险"
+
+  - equipment_type: "板式换热器"
+    manufacturer_examples: ["阿法拉伐 Alfa Laval", "舒瑞普 Swep", "丹佛斯 Danfoss"]
+    specifications:
+      capacity: "100-5000 kW"
+      type: "可拆式/钎焊式"
+      design_pressure: "1.6 MPa"
+    failure_modes:
+      - failure_id: "HEX-LKG-001"
+        failure_mode: "板片间内漏(串液)"
+        severity: 8
+        occurrence: 3
+        detection: 4
+        rpn: 96
+        category: "密封"
+        symptoms: ["一次侧/二次侧水质互串", "压力异常", "出水温度异常"]
+        causes: ["板片腐蚀穿孔", "密封垫老化", "超压运行"]
+        immediate_actions: ["隔离换热器", "检查两侧水质"]
+        maintenance_actions: ["更换密封垫", "更换腐蚀板片"]
+        prevention: ["水质管理", "定期检查压力", "5年更换密封垫"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "供暖/供冷中断"
+
+      - failure_id: "HEX-FUL-001"
+        failure_mode: "换热板片结垢"
+        severity: 5
+        occurrence: 5
+        detection: 3
+        rpn: 75
+        category: "换热"
+        symptoms: ["换热效率下降", "压降增大", "出水温度偏差"]
+        causes: ["水质硬度高", "流速过低", "长期未清洗"]
+        immediate_actions: ["加大流量"]
+        maintenance_actions: ["化学清洗(酸洗)", "检查板片"]
+        prevention: ["水质软化", "每年清洗", "控制流速"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "换热能力下降"
+
+      - failure_id: "HEX-FRZ-001"
+        failure_mode: "冻裂"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "安全"
+        symptoms: ["漏水", "板片变形", "无法换热"]
+        causes: ["冬季停运未排水", "防冻保护失效", "流量过小"]
+        immediate_actions: ["关闭进出水阀", "排水"]
+        maintenance_actions: ["更换板片/整体更换"]
+        prevention: ["防冻保护联锁", "最低流量保证", "停运排水"]
+        typical_repair_time: "1-2天"
+        impact_scope: "供暖中断"
+
+      - failure_id: "HEX-EXT-001"
+        failure_mode: "外部泄漏"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "密封"
+        symptoms: ["设备底部积水", "密封垫处可见渗水"]
+        causes: ["密封垫老化", "螺栓松动", "板片变形"]
+        immediate_actions: ["紧固螺栓", "准备备件"]
+        maintenance_actions: ["更换密封垫", "重新紧固"]
+        prevention: ["定期检查紧固力矩", "密封垫5年更换"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "渗水损坏"
+
+  # =========================================================================
+  # 电气 — 变压器 (Dry-Type Transformer)
+  # =========================================================================
   - equipment_type: "干式变压器"
     manufacturer_examples: ["施耐德 Blokset", "ABB DynaV", "西门子 SGB"]
     specifications:
-      - power_rating: "400-2500 kVA"
-      - voltage_level: "10kV/0.4kV"
-      - insulation_class: "F级或H级"
-      - design_life: "30-40年"
-
+      power_rating: "400-2500 kVA"
+      voltage_level: "10kV/0.4kV"
+      insulation_class: "F级或H级"
+      design_life: "30-40年"
     failure_modes:
       - failure_id: "TRF-INS-001"
         failure_mode: "绕组绝缘老化"
@@ -595,35 +947,13 @@ FMEA_Library:
         detection: 7
         rpn: 189
         category: "绝缘系统"
-        symptoms:
-          - "绝缘电阻下降（<10MΩ）"
-          - "介质损耗角增大"
-          - "局部放电检测异常"
-          - "温升超标"
-          - "油色谱分析异常（油变）"
-        causes:
-          - "长期过负荷运行"
-          - "高温环境"
-          - "水分侵入"
-          - "电应力长期作用"
-          - "绝缘材料老化"
-        immediate_actions:
-          - "监测温度和电流"
-          - "绝缘测试"
-          - "准备更换计划"
-        maintenance_actions:
-          - "绕组重新绝缘处理"
-          - "干燥处理"
-          - "更换变压器（如老化严重）"
-          - "改善通风散热"
-        prevention:
-          - "控制负载率 <85%"
-          - "控制环境温度 <40°C"
-          - "每年绝缘电阻测试"
-          - "定期检查局部放电"
-          - "防止水分侵入"
+        symptoms: ["绝缘电阻下降(<10MΩ)", "介质损耗角增大", "局部放电异常", "温升超标"]
+        causes: ["长期过负荷", "高温环境", "水分侵入", "绝缘材料自然老化"]
+        immediate_actions: ["降低负荷(≤70%)", "绝缘测试"]
+        maintenance_actions: ["绕组干燥处理", "更换变压器(严重时)"]
+        prevention: ["负载率<85%", "环境温度<40°C", "每年绝缘测试", "局部放电监测"]
         typical_repair_time: "24-72小时"
-        impact_scope: "长时间停机，需更换"
+        impact_scope: "整个建筑供电中断"
 
       - failure_id: "TRF-THR-001"
         failure_mode: "过热故障"
@@ -632,477 +962,2571 @@ FMEA_Library:
         detection: 2
         rpn: 32
         category: "热系统"
-        symptoms:
-          - "温度传感器报警"
-          - "绕组温度 >120°C"
-          - "铁芯温度异常"
-          - "绝缘气味"
-          - "冷却系统报警"
-        causes:
-          - "过负荷运行"
-          - "冷却系统失效"
-          - "环境温度太高"
-          - "绕组接触不良"
-          - "谐波电流"
-        immediate_actions:
-          - "减载运行"
-          - "检查冷却系统"
-          - "检查散热通道"
-        maintenance_actions:
-          - "清洁散热器"
-          - "检查并修复冷却风扇"
-          - "检查负荷分配"
-          - "谐波治理"
-          - "调整负荷"
-        prevention:
-          - "安装温度监测系统"
-          - "确保冷却系统良好"
-          - "控制负荷率"
-          - "改善通风"
-          - "定期红外测温"
+        symptoms: ["温度传感器报警", "绕组温度>120°C", "铁芯温度异常", "绝缘气味"]
+        causes: ["过负荷运行", "冷却系统失效", "环境温度过高", "谐波电流"]
+        immediate_actions: ["减载运行", "检查冷却系统"]
+        maintenance_actions: ["清洁散热器", "修复冷却风扇", "谐波治理"]
+        prevention: ["温度监测", "定期清洁散热", "负荷管理", "红外测温"]
         typical_repair_time: "4-12小时"
         impact_scope: "需减载运行"
 
-    failure_statistics:
-      mtbf_hours: 175200  # 20年
-      critical_failures_per_year: 0.1
-      preventive_maintenance_hours: 8  # 年维护工时
-      corrective_maintenance_hours: 4   # 年维修工时
+      - failure_id: "TRF-GND-001"
+        failure_mode: "铁芯多点接地"
+        severity: 7
+        occurrence: 2
+        detection: 6
+        rpn: 84
+        category: "铁芯"
+        symptoms: ["铁芯局部过热", "接地电流异常", "油气异常(如有)"]
+        causes: ["绝缘片损坏", "异物导电桥", "装配不良"]
+        immediate_actions: ["测量接地电流"]
+        maintenance_actions: ["查找并消除多点接地", "更换绝缘片"]
+        prevention: ["每年接地电流测试"]
+        typical_repair_time: "8-24小时"
+        impact_scope: "铁芯过热损坏风险"
 
-# ====== 维护周期建议 ======
-maintenance_schedules:
-  centrifugal_chiller:
-    daily:
-      - "检查运行参数（压力、温度、流量）"
-      - "检查有无异常噪音或振动"
-      - "检查视液镜（检查制冷剂）"
-    weekly:
-      - "检查润滑油油位"
-      - "冷凝器和蒸发器趋近温度"
-      - "清洁控制柜"
-    monthly:
-      - "检查安全阀"
-      - "检查压缩机电流"
-      - "冷却塔清洗"
-    quarterly:
-      - "油液分析"
-      - "振动分析"
-      - "电气连接紧固"
-      - "传感器校准"
-    yearly:
-      - "制冷剂泄漏检测"
-      - "电机绝缘测试"
-      - "系统性能测试"
-      - "换热器清洗"
-      - "大修或中修"
+      - failure_id: "TRF-TAP-001"
+        failure_mode: "分接开关故障"
+        severity: 6
+        occurrence: 2
+        detection: 4
+        rpn: 48
+        category: "调压系统"
+        symptoms: ["电压偏差", "开关卡死", "接触不良"]
+        causes: ["触头磨损", "机构润滑不良", "长期不操作锈蚀"]
+        immediate_actions: ["固定在当前档位"]
+        maintenance_actions: ["检修开关", "更换触头"]
+        prevention: ["每年操作一次", "定期检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "电压调节功能丧失"
 
-  ahu:
-    daily:
-      - "检查运行状态和参数"
-    weekly:
-      - "检查过滤器压差"
-    monthly:
-      - "检查风机振动"
-      - "皮带张紧检查"
-    quarterly:
-      - "过滤器更换"
-      - "传感器校准"
-    yearly:
-      - "风机轴承润滑或更换"
-      - "盘管深度清洗"
-      - "动平衡检查"
+      - failure_id: "TRF-FAN-001"
+        failure_mode: "冷却风扇故障"
+        severity: 5
+        occurrence: 4
+        detection: 2
+        rpn: 40
+        category: "冷却系统"
+        symptoms: ["温控器报警", "温升加快", "风扇不转"]
+        causes: ["电机烧毁", "叶片损坏", "控制回路故障"]
+        immediate_actions: ["限制负荷率"]
+        maintenance_actions: ["更换风扇", "修复控制回路"]
+        prevention: ["每季度检查风扇", "双电源供电"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "变压器需降额运行"
 
-# ====== 备件清单 ======
-recommended_spare_parts:
-  centrifugal_chiller:
-    critical:
-      - "压缩机轴承"
-      - "润滑油泵"
-      - "主控板"
-    normal:
-      - "密封件套件"
-      - "安全阀"
-      - "过滤器"
-  ahu:
-    critical:
-      - "风机轴承"
-      - "皮带"
-      - "控制阀"
-    normal:
-      - "过滤器"
-      - "温度传感器"
-      - "风阀执行器"
+  # =========================================================================
+  # 电气 — 柴油发电机 (Emergency Generator)
+  # =========================================================================
+  - equipment_type: "柴油发电机"
+    manufacturer_examples: ["康明斯 Cummins", "卡特彼勒 CAT", "科勒 Kohler"]
+    specifications:
+      power_rating: "200-2000 kW"
+      voltage_level: "400V/3Ph"
+      fuel_type: "柴油"
+      startup_time: "≤10秒"
+    failure_modes:
+      - failure_id: "GEN-STR-001"
+        failure_mode: "启动失败"
+        severity: 10
+        occurrence: 2
+        detection: 1
+        rpn: 20
+        category: "启动系统"
+        symptoms: ["启动马达无法转动", "发动机不点火", "启动后立即停机", "电池电压低(<22V)"]
+        causes: ["蓄电池老化", "启动电路故障", "燃料系统气阻", "发动机机械故障", "环境温度过低"]
+        immediate_actions: ["检查蓄电池", "检查燃油液位", "手动盘车"]
+        maintenance_actions: ["更换蓄电池(3-5年)", "检查启动电路", "燃油系统排气"]
+        prevention: ["每月空载测试", "每年满载测试(80%/30min)", "每2年更换蓄电池", "保持燃油充足"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "整个应急供电系统失效"
 
-  # ===== 水泵 Pumps =====
+      - failure_id: "GEN-FUL-001"
+        failure_mode: "燃油系统故障"
+        severity: 9
+        occurrence: 3
+        detection: 3
+        rpn: 81
+        category: "燃油系统"
+        symptoms: ["功率不足", "排气冒黑烟", "燃油泄漏", "油压报警"]
+        causes: ["燃油滤清器堵塞", "燃油泵故障", "喷嘴堵塞/雾化差", "燃油变质"]
+        immediate_actions: ["检查燃油滤清器", "检查油压"]
+        maintenance_actions: ["更换滤清器", "清洗/更换喷嘴", "清洗油箱"]
+        prevention: ["每500h更换滤清器", "每6月燃油循环", "油品检测"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "发电能力受限或停机"
+
+      - failure_id: "GEN-COL-001"
+        failure_mode: "冷却系统故障(过热)"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "冷却系统"
+        symptoms: ["水温过高报警(>95°C)", "蒸汽泄漏", "功率下降", "自动停机"]
+        causes: ["冷却液不足", "散热器堵塞", "水泵故障", "恒温器卡死", "风扇皮带断裂"]
+        immediate_actions: ["停机降温", "检查冷却液位", "检查散热器"]
+        maintenance_actions: ["补充冷却液", "清洗散热器", "更换水泵/恒温器"]
+        prevention: ["每月检查冷却液", "每年更换冷却液", "散热器定期清洗"]
+        typical_repair_time: "2-6小时"
+        impact_scope: "发电机过热保护停机"
+
+      - failure_id: "GEN-GOV-001"
+        failure_mode: "调速器故障"
+        severity: 8
+        occurrence: 2
+        detection: 2
+        rpn: 32
+        category: "调速系统"
+        symptoms: ["频率不稳(偏离50Hz)", "转速波动", "负载突变时停机"]
+        causes: ["电子调速器老化", "执行器故障", "传感器失灵"]
+        immediate_actions: ["减载运行", "手动调速(如有)"]
+        maintenance_actions: ["更换调速器", "校准频率"]
+        prevention: ["每年调速器校准", "备用调速器"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "供电质量不稳定"
+
+      - failure_id: "GEN-ATS-001"
+        failure_mode: "ATS自动转换开关故障"
+        severity: 10
+        occurrence: 2
+        detection: 2
+        rpn: 40
+        category: "切换系统"
+        symptoms: ["市电→发电转换失败", "发电→市电回切失败", "两路同时接通(危险)"]
+        causes: ["接触器老化", "控制器故障", "电压检测失灵", "机械联锁失效"]
+        immediate_actions: ["手动切换", "确认联锁有效"]
+        maintenance_actions: ["更换接触器", "检修控制器", "校准电压检测"]
+        prevention: ["每月ATS切换测试", "每年全功能测试", "定期检查联锁"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "供电切换失效,医疗设备断电"
+
+      - failure_id: "GEN-EXH-001"
+        failure_mode: "排气系统泄漏"
+        severity: 7
+        occurrence: 3
+        detection: 3
+        rpn: 63
+        category: "排气系统"
+        symptoms: ["机房烟味", "CO浓度升高", "排气管锈蚀/裂缝"]
+        causes: ["高温氧化腐蚀", "振动疲劳裂纹", "密封垫老化"]
+        immediate_actions: ["通风排气", "CO检测"]
+        maintenance_actions: ["修复/更换排气管", "更换密封垫"]
+        prevention: ["每年检查排气管", "防腐处理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "机房CO中毒风险"
+
+  # =========================================================================
+  # 电气 — UPS不间断电源
+  # =========================================================================
+  - equipment_type: "UPS不间断电源"
+    manufacturer_examples: ["艾默生 Emerson", "APC", "伊顿 Eaton"]
+    specifications:
+      power_rating: "10-500 kVA"
+      voltage_level: "380V/220V"
+      backup_time: "15-30分钟"
+      topology: "双变换在线式"
+    failure_modes:
+      - failure_id: "UPS-BAT-001"
+        failure_mode: "电池组老化失效"
+        severity: 8
+        occurrence: 6
+        detection: 3
+        rpn: 144
+        category: "电池系统"
+        symptoms: ["电池内阻增大(>基线150%)", "容量<80%额定", "温度异常", "漏液/鼓包"]
+        causes: ["使用年限到期(3-5年)", "环境温度>25°C", "充放电循环过多", "浮充电压不准"]
+        immediate_actions: ["电池容量测试", "检查环境温度"]
+        maintenance_actions: ["更换全部电池组(串联一组换)", "均衡充电", "清洁端子"]
+        prevention: ["每季度内阻测试", "每年放电测试", "温度控制20-25°C", "电池监测系统"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "失去不间断电源保护"
+
+      - failure_id: "UPS-INV-001"
+        failure_mode: "逆变器故障"
+        severity: 9
+        occurrence: 2
+        detection: 2
+        rpn: 36
+        category: "逆变器系统"
+        symptoms: ["UPS切换旁路", "输出THD>5%", "逆变器过载报警", "模块温度高"]
+        causes: ["IGBT损坏", "驱动电路故障", "过载(>125%)", "散热失效"]
+        immediate_actions: ["检查负载", "旁路供电", "检查温度"]
+        maintenance_actions: ["更换IGBT模块", "检查驱动电路", "清洁散热"]
+        prevention: ["每季度红外测温", "每年负载测试", "清洁散热通道"]
+        typical_repair_time: "6-12小时"
+        impact_scope: "旁路供电,无保护"
+
+      - failure_id: "UPS-BYP-001"
+        failure_mode: "静态旁路开关故障"
+        severity: 8
+        occurrence: 2
+        detection: 3
+        rpn: 48
+        category: "旁路系统"
+        symptoms: ["无法切换旁路", "切换时断电", "旁路指示灯异常"]
+        causes: ["晶闸管老化", "驱动板故障", "同步信号丢失"]
+        immediate_actions: ["使用维修旁路", "确认供电正常"]
+        maintenance_actions: ["更换晶闸管模块", "检查同步电路"]
+        prevention: ["每半年旁路切换测试"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "失去旁路保护"
+
+      - failure_id: "UPS-RCT-001"
+        failure_mode: "整流器故障"
+        severity: 7
+        occurrence: 2
+        detection: 2
+        rpn: 28
+        category: "整流器系统"
+        symptoms: ["电池持续放电", "直流母线电压偏低", "整流器报警"]
+        causes: ["整流模块老化", "输入过压/欠压", "谐波反馈"]
+        immediate_actions: ["检查输入电压", "电池开始放电"]
+        maintenance_actions: ["更换整流模块", "检查输入滤波"]
+        prevention: ["输入电压监测", "定期检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "电池持续放电直至耗尽"
+
+      - failure_id: "UPS-FAN-001"
+        failure_mode: "散热风扇故障"
+        severity: 6
+        occurrence: 4
+        detection: 2
+        rpn: 48
+        category: "散热系统"
+        symptoms: ["柜内温度升高", "风扇报警", "UPS降额运行"]
+        causes: ["风扇轴承磨损", "灰尘堵塞", "风扇电机老化"]
+        immediate_actions: ["检查风扇", "加强通风"]
+        maintenance_actions: ["更换风扇"]
+        prevention: ["每季度检查风扇", "定期清灰"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "UPS需降额运行"
+
+  # =========================================================================
+  # 电气 — 配电柜 (Switchgear / Distribution Panel)
+  # =========================================================================
+  - equipment_type: "低压配电柜"
+    manufacturer_examples: ["施耐德 Prisma", "ABB MNS", "西门子 SIVACON"]
+    specifications:
+      rated_voltage: "380/220V"
+      rated_current: "630-4000A"
+      type: "抽屉式/固定式"
+    failure_modes:
+      - failure_id: "SWG-ARC-001"
+        failure_mode: "电弧故障(弧闪)"
+        severity: 10
+        occurrence: 1
+        detection: 4
+        rpn: 40
+        category: "电气安全"
+        symptoms: ["爆炸声", "强烈弧光", "烧焦痕迹", "断路器跳闸"]
+        causes: ["接线松动", "绝缘击穿", "异物进入", "操作失误"]
+        immediate_actions: ["立即断开上级电源", "灭火", "人员疏散", "医疗救助"]
+        maintenance_actions: ["修复/更换受损部件", "绝缘测试"]
+        prevention: ["定期热像检测", "红外窗口", "弧闪保护装置(AFD)", "PPE要求"]
+        typical_repair_time: "1-7天"
+        impact_scope: "人身伤害+大面积停电"
+
+      - failure_id: "SWG-BKR-001"
+        failure_mode: "断路器拒动(不跳闸)"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "保护系统"
+        symptoms: ["过载/短路时不动作", "脱扣器测试不合格"]
+        causes: ["脱扣器机构卡死", "触头熔焊", "弹簧疲劳", "保护定值错误"]
+        immediate_actions: ["手动断开", "检查上级保护"]
+        maintenance_actions: ["检修/更换断路器", "重新整定保护定值"]
+        prevention: ["每年断路器测试", "脱扣器特性曲线校验"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "保护失效,短路可能扩大"
+
+      - failure_id: "SWG-THR-001"
+        failure_mode: "母排过热"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "导体"
+        symptoms: ["红外测温热点(ΔT>15K)", "母排变色", "接触电阻增大"]
+        causes: ["螺栓松动", "接触面氧化", "过负荷", "谐波"]
+        immediate_actions: ["限制负荷", "增加监测"]
+        maintenance_actions: ["紧固螺栓(力矩扳手)", "打磨接触面", "涂导电脂"]
+        prevention: ["每半年红外测温", "每年紧固检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "过热可能引发火灾"
+
+      - failure_id: "SWG-INS-001"
+        failure_mode: "绝缘降低(受潮/污染)"
+        severity: 7
+        occurrence: 3
+        detection: 5
+        rpn: 105
+        category: "绝缘"
+        symptoms: ["绝缘电阻下降", "表面爬电", "闪络"]
+        causes: ["配电室潮湿", "灰尘积聚", "有害气体腐蚀"]
+        immediate_actions: ["测量绝缘电阻", "清洁"]
+        maintenance_actions: ["清洁绝缘件", "除湿处理", "更换老化绝缘"]
+        prevention: ["配电室除湿", "定期清洁", "绝缘测试"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "绝缘事故风险"
+
+      - failure_id: "SWG-RLY-001"
+        failure_mode: "保护继电器误动/拒动"
+        severity: 8
+        occurrence: 2
+        detection: 3
+        rpn: 48
+        category: "保护系统"
+        symptoms: ["无故跳闸(误动)", "故障时不跳闸(拒动)", "保护测试不合格"]
+        causes: ["继电器老化", "CT回路问题", "保护定值错误", "电磁干扰"]
+        immediate_actions: ["检查保护定值", "手动操作"]
+        maintenance_actions: ["更换继电器", "校验CT回路", "重新整定"]
+        prevention: ["每年保护测试", "CT极性校验"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "保护可靠性下降"
+
+      - failure_id: "SWG-DRW-001"
+        failure_mode: "抽屉单元卡死"
+        severity: 5
+        occurrence: 3
+        detection: 2
+        rpn: 30
+        category: "机构"
+        symptoms: ["无法推入/抽出", "机械联锁异常"]
+        causes: ["导轨变形", "润滑不良", "触头磨损导致阻力增大"]
+        immediate_actions: ["不要强行操作"]
+        maintenance_actions: ["修复导轨", "润滑", "更换触头"]
+        prevention: ["每年润滑", "定期操作测试"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "无法切换/检修"
+
+  # =========================================================================
+  # 电气 — IT隔离电源系统 (Medical IT System)
+  # =========================================================================
+  - equipment_type: "IT隔离电源系统"
+    manufacturer_examples: ["本德尔 Bender", "施耐德 IMD", "ABB IMD"]
+    specifications:
+      standard: "IEC 60364-7-710"
+      transformer: "医用隔离变压器 3-10kVA"
+      monitoring: "绝缘监测仪(IMD)"
+    failure_modes:
+      - failure_id: "ITP-ISO-001"
+        failure_mode: "隔离变压器绝缘劣化"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "隔离变压器"
+        symptoms: ["IMD报警(绝缘电阻<50kΩ)", "变压器温升异常", "漏电流增大"]
+        causes: ["绝缘老化", "过负荷", "高温环境", "水分侵入"]
+        immediate_actions: ["检查IMD读数", "准备切换至备用"]
+        maintenance_actions: ["更换隔离变压器", "检查干燥状态"]
+        prevention: ["每年绝缘测试", "温度监测", "负荷管理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "手术室IT系统失去隔离保护"
+
+      - failure_id: "ITP-IMD-001"
+        failure_mode: "绝缘监测仪(IMD)失效"
+        severity: 8
+        occurrence: 2
+        detection: 4
+        rpn: 64
+        category: "监测系统"
+        symptoms: ["IMD无显示", "不报警(即使有故障)", "自检失败"]
+        causes: ["电子元件老化", "传感器故障", "固件错误"]
+        immediate_actions: ["使用便携式绝缘测试仪", "加强人工巡检"]
+        maintenance_actions: ["更换IMD", "校准"]
+        prevention: ["每年IMD自检测试", "备用IMD"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "绝缘故障无法被检测,患者触电风险"
+
+      - failure_id: "ITP-OVL-001"
+        failure_mode: "IT系统过载"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "负荷管理"
+        symptoms: ["过载报警", "变压器温升快", "电压偏低"]
+        causes: ["额外设备接入", "设备更换功率增大", "设计余量不足"]
+        immediate_actions: ["断开非关键设备", "检查负荷分配"]
+        maintenance_actions: ["重新评估负荷", "增加IT变压器容量"]
+        prevention: ["负荷登记管理", "定期负荷审计"]
+        typical_repair_time: "1-2小时(调整负荷); 1-2天(增容)"
+        impact_scope: "手术室供电不稳定"
+
+      - failure_id: "ITP-GND-001"
+        failure_mode: "等电位联结断裂"
+        severity: 9
+        occurrence: 2
+        detection: 5
+        rpn: 90
+        category: "接地系统"
+        symptoms: ["等电位测试不合格(>10mΩ)", "金属部件电位差", "患者微电击风险"]
+        causes: ["连接件腐蚀", "施工质量差", "改造时断开", "螺栓松动"]
+        immediate_actions: ["停止手术", "检查等电位网"]
+        maintenance_actions: ["修复断裂连接", "重新测试"]
+        prevention: ["每年等电位测试(IEC 62353)", "施工后验收"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "患者微电击风险,IEC 60364-7-710不合规"
+
+      - failure_id: "ITP-ANN-001"
+        failure_mode: "报警显示面板故障"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "告警系统"
+        symptoms: ["面板不亮", "声光报警不工作", "通信中断"]
+        causes: ["电源故障", "LED老化", "蜂鸣器损坏", "通信线断"]
+        immediate_actions: ["检查电源", "人工巡检替代"]
+        maintenance_actions: ["更换面板", "修复通信"]
+        prevention: ["每月报警测试", "定期检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "手术室工作人员无法收到绝缘报警"
+
+  # =========================================================================
+  # 给排水 — 水泵 (Pump)
+  # =========================================================================
   - equipment_type: "冷冻水循环泵"
     manufacturer_examples: ["格兰富 UPS", "威乐 Wilo", "凯士比 KSB"]
     specifications:
-      - flow_rate: "10-500 m³/h"
-      - head: "10-50 m"
-      - power: "2-75 kW"
-      - efficiency: "65-85%"
-
+      flow_rate: "10-500 m3/h"
+      head: "10-50 m"
+      power: "2-75 kW"
+      efficiency: "65-85%"
     failure_modes:
-      - failure_id: "PMP-001"
+      - failure_id: "PMP-SEL-001"
         failure_mode: "机械密封泄漏"
         severity: 7
         occurrence: 6
         detection: 3
         rpn: 126
         category: "机械密封"
-        symptoms:
-          - "泵体底部有水滴或水渍"
-          - "密封处可见渗水"
-          - "电机绝缘电阻下降"
-          - "轴承润滑脂乳化"
-          - "泵房地面湿滑"
-        causes:
-          - "密封面磨损或划伤"
-          - "密封弹簧失效"
-          - "密封件老化（橡胶硬化）"
-          - "泵振动过大"
-          - "水质差（含杂质）"
-          - "长时间干转"
-        immediate_actions:
-          - "关闭泵电源"
-          - "检查漏水严重程度"
-          - "准备备用泵切换"
-        maintenance_actions:
-          - "更换机械密封组件"
-          - "检查轴套磨损"
-          - "更换轴承（如已进水）"
-          - "检查泵对中"
-          - "清洗密封腔"
-        prevention:
-          - "每季度检查密封泄漏"
-          - "每2年更换机械密封"
-          - "控制振动（＜7.1mm/s）"
-          - "改善水质（过滤）"
-          - "避免干转"
-          - "安装泄漏监测传感器"
+        symptoms: ["泵体底部水滴", "电机绝缘下降", "轴承润滑脂乳化"]
+        causes: ["密封面磨损", "弹簧失效", "密封件老化", "振动过大", "水质差"]
+        immediate_actions: ["关泵", "切换备用泵"]
+        maintenance_actions: ["更换机械密封", "检查轴套", "更换轴承(如进水)"]
+        prevention: ["每季度检查", "每2年更换密封", "振动<7.1mm/s", "水质管理"]
         typical_repair_time: "2-4小时"
         impact_scope: "单台泵停机"
 
-      - failure_id: "PMP-002"
+      - failure_id: "PMP-BRG-001"
         failure_mode: "轴承过热或损坏"
         severity: 8
         occurrence: 4
         detection: 2
         rpn: 64
         category: "轴承系统"
-        symptoms:
-          - "轴承温度＞80°C（报警）"
-          - "异常噪音（金属摩擦声）"
-          - "振动增大"
-          - "润滑脂变色或干涸"
-          - "轴承卡死（无法转动）"
-        causes:
-          - "润滑不良（缺油或油脂变质）"
-          - "轴承安装不当（过紧或过松）"
-          - "泵与电机对中不良"
-          - "轴向力过大"
-          - "轴承本身质量问题"
-          - "长时间过载运行"
-        immediate_actions:
-          - "立即停泵"
-          - "检查轴承温度"
-          - "不要继续运行"
-        maintenance_actions:
-          - "更换轴承"
-          - "清洁轴承座"
-          - "更换润滑脂（清洁）"
-          - "重新对中（激光对中）"
-          - "检查轴向间隙"
-        prevention:
-          - "每月检查轴承温度"
-          - "每6个月补充润滑脂"
-          - "每年更换润滑脂"
-          - "定期对中检查"
-          - "振动监测"
+        symptoms: ["轴承温度>80°C", "异常噪音", "振动增大", "润滑脂变色"]
+        causes: ["润滑不良", "安装不当", "对中不良", "过载运行"]
+        immediate_actions: ["立即停泵"]
+        maintenance_actions: ["更换轴承", "清洁轴承座", "激光对中"]
+        prevention: ["每月温度检查", "每半年润滑", "定期对中"]
         typical_repair_time: "3-6小时"
         impact_scope: "单台泵停机"
 
-    failure_statistics:
-      mtbf_hours: 35040  # 4年
-      common_failures_top5:
-        - "机械密封泄漏"
-        - "轴承故障"
-        - "叶轮磨损"
-        - "气蚀"
-        - "电机故障"
-      preventive_maintenance_hours: 16  # 年维护工时
-      corrective_maintenance_hours: 24   # 年维修工时
+      - failure_id: "PMP-CAV-001"
+        failure_mode: "气蚀(Cavitation)"
+        severity: 7
+        occurrence: 4
+        detection: 3
+        rpn: 84
+        category: "水力"
+        symptoms: ["金属噼啪声", "流量/扬程下降", "叶轮蜂窝状损伤", "振动增大"]
+        causes: ["NPSH不足", "吸入管路阻力大", "水温过高", "泵安装位置过高"]
+        immediate_actions: ["降低泵速/流量", "检查吸入侧"]
+        maintenance_actions: ["检查/更换叶轮", "优化吸入管路"]
+        prevention: ["确保NPSHa>NPSHr+0.5m", "避免过高安装", "水温监控"]
+        typical_repair_time: "4-8小时(含叶轮更换)"
+        impact_scope: "泵效率下降+叶轮损坏"
 
+      - failure_id: "PMP-VFD-001"
+        failure_mode: "变频器故障导致泵无法调速"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "电气控制"
+        symptoms: ["泵只能工频运行", "VFD报警", "转速不受控"]
+        causes: ["IGBT损坏", "散热风扇停", "主板故障"]
+        immediate_actions: ["切换工频运行"]
+        maintenance_actions: ["修复VFD"]
+        prevention: ["定期清洁VFD", "环境温度管理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "泵无法变频节能"
+
+      - failure_id: "PMP-IMP-001"
+        failure_mode: "叶轮磨损"
+        severity: 5
+        occurrence: 3
+        detection: 4
+        rpn: 60
+        category: "水力部件"
+        symptoms: ["流量/扬程下降(偏离性能曲线)", "效率降低", "电流增大"]
+        causes: ["水中含砂/固体颗粒", "气蚀侵蚀", "长期运行磨损"]
+        immediate_actions: ["测量性能曲线偏差"]
+        maintenance_actions: ["更换叶轮"]
+        prevention: ["进水口过滤", "水质管理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "泵性能下降"
+
+      - failure_id: "PMP-ALN-001"
+        failure_mode: "泵-电机对中不良"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "安装"
+        symptoms: ["异常振动", "联轴器温度高", "密封/轴承提前失效"]
+        causes: ["安装不良", "基础沉降", "热膨胀", "管道应力"]
+        immediate_actions: ["检查振动值"]
+        maintenance_actions: ["激光对中校正", "检查基础"]
+        prevention: ["每年激光对中检查", "管道柔性连接"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "加速部件磨损"
+
+      - failure_id: "PMP-MTR-001"
+        failure_mode: "电机故障"
+        severity: 7
+        occurrence: 3
+        detection: 3
+        rpn: 63
+        category: "电机"
+        symptoms: ["电流异常", "绝缘电阻低", "温度超标", "跳闸"]
+        causes: ["绝缘老化", "过负荷", "散热不良", "电压不平衡"]
+        immediate_actions: ["停机", "切换备用"]
+        maintenance_actions: ["电机返修或更换"]
+        prevention: ["每年绝缘测试", "散热通道清洁", "电能质量监测"]
+        typical_repair_time: "4-24小时"
+        impact_scope: "单台泵停机"
+
+  # =========================================================================
+  # 给排水 — 水处理 (Water Treatment)
+  # =========================================================================
+  - equipment_type: "冷却水处理系统"
+    manufacturer_examples: ["纳尔科 Nalco", "苏伊士 SUEZ", "栗田工业 Kurita"]
+    specifications:
+      treatment: "缓蚀阻垢+杀菌灭藻"
+      monitoring: "电导率/pH/ORP在线监测"
+    failure_modes:
+      - failure_id: "WTS-DOS-001"
+        failure_mode: "自动加药系统故障"
+        severity: 6
+        occurrence: 4
+        detection: 3
+        rpn: 72
+        category: "加药系统"
+        symptoms: ["药剂浓度偏低", "水质指标超标", "结垢/腐蚀加速"]
+        causes: ["计量泵故障", "药桶空", "控制器失灵", "进药管堵塞"]
+        immediate_actions: ["手动加药", "检查药桶液位"]
+        maintenance_actions: ["修复/更换计量泵", "清洗进药管"]
+        prevention: ["液位报警", "定期检查计量泵", "冗余设计"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "水质恶化→设备结垢/腐蚀"
+
+      - failure_id: "WTS-SFT-001"
+        failure_mode: "软水器失效(出水硬度超标)"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "软化系统"
+        symptoms: ["出水硬度升高", "树脂颜色变化", "再生盐消耗异常"]
+        causes: ["树脂失效", "再生盐不足", "控制头故障", "进水水质突变"]
+        immediate_actions: ["手动再生", "检查盐箱"]
+        maintenance_actions: ["更换树脂", "检修控制头"]
+        prevention: ["定期硬度检测", "保持盐箱盐位", "每3-5年换树脂"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "换热器/管道结垢"
+
+      - failure_id: "WTS-MON-001"
+        failure_mode: "在线水质监测仪失灵"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "监测系统"
+        symptoms: ["读数异常/不变", "与手动检测偏差大", "探头脏污"]
+        causes: ["探头老化", "结垢覆盖探头", "校准漂移"]
+        immediate_actions: ["人工取样检测"]
+        maintenance_actions: ["清洁/更换探头", "重新校准"]
+        prevention: ["每月校准", "定期清洁探头"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "水质监控盲区"
+
+      - failure_id: "WTS-BIO-001"
+        failure_mode: "微生物超标"
+        severity: 8
+        occurrence: 4
+        detection: 4
+        rpn: 128
+        category: "生物控制"
+        symptoms: ["水浑浊", "异味", "军团菌检测阳性", "生物膜可见"]
+        causes: ["杀菌剂不足", "死水区", "水温25-42°C", "营养物过多"]
+        immediate_actions: ["超氯消毒", "采样送检"]
+        maintenance_actions: ["全系统消毒", "消除死水区"]
+        prevention: ["持续加药杀菌", "水温管理", "定期微生物检测"]
+        typical_repair_time: "1-3天"
+        impact_scope: "军团菌风险,公共卫生事件"
+
+  # =========================================================================
+  # 医用气体 — 液氧站 (LOX Station)
+  # =========================================================================
+  - equipment_type: "液氧站(LOX)"
+    manufacturer_examples: ["林德 Linde", "空气化工 AP", "杭氧 HANGYANG"]
+    specifications:
+      capacity: "5-30 m3"
+      working_pressure: "0.8-1.6 MPa"
+      standard: "WS 435-2013"
+    failure_modes:
+      - failure_id: "LOX-EVP-001"
+        failure_mode: "汽化器结冰/效率下降"
+        severity: 8
+        occurrence: 4
+        detection: 3
+        rpn: 96
+        category: "汽化系统"
+        symptoms: ["出口温度过低(<-5°C)", "管路结霜", "流量不足", "下游压力波动"]
+        causes: ["环境温度低", "翅片脏污", "流量超设计", "除霜不良"]
+        immediate_actions: ["切换备用汽化器", "检查出口温度"]
+        maintenance_actions: ["清洁翅片", "检查除霜系统"]
+        prevention: ["冬季巡检加密", "翅片定期清洁", "备用汽化器"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "氧气供应温度过低,影响设备"
+
+      - failure_id: "LOX-PRV-001"
+        failure_mode: "减压阀故障(压力波动)"
+        severity: 9
+        occurrence: 3
+        detection: 2
+        rpn: 54
+        category: "调压系统"
+        symptoms: ["终端压力波动", "压力报警", "设备使用异常"]
+        causes: ["阀座磨损", "弹簧疲劳", "膜片老化", "杂质卡住"]
+        immediate_actions: ["切换备用减压阀"]
+        maintenance_actions: ["检修/更换减压阀"]
+        prevention: ["每年减压阀校验", "备用阀在线"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "全楼层氧气压力不稳"
+
+      - failure_id: "LOX-LEK-001"
+        failure_mode: "管路/阀门泄漏"
+        severity: 9
+        occurrence: 3
+        detection: 3
+        rpn: 81
+        category: "管路系统"
+        symptoms: ["嘶嘶声", "氧浓度监测报警", "结霜点", "压力下降"]
+        causes: ["焊接缺陷", "阀门密封老化", "振动疲劳", "温度应力"]
+        immediate_actions: ["隔离泄漏段", "通风", "禁止明火"]
+        maintenance_actions: ["修复焊接", "更换阀门密封"]
+        prevention: ["每年试压", "振动控制", "阀门定期检查"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "氧气泄漏→火灾爆炸风险"
+
+      - failure_id: "LOX-TNK-001"
+        failure_mode: "液氧储罐真空度下降"
+        severity: 7
+        occurrence: 2
+        detection: 5
+        rpn: 70
+        category: "储罐"
+        symptoms: ["日蒸发率增大(>0.5%/天)", "外壁结露/结霜", "液氧消耗异常快"]
+        causes: ["真空层破坏", "分子筛吸附剂失效", "密封面漏气"]
+        immediate_actions: ["增加补液频率", "检查蒸发率"]
+        maintenance_actions: ["重新抽真空", "更换吸附剂"]
+        prevention: ["每月蒸发率监测", "日巡检外壁"]
+        typical_repair_time: "1-2天(需专业设备)"
+        impact_scope: "液氧损耗增加,运营成本升高"
+
+  # =========================================================================
+  # 医用气体 — 真空泵 (Medical Vacuum Pump)
+  # =========================================================================
+  - equipment_type: "医用真空泵机组"
+    manufacturer_examples: ["贝克 Becker", "里其乐 Rietschle", "普旭 Busch"]
+    specifications:
+      type: "水环式/旋片式/干式"
+      vacuum_level: "-0.04 ~ -0.07 MPa"
+      standard: "WS 435-2013"
+    failure_modes:
+      - failure_id: "VAC-PMP-001"
+        failure_mode: "真空度不足"
+        severity: 8
+        occurrence: 4
+        detection: 2
+        rpn: 64
+        category: "泵体"
+        symptoms: ["真空压力>-0.04MPa", "吸引力不足", "终端使用异常"]
+        causes: ["叶片磨损", "密封泄漏", "进水口堵塞", "排气阀故障"]
+        immediate_actions: ["切换备用泵", "检查真空表"]
+        maintenance_actions: ["更换叶片", "修复密封", "清洗进水口"]
+        prevention: ["每日真空度检查", "每年叶片检查", "定期密封检测"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "手术室/ICU吸引功能受限"
+
+      - failure_id: "VAC-MOT-001"
+        failure_mode: "泵电机过热"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "电机"
+        symptoms: ["电机温度报警", "跳闸", "噪音增大"]
+        causes: ["散热不良", "过负荷", "轴承故障", "电压不平衡"]
+        immediate_actions: ["切换备用泵"]
+        maintenance_actions: ["检查轴承", "清洁散热", "检查电源"]
+        prevention: ["温度监测", "定期润滑"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "单台泵停机"
+
+      - failure_id: "VAC-FLT-001"
+        failure_mode: "真空过滤器堵塞"
+        severity: 5
+        occurrence: 5
+        detection: 2
+        rpn: 50
+        category: "过滤系统"
+        symptoms: ["吸力下降", "压差增大", "泵负荷增加"]
+        causes: ["吸入液体/固体", "长期未更换", "过滤器破损"]
+        immediate_actions: ["更换/清洗过滤器"]
+        maintenance_actions: ["更换过滤器", "检查管路"]
+        prevention: ["定期更换过滤器", "排液阱检查"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "吸力轻微下降"
+
+      - failure_id: "VAC-TNK-001"
+        failure_mode: "真空罐泄漏"
+        severity: 7
+        occurrence: 2
+        detection: 3
+        rpn: 42
+        category: "储罐"
+        symptoms: ["真空保持不住", "泵频繁启动", "真空度波动"]
+        causes: ["罐体腐蚀", "焊缝开裂", "密封垫老化"]
+        immediate_actions: ["检查泄漏点", "增加泵运行时间"]
+        maintenance_actions: ["修补焊接", "更换密封垫"]
+        prevention: ["每年检查罐体", "防腐处理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "系统不稳定"
+
+  # =========================================================================
+  # 医用气体 — 医用空气压缩机 (Medical Air Compressor)
+  # =========================================================================
+  - equipment_type: "医用空气压缩机"
+    manufacturer_examples: ["阿特拉斯 Atlas Copco", "贝克 Becker", "Dürr Technik"]
+    specifications:
+      type: "无油涡旋式/无油活塞式"
+      quality: "ISO 8573-1 Class [0,1,1]"
+      dew_point: "≤-20°C"
+    failure_modes:
+      - failure_id: "MAC-DRY-001"
+        failure_mode: "干燥器失效(露点超标)"
+        severity: 8
+        occurrence: 4
+        detection: 3
+        rpn: 96
+        category: "干燥系统"
+        symptoms: ["露点>-20°C", "管路结露", "仪器使用异常"]
+        causes: ["干燥剂失效", "再生系统故障", "进气湿度过高", "干燥器过载"]
+        immediate_actions: ["切换备用干燥器", "检查露点"]
+        maintenance_actions: ["更换干燥剂", "修复再生系统"]
+        prevention: ["在线露点监测", "定期更换干燥剂(每年)", "冷凝预处理"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "医用空气质量不合格"
+
+      - failure_id: "MAC-OIL-001"
+        failure_mode: "含油量超标"
+        severity: 9
+        occurrence: 2
+        detection: 4
+        rpn: 72
+        category: "空气质量"
+        symptoms: ["油雾检测超标(>0.01mg/m3)", "管路有油味", "患者投诉"]
+        causes: ["油过滤器饱和", "压缩机密封泄漏(有油机型)", "油水分离器故障"]
+        immediate_actions: ["停止供气", "切换备用"]
+        maintenance_actions: ["更换活性炭过滤器", "检查压缩机"]
+        prevention: ["选用无油压缩机", "在线含油监测", "定期过滤器更换"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "患者呼吸安全风险"
+
+      - failure_id: "MAC-PRS-001"
+        failure_mode: "输出压力不稳"
+        severity: 7
+        occurrence: 4
+        detection: 2
+        rpn: 56
+        category: "压力系统"
+        symptoms: ["终端压力波动", "压力报警", "呼吸机运行异常"]
+        causes: ["压力调节阀故障", "储气罐泄漏", "进气阀故障", "压缩机容量不足"]
+        immediate_actions: ["切换备用机组"]
+        maintenance_actions: ["检修调节阀", "修复泄漏"]
+        prevention: ["压力连续监测", "每年调节阀校验"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "呼吸机/麻醉机供气不稳"
+
+      - failure_id: "MAC-FLT-001"
+        failure_mode: "终端过滤器堵塞"
+        severity: 5
+        occurrence: 5
+        detection: 2
+        rpn: 50
+        category: "过滤系统"
+        symptoms: ["压差增大", "流量下降", "压力报警"]
+        causes: ["超期使用", "空气污染严重", "潮湿"]
+        immediate_actions: ["更换过滤器"]
+        maintenance_actions: ["更换全套过滤器"]
+        prevention: ["定期更换(每6月)", "压差监测"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "终端流量下降"
+
+  # =========================================================================
+  # 消防 — 消防泵 (Fire Pump)
+  # =========================================================================
+  - equipment_type: "消防泵"
+    manufacturer_examples: ["新界 XINJIE", "南方泵 CNP", "格兰富 Grundfos"]
+    specifications:
+      type: "卧式/立式/柴油机驱动"
+      standard: "GB50974-2014"
+      startup: "全自动+手动"
+    failure_modes:
+      - failure_id: "FRP-STR-001"
+        failure_mode: "自动启动失败"
+        severity: 10
+        occurrence: 2
+        detection: 1
+        rpn: 20
+        category: "启动系统"
+        symptoms: ["火灾报警后泵未启动", "启动信号无响应", "消防控制室无反馈"]
+        causes: ["控制回路断路", "电磁接触器故障", "电池组老化(柴油泵)"]
+        immediate_actions: ["手动启动", "消防值班操作"]
+        maintenance_actions: ["检修控制回路", "更换接触器", "更换电池"]
+        prevention: ["每月自动启动测试", "每半年全回路测试"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "消防供水延迟,火灾蔓延风险"
+
+      - failure_id: "FRP-PRF-001"
+        failure_mode: "扬程/流量不达标"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "水力性能"
+        symptoms: ["测试时扬程不足", "喷淋系统压力不够", "消火栓出水量不足"]
+        causes: ["叶轮磨损", "管路泄漏", "阀门未全开", "进水条件差"]
+        immediate_actions: ["检查阀门全开", "检查管路"]
+        maintenance_actions: ["更换叶轮", "修复管路泄漏"]
+        prevention: ["每年性能测试(GB50974)", "叶轮检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "消防供水能力不足"
+
+      - failure_id: "FRP-DSL-001"
+        failure_mode: "柴油消防泵启动失败"
+        severity: 10
+        occurrence: 3
+        detection: 1
+        rpn: 30
+        category: "柴油机"
+        symptoms: ["柴油机不点火", "电池电压低", "燃油问题"]
+        causes: ["蓄电池老化", "燃油变质", "预热系统故障", "机油不足"]
+        immediate_actions: ["检查电池和燃油", "手动盘车"]
+        maintenance_actions: ["更换电池", "更换燃油", "检修预热系统"]
+        prevention: ["每周自动试启动", "每月手动启动测试", "燃油每年更换"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "失去备用消防泵"
+
+      - failure_id: "FRP-VLV-001"
+        failure_mode: "稳压泵频繁启停"
+        severity: 4
+        occurrence: 5
+        detection: 2
+        rpn: 40
+        category: "稳压系统"
+        symptoms: ["稳压泵频繁启停", "气压罐压力波动", "管网有微泄漏"]
+        causes: ["气压罐气体泄漏", "管网微泄漏", "压力开关设定不当"]
+        immediate_actions: ["检查气压罐", "检查管网"]
+        maintenance_actions: ["补气", "修复泄漏点", "调整压力开关"]
+        prevention: ["每月检查气压罐", "管网巡检"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "稳压泵寿命缩短"
+
+      - failure_id: "FRP-SEL-001"
+        failure_mode: "消防泵机械密封泄漏"
+        severity: 6
+        occurrence: 3
+        detection: 3
+        rpn: 54
+        category: "密封"
+        symptoms: ["泵房积水", "密封处可见渗水"]
+        causes: ["密封老化", "长期不运行干裂", "振动"]
+        immediate_actions: ["标记并监控"]
+        maintenance_actions: ["更换机械密封"]
+        prevention: ["每月盘泵运行", "定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "消防泵可靠性下降"
+
+      - failure_id: "FRP-CKV-001"
+        failure_mode: "止回阀失效"
+        severity: 7
+        occurrence: 3
+        detection: 4
+        rpn: 84
+        category: "阀门"
+        symptoms: ["泵停后管网压力快速下降", "水倒流声"]
+        causes: ["阀瓣磨损", "异物卡住", "弹簧疲劳"]
+        immediate_actions: ["关闭出口阀"]
+        maintenance_actions: ["更换止回阀"]
+        prevention: ["每年阀门检查", "试水时检查回流"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "消防管网失压"
+
+  # =========================================================================
+  # HEPA 高效过滤系统
+  # =========================================================================
+  - equipment_type: "高效过滤系统(HEPA)"
+    manufacturer_examples: ["AAF", "Camfil", "MANN+HUMMEL"]
+    specifications:
+      grade: "H13/H14 (EN 1822)"
+      efficiency: "≥99.95%@0.3μm"
+      standard: "GB50333-2013"
+    failure_modes:
+      - failure_id: "HEP-LKG-001"
+        failure_mode: "HEPA密封泄漏"
+        severity: 10
+        occurrence: 3
+        detection: 4
+        rpn: 120
+        category: "密封"
+        symptoms: ["DOP/PAO测试泄漏", "粒子计数超标", "下游粒子突增"]
+        causes: ["密封胶老化", "框架变形", "安装不当", "运输损坏"]
+        immediate_actions: ["标记泄漏点", "评估洁净度影响"]
+        maintenance_actions: ["重新密封或更换HEPA"]
+        prevention: ["每年DOP/PAO检漏", "安装后即测", "运输保护"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "洁净度失控"
+
+      - failure_id: "HEP-BLK-001"
+        failure_mode: "终阻力过高(堵塞)"
+        severity: 6
+        occurrence: 5
+        detection: 2
+        rpn: 60
+        category: "过滤"
+        symptoms: ["压差>初阻力×2(或>450Pa)", "风量下降", "风机电流增大"]
+        causes: ["超期使用", "预过滤失效", "环境污染"]
+        immediate_actions: ["准备更换"]
+        maintenance_actions: ["更换HEPA(整套)"]
+        prevention: ["压差监测报警", "按周期更换", "加强预过滤"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "送风量不足"
+
+      - failure_id: "HEP-DMG-001"
+        failure_mode: "滤材破损"
+        severity: 10
+        occurrence: 2
+        detection: 4
+        rpn: 80
+        category: "滤材"
+        symptoms: ["DOP测试大面积泄漏", "粒子计数急剧升高"]
+        causes: ["外力撞击", "压差过大撕裂", "受潮后强度下降"]
+        immediate_actions: ["立即更换", "停止受影响区域手术"]
+        maintenance_actions: ["更换HEPA"]
+        prevention: ["避免在HEPA面操作", "压差保护", "防潮"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "洁净度完全失效"
+
+      - failure_id: "HEP-FRM-001"
+        failure_mode: "安装框架腐蚀/变形"
+        severity: 7
+        occurrence: 2
+        detection: 5
+        rpn: 70
+        category: "框架"
+        symptoms: ["密封面不平整", "更换HEPA后仍泄漏", "框架锈蚀"]
+        causes: ["潮湿环境腐蚀", "材质不耐腐蚀", "安装应力"]
+        immediate_actions: ["评估框架状态"]
+        maintenance_actions: ["修复或更换框架"]
+        prevention: ["不锈钢框架", "防腐处理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "HEPA无法有效密封"
+
+  # =========================================================================
+  # BAS 楼宇自控系统
+  # =========================================================================
+  - equipment_type: "楼宇自控系统(BAS/BMS)"
+    manufacturer_examples: ["江森 Metasys", "霍尼韦尔 Niagara", "西门子 Desigo"]
+    specifications:
+      protocol: "BACnet/IP, Modbus"
+      controllers: "DDC控制器"
+      workstation: "中央监控站"
+    failure_modes:
+      - failure_id: "BAS-SVR-001"
+        failure_mode: "中央服务器宕机"
+        severity: 7
+        occurrence: 2
+        detection: 1
+        rpn: 14
+        category: "服务器"
+        symptoms: ["工作站无法访问", "历史数据停止记录", "报警系统中断"]
+        causes: ["硬件故障", "操作系统崩溃", "UPS电池耗尽", "病毒/恶意软件"]
+        immediate_actions: ["重启服务器", "DDC独立运行"]
+        maintenance_actions: ["修复/更换硬件", "恢复系统", "数据恢复"]
+        prevention: ["UPS保护", "冗余服务器", "定期备份", "安全加固"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "失去集中监控,DDC独立运行"
+
+      - failure_id: "BAS-DDC-001"
+        failure_mode: "DDC控制器死机"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "控制器"
+        symptoms: ["控制器无响应", "受控设备失控", "通信中断"]
+        causes: ["固件Bug", "内存溢出", "电源波动", "雷击"]
+        immediate_actions: ["复位控制器", "手动控制设备"]
+        maintenance_actions: ["升级固件", "更换控制器"]
+        prevention: ["看门狗定时器", "UPS保护", "防雷"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "局部区域失去自控"
+
+      - failure_id: "BAS-NET-001"
+        failure_mode: "通信网络中断"
+        severity: 6
+        occurrence: 4
+        detection: 2
+        rpn: 48
+        category: "网络"
+        symptoms: ["部分DDC离线", "数据丢失", "报警延迟"]
+        causes: ["交换机故障", "线缆损坏", "IP冲突", "网络风暴"]
+        immediate_actions: ["定位故障点", "检查交换机"]
+        maintenance_actions: ["修复线缆", "更换交换机", "网络调试"]
+        prevention: ["网络冗余(环网)", "网络监控", "定期检查"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "部分区域监控中断"
+
+      - failure_id: "BAS-SEN-001"
+        failure_mode: "现场传感器批量漂移"
+        severity: 5
+        occurrence: 5
+        detection: 4
+        rpn: 100
+        category: "传感器"
+        symptoms: ["多个区域参数偏差", "控制效果差", "能耗异常"]
+        causes: ["传感器老化", "校准周期过期", "同批次质量问题"]
+        immediate_actions: ["交叉比对验证"]
+        maintenance_actions: ["批量校准或更换"]
+        prevention: ["每年校准", "冗余传感器", "趋势分析"]
+        typical_repair_time: "1-2天(批量校准)"
+        impact_scope: "多区域控制精度下降"
+
+      - failure_id: "BAS-INT-001"
+        failure_mode: "第三方系统集成故障"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "集成"
+        symptoms: ["消防/电梯/医气等系统数据中断", "联动失效"]
+        causes: ["协议不兼容", "网关故障", "接口变更", "授权过期"]
+        immediate_actions: ["检查网关状态", "独立系统运行"]
+        maintenance_actions: ["修复集成接口", "更换网关"]
+        prevention: ["标准协议(BACnet)", "接口测试", "维保合同"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "跨系统联动失效"
+
+      - failure_id: "BAS-DB-001"
+        failure_mode: "历史数据库损坏/满"
+        severity: 5
+        occurrence: 3
+        detection: 2
+        rpn: 30
+        category: "数据"
+        symptoms: ["趋势数据缺失", "报表无法生成", "系统变慢"]
+        causes: ["磁盘空间满", "数据库损坏", "备份失败"]
+        immediate_actions: ["清理旧数据", "扩展存储"]
+        maintenance_actions: ["修复数据库", "数据迁移"]
+        prevention: ["自动归档策略", "磁盘空间监控", "定期备份"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "历史数据分析中断"
+
+  # =========================================================================
+  # 电梯 (Elevator)
+  # =========================================================================
+  - equipment_type: "病床电梯"
+    manufacturer_examples: ["通力 KONE", "奥的斯 OTIS", "三菱 Mitsubishi"]
+    specifications:
+      load: "1600-2500 kg"
+      speed: "1.0-2.5 m/s"
+      standard: "GB7588-2020"
+    failure_modes:
+      - failure_id: "ELV-DOR-001"
+        failure_mode: "门系统故障"
+        severity: 6
+        occurrence: 6
+        detection: 1
+        rpn: 36
+        category: "门系统"
+        symptoms: ["门无法开/关", "门反复开关", "异响"]
+        causes: ["门机老化", "光幕/安全触板故障", "门挂轮磨损", "异物卡住"]
+        immediate_actions: ["手动开门", "停梯检修"]
+        maintenance_actions: ["更换门机", "调整门间隙", "更换安全装置"]
+        prevention: ["每月门系统检查", "光幕定期测试"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "电梯停用,影响患者转运"
+
+      - failure_id: "ELV-TRC-001"
+        failure_mode: "曳引机故障"
+        severity: 8
+        occurrence: 2
+        detection: 3
+        rpn: 48
+        category: "驱动系统"
+        symptoms: ["异常噪音/振动", "温度过高", "无法运行"]
+        causes: ["轴承磨损", "制动器故障", "油脂变质"]
+        immediate_actions: ["停梯", "救援被困人员"]
+        maintenance_actions: ["更换轴承", "修复制动器"]
+        prevention: ["每半年检查", "振动监测", "定期润滑"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "电梯停用"
+
+      - failure_id: "ELV-CTL-001"
+        failure_mode: "控制系统故障"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "控制系统"
+        symptoms: ["楼层显示错误", "不平层", "急停", "通信故障"]
+        causes: ["主板故障", "编码器失灵", "电磁干扰", "软件Bug"]
+        immediate_actions: ["复位系统", "手动模式"]
+        maintenance_actions: ["更换主板/编码器", "升级软件"]
+        prevention: ["防雷保护", "定期备份参数"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "电梯停用"
+
+      - failure_id: "ELV-SAF-001"
+        failure_mode: "安全回路故障(非计划停梯)"
+        severity: 7
+        occurrence: 4
+        detection: 1
+        rpn: 28
+        category: "安全系统"
+        symptoms: ["电梯突然停止", "安全回路断开指示"]
+        causes: ["限位开关误动", "安全触板故障", "线路虚接", "缓冲器复位不良"]
+        immediate_actions: ["检查安全回路", "复位"]
+        maintenance_actions: ["修复故障点"]
+        prevention: ["每月安全回路检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "电梯非计划停机"
+
+  # =========================================================================
+  # 医用气体 — 笑气/AGSS (N2O / Anesthetic Gas Scavenging)
+  # =========================================================================
+  - equipment_type: "笑气/废气排放系统"
+    manufacturer_examples: ["Beacon Medaes", "Atlas Copco Medical", "Dräger"]
+    specifications:
+      gas_type: "N2O / 废麻醉气体"
+      standard: "WS 435-2013, NFPA 99"
+    failure_modes:
+      - failure_id: "N2O-MAN-001"
+        failure_mode: "N2O汇流排切换故障"
+        severity: 8
+        occurrence: 3
+        detection: 3
+        rpn: 72
+        category: "气源"
+        symptoms: ["无法自动切换", "压力波动", "供气中断"]
+        causes: ["切换阀卡死", "传感器故障", "控制器失灵"]
+        immediate_actions: ["手动切换", "检查气瓶"]
+        maintenance_actions: ["修复切换阀", "更换传感器"]
+        prevention: ["每月切换测试", "定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "N2O供气中断"
+
+      - failure_id: "N2O-SCV-001"
+        failure_mode: "废气排放系统故障"
+        severity: 9
+        occurrence: 3
+        detection: 3
+        rpn: 81
+        category: "排放系统"
+        symptoms: ["手术室N2O浓度超标(>25ppm)", "麻醉科人员头痛/恶心"]
+        causes: ["排气泵故障", "管路泄漏", "接口松动", "风量不足"]
+        immediate_actions: ["通风换气", "检查排气泵", "暂停N2O使用"]
+        maintenance_actions: ["修复排气泵", "密封检查"]
+        prevention: ["N2O浓度监测", "排气泵定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "职业暴露风险"
+
+      - failure_id: "N2O-ALM-001"
+        failure_mode: "医气报警面板故障"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "报警系统"
+        symptoms: ["面板无显示", "声光报警不工作", "假报警"]
+        causes: ["电源故障", "传感器老化", "控制板故障"]
+        immediate_actions: ["人工巡检替代"]
+        maintenance_actions: ["修复/更换面板"]
+        prevention: ["每月报警测试", "双路供电"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "气体报警盲区"
+
+      - failure_id: "N2O-REG-001"
+        failure_mode: "终端减压阀压力偏差"
+        severity: 7
+        occurrence: 3
+        detection: 3
+        rpn: 63
+        category: "调压"
+        symptoms: ["终端压力不在0.35-0.45MPa", "麻醉机报警"]
+        causes: ["膜片老化", "弹簧疲劳", "杂质卡住"]
+        immediate_actions: ["使用备用终端"]
+        maintenance_actions: ["更换减压阀"]
+        prevention: ["每年压力校验"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "单终端不可用"
+
+  # =========================================================================
+  # 给排水 — 污水泵/排水泵 (Sewage Pump)
+  # =========================================================================
+  - equipment_type: "污水提升泵"
+    manufacturer_examples: ["格兰富 SEG", "威乐 RexaLift", "飞力 Flygt"]
+    specifications:
+      type: "潜水式/干式"
+      flow: "5-100 m3/h"
+      head: "5-30 m"
+    failure_modes:
+      - failure_id: "SWP-BLK-001"
+        failure_mode: "叶轮堵塞"
+        severity: 7
+        occurrence: 6
+        detection: 2
+        rpn: 84
+        category: "水力"
+        symptoms: ["流量急剧下降", "电流增大", "溢水报警"]
+        causes: ["织物/纤维缠绕", "固体物堵塞", "格栅失效"]
+        immediate_actions: ["切换备用泵", "检查格栅"]
+        maintenance_actions: ["清除堵塞物", "检查叶轮"]
+        prevention: ["进水格栅", "切割型叶轮", "定期清理"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "污水溢出风险"
+
+      - failure_id: "SWP-SEL-001"
+        failure_mode: "密封进水(潜水泵)"
+        severity: 8
+        occurrence: 3
+        detection: 4
+        rpn: 96
+        category: "密封"
+        symptoms: ["绝缘电阻下降", "电机异响", "跳闸"]
+        causes: ["机械密封老化", "电缆入口密封失效", "腐蚀"]
+        immediate_actions: ["停泵", "绝缘测试"]
+        maintenance_actions: ["更换密封", "电机烘干"]
+        prevention: ["每季度绝缘测试", "泄漏检测传感器"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "泵烧毁风险"
+
+      - failure_id: "SWP-LVL-001"
+        failure_mode: "液位开关故障"
+        severity: 6
+        occurrence: 4
+        detection: 2
+        rpn: 48
+        category: "控制"
+        symptoms: ["泵不启动(液位高)", "泵不停(液位低)", "频繁启停"]
+        causes: ["浮球卡死", "线缆缠绕", "油脂堵塞"]
+        immediate_actions: ["手动控制泵"]
+        maintenance_actions: ["更换液位开关"]
+        prevention: ["超声波液位计替代", "定期检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "污水溢出或泵干转"
+
+      - failure_id: "SWP-COR-001"
+        failure_mode: "泵体腐蚀"
+        severity: 6
+        occurrence: 3
+        detection: 4
+        rpn: 72
+        category: "材质"
+        symptoms: ["壁厚减薄", "渗漏", "效率下降"]
+        causes: ["污水化学腐蚀", "pH偏低", "材质选型不当"]
+        immediate_actions: ["监控泄漏"]
+        maintenance_actions: ["更换泵"]
+        prevention: ["选用不锈钢/耐腐材质", "水质监测"]
+        typical_repair_time: "4-8小时(更换)"
+        impact_scope: "泵使用寿命缩短"
+
+  # =========================================================================
+  # 给排水 — 热水系统 (Domestic Hot Water)
+  # =========================================================================
+  - equipment_type: "生活热水系统"
+    manufacturer_examples: ["史密斯 AO Smith", "海林 Hailin", "力诺瑞特"]
+    specifications:
+      type: "容积式/即热式/太阳能+辅助"
+      temperature: "55-60°C(供) / ≥50°C(回)"
+    failure_modes:
+      - failure_id: "DHW-LEG-001"
+        failure_mode: "军团菌风险(水温不足)"
+        severity: 10
+        occurrence: 4
+        detection: 4
+        rpn: 160
+        category: "水质安全"
+        symptoms: ["回水温度<50°C", "死水端温度<45°C", "军团菌检测阳性"]
+        causes: ["循环不畅", "死水端", "设定温度不足", "混水阀故障"]
+        immediate_actions: ["提高水温至70°C冲洗", "采样送检"]
+        maintenance_actions: ["消除死水端", "修复循环泵", "调整温度"]
+        prevention: ["回水温度≥50°C", "定期军团菌检测", "消除死水端"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "院内感染重大风险"
+
+      - failure_id: "DHW-SCL-001"
+        failure_mode: "水箱/管路结垢"
+        severity: 5
+        occurrence: 5
+        detection: 4
+        rpn: 100
+        category: "水质"
+        symptoms: ["出水量减小", "加热时间延长", "水温不稳"]
+        causes: ["水质硬度高", "温度过高加速结垢", "长期未清洗"]
+        immediate_actions: ["检查水质"]
+        maintenance_actions: ["水箱清洗", "管路冲洗"]
+        prevention: ["软化水处理", "每年清洗水箱"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "热水供应不足"
+
+      - failure_id: "DHW-MXV-001"
+        failure_mode: "恒温混水阀故障"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "安全"
+        symptoms: ["出水温度过高(>55°C烫伤)", "温度波动大", "无法调温"]
+        causes: ["阀芯卡死", "感温元件失效", "结垢"]
+        immediate_actions: ["关闭热水", "警示标志"]
+        maintenance_actions: ["更换混水阀"]
+        prevention: ["每年检查/更换", "防烫伤保护"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "患者烫伤风险"
+
+      - failure_id: "DHW-CIR-001"
+        failure_mode: "热水循环泵故障"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "循环系统"
+        symptoms: ["远端出热水慢", "回水温度降低", "军团菌风险增加"]
+        causes: ["泵老化", "叶轮结垢", "电气故障"]
+        immediate_actions: ["切换备用泵"]
+        maintenance_actions: ["更换泵"]
+        prevention: ["定期检查", "备用泵"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "远端热水等待时间长"
+
+  # =========================================================================
+  # 螺杆式冷水机组 (补充冷机子类型)
+  # =========================================================================
+  - equipment_type: "螺杆式冷水机组"
+    manufacturer_examples: ["约克 YMC2", "特灵 RTAE", "麦克维尔 WCC"]
+    specifications:
+      cooling_capacity: "100-500 RT"
+      refrigerant: "R134a, R410A"
+      cop_range: "5.5-6.5"
+    failure_modes:
+      - failure_id: "SCR-CMP-001"
+        failure_mode: "螺杆磨损(间隙增大)"
+        severity: 8
+        occurrence: 3
+        detection: 4
+        rpn: 96
+        category: "压缩机"
+        symptoms: ["COP下降", "排气温度升高", "制冷量不足", "噪音增大"]
+        causes: ["润滑油不良", "异物进入", "运行时间过长", "液击"]
+        immediate_actions: ["检查排气温度", "检查油品"]
+        maintenance_actions: ["返厂大修(螺杆研磨)", "更换轴承"]
+        prevention: ["油液分析(每季度)", "避免液击", "及时大修"]
+        typical_repair_time: "1-2周(返厂)"
+        impact_scope: "单台冷机效率大幅下降"
+
+      - failure_id: "SCR-OIL-001"
+        failure_mode: "油分离器效率下降"
+        severity: 6
+        occurrence: 4
+        detection: 4
+        rpn: 96
+        category: "润滑系统"
+        symptoms: ["蒸发器油膜增厚", "换热效率降低", "回油量增加"]
+        causes: ["油分离器滤芯堵塞", "回油管路不畅", "油品乳化"]
+        immediate_actions: ["检查油位"]
+        maintenance_actions: ["更换油分离器滤芯", "清洗回油管路"]
+        prevention: ["每年更换油分离芯", "油液检测"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "换热效率下降10-20%"
+
+      - failure_id: "SCR-UNL-001"
+        failure_mode: "卸载机构故障"
+        severity: 6
+        occurrence: 3
+        detection: 3
+        rpn: 54
+        category: "容量控制"
+        symptoms: ["无法卸载", "启动电流过大", "只能满载运行"]
+        causes: ["滑阀卡死", "液压系统泄漏", "控制信号丢失"]
+        immediate_actions: ["降频运行(变频型)"]
+        maintenance_actions: ["修复滑阀/液压系统"]
+        prevention: ["定期卸载测试"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "无法部分负荷运行"
+
+      - failure_id: "SCR-VIB-001"
+        failure_mode: "异常振动"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "机械"
+        symptoms: ["振动值超标(>7.1mm/s)", "管路连接松动", "基础螺栓松动"]
+        causes: ["螺杆磨损不均", "轴承损坏初期", "管路共振", "基础问题"]
+        immediate_actions: ["增加监测频率"]
+        maintenance_actions: ["检查轴承", "紧固基础", "管路减振"]
+        prevention: ["在线振动监测", "每季度频谱分析"]
+        typical_repair_time: "4-24小时"
+        impact_scope: "设备加速损坏"
+
+  # =========================================================================
+  # 吸收式冷水机组 (补充冷机子类型)
+  # =========================================================================
+  - equipment_type: "溴化锂吸收式冷水机组"
+    manufacturer_examples: ["远大 BROAD", "双良 Shuangliang", "LG"]
+    specifications:
+      cooling_capacity: "200-5000 kW"
+      heat_source: "蒸汽/热水/直燃"
+      cop_range: "1.0-1.5(单效) / 1.2-1.8(双效)"
+    failure_modes:
+      - failure_id: "ABS-CRY-001"
+        failure_mode: "溶液结晶"
+        severity: 9
+        occurrence: 3
+        detection: 3
+        rpn: 81
+        category: "溶液系统"
+        symptoms: ["溶液泵电流异常", "冷量急剧下降", "管路堵塞", "机组停机"]
+        causes: ["冷却水温过低", "溶液浓度过高", "停机时未稀释", "真空度不足"]
+        immediate_actions: ["加热稀释(缓慢)", "不要强制启动"]
+        maintenance_actions: ["溶液循环加热稀释", "检查/调整浓度"]
+        prevention: ["冷却水温控制(≥25°C)", "停机稀释程序", "浓度监测"]
+        typical_repair_time: "8-24小时(缓慢稀释)"
+        impact_scope: "机组长时间停机"
+
+      - failure_id: "ABS-COR-001"
+        failure_mode: "铜管腐蚀穿孔"
+        severity: 8
+        occurrence: 3
+        detection: 5
+        rpn: 120
+        category: "换热管"
+        symptoms: ["真空度下降(不凝气增加)", "制冷效果下降", "冷冻水含锂"]
+        causes: ["溶液含氧", "缓蚀剂不足", "水质差", "焊接不良"]
+        immediate_actions: ["检查真空度", "水质取样"]
+        maintenance_actions: ["堵管/换管", "补充缓蚀剂", "抽真空"]
+        prevention: ["缓蚀剂管理", "每年真空度检查", "水质管理"]
+        typical_repair_time: "1-3天"
+        impact_scope: "机组效率下降/停机"
+
+      - failure_id: "ABS-VAC-001"
+        failure_mode: "真空度不足"
+        severity: 7
+        occurrence: 4
+        detection: 3
+        rpn: 84
+        category: "真空系统"
+        symptoms: ["蒸发温度升高", "COP下降", "冷量不足"]
+        causes: ["不凝气积聚", "密封泄漏", "抽气装置故障"]
+        immediate_actions: ["启动抽气泵"]
+        maintenance_actions: ["查漏修复", "抽真空"]
+        prevention: ["定期抽气", "每月真空度记录"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "制冷能力下降"
+
+      - failure_id: "ABS-PMP-001"
+        failure_mode: "溶液泵故障"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "泵系统"
+        symptoms: ["溶液循环中断", "机组停机", "泵异响"]
+        causes: ["密封泄漏(溴化锂腐蚀)", "轴承磨损", "叶轮结晶"]
+        immediate_actions: ["停机", "备用泵切换(如有)"]
+        maintenance_actions: ["更换密封/轴承", "清除结晶"]
+        prevention: ["定期检查密封", "轴承润滑"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "机组停机"
+
+  # =========================================================================
+  # 补充: 医疗气体区域阀箱 (Zone Valve Box)
+  # =========================================================================
+  - equipment_type: "医用气体区域阀箱(ZVB)"
+    manufacturer_examples: ["Beacon Medaes", "Amico", "Patton's Medical"]
+    specifications:
+      gases: "O2/VAC/CAIR/N2O"
+      standard: "WS 435-2013, ISO 7396"
+    failure_modes:
+      - failure_id: "ZVB-VLV-001"
+        failure_mode: "区域截止阀泄漏"
+        severity: 7
+        occurrence: 3
+        detection: 3
+        rpn: 63
+        category: "阀门"
+        symptoms: ["关阀后下游仍有压力", "听到气体泄漏声", "压力缓慢下降"]
+        causes: ["阀座磨损", "密封老化", "异物卡住", "操作不当"]
+        immediate_actions: ["关闭上级阀门", "通知相关区域"]
+        maintenance_actions: ["更换阀门密封", "清洁阀座"]
+        prevention: ["每年阀门操作测试", "检查密封状态"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "区域气体无法隔离"
+
+      - failure_id: "ZVB-PRG-001"
+        failure_mode: "压力表失灵"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "监测"
+        symptoms: ["读数不准", "指针不动", "与系统压力不符"]
+        causes: ["表头老化", "齿轮磨损", "受冲击损坏"]
+        immediate_actions: ["对比其他压力计"]
+        maintenance_actions: ["更换压力表"]
+        prevention: ["每年校验", "缓冲管保护"]
+        typical_repair_time: "0.5小时"
+        impact_scope: "压力监测不准"
+
+      - failure_id: "ZVB-ALM-001"
+        failure_mode: "区域报警不响"
+        severity: 8
+        occurrence: 3
+        detection: 3
+        rpn: 72
+        category: "报警"
+        symptoms: ["压力异常时无报警", "声光报警器不工作"]
+        causes: ["传感器故障", "线路断裂", "报警器损坏"]
+        immediate_actions: ["加强人工巡检"]
+        maintenance_actions: ["修复报警回路"]
+        prevention: ["每月报警测试"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "气体异常无法及时发现"
+
+  # =========================================================================
+  # 补充: 医疗空间环境监测 (Cleanroom Monitoring)
+  # =========================================================================
+  - equipment_type: "洁净室环境监测系统"
+    manufacturer_examples: ["TSI", "Particle Measuring Systems", "Lighthouse"]
+    specifications:
+      monitoring: "粒子/温湿度/压差/微生物"
+      standard: "GB50333-2013, ISO 14644"
+    failure_modes:
+      - failure_id: "CRM-PRT-001"
+        failure_mode: "粒子计数器校准失效"
+        severity: 8
+        occurrence: 3
+        detection: 4
+        rpn: 96
+        category: "粒子监测"
+        symptoms: ["读数与便携仪器偏差>30%", "零计数异常", "数据跳变"]
+        causes: ["激光光源衰减", "采样流量偏差", "光学系统污染"]
+        immediate_actions: ["便携仪器交叉验证"]
+        maintenance_actions: ["返厂校准", "清洁光学系统"]
+        prevention: ["每年校准(NIST溯源)", "每月零计数测试"]
+        typical_repair_time: "1-2周(送校)"
+        impact_scope: "洁净度监测数据不可靠"
+
+      - failure_id: "CRM-THP-001"
+        failure_mode: "温湿度传感器漂移"
+        severity: 5
+        occurrence: 5
+        detection: 3
+        rpn: 75
+        category: "温湿度"
+        symptoms: ["与手持仪表偏差>1°C/5%RH", "控制系统补偿过度"]
+        causes: ["传感器老化", "湿度传感器受污", "线缆接触不良"]
+        immediate_actions: ["手动交叉验证"]
+        maintenance_actions: ["校准/更换传感器"]
+        prevention: ["每半年校准", "冗余传感器"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "温湿度控制精度下降"
+
+      - failure_id: "CRM-DAS-001"
+        failure_mode: "数据采集系统中断"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "数据系统"
+        symptoms: ["监测画面空白", "历史数据缺失", "报警延迟"]
+        causes: ["服务器故障", "网络中断", "软件错误", "存储满"]
+        immediate_actions: ["重启系统", "手动记录"]
+        maintenance_actions: ["修复服务器", "数据恢复"]
+        prevention: ["冗余服务器", "自动备份", "容量监控"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "监测记录中断,合规风险"
+
+  # =========================================================================
+  # 补充: 手术室专用设备 (OR-specific)
+  # =========================================================================
+  - equipment_type: "手术室层流送风天花"
+    manufacturer_examples: ["Weiss Technik", "M+W Group", "Toul"]
+    specifications:
+      type: "全室/局部层流"
+      velocity: "0.2-0.45 m/s"
+      area: "3×3m / 2.4×2.4m"
+    failure_modes:
+      - failure_id: "LAF-VEL-001"
+        failure_mode: "送风速度不均匀"
+        severity: 8
+        occurrence: 3
+        detection: 4
+        rpn: 96
+        category: "气流"
+        symptoms: ["速度均匀度>20%偏差", "局部涡流", "粒子局部超标"]
+        causes: ["HEPA不均匀堵塞", "送风面板变形", "回风格栅堵塞"]
+        immediate_actions: ["气流可视化检查"]
+        maintenance_actions: ["更换HEPA", "调整面板", "清洁回风口"]
+        prevention: ["每年气流可视化测试", "HEPA定期检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "手术区域洁净度不保证"
+
+      - failure_id: "LAF-LED-001"
+        failure_mode: "手术照明集成故障"
+        severity: 5
+        occurrence: 3
+        detection: 1
+        rpn: 15
+        category: "照明"
+        symptoms: ["部分LED灯不亮", "色温异常", "亮度降低"]
+        causes: ["LED驱动器故障", "LED芯片衰减", "散热不良"]
+        immediate_actions: ["启用备用照明"]
+        maintenance_actions: ["更换LED模块"]
+        prevention: ["运行时数监控", "散热检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "手术照明受影响"
+
+      - failure_id: "LAF-SUS-001"
+        failure_mode: "天花悬挂系统异常"
+        severity: 9
+        occurrence: 1
+        detection: 4
+        rpn: 36
+        category: "结构安全"
+        symptoms: ["天花轻微倾斜", "螺栓松动", "异响"]
+        causes: ["安装不当", "螺栓松动", "结构疲劳", "超重改装"]
+        immediate_actions: ["停用手术室", "安全评估"]
+        maintenance_actions: ["紧固/加固悬挂"]
+        prevention: ["每年结构检查", "载荷限制"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "安全隐患"
+
+  # =========================================================================
+  # 补充: 医用气体终端 (Medical Gas Outlets)
+  # =========================================================================
+  - equipment_type: "医用气体终端(墙壁式/吊塔式)"
+    manufacturer_examples: ["Beacon Medaes", "Amico", "Dräger"]
+    specifications:
+      standard: "ISO 9170-1, WS 435-2013"
+      types: "DISS/Ohmeda/Chemetron"
+    failure_modes:
+      - failure_id: "MGO-LKG-001"
+        failure_mode: "终端接头泄漏"
+        severity: 7
+        occurrence: 4
+        detection: 3
+        rpn: 84
+        category: "密封"
+        symptoms: ["嘶嘶漏气声", "流量表示正常但设备端压力不足", "O2浓度报警"]
+        causes: ["O型圈老化", "接头磨损", "操作不当", "反复插拔"]
+        immediate_actions: ["更换至相邻终端", "标记故障终端"]
+        maintenance_actions: ["更换O型圈/阀芯"]
+        prevention: ["定期检查终端", "培训操作规范"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "单个终端不可用"
+
+      - failure_id: "MGO-BLK-001"
+        failure_mode: "终端阀芯堵塞/卡死"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "阀门"
+        symptoms: ["无法插入快插头", "插入后无气体流出", "流量异常小"]
+        causes: ["异物进入", "阀芯腐蚀", "弹簧断裂"]
+        immediate_actions: ["使用相邻终端"]
+        maintenance_actions: ["更换阀芯组件"]
+        prevention: ["防尘帽保护", "定期功能测试"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "单个终端不可用"
+
+      - failure_id: "MGO-MIS-001"
+        failure_mode: "气体终端错接(交叉连接)"
+        severity: 10
+        occurrence: 1
+        detection: 3
+        rpn: 30
+        category: "安全"
+        symptoms: ["患者SpO2异常", "气体分析仪读数异常", "色标/标识不符"]
+        causes: ["施工接错", "维修后未验证", "标识脱落"]
+        immediate_actions: ["立即断开", "患者急救", "气体采样验证"]
+        maintenance_actions: ["纠正管路连接", "全系统气体验证"]
+        prevention: ["竣工气体验证(每个终端)", "DISS防错接头", "色标管理"]
+        typical_repair_time: "4-24小时(需全面验证)"
+        impact_scope: "患者生命安全(致命风险)"
+
+  # =========================================================================
+  # 补充: 手术室吊塔/设备柱 (Pendant / Equipment Column)
+  # =========================================================================
+  - equipment_type: "手术室吊塔/设备柱"
+    manufacturer_examples: ["德尔格 Dräger", "迈柯唯 Maquet", "创生 MINDRAY"]
+    specifications:
+      type: "干湿分离/双臂/单臂"
+      load: "200-500 kg"
+    failure_modes:
+      - failure_id: "PND-ARM-001"
+        failure_mode: "旋转臂锁定失效"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "机械"
+        symptoms: ["吊塔臂不能锁定位置", "自行旋转/下滑", "操作手柄松动"]
+        causes: ["气弹簧老化", "锁定机构磨损", "液压泄漏"]
+        immediate_actions: ["手动固定", "停用该臂"]
+        maintenance_actions: ["更换气弹簧/液压缸"]
+        prevention: ["每半年检查锁定力", "定期润滑"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "手术操作不便,设备安全"
+
+      - failure_id: "PND-GAS-001"
+        failure_mode: "吊塔内医气管路泄漏"
+        severity: 8
+        occurrence: 2
+        detection: 4
+        rpn: 64
+        category: "医气"
+        symptoms: ["终端压力不足", "吊塔内部嘶嘶声", "旋转关节处漏气"]
+        causes: ["旋转关节密封老化", "管路疲劳(反复旋转)", "安装不当"]
+        immediate_actions: ["使用墙壁终端替代"]
+        maintenance_actions: ["更换旋转关节密封", "管路试压"]
+        prevention: ["每年旋转关节检查", "限制旋转角度"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "吊塔气体终端不可用"
+
+      - failure_id: "PND-ELC-001"
+        failure_mode: "吊塔电气连接故障"
+        severity: 6
+        occurrence: 3
+        detection: 2
+        rpn: 36
+        category: "电气"
+        symptoms: ["部分插座无电", "接地故障报警", "间歇断电"]
+        causes: ["旋转滑环磨损", "线缆疲劳断裂", "接线松动"]
+        immediate_actions: ["使用备用插座"]
+        maintenance_actions: ["更换滑环/线缆"]
+        prevention: ["每年电气安全检测", "接地连续性测试"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "手术设备供电中断"
+
+  # =========================================================================
+  # 补充: 蒸汽系统 (Steam for Sterilization)
+  # =========================================================================
+  - equipment_type: "蒸汽发生器(消毒供应)"
+    manufacturer_examples: ["Getinge", "Steris", "克兰兹 Clayton"]
+    specifications:
+      type: "电加热/燃气"
+      pressure: "0.3-0.7 MPa"
+      application: "灭菌器/加湿"
+    failure_modes:
+      - failure_id: "STM-BLR-001"
+        failure_mode: "蒸汽发生器无法产汽"
+        severity: 7
+        occurrence: 3
+        detection: 1
+        rpn: 21
+        category: "产汽系统"
+        symptoms: ["无蒸汽输出", "加热元件不工作", "压力不升"]
+        causes: ["加热管烧毁", "控制器故障", "水位保护动作", "电源故障"]
+        immediate_actions: ["切换备用机组"]
+        maintenance_actions: ["更换加热管", "检修控制器"]
+        prevention: ["每月检查加热元件", "水质管理"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "CSSD消毒中断"
+
+      - failure_id: "STM-WTR-001"
+        failure_mode: "给水系统故障"
+        severity: 6
+        occurrence: 4
+        detection: 2
+        rpn: 48
+        category: "给水"
+        symptoms: ["低水位报警", "频繁补水", "水质不合格"]
+        causes: ["水泵故障", "浮球阀卡死", "软化水设备失效"]
+        immediate_actions: ["手动补水"]
+        maintenance_actions: ["修复水泵/阀门", "更换软水树脂"]
+        prevention: ["定期检查水位", "水质监测"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "蒸汽发生器停机保护"
+
+      - failure_id: "STM-TRP-001"
+        failure_mode: "疏水阀失效"
+        severity: 4
+        occurrence: 5
+        detection: 4
+        rpn: 80
+        category: "蒸汽系统"
+        symptoms: ["蒸汽泄漏(直通)", "凝结水排不出(堵塞)", "换热效率下降"]
+        causes: ["阀芯磨损", "水垢堵塞", "弹簧疲劳"]
+        immediate_actions: ["旁路阀切换"]
+        maintenance_actions: ["更换疏水阀"]
+        prevention: ["每年疏水阀检测(超声波)", "水质管理"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "蒸汽能效损失/换热不良"
+
+  # =========================================================================
+  # 补充: 智能照明 / 应急照明 (Lighting)
+  # =========================================================================
+  - equipment_type: "医疗照明/应急照明系统"
+    manufacturer_examples: ["飞利浦 Philips", "欧司朗 OSRAM", "三雄极光"]
+    specifications:
+      or_illumination: "≥10000 lux(手术灯)"
+      general: "≥300 lux(病房) / ≥500 lux(诊室)"
+      emergency: "≥1 lux(疏散) / ≥50 lux(医疗)"
+    failure_modes:
+      - failure_id: "LTG-EMG-001"
+        failure_mode: "应急照明蓄电池失效"
+        severity: 8
+        occurrence: 5
+        detection: 3
+        rpn: 120
+        category: "应急照明"
+        symptoms: ["市电断后应急灯不亮或<90min", "蓄电池鼓包/漏液"]
+        causes: ["电池老化(3-5年)", "充电电路故障", "高温环境"]
+        immediate_actions: ["更换电池"]
+        maintenance_actions: ["更换蓄电池组"]
+        prevention: ["每月放电测试", "每3年更换电池"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "疏散照明失效,生命安全"
+
+      - failure_id: "LTG-EMG-002"
+        failure_mode: "应急照明控制器故障"
+        severity: 7
+        occurrence: 2
+        detection: 2
+        rpn: 28
+        category: "控制"
+        symptoms: ["无法自动切换", "应急灯常亮不灭", "通信中断"]
+        causes: ["控制板老化", "电源模块故障", "线路短路"]
+        immediate_actions: ["手动控制"]
+        maintenance_actions: ["更换控制器"]
+        prevention: ["每月切换测试", "每年全面检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "应急照明不自动启动"
+
+      - failure_id: "LTG-ORL-001"
+        failure_mode: "手术无影灯故障"
+        severity: 7
+        occurrence: 3
+        detection: 1
+        rpn: 21
+        category: "手术照明"
+        symptoms: ["亮度不足", "色温偏差", "部分灯珠不亮", "旋臂定位不准"]
+        causes: ["LED模块衰减", "驱动电源故障", "散热不良", "机械磨损"]
+        immediate_actions: ["切换备用灯头"]
+        maintenance_actions: ["更换LED模块", "修复驱动电源"]
+        prevention: ["运行小时监控", "定期清洁散热"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "手术视野受影响"
+
+  # =========================================================================
+  # 补充: 防排烟系统
+  # =========================================================================
+  - equipment_type: "防排烟系统"
+    manufacturer_examples: ["格力", "美的", "依必安派特 ebm-papst"]
+    specifications:
+      exhaust_fan: "排烟风机(280°C/0.5h)"
+      damper: "排烟防火阀(280°C熔断)"
+      standard: "GB51251-2017"
+    failure_modes:
+      - failure_id: "SMK-FAN-001"
+        failure_mode: "排烟风机无法启动"
+        severity: 10
+        occurrence: 2
+        detection: 1
+        rpn: 20
+        category: "风机"
+        symptoms: ["消防联动后风机无动作", "手动启动无响应"]
+        causes: ["电气控制故障", "电机老化", "长期不运行锈蚀"]
+        immediate_actions: ["手动启动", "自然排烟补充"]
+        maintenance_actions: ["检修电气回路", "修复电机"]
+        prevention: ["每月联动测试", "每季度手动启动"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "排烟失效,火灾蔓延"
+
+      - failure_id: "SMK-DMP-001"
+        failure_mode: "排烟防火阀不动作"
+        severity: 10
+        occurrence: 2
+        detection: 3
+        rpn: 60
+        category: "阀门"
+        symptoms: ["火灾报警后阀门未开", "280°C未熔断关闭"]
+        causes: ["执行器故障", "熔断丝未更换", "机构卡死", "控制线断"]
+        immediate_actions: ["手动操作阀门"]
+        maintenance_actions: ["更换执行器/熔断丝"]
+        prevention: ["每半年阀门全行程测试", "检查熔断丝"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "烟气蔓延"
+
+      - failure_id: "SMK-PSR-001"
+        failure_mode: "正压送风系统故障"
+        severity: 9
+        occurrence: 2
+        detection: 2
+        rpn: 36
+        category: "正压送风"
+        symptoms: ["楼梯间无正压", "风口无风", "余压阀不开"]
+        causes: ["送风机故障", "风管断裂", "余压阀卡死", "控制回路故障"]
+        immediate_actions: ["手动开启送风机"]
+        maintenance_actions: ["检修风机/风管/余压阀"]
+        prevention: ["每月联动测试", "余压阀定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "疏散楼梯间充烟,影响逃生"
+
+  # =========================================================================
+  # 补充: 医疗冷链 (Pharmacy / Blood Bank)
+  # =========================================================================
+  - equipment_type: "医用冷链设备(药品/血液冰箱)"
+    manufacturer_examples: ["海尔医疗 Haier Biomedical", "赛默飞 Thermo Fisher", "三洋 Sanyo"]
+    specifications:
+      pharmacy: "2-8°C (药品)"
+      blood_bank: "1-6°C (血液) / -20~-40°C (血浆)"
+      standard: "GSP/GMP"
+    failure_modes:
+      - failure_id: "CCH-TMP-001"
+        failure_mode: "温度超标(失冷)"
+        severity: 10
+        occurrence: 3
+        detection: 2
+        rpn: 60
+        category: "制冷"
+        symptoms: ["温度报警", "温度>8°C(药品)或>6°C(血液)", "蒸发器结霜"]
+        causes: ["压缩机故障", "制冷剂泄漏", "冷凝器脏", "门密封不严", "断电"]
+        immediate_actions: ["转移药品/血液至备用冰箱", "检查冰箱状态"]
+        maintenance_actions: ["修复压缩机", "补充制冷剂", "更换门封条"]
+        prevention: ["温度连续监测+报警", "双机冗余", "UPS供电"]
+        typical_repair_time: "2-8小时"
+        impact_scope: "药品/血液报废,供应中断"
+
+      - failure_id: "CCH-ALM-001"
+        failure_mode: "温度报警系统失效"
+        severity: 9
+        occurrence: 2
+        detection: 4
+        rpn: 72
+        category: "监测"
+        symptoms: ["报警不响", "温度记录中断", "远程监控断线"]
+        causes: ["传感器故障", "通信模块损坏", "电池耗尽", "软件故障"]
+        immediate_actions: ["人工巡检加密"]
+        maintenance_actions: ["更换传感器/模块"]
+        prevention: ["每月报警测试", "双传感器冗余"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "温度异常无法及时发现"
+
+      - failure_id: "CCH-DOR-001"
+        failure_mode: "门频繁开关导致温度波动"
+        severity: 5
+        occurrence: 6
+        detection: 2
+        rpn: 60
+        category: "操作"
+        symptoms: ["温度频繁波动", "压缩机频繁启停", "结霜"]
+        causes: ["操作不规范", "门封条老化", "自闭器故障"]
+        immediate_actions: ["限制开门时间"]
+        maintenance_actions: ["更换门封条", "修复自闭器"]
+        prevention: ["操作培训", "安装门帘", "开门时间报警"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "能耗增加,温度不稳"
+
+  # =========================================================================
+  # 补充: 医用气体中央报警 (Medical Gas Alarm System)
+  # =========================================================================
+  - equipment_type: "医用气体中央报警系统"
+    manufacturer_examples: ["Beacon Medaes", "AmicoDERA", "Atlas Copco"]
+    specifications:
+      standard: "WS 435-2013, ISO 7396-1"
+      location: "24h有人值守站(护士站/值班室)"
+    failure_modes:
+      - failure_id: "MGA-PWR-001"
+        failure_mode: "报警面板断电"
+        severity: 9
+        occurrence: 2
+        detection: 1
+        rpn: 18
+        category: "电源"
+        symptoms: ["面板黑屏", "无声光报警"]
+        causes: ["电源回路跳闸", "UPS失效", "线路老化"]
+        immediate_actions: ["人工巡检所有气体压力"]
+        maintenance_actions: ["修复电源回路"]
+        prevention: ["双路供电", "UPS保护", "每月测试"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "气体异常无法报警"
+
+      - failure_id: "MGA-SEN-001"
+        failure_mode: "气体压力传感器漂移"
+        severity: 7
+        occurrence: 4
+        detection: 4
+        rpn: 112
+        category: "传感器"
+        symptoms: ["报警阈值不准", "假报警或漏报", "与现场表不一致"]
+        causes: ["传感器老化", "温漂", "震动损坏"]
+        immediate_actions: ["交叉验证现场压力表"]
+        maintenance_actions: ["校准/更换传感器"]
+        prevention: ["每半年校准", "冗余传感器"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "报警准确性下降"
+
+      - failure_id: "MGA-COM-001"
+        failure_mode: "报警信号传输中断"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "通信"
+        symptoms: ["中央面板无数据", "区域面板正常但中央无同步"]
+        causes: ["通信线缆损坏", "协议转换故障", "接口板老化"]
+        immediate_actions: ["启用区域面板本地报警"]
+        maintenance_actions: ["修复通信链路"]
+        prevention: ["冗余通信", "定期通信测试"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "集中监控失效"
+
+  # =========================================================================
+  # 补充: 医院污水处理 (Hospital Wastewater Treatment)
+  # =========================================================================
+  - equipment_type: "医院污水处理系统"
+    manufacturer_examples: ["威立雅 Veolia", "中持环保", "碧水源"]
+    specifications:
+      standard: "GB18466-2005 医疗机构水污染物排放标准"
+      process: "预处理+生化+消毒"
+    failure_modes:
+      - failure_id: "HWW-DIS-001"
+        failure_mode: "消毒系统失效"
+        severity: 10
+        occurrence: 3
+        detection: 3
+        rpn: 90
+        category: "消毒"
+        symptoms: ["出水余氯不达标", "粪大肠菌群超标", "消毒液储量不足"]
+        causes: ["加氯泵故障", "次氯酸钠过期", "接触时间不够", "水量突增"]
+        immediate_actions: ["手动投加消毒剂", "减少排放"]
+        maintenance_actions: ["修复加氯系统", "补充消毒液"]
+        prevention: ["在线余氯监测", "消毒液自动补充", "定期检测"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "污水超标排放,环境污染"
+
+      - failure_id: "HWW-BIO-001"
+        failure_mode: "生化系统崩溃"
+        severity: 8
+        occurrence: 2
+        detection: 4
+        rpn: 64
+        category: "生化处理"
+        symptoms: ["出水COD/BOD超标", "活性污泥颜色异常", "泡沫过多"]
+        causes: ["毒性物质冲击", "pH突变", "曝气不足", "污泥老化"]
+        immediate_actions: ["减少进水", "增加曝气", "投加应急菌种"]
+        maintenance_actions: ["接种活性污泥", "调整工艺参数"]
+        prevention: ["进水水质监测", "避免消毒液混入", "污泥龄管理"]
+        typical_repair_time: "3-14天(恢复生化)"
+        impact_scope: "出水不达标,需外运处理"
+
+      - failure_id: "HWW-SLG-001"
+        failure_mode: "污泥脱水系统故障"
+        severity: 5
+        occurrence: 4
+        detection: 2
+        rpn: 40
+        category: "污泥处理"
+        symptoms: ["脱水效果差", "滤布堵塞", "出泥含水率>80%"]
+        causes: ["滤布老化", "加药量不足", "泵故障"]
+        immediate_actions: ["增加加药量"]
+        maintenance_actions: ["更换滤布", "修复泵"]
+        prevention: ["定期更换滤布", "加药系统检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "污泥外运量增加"
+
+  # =========================================================================
+  # 补充: 核医学排风/衰变 (Nuclear Medicine)
+  # =========================================================================
+  - equipment_type: "核医学排风/废水衰变系统"
+    manufacturer_examples: ["Berthold", "Mirion", "专用定制"]
+    specifications:
+      standard: "GBZ 120-2020"
+      exhaust: "活性炭+HEPA过滤"
+      wastewater: "衰变池(≥10个半衰期)"
+    failure_modes:
+      - failure_id: "NUC-EXH-001"
+        failure_mode: "放射性排风过滤失效"
+        severity: 10
+        occurrence: 2
+        detection: 4
+        rpn: 80
+        category: "排风"
+        symptoms: ["排气口放射性监测超标", "活性炭饱和", "HEPA压差超标"]
+        causes: ["活性炭失效", "HEPA泄漏", "超期使用"]
+        immediate_actions: ["停止操作", "隔离排风", "辐射监测"]
+        maintenance_actions: ["更换活性炭/HEPA(辐射防护下)"]
+        prevention: ["在线辐射监测", "按周期更换滤材"]
+        typical_repair_time: "4-8小时(需辐射防护)"
+        impact_scope: "放射性物质释放"
+
+      - failure_id: "NUC-DCY-001"
+        failure_mode: "衰变池排放超标"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "废水"
+        symptoms: ["排放口放射性活度超标", "衰变时间不够"]
+        causes: ["进水量过大", "池容不够", "检测设备失灵", "误排放"]
+        immediate_actions: ["停止排放", "延长衰变时间"]
+        maintenance_actions: ["增加池容", "修复检测设备"]
+        prevention: ["在线活度监测", "排放前采样", "自动阀门联锁"]
+        typical_repair_time: "取决于衰变周期"
+        impact_scope: "辐射安全事件"
+
+      - failure_id: "NUC-MON-001"
+        failure_mode: "辐射监测仪故障"
+        severity: 9
+        occurrence: 2
+        detection: 3
+        rpn: 54
+        category: "监测"
+        symptoms: ["无读数", "读数异常", "校准过期"]
+        causes: ["探测器老化", "电子线路故障", "校准源衰减"]
+        immediate_actions: ["备用仪器替代", "限制人员进入"]
+        maintenance_actions: ["送检校准/更换"]
+        prevention: ["定期校准(每年NIST溯源)", "冗余监测"]
+        typical_repair_time: "1-2周(送检)"
+        impact_scope: "辐射场所监测盲区"
+
+  # =========================================================================
+  # 补充: 洁净室压差梯度系统 (Pressure Cascade)
+  # =========================================================================
+  - equipment_type: "洁净室压差梯度控制"
+    manufacturer_examples: ["西门子 BT", "江森自控 JCI", "霍尼韦尔 Honeywell"]
+    specifications:
+      gradient: "手术室>洁净走廊>清洁走廊>外部"
+      step: "≥5Pa/级"
+    failure_modes:
+      - failure_id: "PCS-GRD-001"
+        failure_mode: "压差梯度倒置"
+        severity: 10
+        occurrence: 3
+        detection: 2
+        rpn: 60
+        category: "压差控制"
+        symptoms: ["脏区空气流向洁净区", "压差显示负值", "粒子计数升高"]
+        causes: ["排风量突增", "送风机跳闸", "相邻区域门同时打开", "压差传感器漂移"]
+        immediate_actions: ["关闭相邻区域门", "检查送排风机", "停止手术"]
+        maintenance_actions: ["修复送风系统", "校准传感器", "调整风量平衡"]
+        prevention: ["连续压差监测+报警", "联锁控制", "定期校准"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "洁净区域交叉污染,感染风险极高"
+
+      - failure_id: "PCS-DOR-001"
+        failure_mode: "气密门故障(洁净区)"
+        severity: 7
+        occurrence: 4
+        detection: 2
+        rpn: 56
+        category: "门系统"
+        symptoms: ["门关不严", "自动门不闭合", "密封条破损", "互锁失效"]
+        causes: ["闭门器故障", "密封条老化", "轨道变形", "互锁控制器故障"]
+        immediate_actions: ["手动关门", "放置警示"]
+        maintenance_actions: ["更换闭门器/密封条", "修复互锁"]
+        prevention: ["每季度检查", "密封条定期更换"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "压差泄漏,洁净度下降"
+
+  # =========================================================================
+  # 补充: 中央供应室灭菌器 (CSSD Sterilizer)
+  # =========================================================================
+  - equipment_type: "压力蒸汽灭菌器"
+    manufacturer_examples: ["Getinge", "Steris", "新华医疗 SHINVA"]
+    specifications:
+      type: "脉动预真空(B级)"
+      temperature: "134°C/2.1bar"
+      cycle: "3-4分钟(裸露)/18分钟(包装)"
+    failure_modes:
+      - failure_id: "STE-VAC-001"
+        failure_mode: "真空泵故障(预真空不合格)"
+        severity: 8
+        occurrence: 3
+        detection: 2
+        rpn: 48
+        category: "真空系统"
+        symptoms: ["BD测试不合格", "灭菌周期延长", "报警"]
+        causes: ["真空泵老化", "密封泄漏", "管路堵塞"]
+        immediate_actions: ["停用灭菌器", "启用备用"]
+        maintenance_actions: ["修复/更换真空泵"]
+        prevention: ["每日BD测试", "定期维护"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "灭菌质量不保证"
+
+      - failure_id: "STE-DOR-001"
+        failure_mode: "门密封泄漏"
+        severity: 7
+        occurrence: 4
+        detection: 2
+        rpn: 56
+        category: "密封"
+        symptoms: ["门处蒸汽泄漏", "腔体无法升压", "报警"]
+        causes: ["密封圈老化", "密封面损伤", "关门机构不到位"]
+        immediate_actions: ["停用灭菌器"]
+        maintenance_actions: ["更换密封圈"]
+        prevention: ["每500次更换密封圈", "定期检查密封面"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "灭菌器停用"
+
+      - failure_id: "STE-SEN-001"
+        failure_mode: "温度/压力传感器失灵"
+        severity: 9
+        occurrence: 3
+        detection: 3
+        rpn: 81
+        category: "监测"
+        symptoms: ["显示温度与实际不符", "灭菌参数记录异常", "生物指示剂不合格"]
+        causes: ["传感器漂移", "热电偶老化", "接线松动"]
+        immediate_actions: ["化学指示剂验证", "停用待校准"]
+        maintenance_actions: ["校准/更换传感器"]
+        prevention: ["每季度校准", "生物指示剂验证"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "灭菌效果无法保证"
+
+      - failure_id: "STE-DRY-001"
+        failure_mode: "干燥不合格"
+        severity: 5
+        occurrence: 4
+        detection: 3
+        rpn: 60
+        category: "干燥系统"
+        symptoms: ["包装潮湿", "干燥时间超标"]
+        causes: ["真空系统效率低", "加热器故障", "冷凝水排水不畅"]
+        immediate_actions: ["延长干燥时间"]
+        maintenance_actions: ["检查加热器", "清理冷凝水管"]
+        prevention: ["定期检查排水系统"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "灭菌物品潮湿,需重新灭菌"
+
+  # =========================================================================
+  # 补充: 负压隔离病房专用 (Negative Pressure Isolation Room)
+  # =========================================================================
+  - equipment_type: "负压隔离病房环控系统"
+    manufacturer_examples: ["约克 YORK", "大金 Daikin", "专用AHU"]
+    specifications:
+      pressure: "≤-8Pa(相对走廊)"
+      ach: "≥12次/h"
+      exhaust: "HEPA过滤后排放"
+      standard: "WS/T 311-2009"
+    failure_modes:
+      - failure_id: "NPR-PRS-001"
+        failure_mode: "负压不足/失效"
+        severity: 10
+        occurrence: 3
+        detection: 2
+        rpn: 60
+        category: "压差控制"
+        symptoms: ["压差>-8Pa(接近0或正压)", "烟雾测试显示空气外泄"]
+        causes: ["排风机故障", "门窗密封破损", "送风量过大", "传感器漂移"]
+        immediate_actions: ["关闭病房门", "检查排风机", "通知感控部门"]
+        maintenance_actions: ["修复排风机", "更换密封条", "调整风量"]
+        prevention: ["连续压差监测", "每班烟雾测试(疫情期)", "冗余排风机"]
+        typical_repair_time: "1-4小时"
+        impact_scope: "病原体外泄,院内感染重大风险"
+
+      - failure_id: "NPR-HEP-001"
+        failure_mode: "排风HEPA过滤器饱和/泄漏"
+        severity: 10
+        occurrence: 3
+        detection: 3
+        rpn: 90
+        category: "过滤"
+        symptoms: ["HEPA压差>450Pa", "PAO测试泄漏", "排风量下降"]
+        causes: ["超期使用", "高感染负荷", "安装密封不良"]
+        immediate_actions: ["限制病房使用", "准备更换"]
+        maintenance_actions: ["更换HEPA(需封堵灭活后)", "DOP测试"]
+        prevention: ["压差监测报警", "定期检漏", "按周期更换"]
+        typical_repair_time: "2-4小时(需生物安全程序)"
+        impact_scope: "排放空气含病原体"
+
+      - failure_id: "NPR-ANT-001"
+        failure_mode: "前室/缓冲间功能失效"
+        severity: 8
+        occurrence: 3
+        detection: 3
+        rpn: 72
+        category: "气流组织"
+        symptoms: ["前室压差不对", "两道门同时打开", "互锁失效"]
+        causes: ["互锁控制器故障", "门闭合不严", "压差不足"]
+        immediate_actions: ["手动控制出入"]
+        maintenance_actions: ["修复互锁", "调整前室压差"]
+        prevention: ["互锁定期测试", "压差监测"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "隔离屏障失效"
+
+      - failure_id: "NPR-UV-001"
+        failure_mode: "排风紫外消毒灯失效"
+        severity: 6
+        occurrence: 4
+        detection: 3
+        rpn: 72
+        category: "消毒"
+        symptoms: ["UV强度<设计值", "运行时数超寿命", "灯管不亮"]
+        causes: ["灯管老化(>8000h)", "镇流器故障", "石英套管污染"]
+        immediate_actions: ["依靠HEPA过滤"]
+        maintenance_actions: ["更换灯管", "清洁套管"]
+        prevention: ["运行时数监控", "每季度UV强度测试"]
+        typical_repair_time: "0.5-1小时"
+        impact_scope: "排风消毒能力下降"
+
+  # =========================================================================
+  # 补充: 气动物流/真空物流 (Pneumatic Tube System)
+  # =========================================================================
+  - equipment_type: "气动物流传输系统"
+    manufacturer_examples: ["Swisslog TranspoNet", "Aerocom", "Pevco"]
+    specifications:
+      speed: "5-8 m/s"
+      tube_diameter: "110-160 mm"
+      application: "标本/药品/血液传输"
+    failure_modes:
+      - failure_id: "PTS-JAM-001"
+        failure_mode: "载体卡堵"
+        severity: 6
+        occurrence: 6
+        detection: 2
+        rpn: 72
+        category: "传输管路"
+        symptoms: ["载体到达超时", "堵塞报警", "后续载体积压"]
+        causes: ["管道弯头积灰", "载体变形", "异物进入", "管道变形"]
+        immediate_actions: ["定位堵塞点", "反向吹气"]
+        maintenance_actions: ["清除堵塞", "检查管道"]
+        prevention: ["定期管道清洗(压缩空气)", "载体检查"]
+        typical_repair_time: "0.5-2小时"
+        impact_scope: "标本/药品传输中断"
+
+      - failure_id: "PTS-BLW-001"
+        failure_mode: "鼓风机/真空泵故障"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "动力系统"
+        symptoms: ["传输速度降低", "载体到达慢", "系统报警"]
+        causes: ["电机老化", "叶轮磨损", "过滤器堵塞"]
+        immediate_actions: ["切换备用鼓风机"]
+        maintenance_actions: ["更换电机/叶轮"]
+        prevention: ["每月检查过滤器", "振动监测"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "物流系统效率下降"
+
+      - failure_id: "PTS-STA-001"
+        failure_mode: "收发站故障"
+        severity: 5
+        occurrence: 4
+        detection: 1
+        rpn: 20
+        category: "终端"
+        symptoms: ["无法发送/接收", "门不开/不关", "传感器不识别"]
+        causes: ["电磁阀故障", "传感器老化", "机械磨损"]
+        immediate_actions: ["人工传送"]
+        maintenance_actions: ["修复终端"]
+        prevention: ["定期功能测试"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "单站点不可用"
+
+  # =========================================================================
+  # 补充: 医疗废物处理 (Medical Waste)
+  # =========================================================================
+  - equipment_type: "医疗废物暂存冷库"
+    manufacturer_examples: ["海尔医疗", "中科美菱", "专用定制"]
+    specifications:
+      temperature: "0-4°C(暂存≤48h)"
+      standard: "医疗废物管理条例"
+    failure_modes:
+      - failure_id: "MWS-TMP-001"
+        failure_mode: "冷库温度超标"
+        severity: 7
+        occurrence: 3
+        detection: 2
+        rpn: 42
+        category: "制冷"
+        symptoms: ["温度>4°C", "异味加重", "温度报警"]
+        causes: ["压缩机故障", "制冷剂泄漏", "门密封差", "断电"]
+        immediate_actions: ["加快废物转运"]
+        maintenance_actions: ["修复制冷系统"]
+        prevention: ["温度监测", "双机冗余", "UPS供电"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "医疗废物变质,二次污染"
+
+      - failure_id: "MWS-ODR-001"
+        failure_mode: "负压/除臭系统故障"
+        severity: 5
+        occurrence: 4
+        detection: 2
+        rpn: 40
+        category: "除臭"
+        symptoms: ["废物间异味扩散", "排风机不转", "活性炭过滤器饱和"]
+        causes: ["排风机故障", "活性炭失效", "管道堵塞"]
+        immediate_actions: ["加强通风"]
+        maintenance_actions: ["修复风机", "更换活性炭"]
+        prevention: ["定期更换活性炭", "风机检查"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "环境污染投诉"
+
+  # =========================================================================
+  # 补充: 太阳能热水 (Solar Hot Water - 医院常用)
+  # =========================================================================
+  - equipment_type: "太阳能热水系统"
+    manufacturer_examples: ["皇明 Himin", "力诺瑞特 Linuo", "海林 Hailin"]
+    specifications:
+      type: "真空管/平板"
+      auxiliary: "空气源热泵/电辅热"
+    failure_modes:
+      - failure_id: "SOL-COL-001"
+        failure_mode: "集热器真空管破裂"
+        severity: 5
+        occurrence: 4
+        detection: 2
+        rpn: 40
+        category: "集热"
+        symptoms: ["集热效率急降", "漏水", "真空管内壁发白"]
+        causes: ["冰雹", "热应力", "安装应力", "质量缺陷"]
+        immediate_actions: ["关闭该回路"]
+        maintenance_actions: ["更换真空管"]
+        prevention: ["防雹网", "备用管库存"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "集热能力下降"
+
+      - failure_id: "SOL-PMP-001"
+        failure_mode: "太阳能循环泵故障"
+        severity: 5
+        occurrence: 3
+        detection: 2
+        rpn: 30
+        category: "循环"
+        symptoms: ["集热器过热", "储水箱温度不升", "泵报警"]
+        causes: ["叶轮结垢", "轴承磨损", "控制器故障"]
+        immediate_actions: ["开启辅助热源"]
+        maintenance_actions: ["更换循环泵"]
+        prevention: ["水质管理", "定期检查"]
+        typical_repair_time: "2-4小时"
+        impact_scope: "太阳能利用中断"
+
+      - failure_id: "SOL-CTL-001"
+        failure_mode: "温差控制器失灵"
+        severity: 4
+        occurrence: 4
+        detection: 3
+        rpn: 48
+        category: "控制"
+        symptoms: ["泵常开/常关", "过热保护不动作", "温度采集错误"]
+        causes: ["温度传感器断路/短路", "控制器老化"]
+        immediate_actions: ["手动控制泵"]
+        maintenance_actions: ["更换控制器/传感器"]
+        prevention: ["每年校准温度传感器"]
+        typical_repair_time: "1-2小时"
+        impact_scope: "太阳能系统效率低"
+
+      - failure_id: "SOL-FRZ-001"
+        failure_mode: "冬季冻裂(非防冻型)"
+        severity: 8
+        occurrence: 2
+        detection: 3
+        rpn: 48
+        category: "防冻"
+        symptoms: ["管路漏水", "集热器破裂", "水箱冻胀"]
+        causes: ["防冻液不足/过期", "循环泵冬季不运行", "排空阀失效"]
+        immediate_actions: ["排空管路"]
+        maintenance_actions: ["修复/更换管路"]
+        prevention: ["防冻液管理", "低温循环保护", "排空阀检查"]
+        typical_repair_time: "4-8小时"
+        impact_scope: "系统停用至修复"
+
+# =============================================================================
+# 维护周期建议
+# =============================================================================
+maintenance_schedules:
+  centrifugal_chiller:
+    daily: ["检查运行参数(压力/温度/流量)", "检查异常噪音或振动", "检查视液镜"]
+    weekly: ["检查润滑油油位", "冷凝器/蒸发器趋近温度", "清洁控制柜"]
+    monthly: ["检查安全阀", "检查压缩机电流", "冷却塔清洗"]
+    quarterly: ["油液分析", "振动分析", "电气连接紧固", "传感器校准"]
+    yearly: ["制冷剂泄漏检测", "电机绝缘测试", "系统性能测试", "换热器清洗"]
+  ahu:
+    daily: ["检查运行状态和参数"]
+    weekly: ["检查过滤器压差"]
+    monthly: ["检查风机振动", "皮带张紧检查"]
+    quarterly: ["过滤器更换", "传感器校准"]
+    yearly: ["风机轴承润滑或更换", "盘管深度清洗", "动平衡检查"]
+  clean_ahu:
+    daily: ["检查洁净度监测数据", "压差巡检"]
+    weekly: ["HEPA压差记录"]
+    monthly: ["粒子计数采样", "冷凝水盘检查"]
+    quarterly: ["传感器校准", "UV灯检查"]
+    yearly: ["HEPA DOP/PAO检漏", "气流可视化测试", "全系统消毒"]
+  medical_gas:
+    daily: ["检查各气体压力", "检查报警面板"]
+    weekly: ["检查汽化器/泵运行"]
+    monthly: ["安全阀检查", "过滤器检查"]
+    quarterly: ["管路气密性抽检", "报警系统测试"]
+    yearly: ["管路试压", "减压阀校验", "备用系统切换测试"]
+
+# =============================================================================
+# 备件清单
+# =============================================================================
 recommended_spare_parts:
   centrifugal_chiller:
-    critical:
-      - "压缩机轴承"
-      - "润滑油泵"
-      - "主控板"
-    normal:
-      - "密封件套件"
-      - "安全阀"
-      - "过滤器"
+    critical: ["压缩机轴承", "润滑油泵", "主控板"]
+    normal: ["密封件套件", "安全阀", "过滤器"]
   ahu:
-    critical:
-      - "风机轴承"
-      - "皮带"
-      - "控制阀"
-    normal:
-      - "过滤器"
-      - "温度传感器"
-      - "风阀执行器"
+    critical: ["风机轴承", "皮带", "控制阀"]
+    normal: ["过滤器", "温度传感器", "风阀执行器"]
+  clean_ahu:
+    critical: ["HEPA过滤器(H13/H14)", "压差传感器", "送风口密封垫"]
+    normal: ["中效过滤器(F7/F9)", "UV灯管", "冷凝水盘排水阀"]
   pump:
-    critical:
-      - "机械密封"
-      - "轴承"
-      - "叶轮"
-    normal:
-      - "O型圈"
-      - "润滑油"
-      - "联轴器"
-
-# ===== 变压器 Transformers =====
-  - equipment_type: "干式变压器"
-    manufacturer_examples: ["施耐德 Blokset", "ABB DynaV", "西门子 SGB"]
-    specifications:
-      - power_rating: "400-2500 kVA"
-      - voltage_level: "10kV/0.4kV"
-      - insulation_class: "F级或H级"  # 155°C或180°C
-      - temperature_rise: "100-125K"
-      - efficiency: ">=98.5% (EU Tier 2)"  # 高效等级
-
-    failure_modes:
-      - failure_id: "TRF-001"
-        failure_mode: "绕组绝缘老化"
-        severity: 9
-        occurrence: 3  # 1次/10年
-        detection: 7   # 需要定期绝缘测试
-        rpn: 189
-        category: "绝缘系统"
-        symptoms:
-          - "绝缘电阻下降（<10MΩ）"  # IEC 60076要求
-          - "介质损耗角（tanδ）增大（>0.5%）"
-          - "局部放电检测异常（>100pC）"  # IEC 60270
-          - "温升超标（>125K）"  # 超过绝缘等级温升
-          - "油色谱分析异常（如有油枕）"  # CO/CO2增长
-          - "绕组温度指示异常（热点温度）"  # IEC 60076-2
-        causes:
-          - "长期过负荷运行（>100%额定）"  # 加速绝缘老化
-          - "高温环境（>40°C）"  # 环境温度超标
-          - "湿度侵入（>75%RH）"  # 绝缘受潮
-          - "电应力长期作用（过电压）"  # 浪涌/雷击
-          - "绝缘材料自然老化"  # 热-氧联合老化
-          - "污染物沉积（导电尘埃）"  # 降低绝缘
-        immediate_actions:
-          - "立即降低负荷（≤70%）"  # 减少热应力
-          - "绝缘电阻测试（兆欧表）"  # 评估绝缘状态
-          - "热点温度监测"  # 光纤传感器或红外
-        maintenance_actions:
-          - "绕组干燥处理（真空干燥）"  # 去湿
-          - "绝缘电阻恢复测试"  # 验证效果
-          - "更换变压器（老化严重）"  # RPN>150需更换
-          - "改善通风散热"  # 风扇或空调
-          - "局部放电监测"  # 持续在线监测
-        prevention:
-          - "控制负载率<85%"  # 延长寿命30%
-          - "控制环境温度<40°C"  # 每降10°C寿命翻倍
-          - "每年绝缘电阻测试（1kV兆欧表）"  # 基线测试
-          - "定期检查局部放电"  # PDM预测性维护
-          - "安装湿度控制器"  # 除湿机
-          - "浪涌保护（SPD）"  # 过电压保护
-        typical_repair_time: "24-72小时"  # 更换或返厂维修
-        impact_scope: "整个建筑供电"  # 影响全部医疗设备
-        safety_impact: "HIGH"  # 影响患者生命安全
-        reference_standard: "IEC 60076-11, IEEE C57.91"  # 干式变压器标准
-
-    failure_statistics:
-      mtbf_hours: 175200  # 20年
-      critical_failures_per_year: 0.1  # 每10年1次严重故障
-      common_failures_top5:
-        - "绝缘老化"
-        - "绕组过热"
-        - "铁芯多点接地"
-        - "冷却系统故障"
-        - "分接开关故障"  # 如有载调压
-      preventive_maintenance_hours: 8  # 年维护工时
-      corrective_maintenance_hours: 4   # 年维修工时
-      availability_target: 0.999  # 99.9%可用性
-
-  # ===== 发电机 Emergency Generator =====
-  - equipment_type: "柴油发电机"
-    manufacturer_examples: ["康明斯 Cummins", "卡特彼勒 CAT", "科勒 Kohler"]
-    specifications:
-      - power_rating: "200-2000 kW"
-      - voltage_level: "400V/3Ph"
-      - fuel_type: "柴油"
-      - startup_time: "≤10秒"  # 应急启动要求
-
-    failure_modes:
-      - failure_id: \"GEN-001\"
-        failure_mode: \"启动失败\"
-        severity: 10  # 危及生命安全
-        occurrence: 2  # 1次/5年
-        detection: 1  # 自检发现
-        rpn: 20
-        category: \"启动系统\"
-        symptoms:
-          - \"启动马达无法转动\"
-          - \"启动马达转动但发动机不点火\"
-          - \"启动后立即停机\"
-          - \"控制器显示启动失败报警\"
-          - \"电池电压低（<22V）\"  # 24V系统
-        causes:
-          - \"蓄电池电量不足或老化\"  # 电解液蒸发
-          - \"启动电路故障（接触器、线路）\"  # 电气连接
-          - \"燃料系统问题（无油、管路气阻）\"  # 油路问题
-          - \"发动机故障（机械卡死）\"  # 少见但严重
-          - \"控制系统故障（传感器误报）\"  # 误启动信号
-          - \"环境温度过低（<-10°C）\"  # 冬季启动困难
-        immediate_actions:
-          - \"检查蓄电池电压和连接\"  # 充电或更换
-          - \"检查燃油液位\"  # 确保充足
-          - \"手动盘车确认机械正常\"  # 无卡死
-          - \"检查环境温度\"  # 预热措施
-        maintenance_actions:
-          - \"更换蓄电池（寿命3-5年）\"  # 定期更换
-          - \"检查启动电路（万用表）\"  # 电气测试
-          - \"燃油系统排气\"  # 排除空气
-          - \"预热发动机（冷却液加热）\"  # 冬季措施
-          - \"检查机油液位\"  # 润滑
-        prevention:
-          - \"每月空载测试启动\"  # NFPA 110要求
-          - \"每年满载测试\"  # 80%负载30分钟
-          - \"每2年更换蓄电池\"  # 预防性更换
-          - \"保持燃油充足\"  # 至少8小时运行
-          - \"燃油定期循环（防变质）\"  # 每6个月
-          - \"冬季预热系统检查\"  # 加热器
-        typical_repair_time: \"2-4小时\"  # 现场修复
-        impact_scope: \"整个应急供电系统\"  # 无备用电源
-        safety_impact: \"EXTREME\"  # 生命安全
-        regulatory_requirement: \"NFPA 110\", \"JGJ 16-2008\"  # 备用电源标准
-        availability_target: \"0.9999\"  # 99.99%可用性
-        maximum_allowed_outage: \"0小时\"  # 不允许停机
-
-# ===== UPS 不间断电源 =====
-  - equipment_type: "UPS不间断电源"
-    manufacturer_examples: ["艾默生 Emerson", "APC", "伊顿 Eaton"]
-    specifications:
-      - power_rating: "10-500 kVA"
-      - voltage_level: "380V/220V"
-      - backup_time: "15-30分钟"  # 标准配置
-      - topology: "双变换在线式"  # 医疗级要求
-      - efficiency: ">=94%"  # 经济运行模式
-
-    failure_modes:
-      - failure_id: "UPS-001"
-        failure_mode: "电池组老化失效"
-        severity: 8  # 电池是UPS核心
-        occurrence: 6  # 3-5年需更换
-        detection: 3  # 定期测试可发现
-        rpn: 144
-        category: "电池系统"
-        symptoms:
-          - "电池内阻增大（＞基线150%）"  # 电池监测仪
-          - "电池容量下降（＜80%额定）"  # 放电测试
-          - "电池温度异常升高"  # 热失控前兆
-          - "电池漏液或鼓包"  # 物理损坏
-          - "UPS报警：电池维护"  # 自检报警
-        causes:
-          - "电池使用年限到期（3-5年）"  # 铅酸电池寿命
-          - "环境温度超标（＞25°C）"  # 温度每升10°C寿命减半
-          - "充放电循环次数过多"  # 频繁断电
-          - "电池质量问题"  # 批次缺陷
-          - "维护不当（长期浮充电压不准）"  # 充电参数
-        immediate_actions:
-          - "立即进行电池容量测试"  # 确认老化
-          - "检查环境温度"  # 改善散热
-          - "准备电池更换"  # 预防性更换
-        maintenance_actions:
-          - "更换全部电池组"  # 串联电池，一组失效全换
-          - "电池均衡充电"  # 激活维护
-          - "清洁电池连接端子"  # 降低内阻
-          - "检查充电电压设置"  # 避免过充/欠充
-        prevention:
-          - "每季度电池内阻测试"  # 趋势分析
-          - "每年电池容量放电测试"  # 30%深度放电
-          - "控制环境温度20-25°C"  # 空调房
-          - "电池组一致性筛选"  # 初始配组
-          - "安装电池监测系统"  # 在线监测每节电池
-        typical_repair_time: "4-8小时"  # 更换时间
-        impact_scope: "失去不间断电源"  # 市电中断时无保护
-        reliability_concern: "CRITICAL"  # 电池是薄弱环节
-        battery_formula: "铅酸电池寿命≈(2.5年 × (25°C/实际温度)^10) × 循环系数"
-        recommended_replacement: "每4年预防性更换"  # 避免突发故障
-
-      - failure_id: "UPS-002"
-        failure_mode: "逆变器故障"
-        severity: 9  # 核心部件
-        occurrence: 2  # 较少见
-        detection: 2  # 监控可发现
-        rpn: 36
-        category: "逆变器系统"
-        symptoms:
-          - "UPS切换到旁路模式"  # 逆变器过载
-          - "输出电压异常（THD＞5%）"  # 波形畸变
-          - "逆变器过载报警"  # 负载超标
-          - "逆变器模块温度高"  # 散热不良
-          - "PFC电路故障"  # 功率因数校正
-        causes:
-          - "IGBT功率模块损坏"  # 开关器件失效
-          - "驱动电路故障"  # 控制信号丢失
-          - "输出过载（＞125%额定）"  # 冲击性负载
-          - "散热系统失效"  # 风扇故障
-          - "输入电压异常"  # 市电质量
-        immediate_actions:
-          - "立即检查负载"  # 卸载部分设备
-          - "切换至旁路供电"  # 保证供电
-          - "检查逆变器温度"  # 过热保护
-        maintenance_actions:
-          - "更换IGBT模块"  # 功率器件
-          - "检查驱动电路"  # 控制板
-          - "检查散热系统"  # 清洁风扇
-          - "输出负载调整"  # 平衡三相
-        prevention:
-          - "每季度红外测温"  # IGBT温度
-          - "每年负载测试"  # 80%负载4小时
-          - "保持清洁的散热通道"  # 定期清洁
-          - "避免冲击性负载"  # 软启动
-          - "输入电压稳定"  # 隔离变压器
-        typical_repair_time: "6-12小时"  # 模块更换
-        impact_scope: "失去不间断电源"  # 旁路供电但无保护
-        redundancy_recommendation: "N+1配置"  # 关键负载
-
-    failure_statistics:
-      mtbf_hours: 87600  # 10年
-      critical_failures_per_year: 0.2  # 电池失效
-      common_failures_top5:
-        - "电池老化"
-        - "逆变器过载"
-        - "散热系统故障"
-        - "静态开关故障"
-        - "控制板故障"
-      preventive_maintenance_hours: 12  # 年维护工时
-      corrective_maintenance_hours: 8   # 年维修工时
-      availability_target: 0.9999  # 99.99%
-
-# ====== 备件清单补充 ======
-recommended_spare_parts:
+    critical: ["机械密封", "轴承", "叶轮"]
+    normal: ["O型圈", "润滑油", "联轴器"]
   transformer:
-    critical:
-      - "温度控制器（风机）"
-      - "绝缘电阻测试仪"
-      - "绝缘垫片"
-    normal:
-      - "冷却风机"
-      - "温控传感器PT100"
-      - "接线端子"
+    critical: ["温度控制器(风机)", "绝缘垫片"]
+    normal: ["冷却风机", "温控传感器PT100"]
   ups:
-    critical:
-      - "电池组（整套）"
-      - "IGBT模块"
-      - "静态开关"
-    normal:
-      - "风扇"
-      - "控制板电池"
-      - "显示面板"
+    critical: ["电池组(整套)", "IGBT模块", "静态开关"]
+    normal: ["风扇", "控制板电池", "显示面板"]
+  generator:
+    critical: ["蓄电池组", "燃油滤清器(库存3套)", "冷却液"]
+    normal: ["机油滤清器", "空气滤清器", "皮带"]
+  medical_gas:
+    critical: ["减压阀", "安全阀", "密封垫"]
+    normal: ["过滤器", "压力表", "阀门手柄"]
+  fire_pump:
+    critical: ["机械密封", "蓄电池(柴油泵)"]
+    normal: ["压力表", "止回阀"]
+  it_isolated_power:
+    critical: ["隔离变压器(备用)", "IMD绝缘监测仪"]
+    normal: ["报警显示面板", "等电位连接线"]
