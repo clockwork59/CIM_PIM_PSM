@@ -1,0 +1,266 @@
+{
+  "milestone": "M4",
+  "test_suite": "platform_sparql_validation",
+  "total_queries": 10,
+  "passed": 10,
+  "failed": 0,
+  "warned": 0,
+  "results": [
+    {
+      "query": "chiller_plant_status",
+      "status": "PASS",
+      "rows": 36,
+      "vars": [
+        "equipID",
+        "label",
+        "designTag",
+        "pointName",
+        "objectType",
+        "presentValue",
+        "units",
+        "timestamp"
+      ],
+      "elapsed_ms": 247.0,
+      "sample": {
+        "equipID": "CHL-633703-001",
+        "label": "633-703 kW",
+        "designTag": "574263",
+        "pointName": "CHL-633703-001-ALM",
+        "objectType": "binaryinput",
+        "presentValue": "false",
+        "units": "no-units",
+        "timestamp": "2026-05-10T08:00:00+08:00"
+      }
+    },
+    {
+      "query": "energy_anomaly",
+      "status": "PASS",
+      "rows": 0,
+      "vars": [
+        "equipID",
+        "label",
+        "ratedPower",
+        "pointName",
+        "currentPower",
+        "units",
+        "ratio"
+      ],
+      "elapsed_ms": 228.4,
+      "sample": {}
+    },
+    {
+      "query": "eq_full_status",
+      "status": "PASS",
+      "rows": 13899,
+      "vars": [
+        "equipID",
+        "label",
+        "designTag",
+        "ratedCapacity",
+        "ratedPower",
+        "pointName",
+        "presentValue",
+        "units",
+        "timestamp",
+        "woID",
+        "woStatus",
+        "woPriority"
+      ],
+      "elapsed_ms": 4693.9,
+      "sample": {
+        "equipID": "AHU-63300000-001",
+        "label": "63300000 J",
+        "designTag": "728908",
+        "ratedCapacity": null,
+        "ratedPower": null,
+        "pointName": "AHU-63300000-001-FANKW",
+        "presentValue": "22.98",
+        "units": "kilowatts",
+        "timestamp": "2026-05-10T08:00:00+08:00",
+        "woID": "WO-INSP-202605-0002",
+        "woStatus": "In Progress",
+        "woPriority": "Medium"
+      }
+    },
+    {
+      "query": "equipment_lifecycle",
+      "status": "PASS",
+      "rows": 13899,
+      "vars": [
+        "equipID",
+        "label",
+        "equipType",
+        "ifcGlobalId",
+        "designTag",
+        "ratedCapacity",
+        "ratedPower",
+        "pointName",
+        "presentValue",
+        "units",
+        "basTimestamp",
+        "woID",
+        "woType",
+        "woStatus",
+        "woPriority",
+        "scheduledDate",
+        "failureMode"
+      ],
+      "elapsed_ms": 10418.2,
+      "sample": {
+        "equipID": "AHU-63300000-001",
+        "label": "63300000 J",
+        "equipType": "https://cim.medical/ontology/v3.4/equipment#AHU",
+        "ifcGlobalId": "3L8hWAGKHBAuJsahiYsbgx",
+        "designTag": "728908",
+        "ratedCapacity": null,
+        "ratedPower": null,
+        "pointName": "AHU-63300000-001-FANKW",
+        "presentValue": "22.98",
+        "units": "kilowatts",
+        "basTimestamp": "2026-05-10T08:00:00+08:00",
+        "woID": "WO-INSP-202605-0002",
+        "woType": "https://cim.medical/ontology/v4.0/cmms#InspectionOrder",
+        "woStatus": "In Progress",
+        "woPriority": "Medium",
+        "scheduledDate": "2026-05-15T08:00:00+08:00",
+        "failureMode": null
+      }
+    },
+    {
+      "query": "fas_zone_status",
+      "status": "PASS",
+      "rows": 0,
+      "vars": [
+        "zoneID",
+        "zoneLabel",
+        "deviceID",
+        "deviceLabel",
+        "deviceType",
+        "detectionState",
+        "spaceLabel",
+        "pointName",
+        "presentValue"
+      ],
+      "elapsed_ms": 2061.5,
+      "sample": {}
+    },
+    {
+      "query": "floor_dashboard",
+      "status": "PASS",
+      "rows": 6348,
+      "vars": [
+        "floorLabel",
+        "equipID",
+        "equipLabel",
+        "equipType",
+        "pointName",
+        "presentValue",
+        "units"
+      ],
+      "elapsed_ms": 3500.8,
+      "sample": {
+        "floorLabel": "First Floor",
+        "equipID": "AHU-63300000-001",
+        "equipLabel": "63300000 J",
+        "equipType": "https://cim.medical/ontology/v3.4/equipment#AHU",
+        "pointName": "AHU-63300000-001-FANKW",
+        "presentValue": "22.98",
+        "units": "kilowatts"
+      }
+    },
+    {
+      "query": "ifc_bas_cmms_triangle",
+      "status": "PASS",
+      "rows": 2310,
+      "vars": [
+        "equipID",
+        "label",
+        "ifcGlobalId",
+        "designTag",
+        "pointName",
+        "presentValue",
+        "units",
+        "woID",
+        "woStatus",
+        "failureMode"
+      ],
+      "elapsed_ms": 4534.8,
+      "sample": {
+        "equipID": "AHU-63300000-001",
+        "label": "63300000 J",
+        "ifcGlobalId": "3L8hWAGKHBAuJsahiYsbgx",
+        "designTag": "728908",
+        "pointName": "AHU-63300000-001-FANKW",
+        "presentValue": "22.98",
+        "units": "kilowatts",
+        "woID": "WO-INSP-202605-0002",
+        "woStatus": "处理中",
+        "failureMode": null
+      }
+    },
+    {
+      "query": "maintenance_due_30d",
+      "status": "PASS",
+      "rows": 2940,
+      "vars": [
+        "woID",
+        "woLabel",
+        "equipID",
+        "equipLabel",
+        "priority",
+        "status",
+        "scheduledDate",
+        "estimatedHours",
+        "team"
+      ],
+      "elapsed_ms": 2130.2,
+      "sample": {
+        "woID": "WO-CM-202605-0043",
+        "woLabel": "CM: VAV-150MM-029 fault repair",
+        "equipID": "VAV-150MM-029",
+        "equipLabel": "150 mm",
+        "priority": "High",
+        "status": "Open",
+        "scheduledDate": "2026-05-07T08:00:00+08:00",
+        "estimatedHours": "0.5",
+        "team": "TEAM-HVAC"
+      }
+    },
+    {
+      "query": "NAMED_GRAPH_ENUMERATION",
+      "status": "PASS",
+      "rows": 8,
+      "vars": [
+        "graph",
+        "triples"
+      ],
+      "elapsed_ms": 1843.2,
+      "sample": {
+        "2026-05-10T08:00": 13710,
+        "2026-05-10T16:00": 13710,
+        "2026-05-11T00:00": 13710,
+        "2026-05": 8309,
+        "ifc": 5488,
+        "tbox": 4421,
+        "pset": 1802,
+        "event": 236
+      }
+    },
+    {
+      "query": "CROSS_GRAPH_IFC_BAS",
+      "status": "PASS",
+      "rows": 5,
+      "vars": [
+        "equipID",
+        "pointName",
+        "value"
+      ],
+      "elapsed_ms": 5.9,
+      "sample": {
+        "equipID": "AHU-63300000-001",
+        "pointName": "AHU-63300000-001-FANKW",
+        "value": "22.98"
+      }
+    }
+  ]
+}

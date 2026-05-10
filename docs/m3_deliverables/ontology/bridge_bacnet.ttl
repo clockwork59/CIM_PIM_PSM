@@ -1,0 +1,201 @@
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+@prefix cim:        <http://hospital-cim.org/v4/core#> .
+@prefix cim-equip:  <http://hospital-cim.org/v4/equipment#> .
+@prefix cim-bacnet: <http://hospital-cim.org/v4/bacnet#> .
+
+# ============================================================
+# CIM v4.0 — Bridge: BACnet Protocol Binding
+# ============================================================
+# File   : bridge/bridge_bacnet.ttl
+# Sprint : M3 2026-05-10
+# Scope  : BACnet object model aligned to ASHRAE 135-2020 (BACnet-2020)
+#          Binds real-time sensor readings to CIM equipment instances
+#          Enables BAS data federation alongside IFC static model
+# ============================================================
+
+<http://hospital-cim.org/v4/bacnet>
+    a owl:Ontology ;
+    rdfs:label "CIM v4.0 BACnet Bridge"@en ,
+               "CIM v4.0 BACnet 协议桥接"@zh ;
+    dcterms:description "BACnet object binding ontology for CIM v4.0. Maps BACnet object types (AI/AO/BI/BO/AV/MSV) to CIM equipment, enabling multi-source federation of real-time BAS data with static IFC instances. Aligned to ASHRAE 135-2020."@en ;
+    owl:versionIRI <http://hospital-cim.org/v4/bacnet/1.0.0> ;
+    owl:imports <http://hospital-cim.org/v4/core> ;
+    dcterms:created "2026-05-10"^^xsd:date ;
+    skos:note "Does not import the full BACnet RDF ontology to avoid size constraints. Defines a CIM-native subset sufficient for federation simulation."@en .
+
+# ============================================================
+# BACnet Device (物理控制器/DDC)
+# ============================================================
+
+cim-bacnet:BACnetDevice
+    a owl:Class ;
+    rdfs:label "BACnet Device"@en , "BACnet设备（DDC控制器）"@zh ;
+    skos:definition "A physical or virtual controller that implements the BACnet protocol (ASHRAE 135-2020). Contains one or more BACnet objects. Corresponds to a DDC controller, RTU, or gateway in the BAS."@en ;
+    rdfs:comment "Instance URI pattern: bacnet:{deviceID}, e.g. bacnet:DDC-AHU-01-CTRL."@en .
+
+cim-bacnet:hasDeviceInstance
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetDevice ;
+    rdfs:range xsd:integer ;
+    rdfs:label "BACnet device instance number"@en ;
+    skos:definition "Unique BACnet device instance number (0–4194302) per ASHRAE 135."@en .
+
+cim-bacnet:hasVendorID
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetDevice ;
+    rdfs:range xsd:integer ;
+    rdfs:label "BACnet vendor ID"@en .
+
+cim-bacnet:hasModelName
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetDevice ;
+    rdfs:range xsd:string ;
+    rdfs:label "model name"@en .
+
+# ============================================================
+# BACnet Object — Abstract Base
+# ============================================================
+
+cim-bacnet:BACnetObject
+    a owl:Class ;
+    rdfs:label "BACnet Object"@en , "BACnet对象"@zh ;
+    skos:definition "An abstract data point in a BACnet device. All BACnet objects have an object-type, object-instance, object-name, and present-value."@en .
+
+cim-bacnet:hasObjectIdentifier
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "object identifier"@en ;
+    skos:definition "The BACnet object identifier encoded as '{ObjectType}:{InstanceNumber}', e.g. 'analog-input:1'. Unique within a device."@en .
+
+cim-bacnet:hasObjectType
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "object type"@en ;
+    skos:definition "BACnet object type string: analog-input | analog-output | analog-value | binary-input | binary-output | binary-value | multi-state-value."@en .
+
+cim-bacnet:hasObjectName
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "object name"@en ;
+    skos:definition "Human-readable descriptive name. Unique within a BACnet device. Convention: '{EQUIP_ID}-{PARAM}', e.g. 'AHU-001-SAT' (supply air temperature)."@en .
+
+cim-bacnet:hasPresentValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range rdfs:Literal ;
+    rdfs:label "present value"@en , "当前值"@zh ;
+    skos:definition "The current value of the BACnet object. Datatype depends on object type: xsd:decimal for analog, xsd:boolean for binary, xsd:integer for multi-state."@en .
+
+cim-bacnet:hasUnitsID
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "engineering units"@en , "工程单位"@zh ;
+    skos:definition "Engineering units per BACnet enumeration, e.g. 'degrees-celsius', 'pascals', 'cubic-meters-per-hour', 'kilowatts', 'percent'."@en .
+
+cim-bacnet:hasTimestamp
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "timestamp"@en , "数据时间戳"@zh ;
+    skos:definition "ISO 8601 timestamp of the present-value reading. Populated by the BAS simulator."@en .
+
+cim-bacnet:hasCovIncrement
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "COV increment"@en ;
+    skos:definition "Change-of-value threshold that triggers unsolicited COV notifications. Analog only."@en .
+
+cim-bacnet:hasPollingInterval
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range xsd:integer ;
+    rdfs:label "polling interval (s)"@en , "轮询间隔（秒）"@zh .
+
+# ============================================================
+# BACnet Object Subclasses (by object-type)
+# ============================================================
+
+cim-bacnet:BACnetAnalogInput
+    a owl:Class ;
+    rdfs:subClassOf cim-bacnet:BACnetObject ;
+    rdfs:label "BACnet Analog Input"@en , "BACnet模拟量输入"@zh ;
+    skos:definition "BACnet object-type: analog-input. Reads a continuous physical measurement (temperature, pressure, flow rate, CO2 concentration, etc.)."@en .
+
+cim-bacnet:BACnetAnalogOutput
+    a owl:Class ;
+    rdfs:subClassOf cim-bacnet:BACnetObject ;
+    rdfs:label "BACnet Analog Output"@en , "BACnet模拟量输出"@zh ;
+    skos:definition "BACnet object-type: analog-output. Commands a continuous actuator (valve position, fan speed, damper position)."@en .
+
+cim-bacnet:BACnetBinaryInput
+    a owl:Class ;
+    rdfs:subClassOf cim-bacnet:BACnetObject ;
+    rdfs:label "BACnet Binary Input"@en , "BACnet数字量输入"@zh ;
+    skos:definition "BACnet object-type: binary-input. Reads a two-state condition: ACTIVE/INACTIVE (run/stop, alarm/normal, open/closed)."@en .
+
+cim-bacnet:BACnetBinaryOutput
+    a owl:Class ;
+    rdfs:subClassOf cim-bacnet:BACnetObject ;
+    rdfs:label "BACnet Binary Output"@en , "BACnet数字量输出"@zh ;
+    skos:definition "BACnet object-type: binary-output. Commands a two-state actuator (motor start/stop, valve open/close)."@en .
+
+cim-bacnet:BACnetAnalogValue
+    a owl:Class ;
+    rdfs:subClassOf cim-bacnet:BACnetObject ;
+    rdfs:label "BACnet Analog Value"@en , "BACnet模拟量内部值"@zh ;
+    skos:definition "BACnet object-type: analog-value. Represents a calculated or software setpoint (supply air temp setpoint, pressure setpoint)."@en .
+
+cim-bacnet:BACnetMultiStateValue
+    a owl:Class ;
+    rdfs:subClassOf cim-bacnet:BACnetObject ;
+    rdfs:label "BACnet Multi-State Value"@en , "BACnet多态值"@zh ;
+    skos:definition "BACnet object-type: multi-state-value. Encodes enumerated states (chiller mode: OFF/STANDBY/RUNNING/FAULT)."@en .
+
+# ============================================================
+# Linking Properties: BACnet Object ↔ CIM Equipment
+# ============================================================
+
+cim-bacnet:bacnetPointOf
+    a owl:ObjectProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "BACnet point of"@en , "所属CIM设备"@zh ;
+    skos:definition "Links a BACnet object (data point) to the CIM equipment instance it physically belongs to or monitors."@en .
+
+cim-bacnet:hostedBy
+    a owl:ObjectProperty ;
+    rdfs:domain cim-bacnet:BACnetObject ;
+    rdfs:range cim-bacnet:BACnetDevice ;
+    rdfs:label "hosted by"@en , "托管设备控制器"@zh ;
+    skos:definition "The BACnet device (DDC controller) that hosts this BACnet object."@en .
+
+cim-bacnet:hasControllerLink
+    a owl:ObjectProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range cim-bacnet:BACnetDevice ;
+    rdfs:label "has controller link"@en , "关联DDC控制器"@zh ;
+    skos:definition "Links a CIM equipment instance to the BACnet DDC controller managing it. Inverse direction of hostedBy."@en .
+
+# ============================================================
+# Annotation: common BACnet point naming conventions for NBU clinic
+# ============================================================
+# AHU points: SAT (supply air temp), RAT (return air temp),
+#              SAP (supply air pressure), RAF (return air flow),
+#              CCT (cooling coil temp), HCT (heating coil temp),
+#              FANSS (fan start/stop), FANSP (fan speed %)
+# VAV points: VAVPOS (damper position %), VAVFLOW (airflow m3/h),
+#              VAVRM_TEMP (room temp), VAVSP (setpoint)
+# Chiller points: CHWST (chilled water supply temp), CHWRT (return temp),
+#                  CHWFLOW (flow rate), COP (calculated), MODE (MSV)
+# FAS points: SMOKE_ALARM (binary), HEAT_TEMP (analog), ZONE_STATUS (MSV)

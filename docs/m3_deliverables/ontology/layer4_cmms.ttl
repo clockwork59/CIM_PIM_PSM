@@ -1,0 +1,247 @@
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+@prefix cim:       <http://hospital-cim.org/v4/core#> .
+@prefix cim-equip: <http://hospital-cim.org/v4/equipment#> .
+@prefix cim-op:    <http://hospital-cim.org/v4/operational#> .
+@prefix cim-cmms:  <http://hospital-cim.org/v4/cmms#> .
+
+# ============================================================
+# CIM v4.0 — Layer 4: CMMS Work Order Module
+# ============================================================
+# File   : layer4_cmms.ttl
+# Sprint : M3 2026-05-10
+# Scope  : Computerized Maintenance Management System work order ontology
+#          Enables CMMS data federation with CIM equipment (IFC ABox)
+#          Aligned to ISO 14224 (Reliability Data) terminology
+# ============================================================
+
+<http://hospital-cim.org/v4/cmms>
+    a owl:Ontology ;
+    rdfs:label "CIM v4.0 CMMS Work Order Layer"@en ,
+               "CIM v4.0 CMMS 工单层"@zh ;
+    dcterms:description "CMMS work order ontology for multi-source data federation (M3). Extends CIM Layer 4 operational semantics with work order lifecycle management, maintenance types, and technician assignment. Compatible with ISO 14224 reliability data model."@en ;
+    owl:versionIRI <http://hospital-cim.org/v4/cmms/1.0.0> ;
+    owl:imports <http://hospital-cim.org/v4/operational> ;
+    dcterms:created "2026-05-10"^^xsd:date .
+
+# ============================================================
+# WORK ORDER CLASS HIERARCHY
+# ============================================================
+
+cim-cmms:WorkOrder
+    a owl:Class ;
+    rdfs:label "Work Order"@en , "维护工单"@zh ;
+    skos:definition "A formally issued instruction authorizing maintenance work on a specific asset. Parent class for all maintenance work order types. Extends cim-op:MaintenanceRecord with lifecycle state machine."@en ;
+    rdfs:subClassOf cim-op:MaintenanceRecord ;
+    rdfs:comment "Instance URI pattern: cmms:WO-{TYPE}-{EQUIP_ID}-{SEQ}, e.g. cmms:WO-PM-AHU-001-0001"@en .
+
+cim-cmms:PreventiveMaintenance
+    a owl:Class ;
+    rdfs:subClassOf cim-cmms:WorkOrder ;
+    rdfs:label "Preventive Maintenance Work Order"@en , "预防性维护工单"@zh ;
+    skos:altLabel "PM"@en , "计划性维护"@zh ;
+    skos:definition "A scheduled, planned maintenance activity performed to prevent equipment failure. Includes periodic inspection, lubrication, filter replacement, and calibration."@en ;
+    rdfs:comment "PM work orders are generated systematically based on equipment type and maintenance interval. Typical intervals: AHU filter quarterly, chiller annual, VAV semi-annual."@en .
+
+cim-cmms:CorrectiveMaintenance
+    a owl:Class ;
+    rdfs:subClassOf cim-cmms:WorkOrder ;
+    rdfs:label "Corrective Maintenance Work Order"@en , "纠正性维护工单"@zh ;
+    skos:altLabel "CM"@en , "故障修复"@zh ;
+    skos:definition "A reactive maintenance activity triggered by an equipment failure, fault detection, or degraded performance. Includes fault diagnosis, repair, and restoration."@en ;
+    rdfs:comment "CM work orders are generated from BAS fault signals or manual fault reporting. Linked to FMEA failure modes."@en .
+
+cim-cmms:InspectionOrder
+    a owl:Class ;
+    rdfs:subClassOf cim-cmms:WorkOrder ;
+    rdfs:label "Inspection Work Order"@en , "巡检工单"@zh ;
+    skos:definition "A routine inspection work order to assess equipment condition without performing repairs. Typically generates a condition report."@en .
+
+cim-cmms:EmergencyWorkOrder
+    a owl:Class ;
+    rdfs:subClassOf cim-cmms:CorrectiveMaintenance ;
+    rdfs:label "Emergency Work Order"@en , "紧急工单"@zh ;
+    skos:definition "A corrective maintenance work order with highest priority, triggered by critical equipment failure threatening patient safety or building operations. Must be started within 2 hours."@en .
+
+cim-cmms:CalibrationOrder
+    a owl:Class ;
+    rdfs:subClassOf cim-cmms:WorkOrder ;
+    rdfs:label "Calibration Work Order"@en , "校准工单"@zh ;
+    skos:definition "A work order for metrological calibration of measurement instruments (medical gas pressure sensors, flow meters, temperature transmitters)."@en .
+
+# ============================================================
+# WORK ORDER STATUS (as Named Individuals)
+# ============================================================
+
+cim-cmms:WorkOrderStatus
+    a owl:Class ;
+    rdfs:label "Work Order Status"@en , "工单状态"@zh ;
+    skos:definition "An enumerated status in the work order lifecycle state machine."@en .
+
+cim-cmms:status_Open
+    a cim-cmms:WorkOrderStatus ;
+    rdfs:label "Open"@en , "待处理"@zh ;
+    skos:definition "Work order created but not yet assigned or started."@en .
+
+cim-cmms:status_InProgress
+    a cim-cmms:WorkOrderStatus ;
+    rdfs:label "In Progress"@en , "处理中"@zh ;
+    skos:definition "Work order accepted and maintenance work is underway."@en .
+
+cim-cmms:status_OnHold
+    a cim-cmms:WorkOrderStatus ;
+    rdfs:label "On Hold"@en , "暂停"@zh ;
+    skos:definition "Work order paused due to pending parts, safety clearance, or resource constraint."@en .
+
+cim-cmms:status_Completed
+    a cim-cmms:WorkOrderStatus ;
+    rdfs:label "Completed"@en , "已完成"@zh ;
+    skos:definition "Maintenance work finished and equipment returned to service."@en .
+
+cim-cmms:status_Cancelled
+    a cim-cmms:WorkOrderStatus ;
+    rdfs:label "Cancelled"@en , "已取消"@zh ;
+    skos:definition "Work order cancelled before completion (superseded, duplicate, or not required)."@en .
+
+# ============================================================
+# WORK ORDER PRIORITY (as Named Individuals)
+# ============================================================
+
+cim-cmms:WorkOrderPriority
+    a owl:Class ;
+    rdfs:label "Work Order Priority"@en , "工单优先级"@zh .
+
+cim-cmms:priority_Critical
+    a cim-cmms:WorkOrderPriority ;
+    rdfs:label "Critical"@en , "紧急"@zh ;
+    skos:definition "Patient safety or life-safety system at risk. Start within 2 hours."@en .
+
+cim-cmms:priority_High
+    a cim-cmms:WorkOrderPriority ;
+    rdfs:label "High"@en , "高"@zh ;
+    skos:definition "Significant equipment degradation. Start within 24 hours."@en .
+
+cim-cmms:priority_Medium
+    a cim-cmms:WorkOrderPriority ;
+    rdfs:label "Medium"@en , "中"@zh ;
+    skos:definition "Routine corrective or near-due PM. Start within 72 hours."@en .
+
+cim-cmms:priority_Low
+    a cim-cmms:WorkOrderPriority ;
+    rdfs:label "Low"@en , "低"@zh ;
+    skos:definition "Planned PM or non-critical inspection. Start within scheduled window."@en .
+
+# ============================================================
+# PERSONNEL CLASSES
+# ============================================================
+
+cim-cmms:MaintenanceTechnician
+    a owl:Class ;
+    rdfs:label "Maintenance Technician"@en , "维护技术员"@zh ;
+    skos:definition "A qualified individual assigned to perform maintenance work. Carries trade certifications relevant to HVAC, electrical, or medical gas systems."@en .
+
+cim-cmms:MaintenanceTeam
+    a owl:Class ;
+    rdfs:label "Maintenance Team"@en , "维护班组"@zh ;
+    skos:definition "A group of technicians organized by trade or system (HVAC team, electrical team, FAS team)."@en .
+
+# ============================================================
+# OBJECT PROPERTIES
+# ============================================================
+
+cim-cmms:hasWorkOrderStatus
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range cim-cmms:WorkOrderStatus ;
+    rdfs:label "has work order status"@en , "工单状态"@zh .
+
+cim-cmms:hasWorkOrderPriority
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range cim-cmms:WorkOrderPriority ;
+    rdfs:label "has work order priority"@en , "工单优先级"@zh .
+
+cim-cmms:maintenanceTarget
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "maintenance target"@en , "维护对象设备"@zh ;
+    skos:definition "The CIM equipment instance (IFC ABox) that is the subject of this work order. Links CMMS data to the IFC static model."@en .
+
+cim-cmms:assignedTo
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range cim-cmms:MaintenanceTechnician ;
+    rdfs:label "assigned to"@en , "指派技术员"@zh .
+
+cim-cmms:managedByTeam
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range cim-cmms:MaintenanceTeam ;
+    rdfs:label "managed by team"@en , "所属班组"@zh .
+
+# ============================================================
+# DATATYPE PROPERTIES
+# ============================================================
+
+cim-cmms:hasWorkOrderID
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:string ;
+    rdfs:label "work order ID"@en , "工单编号"@zh ;
+    skos:definition "Unique work order identifier. Convention: 'WO-{TYPE}-{YEAR}{MONTH}-{SEQ}', e.g. 'WO-PM-202605-0001'."@en .
+
+cim-cmms:scheduledStartDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "scheduled start date"@en , "计划开始时间"@zh .
+
+cim-cmms:actualStartDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "actual start date"@en , "实际开始时间"@zh .
+
+cim-cmms:completedDate
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "completed date"@en , "完成时间"@zh .
+
+cim-cmms:estimatedDurationHours
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "estimated duration (h)"@en , "预计工时（小时）"@zh .
+
+cim-cmms:hasFailureMode
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:CorrectiveMaintenance ;
+    rdfs:range xsd:string ;
+    rdfs:label "failure mode description"@en , "故障模式描述"@zh ;
+    skos:definition "FMEA failure mode code or description that triggered this CM work order. Aligns to the 200+ failure modes in CIM FMEA module."@en .
+
+cim-cmms:hasResolutionDescription
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:string ;
+    rdfs:label "resolution description"@en , "解决方案描述"@zh .
+
+cim-cmms:hasMaintenanceInterval
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:PreventiveMaintenance ;
+    rdfs:range xsd:string ;
+    rdfs:label "maintenance interval"@en , "维护间隔"@zh ;
+    skos:definition "PM recurrence period: 'MONTHLY' | 'QUARTERLY' | 'SEMI-ANNUAL' | 'ANNUAL'. Used by CMMS simulator to generate PM schedules."@en .
+
+cim-cmms:sparesRequired
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cmms:WorkOrder ;
+    rdfs:range xsd:string ;
+    rdfs:label "spares required"@en , "所需备件"@zh .

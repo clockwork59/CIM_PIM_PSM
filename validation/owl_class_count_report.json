@@ -1,6 +1,6 @@
 {
-  "count_explicit_owl_class": 479,
-  "count_with_subclass": 482,
+  "count_explicit_owl_class": 542,
+  "count_with_subclass": 545,
   "by_namespace": {
     "https://cim.medical/ontology/v3.4/equipment": 94,
     "https://cim.medical/ontology/v4.0/foundational": 56,
@@ -8,13 +8,17 @@
     "https://cim.medical/ontology/v4.0/point": 43,
     "https://cim.medical/ontology/v4.0/design": 41,
     "https://cim.medical/ontology/v4.0/operational": 38,
+    "https://cim.medical/ontology/v4.0/control_strategy": 37,
     "https://cim.medical/ontology/v3.4/flow": 31,
-    "https://cim.medical/ontology/v4.0/control_strategy": 31,
     "https://cim.medical/ontology/v4.0/medium": 28,
+    "https://cim.medical/ontology/v4.0/security_event": 26,
     "https://cim.medical/ontology/v3.4/control": 21,
+    "https://cim.medical/ontology/v4.0/fas": 13,
     "https://cim.medical/ontology/v3.4": 12,
     "https://cim.medical/ontology/v4.0/reference": 11,
+    "https://cim.medical/ontology/v4.0/cmms": 10,
     "https://cim.medical/ontology/v3.4/topology": 8,
+    "https://cim.medical/ontology/v4.0/bacnet": 8,
     "https://cim.medical/ontology/v3.4/metering": 7,
     "https://cim.medical/ontology/v3.4/operations": 6,
     "https://cim.medical/ontology/v3.4/location": 4,
@@ -29,6 +33,7 @@
     "version02/cim/metering/metering_hierarchy.ttl",
     "version02/cim/ontology/_index_v4.ttl",
     "version02/cim/ontology/bridge/bridge_ashrae223p.ttl",
+    "version02/cim/ontology/bridge/bridge_bacnet.ttl",
     "version02/cim/ontology/bridge/bridge_brick.ttl",
     "version02/cim/ontology/bridge/bridge_fso.ttl",
     "version02/cim/ontology/bridge/bridge_ifc.ttl",
@@ -36,11 +41,14 @@
     "version02/cim/ontology/layer1_conceptual.ttl",
     "version02/cim/ontology/layer2_reference.ttl",
     "version02/cim/ontology/layer3_design.ttl",
+    "version02/cim/ontology/layer4_cmms.ttl",
     "version02/cim/ontology/layer4_control_strategies.ttl",
+    "version02/cim/ontology/layer4_fas_security.ttl",
     "version02/cim/ontology/layer4_operational.ttl",
+    "version02/cim/ontology/layer4_security_event.ttl",
     "version02/cim/ontology_skeleton.ttl",
     "version02/cim/spaces/medical_special_spaces.ttl"
   ],
   "parse_errors": [],
-  "total_triples": 4539
+  "total_triples": 5395
 }

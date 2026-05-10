@@ -1,0 +1,201 @@
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix bfo:      <http://purl.obolibrary.org/obo/> .
+
+@prefix cim:      <http://hospital-cim.org/v4/core#> .
+@prefix cim-equip: <http://hospital-cim.org/v4/equipment#> .
+@prefix cim-fas:  <http://hospital-cim.org/v4/fas#> .
+@prefix cim-d:    <http://hospital-cim.org/v4/design#> .
+
+# ============================================================
+# CIM v4.0 — Layer 4: Fire Alarm & Safety (FAS) Security Module
+# ============================================================
+# File   : layer4_fas_security.ttl
+# Sprint : M3 2026-05-10
+# Scope  : Operational FAS device classes for BAS/BACnet federation simulation
+#          Aligned to BFO 2020 Continuant hierarchy
+#          Links to layer1_conceptual.ttl abstract equipment classes
+# ============================================================
+
+<http://hospital-cim.org/v4/fas>
+    a owl:Ontology ;
+    rdfs:label "CIM v4.0 FAS Security Layer"@en ,
+               "CIM v4.0 消防安全设备层"@zh ;
+    dcterms:description "Fire Alarm System device ontology for multi-source data federation (M3). Extends CIM Layer 4 operational semantics with FAS device types, alarm zones, and detection states compatible with BACnet binding."@en ;
+    owl:versionIRI <http://hospital-cim.org/v4/fas/1.0.0> ;
+    owl:imports <http://hospital-cim.org/v4/equipment> ;
+    dcterms:created "2026-05-10"^^xsd:date ;
+    dcterms:source "NBU Medical Clinic FAS Design Documents" .
+
+# ============================================================
+# CLASS HIERARCHY
+# ============================================================
+
+# --- Abstract base (bridges to layer1 cim-equip:SafetyEquipment) ---
+
+cim-fas:FireSafetyDevice
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:SafetyEquipment ;
+    rdfs:label "Fire Safety Device"@en , "消防安全设备"@zh ;
+    skos:definition "A material entity that detects, signals, suppresses, or controls fire-related hazards in a building. Subclass of BFO:MaterialEntity via cim-equip:Equipment."@en ;
+    rdfs:comment "Abstract parent for all FAS device types. Instances carry hasEquipmentID and hasFASZoneID."@en .
+
+cim-fas:FireDetector
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireSafetyDevice ;
+    rdfs:label "Fire Detector"@en , "火灾探测器"@zh ;
+    skos:definition "A sensor-class FAS device that detects fire signatures (smoke, heat, gas, flame) and generates a detection signal."@en .
+
+cim-fas:FireSuppressionDevice
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireSafetyDevice ;
+    rdfs:label "Fire Suppression Device"@en , "消防灭火设备"@zh ;
+    skos:definition "A FAS device that actively suppresses fire, including sprinklers, fire dampers, and gas suppression systems."@en .
+
+cim-fas:FireAlarmControlUnit
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireSafetyDevice ;
+    rdfs:label "Fire Alarm Control Unit"@en , "火灾报警控制器"@zh ;
+    skos:altLabel "FireAlarmPanel"@en , "FACU"@en ;
+    skos:definition "The central controller that receives alarm signals from detectors, manages alarm zones, and triggers outputs. Maps to IFC:FireSuppressionTerminal with ControllerType='FireAlarmPanel'."@en .
+
+# --- Concrete detector types ---
+
+cim-fas:SmokeDetector
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireDetector ;
+    rdfs:label "Smoke Detector"@en , "感烟探测器"@zh ;
+    skos:altLabel "PhotoelectricSmokeDetector"@en , "光电感烟探测器"@zh ;
+    skos:definition "A fire detector that responds to visible or invisible particles of combustion. Standard type for general areas in GB 50116."@en ;
+    rdfs:comment "BACnet binding: BACnetBinaryInput with objectName='SMOKE-{zone}-{n}', presentValue ACTIVE/INACTIVE."@en .
+
+cim-fas:IonizationSmokeDetector
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:SmokeDetector ;
+    rdfs:label "Ionization Smoke Detector"@en , "离子感烟探测器"@zh ;
+    skos:definition "Smoke detector using ionization chamber, sensitive to fast-flaming fires. Used in specific high-risk rooms."@en .
+
+cim-fas:HeatDetector
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireDetector ;
+    rdfs:label "Heat Detector"@en , "感温探测器"@zh ;
+    skos:altLabel "ThermalDetector"@en ;
+    skos:definition "A fire detector that responds to abnormal temperature rise (fixed-temperature or rate-of-rise). Used in kitchens, mechanical rooms, and areas with steam or dust that would cause smoke detector false alarms."@en ;
+    rdfs:comment "BACnet binding: BACnetAnalogInput for continuous temperature reading; BACnetBinaryInput for alarm threshold breach."@en .
+
+cim-fas:FlameDetector
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireDetector ;
+    rdfs:label "Flame Detector"@en , "火焰探测器"@zh ;
+    skos:definition "A fire detector that responds to infrared/ultraviolet radiation from open flames. Used in operating theaters and high-value areas."@en .
+
+cim-fas:GasDetector
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireDetector ;
+    rdfs:label "Combustible Gas Detector"@en , "可燃气体探测器"@zh ;
+    skos:definition "A detector sensing flammable or toxic gas concentrations (e.g. LPG, CO). Required in medical gas storage areas."@en ;
+    rdfs:comment "BACnet binding: BACnetAnalogInput for gas concentration (% LEL or ppm)."@en .
+
+cim-fas:ManualCallPoint
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireSafetyDevice ;
+    rdfs:label "Manual Call Point"@en , "手动报警按钮"@zh ;
+    skos:altLabel "ManualAlarmInitiationDevice"@en ;
+    skos:definition "A manually-operated device for triggering a fire alarm. Located at exits and along escape routes per GB 50116."@en .
+
+# --- Suppression devices ---
+
+cim-fas:SprinklerHead
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireSuppressionDevice ;
+    rdfs:label "Sprinkler Head"@en , "自动喷水灭火喷头"@zh ;
+    skos:definition "A thermally-activated water discharge nozzle forming part of the wet pipe sprinkler system."@en .
+
+cim-fas:FireDamper
+    a owl:Class ;
+    rdfs:subClassOf cim-fas:FireSuppressionDevice ;
+    rdfs:label "Fire Damper"@en , "防火阀"@zh ;
+    skos:definition "A duct-mounted damper that closes automatically on smoke/fire detection to prevent fire spread through HVAC ductwork. Linked to AHU/VAV control strategy."@en ;
+    rdfs:comment "Cross-domain link: cim-fas:FireDamper instances may appear in both FAS and HVAC control strategy graphs. Use owl:sameAs or cim:linkedControlDevice to bridge."@en .
+
+# ============================================================
+# OBJECT PROPERTIES
+# ============================================================
+
+cim-fas:hasFASZoneID
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-fas:FireSafetyDevice ;
+    rdfs:range xsd:string ;
+    rdfs:label "has FAS Zone ID"@en , "所属报警区域编号"@zh ;
+    skos:definition "The fire alarm zone identifier assigned by the FACU panel to this device. Format: 'Z{floor}-{area}', e.g. 'Z3-OR'."@en .
+
+cim-fas:hasAlarmZone
+    a owl:ObjectProperty ;
+    rdfs:domain cim-fas:FireSafetyDevice ;
+    rdfs:range cim-fas:FireAlarmZone ;
+    rdfs:label "has alarm zone"@en , "所属报警区域"@zh .
+
+cim-fas:hasDetectionState
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-fas:FireDetector ;
+    rdfs:range xsd:string ;
+    rdfs:label "has detection state"@en , "探测状态"@zh ;
+    skos:definition "Current detection state: NORMAL | ALARM | FAULT | OFFLINE. Updated by BAS polling."@en .
+
+cim-fas:hasAlarmThreshold
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-fas:HeatDetector ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has alarm threshold (°C)"@en , "报警阈值（摄氏度）"@zh .
+
+cim-fas:linkedToPanel
+    a owl:ObjectProperty ;
+    rdfs:domain cim-fas:FireSafetyDevice ;
+    rdfs:range cim-fas:FireAlarmControlUnit ;
+    rdfs:label "linked to panel"@en , "连接的控制器"@zh ;
+    skos:definition "The FACU panel that this detector/device reports to."@en .
+
+cim-fas:coverageArea
+    a owl:ObjectProperty ;
+    rdfs:domain cim-fas:FireSafetyDevice ;
+    rdfs:range cim:Space ;
+    rdfs:label "coverage area"@en , "保护区域"@zh ;
+    skos:definition "The space or room that this FAS device monitors or protects."@en .
+
+cim-fas:hasInstallationHeight
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-fas:FireSafetyDevice ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "installation height (m)"@en , "安装高度（m）"@zh .
+
+cim-fas:hasProtectionRadius
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-fas:FireDetector ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "protection radius (m)"@en , "保护半径（m）"@zh .
+
+# ============================================================
+# SUPPLEMENTARY CLASS: FireAlarmZone
+# ============================================================
+
+cim-fas:FireAlarmZone
+    a owl:Class ;
+    rdfs:label "Fire Alarm Zone"@en , "报警区域"@zh ;
+    skos:definition "A logical grouping of fire detectors and manual call points within a defined spatial boundary, managed by one FACU."@en .
+
+cim-fas:hasZoneNumber
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-fas:FireAlarmZone ;
+    rdfs:range xsd:integer ;
+    rdfs:label "zone number"@en .
+
+cim-fas:containsDevice
+    a owl:ObjectProperty ;
+    owl:inverseOf cim-fas:hasAlarmZone ;
+    rdfs:domain cim-fas:FireAlarmZone ;
+    rdfs:range cim-fas:FireSafetyDevice ;
+    rdfs:label "contains device"@en .
