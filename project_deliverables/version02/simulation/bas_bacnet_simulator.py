@@ -153,11 +153,14 @@ def get_equip_type(equip_id: str) -> str:
     # normalize aliases
     aliases = {
         "CHILLER": "CH",
+        "CHL":     "CH",
+        "CHWCH":   "CH",
         "CHW":     "PUMP",
         "CWP":     "PUMP",
+        "CHWP":    "PUMP",
         "FAN":     "EF",
-        "EXHAUST":  "EF",
-        "SUPPLY":   "SF",
+        "EXHAUST": "EF",
+        "SUPPLY":  "SF",
     }
     return aliases.get(prefix, prefix)
 
