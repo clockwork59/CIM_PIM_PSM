@@ -72,6 +72,55 @@ cim-equip:VAV_Terminal
     cim:sourceAgent "Agent-03" ;
     skos:note "变风量末端装置，用于空调分区控制"@zh-CN .
 
+cim-equip:VAV_SingleDuct
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:VAV_Terminal ;
+    rdfs:label "Single Duct VAV Box"@en ;
+    rdfs:label "单风道VAV箱"@zh-CN ;
+    skos:note "单风道变风量箱，150/200/250mm 规格"@zh-CN .
+
+cim-equip:VAV_DualDuct
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:VAV_Terminal ;
+    rdfs:label "Dual Duct VAV Box"@en ;
+    rdfs:label "双风道VAV箱"@zh-CN ;
+    skos:note "双风道混合型变风量箱，冷/热风混合"@zh-CN .
+
+cim-equip:VAV_FanPowered
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:VAV_Terminal ;
+    rdfs:label "Fan-Powered VAV Box"@en ;
+    rdfs:label "风机动力型VAV箱"@zh-CN ;
+    skos:note "内置风机的变风量箱，含串联型和并联型"@zh-CN .
+
+cim-equip:Coil
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Coil"@en ;
+    rdfs:label "盘管"@zh-CN ;
+    skos:note "AHU/FCU内冷热盘管，对应 brk:Coil; IFC: IfcCoil"@zh-CN .
+
+cim-equip:CoolingCoil
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Coil ;
+    rdfs:label "Cooling Coil"@en ;
+    rdfs:label "冷盘管"@zh-CN ;
+    skos:note "连接冷冻水系统，AHU 内冷却除湿组件"@zh-CN .
+
+cim-equip:HeatingCoil
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:Coil ;
+    rdfs:label "Heating Coil"@en ;
+    rdfs:label "热盘管"@zh-CN ;
+    skos:note "连接热水系统或电加热，AHU 内加热组件"@zh-CN .
+
+cim-equip:PreheatingCoil
+    a owl:Class ;
+    rdfs:subClassOf cim-equip:HeatingCoil ;
+    rdfs:label "Preheating Coil"@en ;
+    rdfs:label "预热盘管"@zh-CN ;
+    skos:note "新风预热盘管，防止结露结冰"@zh-CN .
+
 cim-equip:FCU
     a owl:Class ;
     rdfs:subClassOf cim-equip:Equipment ;

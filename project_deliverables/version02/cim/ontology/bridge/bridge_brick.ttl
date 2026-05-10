@@ -329,6 +329,44 @@ cim-equip:ExhaustFan
     owl:equivalentClass brick:Exhaust_Fan .
 
 # =============================================================================
+# SECTION 4c — P1/P2 缺口修复：Coil/VAV子类/照明/空间 桥接 (2026-05-10)
+# =============================================================================
+
+cim-equip:Coil
+    owl:equivalentClass brick:Coil .
+
+cim-equip:CoolingCoil
+    owl:equivalentClass brick:Cooling_Coil .
+
+cim-equip:HeatingCoil
+    owl:equivalentClass brick:Heating_Coil .
+
+cim-equip:VAV_SingleDuct
+    rdfs:subClassOf brick:Variable_Air_Volume_Box .
+
+cim-equip:VAV_FanPowered
+    rdfs:subClassOf brick:Variable_Air_Volume_Box_With_Reheat .
+
+cim-equip:LightFixture
+    owl:equivalentClass brick:Luminaire .
+
+cim-equip:SurgicalLight
+    rdfs:subClassOf brick:Luminaire ;
+    skos:note "Brick无手术灯专用类，CIM医疗扩展"@zh-CN .
+
+cim-space:ExamRoom
+    skos:closeMatch brick:Room .
+
+cim-space:WaitingArea
+    skos:closeMatch brick:Room .
+
+cim-space:OfficeRoom
+    skos:closeMatch brick:Room .
+
+cim-space:NurseStation
+    skos:closeMatch brick:Room .
+
+# =============================================================================
 # SECTION 5 — CIM 医疗专有类（无 Brick 对应，记录缺口）
 # =============================================================================
 

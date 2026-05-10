@@ -5,7 +5,7 @@
     "missing_in_cim": 0,
     "only_in_cim": 10,
     "coverage_rate_pct": 100.0,
-    "cim_total_classes": 422,
+    "cim_total_classes": 441,
     "pset_coverage_pct": 17.4
   },
   "coverage_matrix": [

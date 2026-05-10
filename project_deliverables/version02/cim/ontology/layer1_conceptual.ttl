@@ -615,6 +615,24 @@ cim-equip:SmokeExhaustDamper
     rdfs:label "Smoke Exhaust Damper"@en ; rdfs:label "排烟防火阀"@zh-CN ;
     skos:note "280°C 熔断关闭；GB 15930"@zh-CN .
 
+# ── P2 照明设备（BIM验证 2026-05-10）────────────────────────────────────────
+cim-equip:LightFixture
+    a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
+    rdfs:label "Light Fixture"@en ; rdfs:label "灯具"@zh-CN ;
+    skos:note "IFC: IfcLightFixture; Brick: brk:Luminaire。建筑照明设备"@zh-CN .
+
+cim-equip:SurgicalLight
+    a owl:Class ; rdfs:subClassOf cim-equip:LightFixture ;
+    rdfs:label "Surgical Light"@en ; rdfs:label "手术无影灯"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "手术室无影灯，照度≥10万lux，显色指数≥95"@zh-CN .
+
+cim-equip:EmergencyLight
+    a owl:Class ; rdfs:subClassOf cim-equip:LightFixture ;
+    rdfs:label "Emergency Light"@en ; rdfs:label "应急照明灯"@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "应急疏散照明，蓄电池供电≥90min"@zh-CN .
+
 # ── HVAC 末端设备（P0 缺口修复 — BIM 验证 2026-05-09）────────────────────────
 cim-equip:SupplyAirDiffuser
     a owl:Class ; rdfs:subClassOf cim-equip:Equipment ;
@@ -701,6 +719,53 @@ cim-space:HemodialysisRoom
     a owl:Class ; rdfs:subClassOf cim-space:Room ;
     rdfs:label "Hemodialysis Room"@en ; rdfs:label "血透室"@zh-CN ;
     skos:note "需要 RO 纯水系统供水"@zh-CN .
+
+# ── P1 诊疗空间扩展（BIM验证 2026-05-10）─────────────────────────────────────
+cim-space:ExamRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Examination Room"@en ; rdfs:label "诊室/检查室"@zh-CN ;
+    skos:note "IFC: IfcSpace(EXAM); 门诊检查用房，含全科诊室和专科诊室"@zh-CN .
+
+cim-space:ProcedureRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Procedure Room"@en ; rdfs:label "治疗室/处置室"@zh-CN ;
+    skos:note "小型门诊手术/治疗操作用房，介于诊室与手术室之间"@zh-CN .
+
+cim-space:ConsultationRoom
+    a owl:Class ; rdfs:subClassOf cim-space:ExamRoom ;
+    rdfs:label "Consultation Room"@en ; rdfs:label "问诊室"@zh-CN .
+
+# ── P2 行政/公共空间扩展（BIM验证 2026-05-10）─────────────────────────────────
+cim-space:OfficeRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Office"@en ; rdfs:label "办公室"@zh-CN ;
+    skos:note "医院行政办公用房，含医生办公室和护士站"@zh-CN .
+
+cim-space:NurseStation
+    a owl:Class ; rdfs:subClassOf cim-space:OfficeRoom ;
+    rdfs:label "Nurse Station"@en ; rdfs:label "护士站"@zh-CN .
+
+cim-space:WaitingArea
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Waiting Area"@en ; rdfs:label "候诊区"@zh-CN ;
+    skos:note "IFC: IfcSpace(WAITING); 门诊/检查科候诊用房"@zh-CN .
+
+cim-space:ReceptionArea
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Reception Area"@en ; rdfs:label "接诊/挂号区"@zh-CN ;
+    skos:note "IFC: IfcSpace(RECEPTION); 入口大厅/挂号窗口"@zh-CN .
+
+cim-space:StorageRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Storage Room"@en ; rdfs:label "库房"@zh-CN .
+
+cim-space:ToiletRoom
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Toilet / Restroom"@en ; rdfs:label "卫生间"@zh-CN .
+
+cim-space:StaffLounge
+    a owl:Class ; rdfs:subClassOf cim-space:Room ;
+    rdfs:label "Staff Lounge"@en ; rdfs:label "医护休息室"@zh-CN .
 
 cim-space:EndoscopyRoom
     a owl:Class ; rdfs:subClassOf cim-space:Room ;
