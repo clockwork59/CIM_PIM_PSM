@@ -1,0 +1,398 @@
+{
+  "event": {
+    "event_id": "EVT-20240115-001",
+    "event_type": "FireEvent",
+    "severity": "L2",
+    "location": "内科楼5F配电室",
+    "device_id": "SD-5F-ER-001",
+    "status": "已归档",
+    "timestamp": "2026-05-10T15:00:27.109782",
+    "plan_id": "PLAN-FIRE-L2-001",
+    "transitions": [
+      {
+        "from": "待确认",
+        "to": "已确认",
+        "time": "2026-05-10T15:00:27.110013"
+      },
+      {
+        "from": "已确认",
+        "to": "处理中",
+        "time": "2026-05-10T15:00:27.110024"
+      },
+      {
+        "from": "处理中",
+        "to": "已闭环",
+        "time": "2026-05-10T15:00:27.311109"
+      },
+      {
+        "from": "已闭环",
+        "to": "已归档",
+        "time": "2026-05-10T15:00:27.311119"
+      }
+    ]
+  },
+  "simulation": {
+    "plan_id": "PLAN-FIRE-L2-001",
+    "plan_name": "L2级电气火灾处置预案",
+    "plan_version": "V2.1",
+    "total_actions": 10,
+    "completed": 10,
+    "timed_out": 0,
+    "skipped": 0,
+    "total_simulated_time_sec": 840.0,
+    "real_elapsed_sec": 0.201,
+    "severity_limit_sec": 900,
+    "within_severity_limit": true,
+    "bas_commands_issued": [
+      {
+        "command": "PowerCutoffCommand",
+        "action_id": 2,
+        "action_name": "切断电源",
+        "issued_at": "2026-05-10T15:00:27.160269"
+      },
+      {
+        "command": "BroadcastCommand",
+        "action_id": 4,
+        "action_name": "区域广播",
+        "issued_at": "2026-05-10T15:00:27.160329"
+      },
+      {
+        "command": "ElevatorRecallCommand",
+        "action_id": 7,
+        "action_name": "电梯迫降",
+        "issued_at": "2026-05-10T15:00:27.160344"
+      },
+      {
+        "command": "DoorReleaseCommand",
+        "action_id": 6,
+        "action_name": "打开门禁",
+        "issued_at": "2026-05-10T15:00:27.160383"
+      }
+    ],
+    "actions": [
+      {
+        "id": 1,
+        "name": "确认火情",
+        "name_en": "Confirm Fire",
+        "role": "ControlRoomOperator",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "ManualConfirmation",
+        "time_limit_sec": 120,
+        "duration_sec": 84.0,
+        "within_limit": true,
+        "bas_command": null,
+        "dispatched_to": "中控值班员"
+      },
+      {
+        "id": 2,
+        "name": "切断电源",
+        "name_en": "Power Cutoff",
+        "role": "SYSTEM",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "AutomaticExecution",
+        "time_limit_sec": 30,
+        "duration_sec": 9.0,
+        "within_limit": true,
+        "bas_command": "PowerCutoffCommand",
+        "dispatched_to": "SYSTEM"
+      },
+      {
+        "id": 3,
+        "name": "启动灭火",
+        "name_en": "Fire Suppression",
+        "role": "ElectricalTechnician",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "ManualExecution",
+        "time_limit_sec": 300,
+        "duration_sec": 210.0,
+        "within_limit": true,
+        "bas_command": null,
+        "dispatched_to": "电工班"
+      },
+      {
+        "id": 4,
+        "name": "区域广播",
+        "name_en": "Area Broadcast",
+        "role": "SYSTEM",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "AutomaticExecution",
+        "time_limit_sec": 10,
+        "duration_sec": 3.0,
+        "within_limit": true,
+        "bas_command": "BroadcastCommand",
+        "dispatched_to": "SYSTEM"
+      },
+      {
+        "id": 5,
+        "name": "启动疏散",
+        "name_en": "Evacuation",
+        "role": "SecurityTeamLeader",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "ManualExecution",
+        "time_limit_sec": 600,
+        "duration_sec": 420.0,
+        "within_limit": true,
+        "bas_command": null,
+        "dispatched_to": "保安队长"
+      },
+      {
+        "id": 6,
+        "name": "打开门禁",
+        "name_en": "Door Release",
+        "role": "SYSTEM",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "AutomaticExecution",
+        "time_limit_sec": 10,
+        "duration_sec": 3.0,
+        "within_limit": true,
+        "bas_command": "DoorReleaseCommand",
+        "dispatched_to": "SYSTEM"
+      },
+      {
+        "id": 7,
+        "name": "电梯迫降",
+        "name_en": "Elevator Recall",
+        "role": "SYSTEM",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "AutomaticExecution",
+        "time_limit_sec": 30,
+        "duration_sec": 9.0,
+        "within_limit": true,
+        "bas_command": "ElevatorRecallCommand",
+        "dispatched_to": "SYSTEM"
+      },
+      {
+        "id": 8,
+        "name": "通知医护",
+        "name_en": "Notify Medical Staff",
+        "role": "SYSTEM",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "AutomaticExecution",
+        "time_limit_sec": 30,
+        "duration_sec": 9.0,
+        "within_limit": true,
+        "bas_command": null,
+        "dispatched_to": "SYSTEM"
+      },
+      {
+        "id": 9,
+        "name": "拨打119",
+        "name_en": "Call 119",
+        "role": "ControlRoomOperator",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "ManualConfirmation",
+        "time_limit_sec": 120,
+        "duration_sec": 84.0,
+        "within_limit": true,
+        "bas_command": null,
+        "dispatched_to": "中控值班员"
+      },
+      {
+        "id": 10,
+        "name": "通知领导",
+        "name_en": "Notify Management",
+        "role": "SYSTEM",
+        "status": "COMPLETED",
+        "status_label": "✅ COMPLETED   已完成",
+        "mode": "AutomaticExecution",
+        "time_limit_sec": 30,
+        "duration_sec": 9.0,
+        "within_limit": true,
+        "bas_command": null,
+        "dispatched_to": "SYSTEM"
+      }
+    ],
+    "event_log": [
+      {
+        "time": "2026-05-10T15:00:27.110039",
+        "action_id": 1,
+        "action": "确认火情",
+        "action_en": "Confirm Fire",
+        "event": "START",
+        "executor": "中控值班员",
+        "mode": "ManualConfirmation"
+      },
+      {
+        "time": "2026-05-10T15:01:51.110039",
+        "action_id": 1,
+        "action": "确认火情",
+        "action_en": "Confirm Fire",
+        "event": "COMPLETE",
+        "duration_sec": 84.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.160269",
+        "action_id": 2,
+        "action": "切断电源",
+        "action_en": "Power Cutoff",
+        "event": "START",
+        "executor": "SYSTEM",
+        "mode": "AutomaticExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:36.160269",
+        "action_id": 2,
+        "action": "切断电源",
+        "action_en": "Power Cutoff",
+        "event": "COMPLETE",
+        "duration_sec": 9.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.160329",
+        "action_id": 4,
+        "action": "区域广播",
+        "action_en": "Area Broadcast",
+        "event": "START",
+        "executor": "SYSTEM",
+        "mode": "AutomaticExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:30.160329",
+        "action_id": 4,
+        "action": "区域广播",
+        "action_en": "Area Broadcast",
+        "event": "COMPLETE",
+        "duration_sec": 3.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.160344",
+        "action_id": 7,
+        "action": "电梯迫降",
+        "action_en": "Elevator Recall",
+        "event": "START",
+        "executor": "SYSTEM",
+        "mode": "AutomaticExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:36.160344",
+        "action_id": 7,
+        "action": "电梯迫降",
+        "action_en": "Elevator Recall",
+        "event": "COMPLETE",
+        "duration_sec": 9.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.160354",
+        "action_id": 8,
+        "action": "通知医护",
+        "action_en": "Notify Medical Staff",
+        "event": "START",
+        "executor": "SYSTEM",
+        "mode": "AutomaticExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:36.160354",
+        "action_id": 8,
+        "action": "通知医护",
+        "action_en": "Notify Medical Staff",
+        "event": "COMPLETE",
+        "duration_sec": 9.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.160362",
+        "action_id": 10,
+        "action": "通知领导",
+        "action_en": "Notify Management",
+        "event": "START",
+        "executor": "SYSTEM",
+        "mode": "AutomaticExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:36.160362",
+        "action_id": 10,
+        "action": "通知领导",
+        "action_en": "Notify Management",
+        "event": "COMPLETE",
+        "duration_sec": 9.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.160378",
+        "action_id": 3,
+        "action": "启动灭火",
+        "action_en": "Fire Suppression",
+        "event": "START",
+        "executor": "电工班",
+        "mode": "ManualExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:27.160381",
+        "action_id": 5,
+        "action": "启动疏散",
+        "action_en": "Evacuation",
+        "event": "START",
+        "executor": "保安队长",
+        "mode": "ManualExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:27.160383",
+        "action_id": 6,
+        "action": "打开门禁",
+        "action_en": "Door Release",
+        "event": "START",
+        "executor": "SYSTEM",
+        "mode": "AutomaticExecution"
+      },
+      {
+        "time": "2026-05-10T15:00:30.160383",
+        "action_id": 6,
+        "action": "打开门禁",
+        "action_en": "Door Release",
+        "event": "COMPLETE",
+        "duration_sec": 3.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:03:57.160378",
+        "action_id": 3,
+        "action": "启动灭火",
+        "action_en": "Fire Suppression",
+        "event": "COMPLETE",
+        "duration_sec": 210.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:00:27.210553",
+        "action_id": 9,
+        "action": "拨打119",
+        "action_en": "Call 119",
+        "event": "START",
+        "executor": "中控值班员",
+        "mode": "ManualConfirmation"
+      },
+      {
+        "time": "2026-05-10T15:01:51.210553",
+        "action_id": 9,
+        "action": "拨打119",
+        "action_en": "Call 119",
+        "event": "COMPLETE",
+        "duration_sec": 84.0,
+        "within_limit": true
+      },
+      {
+        "time": "2026-05-10T15:07:27.160381",
+        "action_id": 5,
+        "action": "启动疏散",
+        "action_en": "Evacuation",
+        "event": "COMPLETE",
+        "duration_sec": 420.0,
+        "within_limit": true
+      }
+    ]
+  },
+  "generated_at": "2026-05-10T15:00:27.311825"
+}

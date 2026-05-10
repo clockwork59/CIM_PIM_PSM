@@ -1,0 +1,82 @@
+{
+  "plan_id": "PLAN-FIRE-L2-001",
+  "plan_name": "L2级电气火灾处置预案",
+  "version": "V2.1",
+  "trigger": {
+    "event_type": "FireEvent",
+    "severity": "L2",
+    "location_type": ["配电室", "设备间", "MechanicalRoom"]
+  },
+  "actions": [
+    {
+      "id": 1, "name": "确认火情", "name_en": "Confirm Fire",
+      "role": "ControlRoomOperator", "mode": "ManualConfirmation",
+      "time_limit_sec": 120, "depends_on": [],
+      "branch": {"confirmed": "NEXT", "false_alarm": "CLOSE"},
+      "bas_command": null
+    },
+    {
+      "id": 2, "name": "切断电源", "name_en": "Power Cutoff",
+      "role": "SYSTEM", "mode": "AutomaticExecution",
+      "time_limit_sec": 30, "depends_on": [1],
+      "bas_command": "PowerCutoffCommand"
+    },
+    {
+      "id": 3, "name": "启动灭火", "name_en": "Fire Suppression",
+      "role": "ElectricalTechnician", "mode": "ManualExecution",
+      "time_limit_sec": 300, "depends_on": [2],
+      "bas_command": null
+    },
+    {
+      "id": 4, "name": "区域广播", "name_en": "Area Broadcast",
+      "role": "SYSTEM", "mode": "AutomaticExecution",
+      "time_limit_sec": 10, "depends_on": [1],
+      "bas_command": "BroadcastCommand"
+    },
+    {
+      "id": 5, "name": "启动疏散", "name_en": "Evacuation",
+      "role": "SecurityTeamLeader", "mode": "ManualExecution",
+      "time_limit_sec": 600, "depends_on": [4],
+      "bas_command": null
+    },
+    {
+      "id": 6, "name": "打开门禁", "name_en": "Door Release",
+      "role": "SYSTEM", "mode": "AutomaticExecution",
+      "time_limit_sec": 10, "depends_on": [4],
+      "bas_command": "DoorReleaseCommand"
+    },
+    {
+      "id": 7, "name": "电梯迫降", "name_en": "Elevator Recall",
+      "role": "SYSTEM", "mode": "AutomaticExecution",
+      "time_limit_sec": 30, "depends_on": [1],
+      "bas_command": "ElevatorRecallCommand"
+    },
+    {
+      "id": 8, "name": "通知医护", "name_en": "Notify Medical Staff",
+      "role": "SYSTEM", "mode": "AutomaticExecution",
+      "time_limit_sec": 30, "depends_on": [1],
+      "bas_command": null
+    },
+    {
+      "id": 9, "name": "拨打119", "name_en": "Call 119",
+      "role": "ControlRoomOperator", "mode": "ManualConfirmation",
+      "time_limit_sec": 120, "depends_on": [3],
+      "bas_command": null
+    },
+    {
+      "id": 10, "name": "通知领导", "name_en": "Notify Management",
+      "role": "SYSTEM", "mode": "AutomaticExecution",
+      "time_limit_sec": 30, "depends_on": [1],
+      "bas_command": null
+    }
+  ],
+  "roles": {
+    "ControlRoomOperator": {"label": "中控值班员", "permission": "R2"},
+    "SecurityTeamLeader": {"label": "保安队长", "permission": "R2"},
+    "ElectricalTechnician": {"label": "电工班", "permission": "R1"},
+    "SYSTEM": {"label": "系统自动", "permission": "AUTO"}
+  },
+  "severity_limits": {
+    "L1": 1800, "L2": 900, "L3": 300
+  }
+}
