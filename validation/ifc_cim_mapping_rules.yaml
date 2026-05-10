@@ -1,0 +1,315 @@
+# IFC → CIM Mapping Rules
+# 版本: 1.0.0 | 2026-05-06
+# 覆盖范围: G-01 设备类型映射 / G-02 Proxy 分类 / G-04 系统介质判断 / G-05 非MEP过滤
+#
+# 设计原则:
+#   1. 规则按优先级从高到低排列，第一条匹配即应用
+#   2. ifc_type + name_pattern 联合匹配，name_pattern 为 Python re.search 正则
+#   3. cim_class 对应 cim-equip: 命名空间下的类名
+#   4. topology_role: SRC | DIST | SINK
+
+meta:
+  version: "1.0.0"
+  schema: IFC2X3
+  cim_version: "v3.4"
+  source_file: WestRiverSide Hospital Mechanical IFC
+
+# ────────────────────────────────────────────────────────────────────────────
+# G-05: 非MEP系统过滤规则（优先级最高，命中则丢弃该系统）
+# ────────────────────────────────────────────────────────────────────────────
+system_filters:
+  description: "IfcSystem 对象如命中以下规则，视为 Revit 空间分组，不映射到 CIM"
+  discard_if_name_matches:
+    - "^Office"
+    - "^Room"
+    - "^Conf"
+    - "^Lecture"
+    - "^Kitchen"
+    - "^\\d+(st|nd|rd|th)\\s"   # 楼层名 e.g. "1st Floor"
+
+# ────────────────────────────────────────────────────────────────────────────
+# G-01 + G-04: 系统前缀 → CIM 系统类 + 流体介质
+# ────────────────────────────────────────────────────────────────────────────
+system_prefix_rules:
+  - prefix: SA
+    cim_class: HVACSystem
+    cim_subtype: SupplyAirSystem
+    medium: supply_air
+    topology_category: air_distribution
+
+  - prefix: RA
+    cim_class: HVACSystem
+    cim_subtype: ReturnAirSystem
+    medium: return_air
+    topology_category: air_distribution
+
+  - prefix: EXH
+    cim_class: HVACSystem
+    cim_subtype: ExhaustAirSystem
+    medium: exhaust_air
+    topology_category: air_distribution
+
+  - prefix: HWS
+    cim_class: HVACSystem
+    cim_subtype: HotWaterSystem
+    medium: hot_water
+    topology_category: hydronic
+
+  - prefix: HWR
+    cim_class: HVACSystem
+    cim_subtype: HotWaterReturnSystem
+    medium: hot_water_return
+    topology_category: hydronic
+
+  - prefix: CWS
+    cim_class: HVACSystem
+    cim_subtype: ChilledWaterSystem
+    medium: chilled_water
+    topology_category: hydronic
+
+  - prefix: CWR
+    cim_class: HVACSystem
+    cim_subtype: ChilledWaterReturnSystem
+    medium: chilled_water_return
+    topology_category: hydronic
+
+  - prefix: CTS
+    cim_class: HVACSystem
+    cim_subtype: CoolingTowerSystem
+    medium: condenser_water_supply
+    topology_category: hydronic
+
+  - prefix: CTR
+    cim_class: HVACSystem
+    cim_subtype: CoolingTowerReturnSystem
+    medium: condenser_water_return
+    topology_category: hydronic
+
+  - prefix: OX
+    cim_class: MedicalGasSystem
+    cim_subtype: OxygenSystem
+    medium: oxygen
+    topology_category: medical_gas
+    # G-04 注: OX 前缀语义明确，不存在歧义
+
+  - prefix: MG
+    cim_class: MedicalGasSystem
+    cim_subtype: MedicalGasSystem
+    medium: medical_gas_mixed
+    topology_category: medical_gas
+
+  - prefix: SV
+    cim_class: MedicalGasSystem
+    cim_subtype: SuctionVacuumSystem
+    medium: vacuum
+    topology_category: medical_gas
+    disambiguation_note: >
+      G-04: SV 可能是 Supply Ventilation（送风）或 Suction Vacuum（负压）。
+      区分逻辑: 若系统成员中存在 IfcFlowTerminal 且名称含 "MedGas/Vacuum/Suction"
+      则为负压系统；否则归为 HVACSystem/SupplyAirSystem 并标记为 ambiguous。
+    disambiguation_rule:
+      member_name_contains_any: ["MedGas", "Vacuum", "Suction", "VAC"]
+      if_match: SuctionVacuumSystem
+      if_no_match:
+        cim_class: HVACSystem
+        cim_subtype: SupplyAirSystem
+        medium: supply_air
+        flag: AMBIGUOUS_SV
+
+  - prefix: SAN
+    cim_class: PlumbingSystem
+    cim_subtype: SanitaryDrainSystem
+    medium: sanitary_drainage
+    topology_category: plumbing
+
+# ────────────────────────────────────────────────────────────────────────────
+# G-01: IFC 实체类型 → CIM 设备类（typed entity mapping）
+# ────────────────────────────────────────────────────────────────────────────
+typed_entity_rules:
+  - ifc_type: IfcFlowSegment
+    cim_class: Pipe
+    topology_role: DIST
+    note: "管段，构成输配管网"
+
+  - ifc_type: IfcFlowFitting
+    cim_class: PipeFitting
+    topology_role: DIST
+    note: "弯头/三通/异径管"
+
+  - ifc_type: IfcFlowController
+    cim_class: FlowControlValve
+    topology_role: DIST
+    note: "控制阀（球阀、蝶阀、调节阀等）"
+
+  - ifc_type: IfcFlowTerminal
+    cim_class: FlowTerminal
+    topology_role: SINK
+    note: "末端出口，具体子类由 name_pattern_rules 细化"
+
+  - ifc_type: IfcDistributionPort
+    cim_class: null
+    skip: true
+    note: "端口对象不独立建模，作为连接关系处理"
+
+# ────────────────────────────────────────────────────────────────────────────
+# G-01 + G-02: 基于 Revit 族名的设备类推断
+# 适用于: IfcBuildingElementProxy / IfcFlowMovingDevice 族名无类型的情况
+# name_pattern: Python re.search，匹配 Name 字段（大小写不敏感）
+# ────────────────────────────────────────────────────────────────────────────
+name_pattern_rules:
+  # 医用气体末端 —— IfcBuildingElementProxy
+  - priority: 10
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "MedGas|Med.*Gas.*Outlet|Gas.*Outlet"
+    cim_class: MedicalGasOutlet
+    topology_role: SINK
+    reliability_level: LIFE_SAFETY
+
+  - priority: 11
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "Oxygen|O2.*Outlet|Oxy.*Terminal"
+    cim_class: MedicalGasOutlet
+    topology_role: SINK
+    attributes:
+      medium: oxygen
+    reliability_level: LIFE_SAFETY
+
+  - priority: 12
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "Vacuum.*Outlet|Suction.*Outlet|VAC.*Outlet"
+    cim_class: MedicalGasOutlet
+    topology_role: SINK
+    attributes:
+      medium: vacuum
+    reliability_level: LIFE_SAFETY
+
+  # 泵 —— G-01: Revit 族名含 Pump
+  - priority: 20
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)pump|水泵"
+    cim_class: Pump
+    topology_role: SRC
+
+  - priority: 21
+    ifc_type: IfcFlowMovingDevice   # IFC4 或完整 Revit 导出
+    name_pattern: "(?i)pump|水泵"
+    cim_class: Pump
+    topology_role: SRC
+
+  # 风机 —— G-01
+  - priority: 30
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)fan|\\bAHU\\b|Air.*Hand|空调机|组合式"
+    cim_class: Fan
+    topology_role: SRC
+
+  - priority: 31
+    ifc_type: IfcFlowMovingDevice
+    name_pattern: ".*"   # 所有未被更高优先级匹配的 FlowMovingDevice
+    cim_class: Fan
+    topology_role: SRC
+
+  # 冷水机组 —— G-01
+  - priority: 40
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)chiller|冷水机|制冷机"
+    cim_class: Chiller
+    topology_role: SRC
+
+  - priority: 41
+    ifc_type: IfcEnergyConversionDevice
+    name_pattern: "(?i)chiller"
+    cim_class: Chiller
+    topology_role: SRC
+
+  # 冷却塔
+  - priority: 50
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)cooling.*tower|冷却塔"
+    cim_class: CoolingTower
+    topology_role: SRC
+
+  # AHU / 空调机组
+  - priority: 60
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)\\bAHU\\b|air.*handl|空调机组|组合式空调"
+    cim_class: AHU
+    topology_role: SRC
+
+  # FCU / 风机盘管
+  - priority: 70
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)\\bFCU\\b|fan.*coil|风机盘管"
+    cim_class: FCU
+    topology_role: SINK
+
+  # VAV 末端
+  - priority: 80
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)\\bVAV\\b|variable.*air.*vol|变风量"
+    cim_class: VAV_Terminal
+    topology_role: SINK
+
+  # 通用阀门 fallback
+  - priority: 90
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: "(?i)valve|阀|butterfly|ball.*valve|gate.*valve"
+    cim_class: FlowControlValve
+    topology_role: DIST
+
+  # 兜底规则：无法识别的 Proxy → 标记为 UnmappedProxy
+  - priority: 999
+    ifc_type: IfcBuildingElementProxy
+    name_pattern: ".*"
+    cim_class: UnmappedProxy
+    topology_role: UNKNOWN
+    flag: REVIEW_REQUIRED
+
+# ────────────────────────────────────────────────────────────────────────────
+# G-06: 管道属性映射（IfcPropertySet → CIM data property）
+# ────────────────────────────────────────────────────────────────────────────
+property_set_rules:
+  - pset_name: Pset_DistributionFlowElementCommon
+    properties:
+      - ifc_property: Reference
+        cim_property: cim:revitFamilyReference
+        type: string
+        note: "Revit 族引用名称，用于族名分类规则"
+
+  - pset_name: Pset_PipeConnectionProperties
+    properties:
+      - ifc_property: NominalDiameter
+        cim_property: cim:nominalDiameter
+        type: decimal
+        unit: mm
+      - ifc_property: WallThickness
+        cim_property: cim:wallThickness
+        type: decimal
+        unit: mm
+
+  - pset_name: Pset_MaterialProperties
+    properties:
+      - ifc_property: Material
+        cim_property: cim:material
+        type: string
+        values_note: "copper | steel | stainless_steel | CPVC | PVC | PPR"
+
+# ────────────────────────────────────────────────────────────────────────────
+# G-03: IFC 文件类型标识 + 联合模型要求
+# ────────────────────────────────────────────────────────────────────────────
+federation_requirements:
+  description: >
+    CIM Agent-05（系统-空间耦合）的验证要求建筑专业 IFC 文件提供 IfcSpace 实体。
+    当前 WestRiverSide Mechanical IFC 不包含 IfcSpace。
+  required_disciplines:
+    - discipline: Architectural
+      ifc_entities: [IfcSpace, IfcZone, IfcBuildingStorey]
+      cim_agents: [Agent-02, Agent-05]
+      validation_blocked: true
+    - discipline: Mechanical
+      ifc_entities: [IfcSystem, IfcFlowSegment, IfcFlowFitting, IfcFlowTerminal]
+      cim_agents: [Agent-01, Agent-03, Agent-04]
+      validation_blocked: false
+  workaround: >
+    在获得建筑 IFC 之前，可手工创建代理空间实例（SPC-FLOOR-* 已从 IfcBuildingStorey
+    生成），并将机械系统临时耦合到楼层级别，而非房间级别。

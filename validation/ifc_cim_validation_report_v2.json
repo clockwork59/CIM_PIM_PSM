@@ -1,0 +1,71 @@
+{
+  "report_title": "IFC→CIM Validation Report v2.0: WestRiverSide Hospital Mechanical",
+  "ifc_file": "20190104WestRiverSide Hospital-Ifc2x3-Autodesk_Hospital_Metric_Mechanical.ifc",
+  "validation_date": "2026-05-06",
+  "version": "2.0",
+  "summary": {
+    "total_ifc_systems": 466,
+    "mapped_systems": 449,
+    "filtered_systems": 17,
+    "mapping_coverage_pct": 96.4,
+    "proxy_classified_pct": 32.4,
+    "ontology_ttl_loaded": 10,
+    "ontology_ttl_failed": 0,
+    "ontology_triples": 1188,
+    "shacl_result": "PASS",
+    "gaps_resolved": 5,
+    "gaps_mitigated": 1,
+    "gaps_documented": 1
+  },
+  "gap_resolution": [
+    {
+      "gap_id": "G-01",
+      "title": "Source equipment (pump/fan/chiller) type inference",
+      "status": "MITIGATED",
+      "resolution": "Name-pattern rules cover 9 equipment types. In this file: 0 IfcFlowMovingDevice found (Revit export limitation). Proxy classification applied to 1182 proxies.",
+      "remaining": "Pump/fan/chiller instances need Revit geometry export or manual tagging."
+    },
+    {
+      "gap_id": "G-02",
+      "title": "IfcBuildingElementProxy classification",
+      "status": "RESOLVED",
+      "resolution": "Name-pattern rules applied to 1182 proxies. MedicalGasOutlet: 121, FlowControlValve: 232, UnmappedProxy: 799.",
+      "remaining": "UnmappedProxy instances need manual review."
+    },
+    {
+      "gap_id": "G-03",
+      "title": "No IfcSpace — Agent-05 coupling unverifiable",
+      "status": "DOCUMENTED",
+      "resolution": "Federation requirement documented in mapping_rules.yaml. Proxy spaces created from 11 IfcBuildingStorey (floor-level coupling only).",
+      "remaining": "Requires architectural IFC with IfcSpace for room-level coupling."
+    },
+    {
+      "gap_id": "G-04",
+      "title": "SV system prefix ambiguity",
+      "status": "RESOLVED",
+      "resolution": "Disambiguation rule applied: 2 SV systems reclassified to SupplyAirSystem based on member name inspection. Remaining SV systems confirmed as SuctionVacuumSystem.",
+      "remaining": "None."
+    },
+    {
+      "gap_id": "G-05",
+      "title": "Non-MEP system objects in IFC",
+      "status": "RESOLVED",
+      "resolution": "17 non-MEP systems filtered out (1st Floor Rear Elevator Lobby, Lecture Room 63, Room 49/48, Room 50+, Room 52/51+).",
+      "remaining": "None."
+    },
+    {
+      "gap_id": "G-06",
+      "title": "Pipe dimension properties missing from CIM",
+      "status": "RESOLVED",
+      "resolution": "EQ-016 (nominalDiameter), EQ-017 (wallThickness), EQ-018 (pipeMaterial), EQ-019 (pressureRating), EQ-020 (flowMedium) added to data_dictionary.yaml. IFC export coverage: Reference=100%, Diameter=0%.",
+      "remaining": "Diameter not present in this IFC export. Revit schedule export needed."
+    },
+    {
+      "gap_id": "G-TTL",
+      "title": "equipment_location.ttl syntax error (missing cim-equip: prefix)",
+      "status": "RESOLVED",
+      "resolution": "Added @prefix cim-equip: declaration. All 10 TTL files now load cleanly.",
+      "remaining": "None."
+    }
+  ]
+}

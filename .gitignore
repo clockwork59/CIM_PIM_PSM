@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE / Editor
+.claude/settings.local.json
+.vscode/
+.idea/
+
+# IFC large binary files (use Git LFS or external storage)
+*.ifc
+sub context docs/
+
+# OS
+.DS_Store
+Thumbs.db

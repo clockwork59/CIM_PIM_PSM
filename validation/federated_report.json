@@ -1,0 +1,207 @@
+{
+  "report_title": "IFC Federated Validation Report — WestRiverSide Hospital (5 Disciplines)",
+  "validation_date": "2026-05-06",
+  "version": "3.0",
+  "summary": {
+    "total_ifc_files": 5,
+    "ontology_ttl_loaded": 10,
+    "ontology_ttl_failed": 0,
+    "total_instance_triples": 10312,
+    "shacl_conforms": true,
+    "shacl_violations": 0,
+    "gaps_identified": 3,
+    "agents_validated": 1,
+    "agents_partial": 5,
+    "agents_blocked": 2
+  },
+  "ifc_entity_counts": {
+    "Mechanical": {
+      "IfcSystem": 466,
+      "IfcFlowSegment": 8732,
+      "IfcBuildingElementProxy": 1182
+    },
+    "Architecture": {
+      "IfcSpace": 0,
+      "IfcBuildingStorey": 8,
+      "IfcWall": 1282
+    },
+    "Plumbing": {
+      "IfcSystem": 65,
+      "IfcFlowSegment": 4308,
+      "IfcBuildingElementProxy": 582
+    },
+    "Electrical": {
+      "IfcSystem": 221,
+      "IfcLightFixture": 1272,
+      "IfcElectricAppliance": 138,
+      "IfcBuildingElementProxy": 1125
+    },
+    "FireAlarm": {
+      "IfcDistributionControlElement": 861,
+      "IfcSystem": 21
+    }
+  },
+  "discipline_stats": {
+    "Mechanical": {
+      "systems_mapped": 449,
+      "systems_filtered": 17,
+      "cim_classes": {
+        "MedicalGasSystem": 57,
+        "HVACSystem": 380,
+        "PlumbingSystem": 12
+      },
+      "proxy_classified": {
+        "FlowControlValve": 232,
+        "UnmappedProxy": 799,
+        "Fan": 11,
+        "Pump": 14,
+        "Chiller": 2,
+        "CoolingTower": 3,
+        "MedicalGasOutlet": 121
+      },
+      "ifcSpace_count": 0,
+      "cim_agents_covered": [
+        "Agent-01",
+        "Agent-03",
+        "Agent-04"
+      ]
+    },
+    "Architecture": {
+      "ifcSpace_count": 0,
+      "storeys": 8,
+      "proxy_classified": {
+        "UnmappedProxy": 1327,
+        "ElevatorComponent": 63,
+        "SanitaryFixture": 380
+      },
+      "cim_agents_covered": [],
+      "cim_agents_blocked": [
+        "Agent-02",
+        "Agent-05"
+      ]
+    },
+    "Plumbing": {
+      "systems_mapped": 65,
+      "total_systems": 65,
+      "cim_classes": {
+        "PlumbingSystem": 65
+      },
+      "proxy_classified": {
+        "SanitaryFixture": 474,
+        "UnmappedProxy": 108
+      },
+      "cim_agents_covered": [
+        "Agent-01",
+        "Agent-03"
+      ]
+    },
+    "Electrical": {
+      "circuits": 97,
+      "light_fixtures": 1272,
+      "data_outlets": 138,
+      "proxy_classified": {
+        "ElecReceptacle": 1116,
+        "ElecPanel": 9
+      },
+      "cim_agents_covered": [
+        "Agent-01 (partial)",
+        "Agent-03 (lighting only)"
+      ]
+    },
+    "FireAlarm": {
+      "devices_total": 861,
+      "device_classes": {
+        "FireAlarmSounder": 353,
+        "FireAlarmPanel": 1,
+        "SmokeDetector": 401,
+        "FireAlarmPullStation": 106
+      },
+      "system_zones": 21,
+      "cim_agents_covered": [
+        "Agent-06 (fire alarm sensors)",
+        "Agent-08 (partial alarms)"
+      ]
+    }
+  },
+  "agent_coverage": {
+    "Agent-01 (System Topology)": {
+      "status": "VALIDATED",
+      "evidence": "Mechanical: 449 systems | Plumbing: 65 systems | Electrical: 97 circuits | FireAlarm: 21 zones",
+      "gap": "None"
+    },
+    "Agent-02 (Space Ontology)": {
+      "status": "BLOCKED — NO IfcSpace",
+      "evidence": "Architecture IFC4 has 0 IfcSpace. 8 storeys as floor proxies only.",
+      "gap": "G-03: Cannot validate room-level spatial model without Revit room export."
+    },
+    "Agent-03 (Equipment Ontology)": {
+      "status": "PARTIAL",
+      "evidence": "Mechanical proxies: MedicalGasOutlet=121, Pump=14, Fan=11 | Plumbing: SanitaryFixture=474 | Electrical: LightFixture=1272 | Fire: 861 devices classified",
+      "gap": "G-07: Power distribution equipment (Transformer/Switchgear/UPS) absent from electrical file."
+    },
+    "Agent-04 (Flow Model)": {
+      "status": "PARTIAL",
+      "evidence": "Pipe segments: Mechanical=8732, Plumbing=4308. Flow topology present.",
+      "gap": "G-06: Pipe NominalDiameter not in IFC export. Conservation equations unverifiable."
+    },
+    "Agent-05 (System-Space Coupling)": {
+      "status": "BLOCKED — NO IfcSpace",
+      "evidence": "Requires IfcSpace from Architecture. Floor-level proxy coupling only.",
+      "gap": "G-03: Spatial coupling cannot be validated at room level."
+    },
+    "Agent-06 (Control System)": {
+      "status": "PARTIAL",
+      "evidence": "Mechanical: 462 FlowController | Electrical: 113 switches | FireAlarm: 861 detection/notification devices",
+      "gap": "No IfcSensor/IfcActuator typed entities found (all as Proxy). BACnet point table absent."
+    },
+    "Agent-07 (Metering)": {
+      "status": "NOT VALIDATED",
+      "evidence": "No metering equipment found in any IFC file.",
+      "gap": "G-07: Electrical meters, thermal meters not exported from Revit MEP models."
+    },
+    "Agent-08 (O&M)": {
+      "status": "PARTIAL",
+      "evidence": "FireAlarm: 861 alarm devices with type classification. Alarm zones mapped.",
+      "gap": "G-08: No fire suppression pump/header. Work order triggers not in IFC."
+    },
+    "Agent-09 (Integration Validator)": {
+      "status": "PARTIAL",
+      "evidence": "SHACL: conforms=True, violations=0. All 10 TTL files load cleanly.",
+      "gap": "Cannot validate cross-agent coupling (Agent-05) until IfcSpace is available."
+    }
+  },
+  "gaps": [
+    {
+      "gap_id": "G-03",
+      "discipline": "Architecture",
+      "severity": "HIGH",
+      "description": "Architecture IFC4 file contains no IfcSpace entities. Room-level system-space coupling (Agent-05) cannot be validated. This is a Revit export configuration issue.",
+      "workaround": "8 IfcBuildingStorey used as floor-level proxy. Recommend re-exporting with 'Export rooms and areas' enabled in Revit IFC settings.",
+      "cim_agents_blocked": [
+        "Agent-02",
+        "Agent-05"
+      ]
+    },
+    {
+      "gap_id": "G-07",
+      "discipline": "Electrical",
+      "severity": "MEDIUM",
+      "description": "Electrical IFC contains only lighting circuits and outlets. Power distribution equipment (Transformer, Switchgear, UPS, Generator, ATS) not present — typical Revit Electrical Lighting model scope.",
+      "workaround": "Need separate Electrical Power IFC file or Revit Power model export.",
+      "cim_agents_blocked": [
+        "Agent-03 (ElectricalEquipment)",
+        "Agent-07 (power metering)"
+      ]
+    },
+    {
+      "gap_id": "G-08",
+      "discipline": "FireAlarm",
+      "severity": "MEDIUM",
+      "description": "Fire Alarm IFC contains 861 detection/notification devices but no fire suppression equipment (FirePump, SprinklerHeader). All devices mapped as base IfcDistributionControlElement — no typed sub-classes (IfcAlarm, IfcSensor) in this export.",
+      "workaround": "Name-pattern rules classify 861 devices into 5 CIM sub-classes. FirePump and suppression system require separate model.",
+      "cim_agents_blocked": [
+        "Agent-08 (fire suppression integration)"
+      ]
+    }
+  ]
+}

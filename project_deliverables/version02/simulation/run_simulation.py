@@ -18,6 +18,7 @@ from project_deliverables.version02.simulation.core.stage_gate_engine import run
 from project_deliverables.version02.simulation.validators.lod_loi_checker import check_lod_loi
 from project_deliverables.version02.simulation.validators.flow_topology import check_flow_topology
 from project_deliverables.version02.simulation.validators.bfo_prereq import check_bfo_prereqs
+from project_deliverables.version02.simulation.validators.shacl_compliance import check_shacl_compliance
 from project_deliverables.version02.simulation.report.pim_plan_generator import (
     generate_json, generate_markdown
 )
@@ -59,9 +60,10 @@ def main():
     # 4. Run simulation
     print(f"\n[4/4] 运行阶段门控仿真...")
     validators = {
-        "lod_loi":      check_lod_loi,
+        "lod_loi":       check_lod_loi,
         "flow_topology": check_flow_topology,
-        "bfo_prereq":   check_bfo_prereqs,
+        "bfo_prereq":    check_bfo_prereqs,
+        "shacl":         check_shacl_compliance,
     }
 
     results = run_simulation(

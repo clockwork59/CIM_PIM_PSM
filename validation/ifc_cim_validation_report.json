@@ -1,0 +1,294 @@
+{
+  "report_title": "IFC→CIM Validation Report: WestRiverSide Hospital Mechanical",
+  "ifc_file": "20190104WestRiverSide Hospital-Ifc2x3-Autodesk_Hospital_Metric_Mechanical.ifc",
+  "ifc_schema": "IFC2X3",
+  "validation_date": "2026-05-06",
+  "summary": {
+    "total_ifc_systems": 466,
+    "mapped_systems": 449,
+    "mapping_coverage_pct": 96.4,
+    "gaps_found": 6,
+    "shacl_result": "PASS",
+    "jsonld_entities_generated": 21,
+    "ontology_ttl_loaded": 9,
+    "ontology_triples": 1096
+  },
+  "system_coverage": [
+    {
+      "ifc_prefix": "CTR",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "CoolingTowerSystem",
+      "system_count": 1,
+      "member_count": 289,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "CTS",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "CoolingTowerSystem",
+      "system_count": 1,
+      "member_count": 422,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "CWR",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "ChilledWaterSystem",
+      "system_count": 12,
+      "member_count": 953,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "CWS",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "ChilledWaterSystem",
+      "system_count": 13,
+      "member_count": 894,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "EXH",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "ExhaustAirSystem",
+      "system_count": 35,
+      "member_count": 3277,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "HWR",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "HotWaterSystem",
+      "system_count": 26,
+      "member_count": 5489,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "HWS",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "HotWaterSystem",
+      "system_count": 29,
+      "member_count": 5132,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "MG",
+      "cim_class": "MedicalGasSystem",
+      "cim_subtype": "MedicalGasSystem",
+      "system_count": 18,
+      "member_count": 4301,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "OX",
+      "cim_class": "MedicalGasSystem",
+      "cim_subtype": "OxygenSystem",
+      "system_count": 23,
+      "member_count": 3818,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "RA",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "ReturnAirSystem",
+      "system_count": 24,
+      "member_count": 6875,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "SA",
+      "cim_class": "HVACSystem",
+      "cim_subtype": "SupplyAirSystem",
+      "system_count": 237,
+      "member_count": 22818,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "SAN",
+      "cim_class": "PlumbingSystem",
+      "cim_subtype": "SanitaryDrainSystem",
+      "system_count": 12,
+      "member_count": 54,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "SV",
+      "cim_class": "MedicalGasSystem",
+      "cim_subtype": "SuctionVacuumSystem",
+      "system_count": 18,
+      "member_count": 3794,
+      "status": "MAPPED"
+    },
+    {
+      "ifc_prefix": "Office",
+      "cim_class": null,
+      "system_count": 7,
+      "status": "GAP"
+    },
+    {
+      "ifc_prefix": "Room",
+      "cim_class": null,
+      "system_count": 6,
+      "status": "GAP"
+    },
+    {
+      "ifc_prefix": "1st",
+      "cim_class": null,
+      "system_count": 1,
+      "status": "GAP"
+    },
+    {
+      "ifc_prefix": "Lecture",
+      "cim_class": null,
+      "system_count": 1,
+      "status": "GAP"
+    },
+    {
+      "ifc_prefix": "Conf",
+      "cim_class": null,
+      "system_count": 1,
+      "status": "GAP"
+    },
+    {
+      "ifc_prefix": "Kitchen",
+      "cim_class": null,
+      "system_count": 1,
+      "status": "GAP"
+    }
+  ],
+  "topology_stats": {
+    "MG": {
+      "SRC": 0,
+      "DIST": 1304,
+      "SINK": 119,
+      "UNKNOWN": 22
+    },
+    "SV": {
+      "SRC": 0,
+      "DIST": 1151,
+      "SINK": 102,
+      "UNKNOWN": 23
+    },
+    "OX": {
+      "SRC": 0,
+      "DIST": 1167,
+      "SINK": 104,
+      "UNKNOWN": 17
+    },
+    "SAN": {
+      "SRC": 0,
+      "DIST": 12,
+      "SINK": 0,
+      "UNKNOWN": 14
+    },
+    "HWR": {
+      "SRC": 0,
+      "DIST": 1571,
+      "SINK": 0,
+      "UNKNOWN": 280
+    },
+    "CWR": {
+      "SRC": 0,
+      "DIST": 265,
+      "SINK": 0,
+      "UNKNOWN": 60
+    },
+    "CWS": {
+      "SRC": 0,
+      "DIST": 267,
+      "SINK": 0,
+      "UNKNOWN": 37
+    },
+    "HWS": {
+      "SRC": 0,
+      "DIST": 1488,
+      "SINK": 0,
+      "UNKNOWN": 244
+    },
+    "SA": {
+      "SRC": 0,
+      "DIST": 6136,
+      "SINK": 563,
+      "UNKNOWN": 1041
+    },
+    "RA": {
+      "SRC": 0,
+      "DIST": 2028,
+      "SINK": 166,
+      "UNKNOWN": 139
+    },
+    "EXH": {
+      "SRC": 0,
+      "DIST": 999,
+      "SINK": 118,
+      "UNKNOWN": 0
+    },
+    "CTS": {
+      "SRC": 0,
+      "DIST": 113,
+      "SINK": 0,
+      "UNKNOWN": 25
+    },
+    "CTR": {
+      "SRC": 0,
+      "DIST": 79,
+      "SINK": 0,
+      "UNKNOWN": 16
+    }
+  },
+  "gaps": [
+    {
+      "gap_id": "G-01",
+      "severity": "HIGH",
+      "category": "Equipment",
+      "description": "No IfcFlowMovingDevice (pumps/fans) found. Source-node equipment is embedded as generic elements. CIM EQP-HVAC-PUMP-* cannot be auto-mapped.",
+      "ifc_count": 0,
+      "cim_class": "Pump / Fan",
+      "recommendation": "CIM needs a mapping rule for Revit family name patterns (e.g. 'M_Pump*', 'M_Fan*') → CIM equipment class"
+    },
+    {
+      "gap_id": "G-02",
+      "severity": "MEDIUM",
+      "category": "Equipment Classification",
+      "description": "1182 IfcBuildingElementProxy elements found. Medical gas outlets, specialty valves use this fallback type. CIM mapping requires name-pattern heuristics.",
+      "ifc_count": 1182,
+      "cim_class": "MedicalGasOutlet / SpecialtyValve",
+      "recommendation": "Add CIM mapping rules: if Name contains 'MedGas' → cim:MedicalGasOutlet; if 'Valve' → cim:FlowController"
+    },
+    {
+      "gap_id": "G-03",
+      "severity": "HIGH",
+      "category": "Space Coupling",
+      "description": "Zero IfcSpace entities in mechanical file. CIM Agent-05 (system-space coupling) cannot be validated without architectural IFC file.",
+      "ifc_count": 0,
+      "cim_class": "Room / Zone",
+      "recommendation": "Validation requires combined architectural + mechanical IFC federation. Agent-02/05 output cannot be tested from this file alone."
+    },
+    {
+      "gap_id": "G-04",
+      "severity": "MEDIUM",
+      "category": "System Classification",
+      "description": "'SV' prefix ambiguous: ['SV 45', 'SV 43', 'SV 14', 'SV 28', 'SV 13']. Could be Supply Ventilation or Suction Vacuum. CIM taxonomy maps SV→SuctionVacuumSystem but this may be wrong for some systems.",
+      "ifc_count": 18,
+      "cim_class": "HVACSystem or MedicalGasSystem",
+      "recommendation": "CIM should use property-based classification (medium type, pressure) rather than name prefix alone."
+    },
+    {
+      "gap_id": "G-05",
+      "severity": "LOW",
+      "category": "System Taxonomy",
+      "description": "17 systems with non-MEP prefixes (['1st', 'Lecture', 'Room', 'Office', 'Conf', 'Kitchen']). Likely Revit room/zone groupings, not mechanical systems.",
+      "ifc_count": 17,
+      "cim_class": "None (out of scope)",
+      "recommendation": "CIM should define a filter to exclude IfcSystem objects that represent Revit room/area groupings."
+    },
+    {
+      "gap_id": "G-06",
+      "severity": "MEDIUM",
+      "category": "Property Mapping",
+      "description": "Pipe segments carry PropertySets: ['Pset_DistributionFlowElementCommon']. CIM data_dictionary.yaml has no explicit pipe dimension or material properties (NominalDiameter, PipeSchedule, Material).",
+      "ifc_count": 8732,
+      "cim_class": "Pipe",
+      "recommendation": "Add cim:nominalDiameter, cim:pipeSchedule, cim:material to CIM data dictionary for distribution network elements."
+    }
+  ]
+}

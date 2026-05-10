@@ -1,0 +1,733 @@
+[
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-144",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "13749.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL3KA"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 3 Ceiling"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-PIPE-4820",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#Pipe"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "38mgLsUHP0CBIlmkuIlPo2"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-MG-2193092",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "medical_gas_mixed"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "00xUuAjsT55ued7YA3lp72"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "MG 20"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-SV-2193099",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#HVACSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "supply_air"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "00xUuAjsT55ued7YA3lp73"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "SV 43"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#mappingFlag": [
+      {
+        "@value": "AMBIGUOUS_SV"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-162",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "23749.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL3MT"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 5 Ceiling"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-PIPE-3239",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#Pipe"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "38mgLsUHP0CBIlmkuIlPoQ"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-PIPE-3290",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#Pipe"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "38mgLsUHP0CBIlmkuIlPoO"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-PIPE-5488",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#Pipe"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "38mgLsUHP0CBIlmkuIlPo0"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-MG-2193127",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "medical_gas_mixed"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "26oyT1P1LAOv_gzNAirPZE"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "MG 54"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-MG-2193078",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "medical_gas_mixed"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3bU7e1zKLBAADpcZS5bO_w"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "MG 14"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-20700",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfRb"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:759956"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-SV-2193064",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "vacuum"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3n1jIE7yrENwPiXyMkbaNx"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "SV 28"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-OX-2193106",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "oxygen"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "00xUuAjsT55ued7YA3lp70"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "OX 48"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-138",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "10999.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL55D"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 3"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-21140",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfQc"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:760023"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-14589",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfON"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:759910"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-150",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "15999.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL56Y"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 4"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-OX-2193113",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "oxygen"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "26oyT1P1LAOv_gzNAirPZF"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "OX 50"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-126",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "5999.99999999664"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWNlEK"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 2"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-22477",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "2El5blb6bFBflqgUD_LXhA"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:761088"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-174",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "28749.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL3NK"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 6 Ceiling"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-20830",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfRS"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:759981"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-PIPE-3267",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#Pipe"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "38mgLsUHP0CBIlmkuIlPoR"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-168",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "25999.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL56R"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 6"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-20985",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfQp"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:760002"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-SV-2193071",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "vacuum"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3n1jIE7yrENwPiXyMkbajs"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "SV 14"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-MG-2193085",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#MedicalGasSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "medical_gas_mixed"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3n1jIE7yrENwPiXyMkbaVk"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "MG 38"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-132",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "8749.99999999643"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL3Bm"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 2 Ceiling"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-180",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "30999.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL57e"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 7"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-20545",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfOC"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:759933"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SYS-SV-2193120",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#HVACSystem"
+    ],
+    "https://cim.medical/ontology/v3.4#flowMedium": [
+      {
+        "@value": "supply_air"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "26oyT1P1LAOv_gzNAirPZ8"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "SV 45"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#mappingFlag": [
+      {
+        "@value": "AMBIGUOUS_SV"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-120",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "0.0"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWNl0L"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 1"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-30047",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "2tbPY2Jo9AYwzsGzqXpN3G"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "VAV8:PValve200:767931"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#SPC-FLOOR-156",
+    "@type": [
+      "https://cim.medical/ontology/v3.4#Floor"
+    ],
+    "https://cim.medical/ontology/v3.4#elevation_m": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal",
+        "@value": "20999.9999999991"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "0$B0wY21D0cfsjufzWL56p"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#name": [
+      {
+        "@value": "Level 5"
+      }
+    ]
+  },
+  {
+    "@id": "http://cim.medical/instance/westriverside#EQP-FLOWCONTROLVALVE-13855",
+    "@type": [
+      "https://cim.medical/ontology/v3.4/equipment#FlowControlValve"
+    ],
+    "https://cim.medical/ontology/v3.4#ifcGuid": [
+      {
+        "@value": "3muLCfFojANO_uMmpKnfO_"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#ifcName": [
+      {
+        "@value": "PValve250:PValve250:759887"
+      }
+    ],
+    "https://cim.medical/ontology/v3.4#topologyRole": [
+      {
+        "@value": "DIST"
+      }
+    ]
+  }
+]

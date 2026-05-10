@@ -1,0 +1,208 @@
+{
+  "@context": {
+    "cim": "http://cim.medical/ontology#",
+    "inst": "http://cim.medical/instance/westriverside#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "inst:SYS-OX-2193113",
+      "@type": "cim:MedicalGasSystem",
+      "cim:subtype": "OxygenSystem",
+      "cim:ifcGuid": "26oyT1P1LAOv_gzNAirPZF",
+      "cim:ifcName": "OX 50",
+      "cim:memberCount": 37,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SYS-SA-2192553",
+      "@type": "cim:HVACSystem",
+      "cim:subtype": "SupplyAirSystem",
+      "cim:ifcGuid": "3sTI61FzX0RhR4dimpoTrv",
+      "cim:ifcName": "SA 406",
+      "cim:memberCount": 25,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SYS-CWS-2192875",
+      "@type": "cim:HVACSystem",
+      "cim:subtype": "ChilledWaterSystem",
+      "cim:ifcGuid": "0TVvqIpGf3nulJw_O5UGlQ",
+      "cim:ifcName": "CWS 20",
+      "cim:memberCount": 4,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SYS-HWS-2192868",
+      "@type": "cim:HVACSystem",
+      "cim:subtype": "HotWaterSystem",
+      "cim:ifcGuid": "0TVvqIpGf3nulJw_O5UGlS",
+      "cim:ifcName": "HWS 57",
+      "cim:memberCount": 4,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SYS-MG-2193127",
+      "@type": "cim:MedicalGasSystem",
+      "cim:subtype": "MedicalGasSystem",
+      "cim:ifcGuid": "26oyT1P1LAOv_gzNAirPZE",
+      "cim:ifcName": "MG 54",
+      "cim:memberCount": 37,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-120",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWNl0L",
+      "cim:name": "Level 1",
+      "cim:elevation_m": 0.0,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-126",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWNlEK",
+      "cim:name": "Level 2",
+      "cim:elevation_m": 5999.99999999664,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-132",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL3Bm",
+      "cim:name": "Level 2 Ceiling",
+      "cim:elevation_m": 8749.99999999643,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-138",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL55D",
+      "cim:name": "Level 3",
+      "cim:elevation_m": 10999.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-144",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL3KA",
+      "cim:name": "Level 3 Ceiling",
+      "cim:elevation_m": 13749.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-150",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL56Y",
+      "cim:name": "Level 4",
+      "cim:elevation_m": 15999.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-156",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL56p",
+      "cim:name": "Level 5",
+      "cim:elevation_m": 20999.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-162",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL3MT",
+      "cim:name": "Level 5 Ceiling",
+      "cim:elevation_m": 23749.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-168",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL56R",
+      "cim:name": "Level 6",
+      "cim:elevation_m": 25999.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-174",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL3NK",
+      "cim:name": "Level 6 Ceiling",
+      "cim:elevation_m": 28749.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:SPC-FLOOR-180",
+      "@type": "cim:Floor",
+      "cim:ifcGuid": "0$B0wY21D0cfsjufzWL57e",
+      "cim:name": "Level 7",
+      "cim:elevation_m": 30999.9999999991,
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:EQP-MGAS-MGOUT-1666607",
+      "@type": "cim:MedicalGasOutlet",
+      "cim:ifcGuid": "3bU7e1zKLBAADpcZS5bOLn",
+      "cim:ifcName": "MedGasOutlet Triple - Hosted:MedGasOutlet Triple - Hosted:1160837",
+      "cim:parentSystem": "inst:SYS-OX-2193057",
+      "cim:topologyRole": "SINK",
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:EQP-MGAS-MGOUT-1666499",
+      "@type": "cim:MedicalGasOutlet",
+      "cim:ifcGuid": "3bU7e1zKLBAADpcZS5bOQU",
+      "cim:ifcName": "MedGasOutlet Triple - Hosted:MedGasOutlet Triple - Hosted:1160554",
+      "cim:parentSystem": "inst:SYS-OX-2193050",
+      "cim:topologyRole": "SINK",
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:EQP-MGAS-MGOUT-1666517",
+      "@type": "cim:MedicalGasOutlet",
+      "cim:ifcGuid": "3bU7e1zKLBAADpcZS5bOPl",
+      "cim:ifcName": "MedGasOutlet Triple - Hosted:MedGasOutlet Triple - Hosted:1160603",
+      "cim:parentSystem": "inst:SYS-OX-2193050",
+      "cim:topologyRole": "SINK",
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:EQP-MGAS-MGOUT-1666535",
+      "@type": "cim:MedicalGasOutlet",
+      "cim:ifcGuid": "3bU7e1zKLBAADpcZS5bOOu",
+      "cim:ifcName": "MedGasOutlet Triple - Hosted:MedGasOutlet Triple - Hosted:1160652",
+      "cim:parentSystem": "inst:SYS-OX-2193050",
+      "cim:topologyRole": "SINK",
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    },
+    {
+      "@id": "inst:EQP-MGAS-MGOUT-1666553",
+      "@type": "cim:MedicalGasOutlet",
+      "cim:ifcGuid": "3bU7e1zKLBAADpcZS5bOOR",
+      "cim:ifcName": "MedGasOutlet Triple - Hosted:MedGasOutlet Triple - Hosted:1160687",
+      "cim:parentSystem": "inst:SYS-OX-2193050",
+      "cim:topologyRole": "SINK",
+      "cim:sourceAgent": "IFC-WestRiverSide",
+      "cim:mappingStatus": "AUTO_MAPPED"
+    }
+  ]
+}

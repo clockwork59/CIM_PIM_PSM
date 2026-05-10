@@ -1,0 +1,2443 @@
+{
+  "NBU_HVAC": {
+    "file": "NBU_MedicalClinic_Eng-HVAC.ifc",
+    "schema": "IFC2X3",
+    "total_entities": 455957,
+    "entity_counts": {
+      "IfcProject": 1,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 4,
+      "IfcSpace": 263,
+      "IfcFlowMovingDevice": 8,
+      "IfcFlowTerminal": 440,
+      "IfcEnergyConversionDevice": 3,
+      "IfcAirTerminalBoxType": 110,
+      "IfcFanType": 7,
+      "IfcChillerType": 1,
+      "IfcUnitaryEquipmentType": 2
+    },
+    "spaces": [
+      {
+        "id": "1Hk4$wKjPFLAM7$8qJgCTK",
+        "name": "S100",
+        "long_name": "Chiller Pad"
+      },
+      {
+        "id": "1EZvvXw2b3nf9WY8lHB1Jr",
+        "name": "2A12A",
+        "long_name": "X-RAY ALCOVE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iube1",
+        "name": "2B23",
+        "long_name": "BEE TECH"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubkQ",
+        "name": "2A03",
+        "long_name": "SEC. OFFICE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubeA",
+        "name": "2B2",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubkf",
+        "name": "2A09",
+        "long_name": "GEN. DENT. DTR #5"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpgl",
+        "name": "1D08",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubkT",
+        "name": "2A05",
+        "long_name": "OH DTR #1"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubeJ",
+        "name": "2B4",
+        "long_name": "PSYCH TEST"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubgN",
+        "name": "2D07",
+        "long_name": "SUPER"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubgH",
+        "name": "2D13",
+        "long_name": "TOILET"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubkc",
+        "name": "2A08",
+        "long_name": "GEN. DENT. DTR #4"
+      },
+      {
+        "id": "0fnMpz1HLFAOQuQ9iNuvg$",
+        "name": "3R01",
+        "long_name": "R-Roof"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpjZ",
+        "name": "1C04",
+        "long_name": "FITTING / DISP."
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubkW",
+        "name": "2A06",
+        "long_name": "OH DTR #2"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubgK",
+        "name": "2D16",
+        "long_name": "RMO DIR"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoNS",
+        "name": "1E21",
+        "long_name": "FLAMMABLE STORAGE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubkH",
+        "name": "2A14",
+        "long_name": "ADMIN"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpgg",
+        "name": "1D10",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubfx",
+        "name": "2B21",
+        "long_name": "PH SUPER"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubki",
+        "name": "2C02",
+        "long_name": "GEN. DENT. DTR #6"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoN6",
+        "name": "1E23",
+        "long_name": "BEE EQUIP. STORAGE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iube4",
+        "name": "2B24",
+        "long_name": "BEE TECH"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubf8",
+        "name": "2B5",
+        "long_name": "W. TOILET"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubfl",
+        "name": "2D20",
+        "long_name": "CONF. ROOM"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpgK",
+        "name": "1D15",
+        "long_name": "WTS & MEAS ROOM"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubla",
+        "name": "2CC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IublI",
+        "name": "2CC5",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpj$",
+        "name": "1C03",
+        "long_name": "JAN.CL."
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoN9",
+        "name": "1E16",
+        "long_name": "BMET WORK STATION"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubl9",
+        "name": "2C10",
+        "long_name": "DIPC DECON"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoMu",
+        "name": "1DC7",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpjj",
+        "name": "1C06",
+        "long_name": "SOIL. UTL./ TRASH"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpjw",
+        "name": "1C02",
+        "long_name": "RECEPTION"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubgc",
+        "name": "2D19",
+        "long_name": "READINESS NCOIC OFFICE"
+      },
+      {
+        "id": "29yPXt$4T3gOWnowNxAAYj",
+        "name": "1C14",
+        "long_name": "HIST./INTV"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubeG",
+        "name": "2B3",
+        "long_name": "CONF. / GROUP THERAPY"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubg8",
+        "name": "2D09",
+        "long_name": "ADMIN OFFICE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iube7",
+        "name": "2B01",
+        "long_name": "OFFICE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31IubgE",
+        "name": "2D11",
+        "long_name": "CMDR OFFICE"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpjv",
+        "name": "1C01",
+        "long_name": "WAITING"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoM_",
+        "name": "1E14",
+        "long_name": "DISASTER STORAGE"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoNH",
+        "name": "1E22",
+        "long_name": "SEC. STORAGE"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoNk",
+        "name": "1E29",
+        "long_name": "HK. SUPV. OFFICE"
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubf2",
+        "name": "2BC6",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpjm",
+        "name": "1C10",
+        "long_name": "OPT. EXAM. OFF.OPT."
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpe6",
+        "name": "1D35",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEpgf",
+        "name": "1D12",
+        "long_name": "SPECIMEN COLL LAB"
+      },
+      {
+        "id": "1ApixdShTADgzYQQNPEoNR",
+        "name": "1E30",
+        "long_name": "SOIL.LIN."
+      },
+      {
+        "id": "22wRXcsxb3fOQ$v31Iubgi",
+        "name": "2DC1",
+        "long_name": "CORRIDOR"
+      }
+    ],
+    "storeys": [
+      {
+        "name": "Roof - Mech",
+        "elevation": 9250.0
+      },
+      {
+        "name": "First Floor",
+        "elevation": 0.0
+      },
+      {
+        "name": "Second Floor",
+        "elevation": 4570.0
+      },
+      {
+        "name": "TOF Footing",
+        "elevation": -1000.0
+      }
+    ],
+    "systems": [],
+    "equipment_sample": {
+      "IfcProject": [
+        {
+          "id": "3bBuD8vl95iwV9GcJKE3RR",
+          "name": "123456789",
+          "tag": ""
+        }
+      ],
+      "IfcBuilding": [
+        {
+          "id": "3bBuD8vl95iwV9GcJKE3RQ",
+          "name": "",
+          "tag": ""
+        }
+      ],
+      "IfcBuildingStorey": [
+        {
+          "id": "3bBuD8vl95iwV9GcGhm7ur",
+          "name": "Roof - Mech",
+          "tag": ""
+        },
+        {
+          "id": "3bBuD8vl95iwV9GcGhnyWS",
+          "name": "First Floor",
+          "tag": ""
+        },
+        {
+          "id": "3bBuD8vl95iwV9GcGhnykT",
+          "name": "Second Floor",
+          "tag": ""
+        },
+        {
+          "id": "3bBuD8vl95iwV9GcGhm7vk",
+          "name": "TOF Footing",
+          "tag": ""
+        }
+      ],
+      "IfcSpace": [
+        {
+          "id": "1Hk4$wKjPFLAM7$8qJgCTK",
+          "name": "S100",
+          "tag": ""
+        },
+        {
+          "id": "1EZvvXw2b3nf9WY8lHB1Jr",
+          "name": "2A12A",
+          "tag": ""
+        },
+        {
+          "id": "22wRXcsxb3fOQ$v31Iube1",
+          "name": "2B23",
+          "tag": ""
+        },
+        {
+          "id": "22wRXcsxb3fOQ$v31IubkQ",
+          "name": "2A03",
+          "tag": ""
+        },
+        {
+          "id": "22wRXcsxb3fOQ$v31IubeA",
+          "name": "2B2",
+          "tag": ""
+        }
+      ],
+      "IfcFlowMovingDevice": [
+        {
+          "id": "1gW$dr5u590gCcZGG3AEDB",
+          "name": "M_Centrifugal Fan -  Rooftop  - Upblast:991-1905 LPS:991-1905 LPS:733718",
+          "tag": "733718"
+        },
+        {
+          "id": "1gW$dr5u590gCcZGG3AFxX",
+          "name": "M_Centrifugal Fan -  Rooftop  - Upblast:991-1905 LPS:991-1905 LPS:733116",
+          "tag": "733116"
+        },
+        {
+          "id": "1Bt2bbQ3vCRRncVtkgKm_G",
+          "name": "M_Exhaust Unit with Cabinet - Round Connection - Ceiling Mounted:47-84 LPS:47-84 LPS:581560",
+          "tag": "581560"
+        },
+        {
+          "id": "1GkzlmPcH0QOU$zSigxFNX",
+          "name": "M_Exhaust Unit with Cabinet - Round Connection - Ceiling Mounted:47-84 LPS:47-84 LPS:610955",
+          "tag": "610955"
+        },
+        {
+          "id": "1Bt2bbQ3vCRRncVtkgKm$g",
+          "name": "M_Exhaust Unit with Cabinet - Round Connection - Ceiling Mounted:47-84 LPS:47-84 LPS:581570",
+          "tag": "581570"
+        }
+      ],
+      "IfcFlowTerminal": [
+        {
+          "id": "1G$vhmQXn2Jvv399dvK$5L",
+          "name": "M_Return Register:RR-600 x 600 Face 300 x 300 Connection:RR-600 x 600 Face 300 x 300 Connection:611940",
+          "tag": "611940"
+        },
+        {
+          "id": "2mEJjBcIX1YQdA7f2wXhTc",
+          "name": "M_Exhaust Grill:ER-600 x 600 Face 300 x 300 Connection:ER-600 x 600 Face 300 x 300 Connection:603475",
+          "tag": "603475"
+        },
+        {
+          "id": "270CRfYljClP3lAwmpBQhz",
+          "name": "M_Supply Diffuser:SD-600 x 600 Face 300 x 300 Connection:SD-600 x 600 Face 300 x 300 Connection:613058",
+          "tag": "613058"
+        },
+        {
+          "id": "3vjAMrGwDEGhjt_XkGxIhM",
+          "name": "M_Return Register:RR-600 x 600 Face 300 x 300 Connection:RR-600 x 600 Face 300 x 300 Connection:634975",
+          "tag": "634975"
+        },
+        {
+          "id": "1G$vhmQXn2Jvv399dvK$5f",
+          "name": "M_Supply Diffuser:SD-600 x 600 Face 300 x 300 Connection:SD-600 x 600 Face 300 x 300 Connection:611928",
+          "tag": "611928"
+        }
+      ],
+      "IfcEnergyConversionDevice": [
+        {
+          "id": "0rcx3NRlHCjxDJbhLB_yA3",
+          "name": "M_Air Handling Unit - Split System - Horizontal:63300000 J:63300000 J:621849",
+          "tag": "621849"
+        },
+        {
+          "id": "3eI1mbah1DKxvkhQWIGlDu",
+          "name": "M_Air Handling Unit - Split System - Horizontal:63300000 J:63300000 J:630076",
+          "tag": "630076"
+        },
+        {
+          "id": "1Hk4$wKjPFLAM7$8qJgCUa",
+          "name": "M_Screw Chiller - Air Cooled - 281-1231 kW:633-703 kW:633-703 kW:725669",
+          "tag": "725669"
+        }
+      ],
+      "IfcAirTerminalBoxType": [
+        {
+          "id": "3zbrSnpgLDLx4_99A4rUZU",
+          "name": "200 mm",
+          "tag": "740914"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rUZS",
+          "name": "150 mm",
+          "tag": "740912"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rUZf",
+          "name": "150 mm",
+          "tag": "740869"
+        },
+        {
+          "id": "2KsT9lZyb2ce7TAWYBUnnQ",
+          "name": "250 mm",
+          "tag": "748513"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rUZZ",
+          "name": "150 mm",
+          "tag": "740879"
+        }
+      ],
+      "IfcFanType": [
+        {
+          "id": "3zbrSnpgLDLx4_99A4rVnH",
+          "name": "991-1905 LPS",
+          "tag": "744125"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rV2B",
+          "name": "47-84 LPS",
+          "tag": "743015"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rV26",
+          "name": "47-84 LPS",
+          "tag": "743018"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rVnG",
+          "name": "991-1905 LPS",
+          "tag": "744124"
+        },
+        {
+          "id": "3zbrSnpgLDLx4_99A4rV2A",
+          "name": "47-84 LPS",
+          "tag": "743014"
+        }
+      ],
+      "IfcChillerType": [
+        {
+          "id": "29zlrModn8QxZ4$c6kbMv4",
+          "name": "633-703 kW",
+          "tag": "574263"
+        }
+      ],
+      "IfcUnitaryEquipmentType": [
+        {
+          "id": "3L8hWAGKHBAuJsahiYsbgx",
+          "name": "63300000 J",
+          "tag": "728908"
+        },
+        {
+          "id": "3oIxNfHLz43RKbF1JGc7V5",
+          "name": "63300000 J",
+          "tag": "747748"
+        }
+      ]
+    },
+    "psets_found": [
+      "Constraints",
+      "Construction",
+      "Dimensions",
+      "Electrical",
+      "Electrical - Loads",
+      "Energy Analysis",
+      "Fittings",
+      "Graphics",
+      "Identity Data",
+      "Insulation",
+      "Lining",
+      "Mechanical",
+      "Mechanical - Flow",
+      "Other",
+      "Phasing",
+      "Pset_BuildingCommon",
+      "Pset_SpaceCommon"
+    ]
+  },
+  "NBU_ARCH": {
+    "file": "NBU_MedicalClinic_Arch.ifc",
+    "schema": "IFC2X3",
+    "total_entities": 273138,
+    "entity_counts": {
+      "IfcProject": 1,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 4,
+      "IfcSpace": 269,
+      "IfcFlowTerminal": 102
+    },
+    "spaces": [
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcha",
+        "name": "1AC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcZz",
+        "name": "1A01",
+        "long_name": "PATIENT ADMIN. RECEPT."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcZa",
+        "name": "1A02",
+        "long_name": "RMO ANALYST"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcZZ",
+        "name": "1A03",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcZk",
+        "name": "1A04",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcZj",
+        "name": "1A05",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcZe",
+        "name": "1A06",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcYN",
+        "name": "1A07",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcYI",
+        "name": "1A08",
+        "long_name": "PHARM. OFFICE"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcYR",
+        "name": "1A11",
+        "long_name": "JAN."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcY0",
+        "name": "1A14",
+        "long_name": "SUPER / NCOIC"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcYF",
+        "name": "1A15",
+        "long_name": "COUNSELING"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcY9",
+        "name": "1DC1",
+        "long_name": "WAITING / ACTIVITY AREA"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcaa",
+        "name": "1DC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcaZ",
+        "name": "1DC3",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcak",
+        "name": "1DC4",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcqZ",
+        "name": "1CC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcqk",
+        "name": "1CC3",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcqj",
+        "name": "1C01",
+        "long_name": "WAITING"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBK",
+        "name": "1C02",
+        "long_name": "RECEPTION"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBJ",
+        "name": "1C03",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBR",
+        "name": "1C04",
+        "long_name": "FITTING / DISP."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcB6",
+        "name": "1C05",
+        "long_name": "VISUAL FIELD"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcB5",
+        "name": "1C06",
+        "long_name": "SOIL. UTL. / TRASH"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcB0",
+        "name": "1C07",
+        "long_name": "OPT. EXAM / OFF."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBF",
+        "name": "1C08",
+        "long_name": "SCREEN EYE TEST"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBA",
+        "name": "1C09",
+        "long_name": "FUNDUS CAMERA ROOM"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcB9",
+        "name": "1C10",
+        "long_name": "OPT. EXAM / OFF."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBw",
+        "name": "1D01",
+        "long_name": "SL. LIN. / TRASH"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcBW",
+        "name": "1D03",
+        "long_name": "CLEAN U."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcA7",
+        "name": "1D12",
+        "long_name": "SPECIMEN COLL. LAB"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcAC",
+        "name": "1D15",
+        "long_name": "WTS & MEAS. ROOM"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcAu",
+        "name": "1D16",
+        "long_name": "PROVIDER CUBICLES"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcAd",
+        "name": "1D17",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcAX",
+        "name": "1D19",
+        "long_name": "MDIS VIEW"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcAi",
+        "name": "1D20",
+        "long_name": "APPMTS"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqcAh",
+        "name": "1D21",
+        "long_name": "GROUP IS"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc9L",
+        "name": "1D23",
+        "long_name": "GROUP IS"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc9G",
+        "name": "1D24",
+        "long_name": "RECORDS"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc9V",
+        "name": "1D25",
+        "long_name": "PROVIDER CUBICLES"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc9P",
+        "name": "1D27",
+        "long_name": "ADMIN WORK STATN."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc93",
+        "name": "1D30",
+        "long_name": "WTS & MEAS. ROOM"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc9r",
+        "name": "1D33",
+        "long_name": "PEDIATRIC WAITING"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc9v",
+        "name": "1D37",
+        "long_name": "CLEAN U."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc8Z",
+        "name": "1D39",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc8e",
+        "name": "1DC5",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc1c",
+        "name": "1DC6",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc1b",
+        "name": "1DC7",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc1W",
+        "name": "1DC8",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "0ztdC3L1HAzhbhMHypqc0L",
+        "name": "1C13",
+        "long_name": "COMM. ROOM"
+      }
+    ],
+    "storeys": [
+      {
+        "name": "TOF Footing",
+        "elevation": -1.000000000000353
+      },
+      {
+        "name": "First Floor",
+        "elevation": -3.531500425424383e-13
+      },
+      {
+        "name": "Second Floor",
+        "elevation": 4.570000000004098
+      },
+      {
+        "name": "Roof - Main",
+        "elevation": 9.25000000000408
+      }
+    ],
+    "systems": [],
+    "equipment_sample": {
+      "IfcProject": [
+        {
+          "id": "3eM8WbY_59RR5TDWry5aRV",
+          "name": "Project Number",
+          "tag": ""
+        }
+      ],
+      "IfcBuilding": [
+        {
+          "id": "3eM8WbY_59RR5TDWry5aRU",
+          "name": "",
+          "tag": ""
+        }
+      ],
+      "IfcBuildingStorey": [
+        {
+          "id": "3eM8WbY_59RR5TDWs3wwJR",
+          "name": "TOF Footing",
+          "tag": ""
+        },
+        {
+          "id": "3eM8WbY_59RR5TDWs3wwJP",
+          "name": "First Floor",
+          "tag": ""
+        },
+        {
+          "id": "3eM8WbY_59RR5TDWs3wwJN",
+          "name": "Second Floor",
+          "tag": ""
+        },
+        {
+          "id": "3eM8WbY_59RR5TDWs3wwJL",
+          "name": "Roof - Main",
+          "tag": ""
+        }
+      ],
+      "IfcSpace": [
+        {
+          "id": "0ztdC3L1HAzhbhMHypqcha",
+          "name": "1AC2",
+          "tag": ""
+        },
+        {
+          "id": "0ztdC3L1HAzhbhMHypqcZz",
+          "name": "1A01",
+          "tag": ""
+        },
+        {
+          "id": "0ztdC3L1HAzhbhMHypqcZa",
+          "name": "1A02",
+          "tag": ""
+        },
+        {
+          "id": "0ztdC3L1HAzhbhMHypqcZZ",
+          "name": "1A03",
+          "tag": ""
+        },
+        {
+          "id": "0ztdC3L1HAzhbhMHypqcZk",
+          "name": "1A04",
+          "tag": ""
+        }
+      ],
+      "IfcFlowTerminal": [
+        {
+          "id": "1PhTeLfT1CTfFmYGr3$Ju$",
+          "name": "M_Elevator-Hydraulic:2000 lbs:2000 lbs:306114",
+          "tag": "306114"
+        },
+        {
+          "id": "25QVeOxmX9DQEpjA0wx7Nd",
+          "name": "M_Fire Extinguisher Cabinet:305 x 215 x 813mm:305 x 215 x 813mm:350693",
+          "tag": "350693"
+        },
+        {
+          "id": "1CU3Pa7ALAQOW5yxokoHTD",
+          "name": "M_Fire Extinguisher Cabinet:305 x 215 x 813mm:305 x 215 x 813mm:350968",
+          "tag": "350968"
+        },
+        {
+          "id": "0tIhQ6hmz02e5gznEed7ES",
+          "name": "M_Fire Extinguisher Cabinet:305 x 215 x 813mm:305 x 215 x 813mm:351171",
+          "tag": "351171"
+        },
+        {
+          "id": "0tIhQ6hmz02e5gznEed7H7",
+          "name": "M_Fire Extinguisher Cabinet:305 x 215 x 813mm:305 x 215 x 813mm:351256",
+          "tag": "351256"
+        }
+      ]
+    },
+    "psets_found": [
+      "PSet_Revit_Constraints",
+      "PSet_Revit_Construction",
+      "PSet_Revit_Dimensions",
+      "PSet_Revit_Electrical - Loads",
+      "PSet_Revit_Graphics",
+      "PSet_Revit_Horizontal Grid Pattern",
+      "PSet_Revit_Identity Data",
+      "PSet_Revit_Other",
+      "PSet_Revit_Phasing",
+      "PSet_Revit_Structural",
+      "PSet_Revit_Type_Constraints",
+      "PSet_Revit_Type_Construction",
+      "PSet_Revit_Type_Dimensions",
+      "PSet_Revit_Type_Fire Protection",
+      "PSet_Revit_Type_Graphics",
+      "PSet_Revit_Type_Green Building Properties",
+      "PSet_Revit_Type_Horizontal Grid Pattern",
+      "PSet_Revit_Type_Horizontal Mullions",
+      "PSet_Revit_Type_Identity Data",
+      "PSet_Revit_Type_Materials and Finishes",
+      "PSet_Revit_Type_Other",
+      "PSet_Revit_Type_Risers",
+      "PSet_Revit_Type_Stringers",
+      "PSet_Revit_Type_Treads",
+      "PSet_Revit_Type_Vertical Grid Pattern",
+      "PSet_Revit_Type_Vertical Mullions",
+      "PSet_Revit_Vertical Grid Pattern",
+      "Pset_BuildingCommon",
+      "Pset_CoveringCommon",
+      "Pset_CurtainWallCommon",
+      "Pset_DoorCommon",
+      "Pset_RailingCommon",
+      "Pset_SpaceCommon",
+      "Pset_StairCommon",
+      "Pset_StairFlightCommon",
+      "Pset_WallCommon",
+      "Pset_WindowCommon"
+    ]
+  },
+  "NBU_MEP": {
+    "file": "NBU_MedicalClinic_Eng-MEP-Optimized.ifc",
+    "schema": "IFC2X3",
+    "total_entities": 2066481,
+    "entity_counts": {
+      "IfcProject": 1,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 4,
+      "IfcSpace": 526,
+      "IfcFlowMovingDevice": 137,
+      "IfcFlowTerminal": 3053,
+      "IfcFlowStorageDevice": 1,
+      "IfcEnergyConversionDevice": 3,
+      "IfcFanType": 8,
+      "IfcPumpType": 1,
+      "IfcChillerType": 1,
+      "IfcLightFixtureType": 9
+    },
+    "spaces": [
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hct",
+        "name": "1D04-M",
+        "long_name": "TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcr",
+        "name": "1D02-M",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HWh",
+        "name": "1C12-M",
+        "long_name": "TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HWr",
+        "name": "1C14-M",
+        "long_name": "HIST. / INTV"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcl",
+        "name": "1A03-M",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XazC",
+        "name": "2D20-M",
+        "long_name": "CONF. ROOM"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcc",
+        "name": "1AC3-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazu",
+        "name": "2C07-M",
+        "long_name": "M. STAFF TOILET"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazx",
+        "name": "2C03-M",
+        "long_name": "CONSULT."
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XazD",
+        "name": "2AC1-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HcZ",
+        "name": "1A10-M",
+        "long_name": "LOUNGE"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcv",
+        "name": "1D12-M",
+        "long_name": "SPECIMEN COLL. LAB"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazp",
+        "name": "2C15-M",
+        "long_name": "COMM. ROOM"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazr",
+        "name": "2C05-M",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XazA",
+        "name": "2B11-M",
+        "long_name": "WAITING"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcs",
+        "name": "1D05-M",
+        "long_name": "TRMT RM. DIRTY PROC."
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HWY",
+        "name": "1C03-M",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HWa",
+        "name": "1D36-M",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcx",
+        "name": "1D10-M",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HWb",
+        "name": "1D34-M",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xaz8",
+        "name": "2BC3-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HcF",
+        "name": "1D40-M",
+        "long_name": "IMMUNIZ'N ROOM"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazt",
+        "name": "2CC1-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XayM",
+        "name": "2B10-M",
+        "long_name": "RECEPTION"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hdt",
+        "name": "1AC5-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hck",
+        "name": "1A07-M",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HXa",
+        "name": "1E17-M",
+        "long_name": "HAZ. STOR."
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HXF",
+        "name": "1B10-M",
+        "long_name": "STAFF LOUNGE"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HdP",
+        "name": "1C10-M",
+        "long_name": "OPT. EXAM / OFF."
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazs",
+        "name": "2C23-M",
+        "long_name": "M. TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hdq",
+        "name": "1D03-M",
+        "long_name": "CLEAN U."
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xazq",
+        "name": "2C08-M",
+        "long_name": "STAFF TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HX8",
+        "name": "1A13-M",
+        "long_name": "STAFF TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hch",
+        "name": "1A06-M",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HWZ",
+        "name": "1D08-M",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HXX",
+        "name": "1B06-M",
+        "long_name": "LAB OFFICE"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HcY",
+        "name": "1A12-M",
+        "long_name": "M. TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hc5",
+        "name": "1D21-M",
+        "long_name": "GROUP IS"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xaz0",
+        "name": "2D12-M",
+        "long_name": "VEST."
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XayN",
+        "name": "2B12-M",
+        "long_name": "COMM. ROOM"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XazB",
+        "name": "2BC4-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$XazE",
+        "name": "2CC5-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xaz9",
+        "name": "2C14-M",
+        "long_name": "GEN. DENT. DTR #10"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xaz6",
+        "name": "2DC2-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hds",
+        "name": "1A02-M",
+        "long_name": "RMO ANALYST"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hc_",
+        "name": "1D01-M",
+        "long_name": "SL. LIN. / TRASH"
+      },
+      {
+        "id": "3Afqvjj$rBRwj8gwB$Xayt",
+        "name": "2D05-M",
+        "long_name": "MAIN MECHANICAL ROOM"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7HXS",
+        "name": "1E09-M",
+        "long_name": "W. TOILET"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hdi",
+        "name": "1CC3-M",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "2_pkqoszXDuuoiHAOB7Hcz",
+        "name": "1A15-M",
+        "long_name": "COUNSELING"
+      }
+    ],
+    "storeys": [
+      {
+        "name": "Roof - Main",
+        "elevation": 9.250000000004482
+      },
+      {
+        "name": "Level 1",
+        "elevation": -2.820868871822313e-13
+      },
+      {
+        "name": "Level 2",
+        "elevation": 4.570000000004495
+      },
+      {
+        "name": "TOF Footing",
+        "elevation": -1.000000000000282
+      }
+    ],
+    "systems": [],
+    "equipment_sample": {
+      "IfcProject": [
+        {
+          "id": "1VB9G8xuL3MArqCPnBKZuI",
+          "name": "Project Number",
+          "tag": ""
+        }
+      ],
+      "IfcBuilding": [
+        {
+          "id": "1VB9G8xuL3MArqCPnBKZuJ",
+          "name": "",
+          "tag": ""
+        }
+      ],
+      "IfcBuildingStorey": [
+        {
+          "id": "1VB9G8xuL3MArqCPoqfRJ7",
+          "name": "Roof - Main",
+          "tag": ""
+        },
+        {
+          "id": "1VB9G8xuL3MArqCPoqhS3L",
+          "name": "Level 1",
+          "tag": ""
+        },
+        {
+          "id": "1VB9G8xuL3MArqCPoqhSDK",
+          "name": "Level 2",
+          "tag": ""
+        },
+        {
+          "id": "1VB9G8xuL3MArqCPoqfRKT",
+          "name": "TOF Footing",
+          "tag": ""
+        }
+      ],
+      "IfcSpace": [
+        {
+          "id": "2_pkqoszXDuuoiHAOB7Hct",
+          "name": "1D04-M",
+          "tag": ""
+        },
+        {
+          "id": "2_pkqoszXDuuoiHAOB7Hcr",
+          "name": "1D02-M",
+          "tag": ""
+        },
+        {
+          "id": "2_pkqoszXDuuoiHAOB7HWh",
+          "name": "1C12-M",
+          "tag": ""
+        },
+        {
+          "id": "2_pkqoszXDuuoiHAOB7HWr",
+          "name": "1C14-M",
+          "tag": ""
+        },
+        {
+          "id": "2_pkqoszXDuuoiHAOB7Hcl",
+          "name": "1A03-M",
+          "tag": ""
+        }
+      ],
+      "IfcFlowMovingDevice": [
+        {
+          "id": "1d93A807LClwKjBM$WBKFW",
+          "name": "M_Centrifugal Fan -  Rooftop  - Upblast:991-1905 LPS:991-1905 LPS:1062388",
+          "tag": "1062388"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc5Ms",
+          "name": "M_Air Handling Unit - Split System - Horizontal:63300000 J:63300000 J:570459",
+          "tag": "570459"
+        },
+        {
+          "id": "1gn$K6jVP9HfhTuVWaGfTa",
+          "name": "M_Air Handling Unit - Split System - Horizontal:63300000 J:63300000 J:570439",
+          "tag": "570439"
+        },
+        {
+          "id": "2wMFGeBgjDMxsU9PjH44jb",
+          "name": "M_Inline Pump - Circulator:3.9 LPS - 0.8 Meter Head:3.9 LPS - 0.8 Meter Head:1060890",
+          "tag": "1060890"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc4wE",
+          "name": "M_VAV Unit - Single Duct:250 mm:250 mm:569187",
+          "tag": "569187"
+        }
+      ],
+      "IfcFlowTerminal": [
+        {
+          "id": "1MPejKGxvAxOPe64yBS3ZE",
+          "name": "M_Pendant Light - Linear - 2 Lamp:1200mm - 120V:1200mm - 120V:745294",
+          "tag": "745294"
+        },
+        {
+          "id": "1MPejKGxvAxOPe64yBS1EU",
+          "name": "M_Pendant Light - Linear - 2 Lamp:1200mm - 120V:1200mm - 120V:750622",
+          "tag": "750622"
+        },
+        {
+          "id": "1MPejKGxvAxOPe64yBS1C7",
+          "name": "M_Pendant Light - Linear - 2 Lamp:1200mm - 120V:1200mm - 120V:750727",
+          "tag": "750727"
+        },
+        {
+          "id": "36gs2_li932QR3btkQ2GAo",
+          "name": "M_Troffer Light - Parabolic Rectangular:0600x1200mm(2 Lamp) - 120V:0600x1200mm(2 Lamp) - 120V:737660",
+          "tag": "737660"
+        },
+        {
+          "id": "1MPejKGxvAxOPe64yBS3WQ",
+          "name": "M_Pendant Light - Linear - 2 Lamp:1200mm - 120V:1200mm - 120V:745370",
+          "tag": "745370"
+        }
+      ],
+      "IfcFlowStorageDevice": [
+        {
+          "id": "0i9MrBDlLCy8LvLeq$5fBi",
+          "name": "M_Water Heater:380 L:380 L:1061086",
+          "tag": "1061086"
+        }
+      ],
+      "IfcEnergyConversionDevice": [
+        {
+          "id": "3aS26xLUH6pg5G3T_gyyYA",
+          "name": "M_Transformer Switchboard:914mmx673mm:MS1:860947",
+          "tag": "860947"
+        },
+        {
+          "id": "23oK9Ybpf2MPoMOri$Yi74",
+          "name": "M_Transformer Switchboard:914mmx673mm:MS2:861040",
+          "tag": "861040"
+        },
+        {
+          "id": "379JtJEeXDcB$Kt4QdnzF0",
+          "name": "M_Screw Chiller - Air Cooled - 281-1231 kW:633-703 kW:633-703 kW:1066741",
+          "tag": "1066741"
+        }
+      ],
+      "IfcFanType": [
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc4cN",
+          "name": "150 mm",
+          "tag": "567418"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc4bk",
+          "name": "250 mm",
+          "tag": "567427"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc4dx",
+          "name": "350 mm",
+          "tag": "567318"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc4db",
+          "name": "200 mm",
+          "tag": "567304"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc4ct",
+          "name": "300 mm",
+          "tag": "567386"
+        }
+      ],
+      "IfcPumpType": [
+        {
+          "id": "3u9DOlJebDl9MeZM6OymSR",
+          "name": "3.9 LPS - 0.8 Meter Head",
+          "tag": "1060890"
+        }
+      ],
+      "IfcChillerType": [
+        {
+          "id": "2H3wYxUIPBpw3mjj9GlAnl",
+          "name": "633-703 kW",
+          "tag": "1066741"
+        }
+      ],
+      "IfcLightFixtureType": [
+        {
+          "id": "0FGGKr9E19BvyMqqUqhCY9",
+          "name": "Single Pole",
+          "tag": "795878"
+        },
+        {
+          "id": "0YIMYffWP7i9skNaemGPe9",
+          "name": "Three Way",
+          "tag": "798387"
+        },
+        {
+          "id": "1MPejKGxvAxOPe64yBS1lL",
+          "name": "100W - 120V",
+          "tag": "752725"
+        },
+        {
+          "id": "2FyTkPjK9BvRWrsrCGCvMc",
+          "name": "0600x1200mm(2 Lamp) - 120V",
+          "tag": "737660"
+        },
+        {
+          "id": "1MPejKGxvAxOPe64yBS0Dr",
+          "name": "203mm Incandescent - 120V",
+          "tag": "746741"
+        }
+      ]
+    },
+    "psets_found": [
+      "PSet_Revit_Constraints",
+      "PSet_Revit_Dimensions",
+      "PSet_Revit_Electrical",
+      "PSet_Revit_Electrical - Circuiting",
+      "PSet_Revit_Electrical - Lighting",
+      "PSet_Revit_Electrical - Loads",
+      "PSet_Revit_Energy Analysis",
+      "PSet_Revit_Fire Protection",
+      "PSet_Revit_General",
+      "PSet_Revit_Graphics",
+      "PSet_Revit_Identity Data",
+      "PSet_Revit_Mechanical",
+      "PSet_Revit_Mechanical - Airflow",
+      "PSet_Revit_Other",
+      "PSet_Revit_Phasing",
+      "PSet_Revit_Plumbing",
+      "PSet_Revit_Type_Constraints",
+      "PSet_Revit_Type_Construction",
+      "PSet_Revit_Type_Dimensions",
+      "PSet_Revit_Type_Electrical",
+      "PSet_Revit_Type_Electrical - Loads",
+      "PSet_Revit_Type_Energy Analysis",
+      "PSet_Revit_Type_Fire Protection",
+      "PSet_Revit_Type_Fitting",
+      "PSet_Revit_Type_Graphics",
+      "PSet_Revit_Type_Identity Data",
+      "PSet_Revit_Type_Materials and Finishes",
+      "PSet_Revit_Type_Mechanical",
+      "PSet_Revit_Type_Mechanical - Airflow",
+      "PSet_Revit_Type_Other",
+      "PSet_Revit_Type_Photometrics",
+      "Pset_BuildingCommon",
+      "Pset_SpaceCommon"
+    ]
+  },
+  "NBU_ELE": {
+    "file": "NBU_MedicalClinic_Eng-ELE.ifc",
+    "schema": "IFC2X3",
+    "total_entities": 171954,
+    "entity_counts": {
+      "IfcProject": 1,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 3,
+      "IfcSpace": 266,
+      "IfcFlowMovingDevice": 4,
+      "IfcFlowTerminal": 2081,
+      "IfcFlowStorageDevice": 1,
+      "IfcEnergyConversionDevice": 3,
+      "IfcFanType": 2,
+      "IfcPumpType": 1,
+      "IfcChillerType": 1,
+      "IfcLightFixtureType": 47
+    },
+    "spaces": [
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGb",
+        "name": "1AC1",
+        "long_name": "CENTRAL WAITING"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGd",
+        "name": "1AC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGv",
+        "name": "1AC3",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGx",
+        "name": "1AC4",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGz",
+        "name": "1AC5",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujG$",
+        "name": "1A01",
+        "long_name": "PATIENT ADMIN. RECEPT."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGn",
+        "name": "1A02",
+        "long_name": "RMO ANALYST"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGp",
+        "name": "1A03",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGr",
+        "name": "1A04",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGt",
+        "name": "1A05",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujG9",
+        "name": "1A06",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGB",
+        "name": "1A07",
+        "long_name": "TRICARE OFFICE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGD",
+        "name": "1A08",
+        "long_name": "PHARM. OFFICE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGF",
+        "name": "1A09",
+        "long_name": "W. TOILET"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujG1",
+        "name": "1A10",
+        "long_name": "LOUNGE"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujG3",
+        "name": "1A11",
+        "long_name": "JAN."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujG5",
+        "name": "1A12",
+        "long_name": "M. TOILET"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujG7",
+        "name": "1A13",
+        "long_name": "STAFF TOILET"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGP",
+        "name": "1A14",
+        "long_name": "SUPER / NCOIC"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGR",
+        "name": "1A15",
+        "long_name": "COUNSELING"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGT",
+        "name": "1DC1",
+        "long_name": "WAITING / ACTIVITY AREA"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGV",
+        "name": "1DC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGH",
+        "name": "1DC3",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGJ",
+        "name": "1DC4",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGL",
+        "name": "1CC1",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujGN",
+        "name": "1CC2",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHf",
+        "name": "1CC3",
+        "long_name": "CORRIDOR"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHh",
+        "name": "1C01",
+        "long_name": "WAITING"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHj",
+        "name": "1C02",
+        "long_name": "RECEPTION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHl",
+        "name": "1C03",
+        "long_name": "JAN. CL."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHX",
+        "name": "1C04",
+        "long_name": "FITTING / DISP."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHZ",
+        "name": "1C05",
+        "long_name": "VISUAL FIELD"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHb",
+        "name": "1C06",
+        "long_name": "SOIL. UTL. / TRASH"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHd",
+        "name": "1C07",
+        "long_name": "OPT. EXAM / OFF."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHv",
+        "name": "1C08",
+        "long_name": "SCREEN EYE TEST"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHx",
+        "name": "1C09",
+        "long_name": "FUNDUS CAMERA ROOM"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHz",
+        "name": "1C10",
+        "long_name": "OPT. EXAM / OFF."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujH$",
+        "name": "1D01",
+        "long_name": "SL. LIN. / TRASH"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHn",
+        "name": "1D02",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHp",
+        "name": "1D03",
+        "long_name": "CLEAN U."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHr",
+        "name": "1D04",
+        "long_name": "TOILET"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHt",
+        "name": "1D05",
+        "long_name": "TRMT RM. DIRTY PROC."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujH9",
+        "name": "1D06",
+        "long_name": "SCOPE WASH / DECON."
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHB",
+        "name": "1D07",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHD",
+        "name": "1D08",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujHF",
+        "name": "1D09",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujH1",
+        "name": "1D10",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujH3",
+        "name": "1D11",
+        "long_name": "INTERACTION STATION"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujH5",
+        "name": "1D12",
+        "long_name": "SPECIMEN COLL. LAB"
+      },
+      {
+        "id": "30C8Tgpln5Khj3mpxiujH7",
+        "name": "1D13",
+        "long_name": "INTERACTION STATION"
+      }
+    ],
+    "storeys": [
+      {
+        "name": "Level 1",
+        "elevation": -2.82086887182231e-13
+      },
+      {
+        "name": "Level 2",
+        "elevation": 4.57000000000449
+      },
+      {
+        "name": "Roof - Main",
+        "elevation": 9.25000000000448
+      }
+    ],
+    "systems": [],
+    "equipment_sample": {
+      "IfcProject": [
+        {
+          "id": "1VB9G8xuL3MArqCPnBKZuI",
+          "name": "100001",
+          "tag": ""
+        }
+      ],
+      "IfcBuilding": [
+        {
+          "id": "1VB9G8xuL3MArqCPnBKZuJ",
+          "name": "Medical Clinic",
+          "tag": ""
+        }
+      ],
+      "IfcBuildingStorey": [
+        {
+          "id": "1VB9G8xuL3MArqCPoqhS3L",
+          "name": "Level 1",
+          "tag": ""
+        },
+        {
+          "id": "1VB9G8xuL3MArqCPoqhSDK",
+          "name": "Level 2",
+          "tag": ""
+        },
+        {
+          "id": "1VB9G8xuL3MArqCPoqfRJ7",
+          "name": "Roof - Main",
+          "tag": ""
+        }
+      ],
+      "IfcSpace": [
+        {
+          "id": "30C8Tgpln5Khj3mpxiujGb",
+          "name": "1AC1",
+          "tag": ""
+        },
+        {
+          "id": "30C8Tgpln5Khj3mpxiujGd",
+          "name": "1AC2",
+          "tag": ""
+        },
+        {
+          "id": "30C8Tgpln5Khj3mpxiujGv",
+          "name": "1AC3",
+          "tag": ""
+        },
+        {
+          "id": "30C8Tgpln5Khj3mpxiujGx",
+          "name": "1AC4",
+          "tag": ""
+        },
+        {
+          "id": "30C8Tgpln5Khj3mpxiujGz",
+          "name": "1AC5",
+          "tag": ""
+        }
+      ],
+      "IfcFlowMovingDevice": [
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc5Mg",
+          "name": "M_Air Handling Unit - Split System - Horizontal:63300000 J:63300000 J:570439",
+          "tag": "570439"
+        },
+        {
+          "id": "0JGTSjcSn7v8o$ZI4qc5Ms",
+          "name": "M_Air Handling Unit - Split System - Horizontal:63300000 J:63300000 J:570459",
+          "tag": "570459"
+        },
+        {
+          "id": "3u9DOlJebDl9MeZM6OymSR",
+          "name": "M_Inline Pump - Circulator:3.9 LPS - 0.8 Meter Head:3.9 LPS - 0.8 Meter Head:1060890",
+          "tag": "1060890"
+        },
+        {
+          "id": "0VU2rHYgPAX8k2yXfmStdn",
+          "name": "M_Centrifugal Fan -  Rooftop  - Upblast:991-1905 LPS:991-1905 LPS:1062388",
+          "tag": "1062388"
+        }
+      ],
+      "IfcFlowTerminal": [
+        {
+          "id": "2FyTkPjK9BvRWrsrCGCvMc",
+          "name": "M_Troffer Light - Parabolic Rectangular:B1 - 0610x1219mm:B1 - 0610x1219mm:737660",
+          "tag": "737660"
+        },
+        {
+          "id": "2FyTkPjK9BvRWrsrCGCvLK",
+          "name": "M_Troffer Light - Parabolic Rectangular:B1 - 0610x1219mm:B1 - 0610x1219mm:737678",
+          "tag": "737678"
+        },
+        {
+          "id": "17wj1NfVL9RPoveuB_LVhQ",
+          "name": "M_Troffer Light - Parabolic Rectangular:B1 - 0610x1219mm:B1 - 0610x1219mm:738197",
+          "tag": "738197"
+        },
+        {
+          "id": "17wj1NfVL9RPoveuB_LVhO",
+          "name": "M_Troffer Light - Parabolic Rectangular:B1 - 0610x1219mm:B1 - 0610x1219mm:738199",
+          "tag": "738199"
+        },
+        {
+          "id": "17wj1NfVL9RPoveuB_LVhn",
+          "name": "M_Troffer Light - Parabolic Rectangular:B1 - 0610x1219mm:B1 - 0610x1219mm:738238",
+          "tag": "738238"
+        }
+      ],
+      "IfcFlowStorageDevice": [
+        {
+          "id": "1C7ufxVL54OQXhLl9juIzL",
+          "name": "M_Water Heater:380 L:380 L:1061086",
+          "tag": "1061086"
+        }
+      ],
+      "IfcEnergyConversionDevice": [
+        {
+          "id": "23oK9Ybpf2MPoMOri$Yi6d",
+          "name": "M_Transformer Switchboard:914mmx673mm:MS1:860947",
+          "tag": "860947"
+        },
+        {
+          "id": "23oK9Ybpf2MPoMOri$Yi74",
+          "name": "M_Transformer Switchboard:914mmx673mm:MS2:861040",
+          "tag": "861040"
+        },
+        {
+          "id": "2H3wYxUIPBpw3mjj9GlAnl",
+          "name": "M_Screw Chiller - Air Cooled - 281-1231 kW:633-703 kW:633-703 kW:1066741",
+          "tag": "1066741"
+        }
+      ],
+      "IfcFanType": [
+        {
+          "id": "3B$cixkHTD3fgO4BSmmOO$",
+          "name": "63300000 J",
+          "tag": "1072496"
+        },
+        {
+          "id": "15roLivmP7ZAtrej4E7ysf",
+          "name": "991-1905 LPS",
+          "tag": "513763"
+        }
+      ],
+      "IfcPumpType": [
+        {
+          "id": "0HVI4d9B5EfO80h0cOgHch",
+          "name": "3.9 LPS - 0.8 Meter Head",
+          "tag": "498323"
+        }
+      ],
+      "IfcChillerType": [
+        {
+          "id": "2H3wYxUIPBpw3mjj9GlAni",
+          "name": "633-703 kW",
+          "tag": "1066742"
+        }
+      ],
+      "IfcLightFixtureType": [
+        {
+          "id": "20q2kYy0n759BMGNZo5F04",
+          "name": "B1 - 0610x1219mm",
+          "tag": "1192474"
+        },
+        {
+          "id": "20q2kYy0n759BMGNZo5F02",
+          "name": "B1B - 0610x1219mm",
+          "tag": "1192476"
+        },
+        {
+          "id": "20q2kYy0n759BMGNZo5F0s",
+          "name": "C18 - 0610x1219mm",
+          "tag": "1192488"
+        },
+        {
+          "id": "20q2kYy0n759BMGNZo5F0q",
+          "name": "C18B - 0610x1219mm",
+          "tag": "1192490"
+        },
+        {
+          "id": "1gkkB9yCn8dvO12$km0WNH",
+          "name": "F1 - 0610x1219mm",
+          "tag": "1200034"
+        }
+      ]
+    },
+    "psets_found": [
+      "Constraints",
+      "Data",
+      "Dimensions",
+      "Electrical",
+      "Electrical - Circuiting",
+      "Electrical - Lighting",
+      "Electrical - Loads",
+      "Energy Analysis",
+      "General",
+      "Graphics",
+      "Identity Data",
+      "Materials and Finishes",
+      "Mechanical",
+      "Mechanical - Flow",
+      "Other",
+      "Phasing",
+      "Photometrics",
+      "Pset_BuildingCommon",
+      "Pset_BuildingElementProxyCommon",
+      "Pset_SpaceCommon",
+      "Text",
+      "Visibility"
+    ]
+  },
+  "NVW_L200_HVAC": {
+    "file": "NVW_DCR-LOD200_Eng-HVAC.ifc",
+    "schema": "IFC2X3",
+    "total_entities": 517535,
+    "entity_counts": {
+      "IfcProject": 1,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 8,
+      "IfcSystem": 7,
+      "IfcFlowTerminal": 259,
+      "IfcEnergyConversionDevice": 8,
+      "IfcChillerType": 2,
+      "IfcUnitaryEquipmentType": 4
+    },
+    "spaces": [],
+    "storeys": [
+      {
+        "name": "Mod-Floor-UG1",
+        "elevation": -4.5
+      },
+      {
+        "name": "Mod-Floor-1",
+        "elevation": 0.0
+      },
+      {
+        "name": "Mod-Floor-2",
+        "elevation": 4.5
+      },
+      {
+        "name": "Mod-Floor-3",
+        "elevation": 9.0
+      },
+      {
+        "name": "Mod-Floor-4",
+        "elevation": 13.5
+      },
+      {
+        "name": "Mod-Floor-5",
+        "elevation": 18.0
+      },
+      {
+        "name": "Mod-Floor-6",
+        "elevation": 22.5
+      },
+      {
+        "name": "Mod-Floor-7",
+        "elevation": 27.0
+      }
+    ],
+    "systems": [
+      {
+        "name": "1_Tilluft 10",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "2_Avtrekk 11",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "5_Inntak 40",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "7_Avkast 41",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "4_Avtrekk 11",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "3_Tilluft 10",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "6_Avkast 41",
+        "type": "IfcSystem"
+      }
+    ],
+    "equipment_sample": {
+      "IfcProject": [
+        {
+          "id": "3Ugtlois99awRNJuVi4cZb",
+          "name": "DDS Project",
+          "tag": ""
+        }
+      ],
+      "IfcBuilding": [
+        {
+          "id": "39DnUU4fv4bPKk4ZX6EdIf",
+          "name": "",
+          "tag": ""
+        }
+      ],
+      "IfcBuildingStorey": [
+        {
+          "id": "1iBm_q6E13EQIN$xlO3KgQ",
+          "name": "Mod-Floor-UG1",
+          "tag": ""
+        },
+        {
+          "id": "3mh0zn4tD2W9AE1YR9K$qO",
+          "name": "Mod-Floor-1",
+          "tag": ""
+        },
+        {
+          "id": "0yXic1ZyTDqetVgf1VklDo",
+          "name": "Mod-Floor-2",
+          "tag": ""
+        },
+        {
+          "id": "3DE25NeJPFPAlqK843v6jl",
+          "name": "Mod-Floor-3",
+          "tag": ""
+        },
+        {
+          "id": "3RUCaGw_PDBR2yDgG_rzkA",
+          "name": "Mod-Floor-4",
+          "tag": ""
+        }
+      ],
+      "IfcSystem": [
+        {
+          "id": "337jgnw1j13hLgFE53H8MJ",
+          "name": "1_Tilluft 10",
+          "tag": ""
+        },
+        {
+          "id": "0V4tkugvTCKhnEKMVkPXoJ",
+          "name": "2_Avtrekk 11",
+          "tag": ""
+        },
+        {
+          "id": "0Wy9eR$4r4iR5gJ4UgXfVR",
+          "name": "5_Inntak 40",
+          "tag": ""
+        },
+        {
+          "id": "2XDyZH6EP77On$b9kHiL6G",
+          "name": "7_Avkast 41",
+          "tag": ""
+        },
+        {
+          "id": "1xZLcNW0bEqfy8FQp7BR75",
+          "name": "4_Avtrekk 11",
+          "tag": ""
+        }
+      ],
+      "IfcFlowTerminal": [
+        {
+          "id": "0w21y7sKvAHxK5zD9ItlT$",
+          "name": "5.3.8",
+          "tag": ""
+        },
+        {
+          "id": "1ni54H7Rv7$QS36eCNZ13D",
+          "name": "6.1.14",
+          "tag": ""
+        },
+        {
+          "id": "3lGAcGme1BNPT926dF9mDh",
+          "name": "4.2.0",
+          "tag": ""
+        },
+        {
+          "id": "2ywhQ22XL0BhNJR9tQ75aG",
+          "name": "4.2.0",
+          "tag": ""
+        },
+        {
+          "id": "3$U1dT_Xj3E8eUiM2O8oDA",
+          "name": "4.2.0",
+          "tag": ""
+        }
+      ],
+      "IfcEnergyConversionDevice": [
+        {
+          "id": "1pJ1odsSLAtBvrBz8YJZOa",
+          "name": "",
+          "tag": ""
+        },
+        {
+          "id": "2lDx4AJzPCHxwKptPlZU_Z",
+          "name": "",
+          "tag": ""
+        },
+        {
+          "id": "3XB6kDjMP1JeSf3ZUG0Ful",
+          "name": "3.2.0",
+          "tag": ""
+        },
+        {
+          "id": "3BcfV2l5v23flLxLwlxf_o",
+          "name": "3.2.0",
+          "tag": ""
+        },
+        {
+          "id": "1G0O2XhT183PIz3WZCV3Tf",
+          "name": "",
+          "tag": ""
+        }
+      ],
+      "IfcChillerType": [
+        {
+          "id": "0uqukrg3H1BBoYJ_LSfXkh",
+          "name": "CO2100",
+          "tag": ""
+        },
+        {
+          "id": "16H75Bo3fDquRBtlmOwO4u",
+          "name": "CO2100",
+          "tag": ""
+        }
+      ],
+      "IfcUnitaryEquipmentType": [
+        {
+          "id": "16m4syavXEi8I8$vbUhpwh",
+          "name": "GF2001",
+          "tag": ""
+        },
+        {
+          "id": "1CgqcZ57LFKwb5t2LUICyR",
+          "name": "GF2001",
+          "tag": ""
+        },
+        {
+          "id": "0ae31y0gD4Lg0M1QSPYiMi",
+          "name": "cooltow.bim",
+          "tag": ""
+        },
+        {
+          "id": "1V39lSbCvEIAlWDt5SntLJ",
+          "name": "cooltow.bim",
+          "tag": ""
+        }
+      ]
+    },
+    "psets_found": [
+      "Pset_AirTerminalTypeCommon",
+      "Pset_DuctFittingTypeCommon",
+      "Pset_DuctSegmentTypeCommon",
+      "Pset_FlowSegmentDuctSegment",
+      "Pset_FlowTerminalAirTerminal",
+      "Pset_ManufacturerTypeInformation"
+    ]
+  },
+  "NVW_L300_HVAC": {
+    "file": "NVW_DCR-LOD300_Eng-HVAC.ifc",
+    "schema": "IFC2X3",
+    "total_entities": 364697,
+    "entity_counts": {
+      "IfcProject": 1,
+      "IfcBuilding": 1,
+      "IfcBuildingStorey": 9,
+      "IfcSystem": 3,
+      "IfcFlowTerminal": 468,
+      "IfcEnergyConversionDevice": 36,
+      "IfcChillerType": 4,
+      "IfcUnitaryEquipmentType": 3
+    },
+    "spaces": [],
+    "storeys": [
+      {
+        "name": "Mod-Floor-UG1",
+        "elevation": -4.5
+      },
+      {
+        "name": "Mod-Floor-1",
+        "elevation": 0.0
+      },
+      {
+        "name": "Mod-Floor-2",
+        "elevation": 4.5
+      },
+      {
+        "name": "Mod-Floor-3",
+        "elevation": 9.0
+      },
+      {
+        "name": "Mod-Floor-4",
+        "elevation": 13.5
+      },
+      {
+        "name": "Mod-Floor-5",
+        "elevation": 18.0
+      },
+      {
+        "name": "Mod-Floor-6",
+        "elevation": 22.5
+      },
+      {
+        "name": "Mod-Floor-7",
+        "elevation": 27.0
+      },
+      {
+        "name": "Mod-Floor-Tower",
+        "elevation": 31.5
+      }
+    ],
+    "systems": [
+      {
+        "name": "3_Tilluft 10",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "2_Avtrekk 11",
+        "type": "IfcSystem"
+      },
+      {
+        "name": "1_Tilluft 10",
+        "type": "IfcSystem"
+      }
+    ],
+    "equipment_sample": {
+      "IfcProject": [
+        {
+          "id": "0Cx1rGNN9FSv6mkRizrJ__",
+          "name": "DDS Project",
+          "tag": ""
+        }
+      ],
+      "IfcBuilding": [
+        {
+          "id": "0uO4OyQZ909vcvorBEUQ5_",
+          "name": "VectorWorks",
+          "tag": ""
+        }
+      ],
+      "IfcBuildingStorey": [
+        {
+          "id": "2J_ZQHEgT6vRF3MOb011wW",
+          "name": "Mod-Floor-UG1",
+          "tag": ""
+        },
+        {
+          "id": "34wsQoDzHDkOwaGgM6T6ho",
+          "name": "Mod-Floor-1",
+          "tag": ""
+        },
+        {
+          "id": "34UH6EV810Gu30Ftka3ud1",
+          "name": "Mod-Floor-2",
+          "tag": ""
+        },
+        {
+          "id": "1h59WB3LX7_vV95wDelC8G",
+          "name": "Mod-Floor-3",
+          "tag": ""
+        },
+        {
+          "id": "10Drq6ko95Tu89EaVJJTyQ",
+          "name": "Mod-Floor-4",
+          "tag": ""
+        }
+      ],
+      "IfcSystem": [
+        {
+          "id": "18m2TGjMj68Bi1eJalbq9k",
+          "name": "3_Tilluft 10",
+          "tag": ""
+        },
+        {
+          "id": "24prsEgi16vhWBs86aBF8d",
+          "name": "2_Avtrekk 11",
+          "tag": ""
+        },
+        {
+          "id": "05n0ohne96lQztAXfeDSgt",
+          "name": "1_Tilluft 10",
+          "tag": ""
+        }
+      ],
+      "IfcFlowTerminal": [
+        {
+          "id": "29ZF9APUH6OOcj9mYTiLwX",
+          "name": "3.0.0",
+          "tag": ""
+        },
+        {
+          "id": "3KJq4vFA5EruljygJIDR$N",
+          "name": "3.0.0",
+          "tag": ""
+        },
+        {
+          "id": "2w9HASQ390HfHK49GaKuNG",
+          "name": "3.0.0",
+          "tag": ""
+        },
+        {
+          "id": "0NoL1D9Zr9AP2wg2qCOqOB",
+          "name": "3.0.0",
+          "tag": ""
+        },
+        {
+          "id": "3XNYfhVyb7cPtAp05DHtUu",
+          "name": "3.0.0",
+          "tag": ""
+        }
+      ],
+      "IfcEnergyConversionDevice": [
+        {
+          "id": "1rfg3irdHFjfPjKMDZOCu0",
+          "name": "",
+          "tag": ""
+        },
+        {
+          "id": "29FEr45XDCefZHFHxV0yXX",
+          "name": "",
+          "tag": ""
+        },
+        {
+          "id": "2xQEwh7LXCaeQUmA4EkJjd",
+          "name": "",
+          "tag": ""
+        },
+        {
+          "id": "2ACdWtY9X0hucLN0Li$GhT",
+          "name": "",
+          "tag": ""
+        },
+        {
+          "id": "26p8yp8Ev82PnLoK9ebd$6",
+          "name": "",
+          "tag": ""
+        }
+      ],
+      "IfcChillerType": [
+        {
+          "id": "2V0OjNsvn5sgv8Bgct7KWH",
+          "name": "CO2100",
+          "tag": ""
+        },
+        {
+          "id": "04qij7W9T3_euApHTSEa10",
+          "name": "CO2100",
+          "tag": ""
+        },
+        {
+          "id": "0xX$xvgBH629$Uj6vRu6ju",
+          "name": "CO2100",
+          "tag": ""
+        },
+        {
+          "id": "2D1hOT6z56_RY6GRfwCF1k",
+          "name": "CO2100",
+          "tag": ""
+        }
+      ],
+      "IfcUnitaryEquipmentType": [
+        {
+          "id": "1r7Ib0XsDErPG6UDGiUCXO",
+          "name": "GF2001",
+          "tag": ""
+        },
+        {
+          "id": "3483XNL7vAhAMrP9MvNTkN",
+          "name": "cooltow.bim",
+          "tag": ""
+        },
+        {
+          "id": "0r8eSAUcP1$vNeBpZlNI6y",
+          "name": "GF2001",
+          "tag": ""
+        }
+      ]
+    },
+    "psets_found": [
+      "Pset_AirTerminalTypeCommon",
+      "Pset_DuctFittingTypeCommon",
+      "Pset_DuctSegmentTypeCommon",
+      "Pset_FlowSegmentDuctSegment",
+      "Pset_FlowSegmentPipeSegment",
+      "Pset_FlowTerminalAirTerminal",
+      "Pset_ManufacturerTypeInformation",
+      "Pset_PipeFittingTypeCommon",
+      "Pset_PipeSegmentTypeCommon"
+    ]
+  }
+}
