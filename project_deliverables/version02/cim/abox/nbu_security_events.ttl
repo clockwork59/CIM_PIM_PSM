@@ -1,0 +1,150 @@
+@prefix cim-sec: <https://cim.medical/ontology/v4.0/security_event#> .
+@prefix inst: <https://cim.medical/instance/nbu_medical_clinic/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sec: <https://cim.medical/ontology/v4.0/security_event/instances#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+sec:EVT-20260510-001 a cim-sec:FireAlarmEvent,
+        cim-sec:SecurityEvent ;
+    rdfs:label "FireAlarmEvent EVT-20260510-001 Zone ZONE-UNKNOWN"@en ;
+    cim-sec:activatesActionChain <http://cim.medical/instance/smoke_alarm_drill#AC-FIRE-L2-001> ;
+    cim-sec:dualZoneConfirmed true ;
+    cim-sec:eventTimestamp "2026-05-10T15:19:54+00:00"^^xsd:dateTime ;
+    cim-sec:hasActionNodeExecution sec:EVT-20260510-001-STEP-01,
+        sec:EVT-20260510-001-STEP-02,
+        sec:EVT-20260510-001-STEP-03,
+        sec:EVT-20260510-001-STEP-04,
+        sec:EVT-20260510-001-STEP-05,
+        sec:EVT-20260510-001-STEP-06,
+        sec:EVT-20260510-001-STEP-07,
+        sec:EVT-20260510-001-STEP-08,
+        sec:EVT-20260510-001-STEP-09,
+        sec:EVT-20260510-001-STEP-10 ;
+    cim-sec:hasEventID "EVT-20260510-001" ;
+    cim-sec:hasEventState cim-sec:state_Confirmed ;
+    cim-sec:hasSeverityLevel cim-sec:SeverityL2 ;
+    cim-sec:involvesEquipment <https://cim.medical/instance/fas/SD-2F-OR-01>,
+        <https://cim.medical/instance/fas/SD-2F-OR-03> ;
+    cim-sec:involvesZone inst:ZONE-UNKNOWN ;
+    cim-sec:triggeredByPoint <https://cim.medical/ontology/v4.0/bacnet/instances#SD_2F_OR_01_SMKDET_BI>,
+        <https://cim.medical/ontology/v4.0/bacnet/instances#SD_2F_OR_03_SMKDET_BI> .
+
+sec:EVT-20260510-001-STEP-05 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Initiate evacuation"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-04 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Pending ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-05" ;
+    cim-sec:hasResponderRole "SEC" ;
+    cim-sec:hasStepNumber 5 ;
+    cim-sec:hasStepSlug "evacuate" ;
+    cim-sec:hasTimeoutSeconds 600 ;
+    cim-sec:isAutomatic false ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-06 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Release access control"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-04 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Pending ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-06" ;
+    cim-sec:hasResponderRole "SYS" ;
+    cim-sec:hasStepNumber 6 ;
+    cim-sec:hasStepSlug "open_doors" ;
+    cim-sec:hasTimeoutSeconds 10 ;
+    cim-sec:isAutomatic true ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-07 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Return elevators to ground"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-01 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Executing ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-07" ;
+    cim-sec:hasResponderRole "SYS" ;
+    cim-sec:hasStepNumber 7 ;
+    cim-sec:hasStepSlug "elevator_home" ;
+    cim-sec:hasTimeoutSeconds 30 ;
+    cim-sec:isAutomatic true ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-08 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Notify medical staff"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-01 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Executing ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-08" ;
+    cim-sec:hasResponderRole "SYS" ;
+    cim-sec:hasStepNumber 8 ;
+    cim-sec:hasStepSlug "notify_medical" ;
+    cim-sec:hasTimeoutSeconds 30 ;
+    cim-sec:isAutomatic true ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-09 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Call fire department 119"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-03 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Pending ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-09" ;
+    cim-sec:hasResponderRole "CTRL" ;
+    cim-sec:hasStepNumber 9 ;
+    cim-sec:hasStepSlug "call_119" ;
+    cim-sec:hasTimeoutSeconds 120 ;
+    cim-sec:isAutomatic false ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-10 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Notify duty leadership"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-01 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Executing ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-10" ;
+    cim-sec:hasResponderRole "SYS" ;
+    cim-sec:hasStepNumber 10 ;
+    cim-sec:hasStepSlug "notify_leaders" ;
+    cim-sec:hasTimeoutSeconds 30 ;
+    cim-sec:isAutomatic true ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-02 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Cut electrical power"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-01 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Executing ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-02" ;
+    cim-sec:hasResponderRole "SYS" ;
+    cim-sec:hasStepNumber 2 ;
+    cim-sec:hasStepSlug "cut_power" ;
+    cim-sec:hasTimeoutSeconds 30 ;
+    cim-sec:isAutomatic true ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-03 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Activate fire suppression"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-02 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Pending ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-03" ;
+    cim-sec:hasResponderRole "ELEC" ;
+    cim-sec:hasStepNumber 3 ;
+    cim-sec:hasStepSlug "start_suppression" ;
+    cim-sec:hasTimeoutSeconds 300 ;
+    cim-sec:isAutomatic false ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-04 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Zone emergency broadcast"@en ;
+    cim-sec:dependsOnNode sec:EVT-20260510-001-STEP-01 ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Executing ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-04" ;
+    cim-sec:hasResponderRole "SYS" ;
+    cim-sec:hasStepNumber 4 ;
+    cim-sec:hasStepSlug "broadcast" ;
+    cim-sec:hasTimeoutSeconds 10 ;
+    cim-sec:isAutomatic true ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+
+sec:EVT-20260510-001-STEP-01 a cim-sec:ActionNodeExecution ;
+    rdfs:label "Confirm fire alarm"@en ;
+    cim-sec:hasExecutionState cim-sec:nodeState_Executing ;
+    cim-sec:hasNodeID "EVT-20260510-001-STEP-01" ;
+    cim-sec:hasResponderRole "CTRL" ;
+    cim-sec:hasStepNumber 1 ;
+    cim-sec:hasStepSlug "confirm_fire" ;
+    cim-sec:hasTimeoutSeconds 120 ;
+    cim-sec:isAutomatic false ;
+    cim-sec:nodeCreatedAt "2026-05-10T15:19:54+00:00"^^xsd:dateTime .
+

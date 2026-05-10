@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宣武安防MVP — 烟感报警处置中心</title>
+<style>
+/* ──────── Reset & Variables ──────── */
+:root {
+  --bg:       #0d1117;
+  --bg2:      #161b22;
+  --bg3:      #21262d;
+  --border:   #30363d;
+  --text:     #e6edf3;
+  --muted:    #8b949e;
+  --red:      #f85149;
+  --orange:   #d29922;
+  --yellow:   #e3b341;
+  --green:    #3fb950;
+  --blue:     #58a6ff;
+  --purple:   #bc8cff;
+  --radius:   8px;
+  --shadow:   0 4px 16px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ──────── Layout ──────── */
+.header {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 12px 20px; display: flex; align-items: center; gap: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 600; }
+.header .badge {
+  background: var(--red); color: #fff; padding: 2px 10px;
+  border-radius: 20px; font-size: 12px; font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.header .status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+}
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.clock { font-family: monospace; color: var(--muted); font-size: 13px; }
+
+.main { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 16px; }
+@media (max-width: 1024px) { .main { grid-template-columns: 1fr; } }
+
+/* ──────── Cards ──────── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.card-header {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg3);
+}
+.card-header h2 { font-size: 14px; font-weight: 600; }
+.card-body { padding: 16px; }
+
+/* ──────── Panel 1: Alarm Board ──────── */
+.alarm-card {
+  border-color: var(--red);
+  box-shadow: 0 0 20px rgba(248, 81, 73, 0.15);
+}
+.alarm-card .card-header { background: rgba(248,81,73,0.1); }
+
+.event-item {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px; margin-bottom: 10px; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.event-item:hover { border-color: var(--blue); }
+.event-item.selected { border-color: var(--orange); background: rgba(210,153,34,0.05); }
+.event-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.event-id { font-family: monospace; font-size: 13px; font-weight: 600; }
+.state-badge {
+  padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+}
+.state-PENDING   { background: rgba(227,179,65,0.2);  color: var(--yellow); border: 1px solid var(--yellow); }
+.state-CONFIRMED { background: rgba(248,81,73,0.2);   color: var(--red);    border: 1px solid var(--red); }
+.state-IN_PROGRESS{ background: rgba(88,166,255,0.2); color: var(--blue);   border: 1px solid var(--blue); }
+.state-CLOSED_LOOP{ background: rgba(63,185,80,0.2);  color: var(--green);  border: 1px solid var(--green); }
+.state-CLOSED    { background: var(--bg3);             color: var(--muted);  border: 1px solid var(--border); }
+
+.event-detail { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.event-actions { display: flex; gap: 8px; }
+
+.btn {
+  padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-danger   { background: var(--red);    color: #fff; }
+.btn-primary  { background: var(--blue);   color: #fff; }
+.btn-success  { background: var(--green);  color: #000; }
+.btn-warning  { background: var(--orange); color: #fff; }
+.btn-ghost    { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+
+.inject-form { margin-top: 12px; padding: 12px; background: var(--bg3); border-radius: var(--radius); }
+.inject-form label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.inject-form select, .inject-form input {
+  width: 100%; padding: 6px 8px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 4px; color: var(--text);
+  font-size: 13px; margin-bottom: 8px;
+}
+
+/* ──────── Panel 2: Action Execution ──────── */
+.action-panel { }
+.step-list { list-style: none; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.step-item:last-child { border-bottom: none; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 12px;
+  font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.step-PENDING   { background: var(--bg3); color: var(--muted); border: 2px solid var(--border); }
+.step-EXECUTING { background: rgba(88,166,255,0.2); color: var(--blue);  border: 2px solid var(--blue);  animation: pulse 2s infinite; }
+.step-COMPLETED { background: rgba(63,185,80,0.2);  color: var(--green); border: 2px solid var(--green); }
+.step-TIMEOUT   { background: rgba(248,81,73,0.2);  color: var(--red);   border: 2px solid var(--red); }
+
+.step-content { flex: 1; }
+.step-label { font-size: 13px; font-weight: 500; }
+.step-meta  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.step-role-SYS  { color: var(--purple); }
+.step-role-CTRL { color: var(--blue); }
+.step-role-ELEC { color: var(--yellow); }
+.step-role-SEC  { color: var(--orange); }
+
+.step-btn { margin-left: auto; flex-shrink: 0; }
+
+.progress-bar-wrap {
+  background: var(--bg3); border-radius: 4px; height: 6px; margin: 12px 0 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; background: linear-gradient(90deg, var(--green), var(--blue));
+  border-radius: 4px; transition: width 0.5s ease;
+}
+.progress-label { font-size: 12px; color: var(--muted); text-align: right; }
+
+/* ──────── Panel 3: Timeline ──────── */
+.timeline-panel {}
+.timeline-list { position: relative; padding-left: 20px; }
+.timeline-list::before {
+  content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tl-item {
+  position: relative; padding: 0 0 16px 16px;
+}
+.tl-dot {
+  position: absolute; left: -13px; top: 4px;
+  width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--bg);
+}
+.tl-dot-CREATED   { background: var(--yellow); }
+.tl-dot-CONFIRMED { background: var(--red); }
+.tl-dot-COMPLETED { background: var(--green); }
+.tl-dot-CLOSED    { background: var(--blue); }
+
+.tl-time  { font-family: monospace; font-size: 11px; color: var(--muted); }
+.tl-label { font-size: 13px; margin-top: 2px; }
+.tl-actor { font-size: 11px; color: var(--muted); }
+.tl-auto-tag {
+  display: inline-block; padding: 0 5px; background: rgba(188,140,255,0.2);
+  color: var(--purple); border-radius: 3px; font-size: 10px; margin-left: 4px;
+}
+
+/* ──────── Notifications ──────── */
+.toast-container {
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 10px 16px; border-radius: 6px; font-size: 13px;
+  box-shadow: var(--shadow); max-width: 320px; animation: slide-in 0.3s ease;
+}
+@keyframes slide-in { from{transform:translateX(100%);opacity:0} to{transform:none;opacity:1} }
+.toast-success { background: rgba(63,185,80,0.15); border: 1px solid var(--green); color: var(--green); }
+.toast-error   { background: rgba(248,81,73,0.15); border: 1px solid var(--red);   color: var(--red); }
+.toast-info    { background: rgba(88,166,255,0.15); border: 1px solid var(--blue);  color: var(--blue); }
+
+/* ──────── Empty state ──────── */
+.empty-state {
+  text-align: center; padding: 40px 20px; color: var(--muted);
+}
+.empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+
+/* ──────── Status bar ──────── */
+.statusbar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 6px 20px; font-size: 12px; color: var(--muted);
+  display: flex; gap: 20px; align-items: center;
+}
+.statusbar .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="status-dot"></div>
+  <h1>🏥 宣武安防MVP · 烟感报警处置中心</h1>
+  <div id="alarm-badge" class="badge" style="display:none">⚠ 活跃报警</div>
+  <div class="header-right">
+    <span id="api-status" style="font-size:12px;color:var(--muted)">API 连接中…</span>
+    <span class="clock" id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- Main Grid -->
+<div class="main">
+
+  <!-- Panel 1: Alarm Board -->
+  <div class="card alarm-card">
+    <div class="card-header">
+      <h2>🚨 告警看板</h2>
+      <button class="btn btn-ghost" onclick="refreshEvents()" style="font-size:12px;padding:4px 10px">刷新</button>
+    </div>
+    <div class="card-body">
+      <div id="event-list">
+        <div class="empty-state"><div class="icon">🟢</div>当前无活跃报警</div>
+      </div>
+
+      <!-- Inject Alarm Form -->
+      <div class="inject-form">
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--muted)">▸ 仿真注入报警</div>
+        <label>触发设备</label>
+        <select id="inj-device">
+          <option value="SD-F5-001">SD-F5-001 (5楼西区烟感)</option>
+          <option value="SD-F5-003">SD-F5-003 (5楼西区烟感2)</option>
+          <option value="SD-F3-007">SD-F3-007 (3楼ICU烟感)</option>
+        </select>
+        <label>FAS区域</label>
+        <select id="inj-zone">
+          <option value="FAS-ZONE-05">FAS-ZONE-05 (5楼西翼)</option>
+          <option value="FAS-ZONE-03">FAS-ZONE-03 (3楼ICU)</option>
+          <option value="FAS-ZONE-01">FAS-ZONE-01 (1楼大厅)</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="inj-dual" checked style="width:auto;margin-bottom:0">
+          双点联动（自动升级已确认）
+        </label>
+        <br>
+        <button class="btn btn-danger" style="width:100%" onclick="injectAlarm()">⚡ 注入烟感报警</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 2: Action Execution -->
+  <div class="card action-panel">
+    <div class="card-header">
+      <h2>📋 L2预案执行</h2>
+      <span id="action-event-id" style="font-size:11px;color:var(--muted);font-family:monospace">未选中事件</span>
+    </div>
+    <div class="card-body">
+      <div id="action-no-event" class="empty-state">
+        <div class="icon">📭</div>请在左侧选择一个活跃事件
+      </div>
+      <div id="action-content" style="display:none">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0/10</div>
+        <ul class="step-list" id="step-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 3: Event Timeline -->
+  <div class="card timeline-panel">
+    <div class="card-header">
+      <h2>📅 处置时序</h2>
+      <span id="timeline-event-id" style="font-size:11px;color:var(--muted);font-family:monospace">未选中事件</span>
+    </div>
+    <div class="card-body">
+      <div id="timeline-no-event" class="empty-state">
+        <div class="icon">📊</div>选中事件后显示时序
+      </div>
+      <div id="timeline-content" style="display:none">
+        <div class="timeline-list" id="timeline-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Status Bar -->
+<div class="statusbar">
+  <span><span class="dot" style="background:var(--green)"></span>API就绪</span>
+  <span id="sb-events">事件: 0</span>
+  <span id="sb-active">活跃: 0</span>
+  <span id="sb-snapshot">快照: t1</span>
+  <span style="margin-left:auto">CIM-PIM-PSM MVP v1.0 · rdflib mode</span>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────────────────────────────────────
+const API_BASE = 'http://localhost:8001/mvp';
+
+let _events = {};
+let _selectedEventId = null;
+let _actionNodes = {};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLOCK
+// ─────────────────────────────────────────────────────────────────────────────
+function updateClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('zh-CN', {hour12: false});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// API HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+async function apiGet(path) {
+  const r = await fetch(API_BASE + path);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+async function apiPost(path, body = {}) {
+  const r = await fetch(API_BASE + path, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    throw new Error(err.detail || `HTTP ${r.status}`);
+  }
+  return r.json();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────────────────────
+function toast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHECK API CONNECTION
+// ─────────────────────────────────────────────────────────────────────────────
+async function checkApi() {
+  try {
+    await fetch('http://localhost:8001/');
+    document.getElementById('api-status').textContent = '✅ API已连接';
+    document.getElementById('api-status').style.color = 'var(--green)';
+  } catch {
+    document.getElementById('api-status').textContent = '⚠ API未连接 (使用本地演示模式)';
+    document.getElementById('api-status').style.color = 'var(--yellow)';
+    // Load demo data when API is not available
+    loadDemoData();
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEMO DATA (when API not running)
+// ─────────────────────────────────────────────────────────────────────────────
+function loadDemoData() {
+  const demoEventId = 'EVT-20260510-001';
+  const now = new Date().toISOString().replace('T', 'T').slice(0, 19) + 'Z';
+
+  const L2_STEPS = [
+    {step:1,  slug:'confirm_fire',      label:'确认火情',  role:'CTRL', auto:false, deps:[],  timeout:120, state:'COMPLETED', completed_by:'CTRL-001'},
+    {step:2,  slug:'cut_power',         label:'切断电源',  role:'SYS',  auto:true,  deps:[1], timeout:30,  state:'COMPLETED', completed_by:'SYSTEM'},
+    {step:3,  slug:'start_suppression', label:'启动灭火',  role:'ELEC', auto:false, deps:[2], timeout:300, state:'EXECUTING', completed_by:null},
+    {step:4,  slug:'broadcast',         label:'区域广播',  role:'SYS',  auto:true,  deps:[1], timeout:10,  state:'COMPLETED', completed_by:'SYSTEM'},
+    {step:5,  slug:'evacuate',          label:'启动疏散',  role:'SEC',  auto:false, deps:[4], timeout:600, state:'EXECUTING', completed_by:null},
+    {step:6,  slug:'open_doors',        label:'打开门禁',  role:'SYS',  auto:true,  deps:[4], timeout:10,  state:'COMPLETED', completed_by:'SYSTEM'},
+    {step:7,  slug:'elevator_home',     label:'电梯归首',  role:'SYS',  auto:true,  deps:[1], timeout:30,  state:'COMPLETED', completed_by:'SYSTEM'},
+    {step:8,  slug:'notify_medical',    label:'通知医护',  role:'SYS',  auto:true,  deps:[1], timeout:30,  state:'COMPLETED', completed_by:'SYSTEM'},
+    {step:9,  slug:'call_119',          label:'拨打119',   role:'CTRL', auto:false, deps:[3], timeout:120, state:'PENDING',   completed_by:null},
+    {step:10, slug:'notify_leaders',    label:'通知领导',  role:'SYS',  auto:true,  deps:[1], timeout:30,  state:'COMPLETED', completed_by:'SYSTEM'},
+  ];
+
+  const nodes = {};
+  L2_STEPS.forEach(s => {
+    const nid = `${demoEventId}-STEP-${String(s.step).padStart(2,'0')}`;
+    nodes[nid] = { ...s, node_id: nid, event_id: demoEventId };
+  });
+
+  const evt = {
+    event_id: demoEventId,
+    state: 'IN_PROGRESS',
+    severity: 'L2',
+    trigger_device: 'SD-F5-001',
+    zone: 'FAS-ZONE-05',
+    dual_zone: true,
+    created_at: now,
+    confirmed_at: now,
+    node_ids: Object.keys(nodes),
+  };
+
+  _events[demoEventId] = { ...evt, action_nodes: L2_STEPS.map(s => ({
+    ...s,
+    node_id: `${demoEventId}-STEP-${String(s.step).padStart(2,'0')}`,
+    event_id: demoEventId,
+    completed_at: s.state === 'COMPLETED' ? now : null,
+  }))};
+
+  renderEvents();
+  selectEvent(demoEventId);
+  updateStatusBar();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INJECT ALARM
+// ─────────────────────────────────────────────────────────────────────────────
+async function injectAlarm() {
+  const device = document.getElementById('inj-device').value;
+  const zone   = document.getElementById('inj-zone').value;
+  const dual   = document.getElementById('inj-dual').checked;
+
+  try {
+    const res = await apiPost('/events', {
+      trigger_device: device,
+      zone: zone,
+      dual_zone: dual,
+      severity: 'L2',
+    });
+    toast(`✅ 事件已创建: ${res.event_id}`, 'success');
+    document.getElementById('alarm-badge').style.display = '';
+    await refreshEvents();
+    if (res.event_id) selectEventById(res.event_id);
+  } catch(e) {
+    toast(`❌ 注入失败: ${e.message}`, 'error');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REFRESH EVENTS
+// ─────────────────────────────────────────────────────────────────────────────
+async function refreshEvents() {
+  try {
+    const data = await apiGet('/events');
+    _events = {};
+    for (const evt of data.events) {
+      _events[evt.event_id] = evt;
+    }
+    renderEvents();
+    updateStatusBar();
+    if (_selectedEventId) await loadEventDetail(_selectedEventId);
+  } catch(e) {
+    // API not available, keep demo data
+  }
+}
+
+function renderEvents() {
+  const el = document.getElementById('event-list');
+  const evts = Object.values(_events);
+
+  if (evts.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">🟢</div>当前无活跃报警</div>';
+    document.getElementById('alarm-badge').style.display = 'none';
+    return;
+  }
+
+  const active = evts.filter(e => !['CLOSED', 'CLOSED_LOOP'].includes(e.state));
+  if (active.length > 0) document.getElementById('alarm-badge').style.display = '';
+
+  el.innerHTML = evts.map(evt => `
+    <div class="event-item ${evt.event_id === _selectedEventId ? 'selected' : ''}"
+         onclick="selectEvent('${evt.event_id}')">
+      <div class="event-meta">
+        <span class="event-id">${evt.event_id}</span>
+        <span class="state-badge state-${evt.state}">${stateLabel(evt.state)}</span>
+        ${evt.severity ? `<span style="font-size:11px;color:var(--red)">${evt.severity}</span>` : ''}
+      </div>
+      <div class="event-detail">
+        📍 ${evt.zone || '-'} &nbsp;|&nbsp; 🔴 ${evt.trigger_device || '-'}
+        &nbsp;|&nbsp; ${evt.dual_zone ? '双点联动' : '单点报警'}
+        ${evt.progress ? `&nbsp;|&nbsp; 进度: ${evt.progress}` : ''}
+      </div>
+      <div class="event-actions">
+        ${evt.state === 'PENDING'
+          ? `<button class="btn btn-danger" onclick="confirmEvent('${evt.event_id}', event)">确认报警</button>`
+          : ''}
+        <button class="btn btn-ghost" onclick="selectEvent('${evt.event_id}')">查看详情</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function stateLabel(s) {
+  return {
+    PENDING:'待确认', CONFIRMED:'已确认', IN_PROGRESS:'处理中',
+    CLOSED_LOOP:'已闭环', CLOSED:'已关闭'
+  }[s] || s;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIRM EVENT
+// ─────────────────────────────────────────────────────────────────────────────
+async function confirmEvent(eventId, ev) {
+  ev.stopPropagation();
+  try {
+    const res = await apiPost(`/events/${eventId}/confirm`, {});
+    toast(`✅ 已确认 ${eventId}，${res.auto_completed.length} 个系统动作自动执行`, 'success');
+    await refreshEvents();
+  } catch(e) {
+    toast(`❌ 确认失败: ${e.message}`, 'error');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SELECT EVENT
+// ─────────────────────────────────────────────────────────────────────────────
+function selectEvent(eventId) {
+  _selectedEventId = eventId;
+  renderEvents();  // re-render to show selection
+  loadEventDetail(eventId);
+}
+
+function selectEventById(eventId) {
+  _selectedEventId = eventId;
+  renderEvents();
+  loadEventDetail(eventId);
+}
+
+async function loadEventDetail(eventId) {
+  // Try API first
+  try {
+    const data = await apiGet(`/events/${eventId}`);
+    _events[eventId] = data;
+    renderActionPanel(data);
+    await loadTimeline(eventId);
+    return;
+  } catch {}
+
+  // Fallback to cached data
+  const evt = _events[eventId];
+  if (evt) {
+    renderActionPanel(evt);
+    renderTimelineLocal(evt);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ACTION PANEL
+// ─────────────────────────────────────────────────────────────────────────────
+function renderActionPanel(evt) {
+  document.getElementById('action-no-event').style.display = 'none';
+  document.getElementById('action-content').style.display = '';
+  document.getElementById('action-event-id').textContent = evt.event_id;
+
+  const nodes = evt.action_nodes || [];
+  const completed = nodes.filter(n => n.state === 'COMPLETED').length;
+  const pct = nodes.length ? Math.round((completed / nodes.length) * 100) : 0;
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent =
+    `${completed}/${nodes.length} 步骤已完成 (${pct}%)`;
+
+  const list = document.getElementById('step-list');
+  list.innerHTML = nodes.map(node => {
+    const roleColor = `step-role-${node.role}`;
+    const roleMap   = {SYS:'系统自动', CTRL:'中控', ELEC:'电工班', SEC:'保安队'};
+    const canComplete = node.state === 'EXECUTING' && !node.auto;
+
+    return `
+      <li class="step-item">
+        <div class="step-num step-${node.state}">${node.step}</div>
+        <div class="step-content">
+          <div class="step-label">${node.label}</div>
+          <div class="step-meta">
+            <span class="${roleColor}">${roleMap[node.role] || node.role}</span>
+            &nbsp;·&nbsp; 超时: ${node.timeout}s
+            ${node.auto ? ' · <span style="color:var(--purple)">自动</span>' : ''}
+            ${node.completed_by ? ` · <span style="color:var(--green)">✓ ${node.completed_by}</span>` : ''}
+          </div>
+        </div>
+        ${canComplete
+          ? `<button class="btn btn-success step-btn" style="font-size:12px;padding:4px 10px"
+               onclick="completeAction('${node.node_id}')">完成</button>`
+          : node.state === 'PENDING'
+            ? '<span style="font-size:11px;color:var(--muted);margin-left:auto">等待前置</span>'
+            : ''
+        }
+      </li>
+    `;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COMPLETE ACTION
+// ─────────────────────────────────────────────────────────────────────────────
+async function completeAction(nodeId) {
+  try {
+    const res = await apiPost(`/actions/${nodeId}/complete`, {
+      completed_by: 'DUTY-OPERATOR',
+    });
+    toast(`✅ 步骤已完成，解锁 ${res.unlocked_nodes.join(', ')}`, 'success');
+    if (res.event_state === 'CLOSED_LOOP') {
+      toast('🎉 处置闭环！所有动作已完成', 'success');
+    }
+    await loadEventDetail(_selectedEventId);
+    await refreshEvents();
+  } catch(e) {
+    toast(`❌ 操作失败: ${e.message}`, 'error');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TIMELINE
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadTimeline(eventId) {
+  try {
+    const data = await apiGet(`/events/${eventId}/timeline`);
+    renderTimeline(data.timeline);
+    document.getElementById('timeline-event-id').textContent = eventId;
+  } catch {
+    renderTimelineLocal(_events[eventId]);
+  }
+}
+
+function renderTimeline(items) {
+  document.getElementById('timeline-no-event').style.display = 'none';
+  document.getElementById('timeline-content').style.display = '';
+
+  const list = document.getElementById('timeline-list');
+  if (!items || items.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:12px">暂无时序记录</div>';
+    return;
+  }
+
+  list.innerHTML = items.map(item => {
+    const dotClass = item.type === 'EVENT_CREATED'    ? 'tl-dot-CREATED'
+                   : item.type === 'EVENT_CONFIRMED'  ? 'tl-dot-CONFIRMED'
+                   : item.type === 'ACTION_COMPLETED' ? 'tl-dot-COMPLETED'
+                   : 'tl-dot-CLOSED';
+
+    const timeStr = item.timestamp
+      ? new Date(item.timestamp).toLocaleTimeString('zh-CN')
+      : '--:--:--';
+
+    return `
+      <div class="tl-item">
+        <div class="tl-dot ${dotClass}"></div>
+        <div class="tl-time">${timeStr}</div>
+        <div class="tl-label">
+          ${item.label}
+          ${item.auto ? '<span class="tl-auto-tag">自动</span>' : ''}
+        </div>
+        <div class="tl-actor">${item.actor || ''}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderTimelineLocal(evt) {
+  if (!evt) return;
+  document.getElementById('timeline-no-event').style.display = 'none';
+  document.getElementById('timeline-content').style.display = '';
+  document.getElementById('timeline-event-id').textContent = evt.event_id;
+
+  const items = [];
+  const now   = new Date().toISOString();
+
+  items.push({
+    timestamp: evt.created_at || now,
+    type: 'EVENT_CREATED',
+    label: `烟感报警触发 — ${evt.trigger_device || 'SD-F5-001'} (${evt.zone || 'FAS-ZONE-05'})`,
+    actor: 'SYSTEM', auto: true,
+  });
+
+  if (evt.confirmed_at) {
+    items.push({
+      timestamp: evt.confirmed_at,
+      type: 'EVENT_CONFIRMED',
+      label: '中控确认火情，L2预案激活',
+      actor: evt.confirmed_by || 'CTRL', auto: false,
+    });
+  }
+
+  const nodes = evt.action_nodes || [];
+  nodes.filter(n => n.completed_at).forEach(n => {
+    items.push({
+      timestamp: n.completed_at,
+      type: 'ACTION_COMPLETED',
+      label: `步骤${n.step} ${n.label}`,
+      actor: n.completed_by || '?',
+      auto: n.auto,
+    });
+  });
+
+  renderTimeline(items);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATUS BAR
+// ─────────────────────────────────────────────────────────────────────────────
+function updateStatusBar() {
+  const evts = Object.values(_events);
+  const active = evts.filter(e => !['CLOSED'].includes(e.state)).length;
+  document.getElementById('sb-events').textContent = `事件: ${evts.length}`;
+  document.getElementById('sb-active').textContent = `活跃: ${active}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+window.addEventListener('load', async () => {
+  await checkApi();
+  try {
+    await refreshEvents();
+  } catch {}
+  // Auto-refresh every 5 seconds
+  setInterval(async () => {
+    try { await refreshEvents(); } catch {}
+  }, 5000);
+});
+</script>
+</body>
+</html>
