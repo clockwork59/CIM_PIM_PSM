@@ -1,0 +1,177 @@
+{
+  "milestone": "M5",
+  "test_suite": "step11_api_test",
+  "total": 28,
+  "passed": 27,
+  "failed": 1,
+  "results": [
+    {
+      "test": "T01_named_graph_loading",
+      "status": "PASS",
+      "rows": 37974,
+      "detail": "37974 quads in 3.7s"
+    },
+    {
+      "test": "T02_sparql_files_found",
+      "status": "PASS",
+      "rows": 9,
+      "detail": "9 files"
+    },
+    {
+      "test": "T02_bas_trend_24h",
+      "status": "PASS",
+      "rows": 0,
+      "detail": ""
+    },
+    {
+      "test": "T02_chiller_plant_status",
+      "status": "PASS",
+      "rows": 36,
+      "detail": ""
+    },
+    {
+      "test": "T02_energy_anomaly",
+      "status": "PASS",
+      "rows": 1,
+      "detail": ""
+    },
+    {
+      "test": "T02_eq_full_status",
+      "status": "PASS",
+      "rows": 13983,
+      "detail": ""
+    },
+    {
+      "test": "T02_equipment_lifecycle",
+      "status": "PASS",
+      "rows": 13983,
+      "detail": ""
+    },
+    {
+      "test": "T02_fas_zone_status",
+      "status": "PASS",
+      "rows": 124,
+      "detail": ""
+    },
+    {
+      "test": "T02_floor_dashboard",
+      "status": "PASS",
+      "rows": 6714,
+      "detail": ""
+    },
+    {
+      "test": "T02_ifc_bas_cmms_triangle",
+      "status": "PASS",
+      "rows": 2314,
+      "detail": ""
+    },
+    {
+      "test": "T02_maintenance_due_30d",
+      "status": "PASS",
+      "rows": 2940,
+      "detail": ""
+    },
+    {
+      "test": "T03_fas_zone_rows_gt_0",
+      "status": "PASS",
+      "rows": 124,
+      "detail": "124 FAS device rows"
+    },
+    {
+      "test": "T04_energy_anomaly_query_runs",
+      "status": "PASS",
+      "rows": 1,
+      "detail": "1 anomaly rows"
+    },
+    {
+      "test": "T05_bas_trend_query_runs",
+      "status": "PASS",
+      "rows": 0,
+      "detail": "0 trend rows"
+    },
+    {
+      "test": "T05_trend_multi_timestamp",
+      "status": "FAIL",
+      "rows": -1,
+      "detail": "no trend data"
+    },
+    {
+      "test": "T06_fastapi_importable",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "11 routes registered"
+    },
+    {
+      "test": "T06_routes_sparql",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "/api/v1/sparql"
+    },
+    {
+      "test": "T06_routes_health",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "/health"
+    },
+    {
+      "test": "T06_routes_floor_dashboard",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "floor dashboard endpoint"
+    },
+    {
+      "test": "T06_routes_ge_6",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "route count = 11"
+    },
+    {
+      "test": "T07_frontend_html_exists",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "project_deliverables/version02/platform/frontend/index.html"
+    },
+    {
+      "test": "T07_frontend_has_fetch",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "uses fetch() API"
+    },
+    {
+      "test": "T07_frontend_has_sparql_panel",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "SPARQL console present"
+    },
+    {
+      "test": "T07_frontend_has_dashboard",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "dashboard panel present"
+    },
+    {
+      "test": "T08_docker_compose_exists",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "project_deliverables/version02/platform/docker/docker-compose.yml"
+    },
+    {
+      "test": "T09_bas_trend_sparql_exists",
+      "status": "PASS",
+      "rows": -1,
+      "detail": "project_deliverables/version02/platform/queries/bas_trend_24h.sparql"
+    },
+    {
+      "test": "T10_named_graph_count",
+      "status": "PASS",
+      "rows": 9,
+      "detail": "9 named graphs"
+    },
+    {
+      "test": "T11_cross_graph_federation",
+      "status": "PASS",
+      "rows": 5,
+      "detail": "5 cross-graph rows"
+    }
+  ]
+}

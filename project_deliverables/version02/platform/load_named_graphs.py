@@ -35,6 +35,7 @@ GRAPH_URIS = {
     "bas_t2": "https://cim.medical/graph/bas/2026-05-11T00:00",
     "cmms":   "https://cim.medical/graph/cmms/2026-05",
     "event":  "https://cim.medical/graph/event",
+    "fas":    "https://cim.medical/graph/fas",
 }
 
 # ---------------------------------------------------------------------------
@@ -55,6 +56,7 @@ FILE_MAP: dict[str, list[Path]] = {
     "bas_t2": [ABOX_DIR / "nbu_bas_readings_t2.ttl"],
     "cmms":   [ABOX_DIR / "nbu_cmms_workorders.ttl"],
     "event":  [SCENARIO_DIR / "smoke_alarm_drill.ttl"],
+    "fas":    [ABOX_DIR / "nbu_fas_instances.ttl"],
 }
 
 

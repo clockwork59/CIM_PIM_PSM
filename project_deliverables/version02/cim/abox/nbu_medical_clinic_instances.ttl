@@ -2725,6 +2725,7 @@ inst:AHU-63300000-001 a cim-equip:AHU ;
     rdfs:label "63300000 J"@en ;
     cim:hasEquipmentID "AHU-63300000-001" ;
     cim-d:designTag "728908" ;
+    cim-d:ratedPower "22.0"^^xsd:decimal ;
     cim:hasSystemReference "cim:HVAC-AHU-MAIN" ;
     cim:ifcGlobalId "3L8hWAGKHBAuJsahiYsbgx" .
 

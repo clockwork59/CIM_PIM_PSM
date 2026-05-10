@@ -1,0 +1,676 @@
+# =============================================================================
+# CIM ABox — NBU Medical Clinic FAS (Fire Alarm System) Instance Data
+#
+# Source : layer4_fas_security.ttl TBox + NBU Medical Clinic layout
+# Ontology: CIM v4.0 FAS Security Layer
+# Date   : 2026-05-10
+# Count  : ~62 device instances across 5 fire alarm zones
+# =============================================================================
+
+@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-fas:   <https://cim.medical/ontology/v4.0/fas#> .
+@prefix cim-d:     <https://cim.medical/ontology/v4.0/design#> .
+
+@prefix inst:      <https://cim.medical/instance/nbu_medical_clinic/> .
+@prefix fas:       <https://cim.medical/instance/fas/> .
+
+# ===========================================================================
+# FIRE ALARM CONTROL UNITS (FACU) — 3 panels
+# ===========================================================================
+
+fas:FACU-1F-01 a cim-fas:FireAlarmControlUnit ;
+    rdfs:label "First Floor Fire Alarm Control Unit"@en ,
+               "一层火灾报警控制器"@zh ;
+    cim:hasEquipmentID "FACU-1F-01" ;
+    cim-fas:hasFASZoneID "Z1F-ALL" ;
+    cim-fas:coverageArea inst:FLOOR-First_Floor .
+
+fas:FACU-2F-01 a cim-fas:FireAlarmControlUnit ;
+    rdfs:label "Second Floor Fire Alarm Control Unit"@en ,
+               "二层火灾报警控制器"@zh ;
+    cim:hasEquipmentID "FACU-2F-01" ;
+    cim-fas:hasFASZoneID "Z2F-ALL" ;
+    cim-fas:coverageArea inst:FLOOR-Second_Floor .
+
+fas:FACU-RF-01 a cim-fas:FireAlarmControlUnit ;
+    rdfs:label "Roof Mechanical Fire Alarm Control Unit"@en ,
+               "屋顶机房火灾报警控制器"@zh ;
+    cim:hasEquipmentID "FACU-RF-01" ;
+    cim-fas:hasFASZoneID "ZRF-ALL" ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+# ===========================================================================
+# FIRE ALARM ZONES — 5 zones
+# ===========================================================================
+
+fas:ZONE-1F-GENERAL a cim-fas:FireAlarmZone ;
+    rdfs:label "1F General Zone"@en ,
+               "一层一般区域"@zh ;
+    cim-fas:hasZoneNumber 1 .
+
+fas:ZONE-1F-MECH a cim-fas:FireAlarmZone ;
+    rdfs:label "1F Mechanical Zone"@en ,
+               "一层机房区域"@zh ;
+    cim-fas:hasZoneNumber 2 .
+
+fas:ZONE-2F-GENERAL a cim-fas:FireAlarmZone ;
+    rdfs:label "2F General Zone"@en ,
+               "二层一般区域"@zh ;
+    cim-fas:hasZoneNumber 3 .
+
+fas:ZONE-2F-OR a cim-fas:FireAlarmZone ;
+    rdfs:label "2F Operating Room Zone"@en ,
+               "二层手术室区域"@zh ;
+    cim-fas:hasZoneNumber 4 .
+
+fas:ZONE-RF-MECH a cim-fas:FireAlarmZone ;
+    rdfs:label "Roof Mechanical Zone"@en ,
+               "屋顶机房区域"@zh ;
+    cim-fas:hasZoneNumber 5 .
+
+# ===========================================================================
+# SMOKE DETECTORS — 30 units
+# ===========================================================================
+
+# --- Zone 1F-GENERAL: 6 detectors ---
+
+fas:SD-1F-GEN-01 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-GEN-01 (Reception)"@en ;
+    cim:hasEquipmentID "SD-1F-GEN-01" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1C02 .
+
+fas:SD-1F-GEN-02 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-GEN-02 (Waiting)"@en ;
+    cim:hasEquipmentID "SD-1F-GEN-02" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1C01 .
+
+fas:SD-1F-GEN-03 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-GEN-03 (Exam Room)"@en ;
+    cim:hasEquipmentID "SD-1F-GEN-03" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1C10 .
+
+fas:SD-1F-GEN-04 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-GEN-04 (Office)"@en ;
+    cim:hasEquipmentID "SD-1F-GEN-04" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1A03 .
+
+fas:SD-1F-GEN-05 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-GEN-05 (Admin)"@en ;
+    cim:hasEquipmentID "SD-1F-GEN-05" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1E18 .
+
+fas:SD-1F-GEN-06 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-GEN-06 (Corridor D)"@en ;
+    cim:hasEquipmentID "SD-1F-GEN-06" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1D08 .
+
+# --- Zone 1F-MECH: 2 detectors ---
+
+fas:SD-1F-MECH-01 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-MECH-01"@en ;
+    cim:hasEquipmentID "SD-1F-MECH-01" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D10 .
+
+fas:SD-1F-MECH-02 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 1F-MECH-02"@en ;
+    cim:hasEquipmentID "SD-1F-MECH-02" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D15 .
+
+# --- Zone 2F-GENERAL: 8 detectors ---
+
+fas:SD-2F-GEN-01 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-01"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-01" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A03 .
+
+fas:SD-2F-GEN-02 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-02"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-02" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A05 .
+
+fas:SD-2F-GEN-03 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-03"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-03" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A06 .
+
+fas:SD-2F-GEN-04 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-04"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-04" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A08 .
+
+fas:SD-2F-GEN-05 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-05"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-05" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A09 .
+
+fas:SD-2F-GEN-06 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-06"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-06" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A12A .
+
+fas:SD-2F-GEN-07 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-07"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-07" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A14 .
+
+fas:SD-2F-GEN-08 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-GEN-08 (Mechanical)"@en ;
+    cim:hasEquipmentID "SD-2F-GEN-08" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2D05 .
+
+# --- Zone 2F-OR: 8 detectors (operating rooms) ---
+
+fas:SD-2F-OR-01 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-01 (OR-CC2)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-01" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2CC2 .
+
+fas:SD-2F-OR-02 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-02 (OR-CC5)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-02" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2CC5 .
+
+fas:SD-2F-OR-03 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-03 (OR-BC6)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-03" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2BC6 .
+
+fas:SD-2F-OR-04 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-04 (OR-DC1)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-04" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2DC1 .
+
+fas:SD-2F-OR-05 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-05 (OR-BC5)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-05" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2BC5 .
+
+fas:SD-2F-OR-06 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-06 (OR-D08)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-06" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2D08 .
+
+fas:SD-2F-OR-07 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-07 (Corridor B)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-07" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2B23 .
+
+fas:SD-2F-OR-08 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector 2F-OR-08 (Corridor D)"@en ;
+    cim:hasEquipmentID "SD-2F-OR-08" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2D07 .
+
+# --- Zone RF-MECH: 6 detectors ---
+
+fas:SD-RF-MECH-01 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector RF-MECH-01"@en ;
+    cim:hasEquipmentID "SD-RF-MECH-01" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:ROOM-3R01 .
+
+fas:SD-RF-MECH-02 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector RF-MECH-02"@en ;
+    cim:hasEquipmentID "SD-RF-MECH-02" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+fas:SD-RF-MECH-03 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector RF-MECH-03"@en ;
+    cim:hasEquipmentID "SD-RF-MECH-03" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+fas:SD-RF-MECH-04 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector RF-MECH-04"@en ;
+    cim:hasEquipmentID "SD-RF-MECH-04" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+fas:SD-RF-MECH-05 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector RF-MECH-05"@en ;
+    cim:hasEquipmentID "SD-RF-MECH-05" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Main .
+
+fas:SD-RF-MECH-06 a cim-fas:SmokeDetector ;
+    rdfs:label "Smoke Detector RF-MECH-06"@en ;
+    cim:hasEquipmentID "SD-RF-MECH-06" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasProtectionRadius "6.7"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Main .
+
+# ===========================================================================
+# HEAT DETECTORS — 8 units (mechanical/kitchen areas)
+# ===========================================================================
+
+fas:HD-1F-MECH-01 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector 1F-MECH-01 (Boiler Room)"@en ;
+    cim:hasEquipmentID "HD-1F-MECH-01" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D10 .
+
+fas:HD-1F-MECH-02 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector 1F-MECH-02 (Electrical Room)"@en ;
+    cim:hasEquipmentID "HD-1F-MECH-02" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D15 .
+
+fas:HD-1F-MECH-03 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector 1F-MECH-03 (Kitchen)"@en ;
+    cim:hasEquipmentID "HD-1F-MECH-03" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D35 .
+
+fas:HD-1F-MECH-04 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector 1F-MECH-04 (Plant Room)"@en ;
+    cim:hasEquipmentID "HD-1F-MECH-04" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D12 .
+
+fas:HD-2F-MECH-01 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector 2F-MECH-01"@en ;
+    cim:hasEquipmentID "HD-2F-MECH-01" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2D05 .
+
+fas:HD-RF-MECH-01 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector RF-MECH-01"@en ;
+    cim:hasEquipmentID "HD-RF-MECH-01" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:ROOM-3R01 .
+
+fas:HD-RF-MECH-02 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector RF-MECH-02"@en ;
+    cim:hasEquipmentID "HD-RF-MECH-02" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+fas:HD-RF-MECH-03 a cim-fas:HeatDetector ;
+    rdfs:label "Heat Detector RF-MECH-03"@en ;
+    cim:hasEquipmentID "HD-RF-MECH-03" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasDetectionState "NORMAL" ;
+    cim-fas:hasAlarmThreshold "68.0"^^xsd:decimal ;
+    cim-fas:hasProtectionRadius "4.4"^^xsd:decimal ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+# ===========================================================================
+# MANUAL CALL POINTS — 10 units (at exits and escape routes)
+# ===========================================================================
+
+fas:MCP-1F-01 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 1F Main Entrance"@en ;
+    cim:hasEquipmentID "MCP-1F-01" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1C01 .
+
+fas:MCP-1F-02 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 1F East Stairwell"@en ;
+    cim:hasEquipmentID "MCP-1F-02" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1E30 .
+
+fas:MCP-1F-03 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 1F West Stairwell"@en ;
+    cim:hasEquipmentID "MCP-1F-03" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1A14 .
+
+fas:MCP-1F-04 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 1F Corridor D"@en ;
+    cim:hasEquipmentID "MCP-1F-04" ;
+    cim-fas:hasFASZoneID "Z1F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-1D31 .
+
+fas:MCP-2F-01 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 2F North Stairwell"@en ;
+    cim:hasEquipmentID "MCP-2F-01" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2A14 .
+
+fas:MCP-2F-02 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 2F South Stairwell"@en ;
+    cim:hasEquipmentID "MCP-2F-02" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2B24 .
+
+fas:MCP-2F-03 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 2F OR Corridor"@en ;
+    cim:hasEquipmentID "MCP-2F-03" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2D07 .
+
+fas:MCP-2F-04 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point 2F East Exit"@en ;
+    cim:hasEquipmentID "MCP-2F-04" ;
+    cim-fas:hasFASZoneID "Z2F-GEN" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-GENERAL ;
+    cim-fas:coverageArea inst:ROOM-2D20 .
+
+fas:MCP-RF-01 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point Roof Access"@en ;
+    cim:hasEquipmentID "MCP-RF-01" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:ROOM-3R01 .
+
+fas:MCP-RF-02 a cim-fas:ManualCallPoint ;
+    rdfs:label "Manual Call Point Roof Mechanical"@en ;
+    cim:hasEquipmentID "MCP-RF-02" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasInstallationHeight "1.4"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:FLOOR-Roof_-_Mech .
+
+# ===========================================================================
+# SPRINKLER HEADS — 6 units (high-risk areas)
+# ===========================================================================
+
+fas:SPK-2F-OR-01 a cim-fas:SprinklerHead ;
+    rdfs:label "Sprinkler Head OR-CC2"@en ;
+    cim:hasEquipmentID "SPK-2F-OR-01" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2CC2 .
+
+fas:SPK-2F-OR-02 a cim-fas:SprinklerHead ;
+    rdfs:label "Sprinkler Head OR-CC5"@en ;
+    cim:hasEquipmentID "SPK-2F-OR-02" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2CC5 .
+
+fas:SPK-2F-OR-03 a cim-fas:SprinklerHead ;
+    rdfs:label "Sprinkler Head OR-BC6"@en ;
+    cim:hasEquipmentID "SPK-2F-OR-03" ;
+    cim-fas:hasFASZoneID "Z2F-OR" ;
+    cim-fas:hasInstallationHeight "2.8"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-2F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-2F-OR ;
+    cim-fas:coverageArea inst:ROOM-2BC6 .
+
+fas:SPK-1F-MECH-01 a cim-fas:SprinklerHead ;
+    rdfs:label "Sprinkler Head 1F Boiler Room"@en ;
+    cim:hasEquipmentID "SPK-1F-MECH-01" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D10 .
+
+fas:SPK-1F-MECH-02 a cim-fas:SprinklerHead ;
+    rdfs:label "Sprinkler Head 1F Electrical Room"@en ;
+    cim:hasEquipmentID "SPK-1F-MECH-02" ;
+    cim-fas:hasFASZoneID "Z1F-MECH" ;
+    cim-fas:hasInstallationHeight "3.5"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-1F-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-1F-MECH ;
+    cim-fas:coverageArea inst:ROOM-1D15 .
+
+fas:SPK-RF-MECH-01 a cim-fas:SprinklerHead ;
+    rdfs:label "Sprinkler Head Roof Mechanical"@en ;
+    cim:hasEquipmentID "SPK-RF-MECH-01" ;
+    cim-fas:hasFASZoneID "ZRF-MECH" ;
+    cim-fas:hasInstallationHeight "4.0"^^xsd:decimal ;
+    cim-fas:linkedToPanel fas:FACU-RF-01 ;
+    cim-fas:hasAlarmZone fas:ZONE-RF-MECH ;
+    cim-fas:coverageArea inst:ROOM-3R01 .
+
+# ===========================================================================
+# END OF FAS INSTANCE DATA
+# ===========================================================================

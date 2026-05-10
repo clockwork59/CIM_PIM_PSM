@@ -16,7 +16,7 @@ bacnet:AHU-63300000-001-FANKW a cim-bacnet:BACnetAnalogInput ;
     cim-bacnet:hasObjectIdentifier "analoginput:16" ;
     cim-bacnet:hasObjectName "AHU-63300000-001-FANKW" ;
     cim-bacnet:hasObjectType "analoginput" ;
-    cim-bacnet:hasPresentValue 22.98 ;
+    cim-bacnet:hasPresentValue 29.87 ;
     cim-bacnet:hasTimestamp "2026-05-10T16:00:00+08:00"^^xsd:dateTime ;
     cim-bacnet:hasUnitsID "kilowatts" ;
     cim-bacnet:hostedBy bacnet:CTRL-AHU-63300000-001 .

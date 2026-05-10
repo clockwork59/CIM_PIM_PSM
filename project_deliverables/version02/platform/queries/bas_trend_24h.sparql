@@ -1,0 +1,25 @@
+# =============================================================================
+# bas_trend_24h.sparql
+# BAS 24h Trend — Equipment readings across time-series snapshots
+#
+# Queries all BACnet present-values from named graphs containing "bas",
+# yielding a time-series trend for each equipment point across the
+# three snapshots (T0=08:00, T1=16:00, T2=00:00).
+# =============================================================================
+
+PREFIX cim:        <https://cim.medical/ontology/v3.4#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?equipID ?pointName ?ts ?value ?units WHERE {
+    GRAPH ?g {
+        ?pt cim-bacnet:bacnetPointOf ?equip ;
+            cim-bacnet:hasObjectName ?pointName ;
+            cim-bacnet:hasPresentValue ?value ;
+            cim-bacnet:hasTimestamp ?ts .
+        OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+        FILTER(CONTAINS(STR(?g), "bas"))
+    }
+    ?equip cim:hasEquipmentID ?equipID .
+}
+ORDER BY ?equipID ?pointName ?ts

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIM PIM 数字孪生平台</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: #f5f5f5; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #1a1a2e; margin-bottom: 4px; }
+        h1 small { font-size: 0.5em; color: #888; font-weight: 400; }
+        h2 { color: #16213e; border-bottom: 2px solid #0f3460; padding-bottom: 8px; margin-top: 0; }
+        .panel { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .row { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 12px; flex-wrap: wrap; }
+        label { display: block; font-size: 0.85em; color: #555; margin-bottom: 4px; }
+        input[type="text"], select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        input[type="text"] { width: 260px; }
+        textarea { width: 100%; height: 140px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 13px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }
+        button { background: #0f3460; color: white; border: none; padding: 8px 18px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #16213e; }
+        button:disabled { background: #999; cursor: not-allowed; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; font-weight: 600; position: sticky; top: 0; }
+        tr:hover td { background: #f0f4ff; }
+        .results-wrap { max-height: 400px; overflow: auto; }
+        .status-ok { color: #27ae60; font-weight: 600; }
+        .status-err { color: #e74c3c; font-weight: 600; }
+        .status-pending { color: #f39c12; font-weight: 600; }
+        .meta { font-size: 0.85em; color: #888; margin-top: 6px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; }
+        .badge-green { background: #e8f5e9; color: #2e7d32; }
+        .badge-red { background: #ffebee; color: #c62828; }
+        .badge-gray { background: #f5f5f5; color: #616161; }
+        #sparql-query { tab-size: 4; }
+        footer { text-align: center; color: #999; font-size: 0.8em; margin-top: 30px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>CIM PIM 数字孪生平台 <small>v4.0</small></h1>
+        <p style="color:#666; margin-top: 0;">医疗建筑统一领域模型 &mdash; Knowledge Graph REST Console</p>
+    </header>
+
+    <!-- Panel 1: System Status -->
+    <div class="panel" id="status-panel">
+        <h2>系统状态 System Status</h2>
+        <div class="row">
+            <div>API Health: <span id="api-health" class="status-pending">checking...</span></div>
+            <div style="margin-left:30px;">Queries available: <span id="query-count">-</span></div>
+            <div style="margin-left:30px;">Version: <span id="api-version">-</span></div>
+            <div style="margin-left:auto;"><button onclick="checkHealth()">Refresh</button></div>
+        </div>
+        <div class="meta" id="status-detail"></div>
+    </div>
+
+    <!-- Panel 2: Equipment Dashboard -->
+    <div class="panel">
+        <h2>楼层设备面板 Floor Dashboard</h2>
+        <div class="row">
+            <div>
+                <label for="floor-input">Floor ID (e.g. First_Floor, Second_Floor)</label>
+                <input type="text" id="floor-input" value="First_Floor" placeholder="Floor ID">
+            </div>
+            <button onclick="fetchFloorDashboard()" id="btn-floor">查询 Query</button>
+        </div>
+        <div class="results-wrap" id="floor-results"></div>
+        <div class="meta" id="floor-meta"></div>
+    </div>
+
+    <!-- Panel 3: SPARQL Console -->
+    <div class="panel">
+        <h2>SPARQL 查询控制台</h2>
+        <label for="sparql-query">SPARQL SELECT Query</label>
+        <textarea id="sparql-query">PREFIX cim: <https://cim.medical/ontology/v3.4#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?equipID ?label WHERE {
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label .
+}
+ORDER BY ?equipID
+LIMIT 20</textarea>
+        <div class="row" style="margin-top: 8px;">
+            <button onclick="executeSparql()" id="btn-sparql">Execute</button>
+            <select id="sparql-presets" onchange="loadPreset()">
+                <option value="">-- Preset Queries --</option>
+                <option value="fas">FAS Zone Status</option>
+                <option value="energy">Energy Anomaly</option>
+                <option value="trend">BAS 24h Trend (CHL)</option>
+                <option value="cmms">Maintenance Due 30d</option>
+            </select>
+        </div>
+        <div class="results-wrap" id="sparql-results"></div>
+        <div class="meta" id="sparql-meta"></div>
+    </div>
+
+    <footer>CIM Medical Building Knowledge Graph &copy; 2026 &mdash; FastAPI + rdflib backend</footer>
+</div>
+
+<script>
+const API_BASE = window.location.origin;
+
+const PRESETS = {
+    fas: `PREFIX cim: <https://cim.medical/ontology/v3.4#>
+PREFIX cim-fas: <https://cim.medical/ontology/v4.0/fas#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?deviceID ?deviceLabel ?detectionState ?zoneID WHERE {
+    ?device a ?deviceType ;
+            rdfs:label ?deviceLabel .
+    FILTER(STRSTARTS(STR(?deviceType), "https://cim.medical/ontology/v4.0/fas#"))
+    OPTIONAL { ?device cim:hasEquipmentID ?deviceID }
+    OPTIONAL { ?device cim-fas:hasDetectionState ?detectionState }
+    OPTIONAL { ?device cim-fas:hasFASZoneID ?zoneID }
+}
+ORDER BY ?zoneID`,
+    energy: `PREFIX cim: <https://cim.medical/ontology/v3.4#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-d: <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?equipID ?label ?ratedPower ?pointName ?currentPower
+       (?currentPower / ?ratedPower AS ?ratio) WHERE {
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label ;
+           cim-d:ratedPower ?ratedPower .
+    ?pt cim-bacnet:bacnetPointOf ?equip ;
+        cim-bacnet:hasObjectName ?pointName ;
+        cim-bacnet:hasPresentValue ?currentPower .
+    FILTER(CONTAINS(UCASE(?pointName), "KW") || CONTAINS(UCASE(?pointName), "POWER"))
+    FILTER(?ratedPower > 0)
+}
+ORDER BY DESC(?ratio)`,
+    trend: `PREFIX cim: <https://cim.medical/ontology/v3.4#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+
+SELECT ?equipID ?pointName ?ts ?value ?units WHERE {
+    GRAPH ?g {
+        ?pt cim-bacnet:bacnetPointOf ?equip ;
+            cim-bacnet:hasObjectName ?pointName ;
+            cim-bacnet:hasPresentValue ?value ;
+            cim-bacnet:hasTimestamp ?ts .
+        OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+        FILTER(CONTAINS(STR(?g), "bas"))
+    }
+    ?equip cim:hasEquipmentID ?equipID .
+    FILTER(CONTAINS(?equipID, "CHL"))
+}
+ORDER BY ?equipID ?pointName ?ts`,
+    cmms: `PREFIX cim-cmms: <https://cim.medical/ontology/v4.0/cmms#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?woID ?target ?status ?priority ?dueDate WHERE {
+    ?wo cim-cmms:hasWorkOrderID ?woID ;
+        cim-cmms:maintenanceTarget ?targetEquip ;
+        cim-cmms:hasWorkOrderStatus ?statusObj .
+    ?statusObj rdfs:label ?status .
+    OPTIONAL { ?targetEquip rdfs:label ?target }
+    OPTIONAL {
+        ?wo cim-cmms:hasWorkOrderPriority ?prioObj .
+        ?prioObj rdfs:label ?priority .
+    }
+    OPTIONAL { ?wo cim-cmms:hasDueDate ?dueDate }
+}
+ORDER BY ?dueDate`
+};
+
+function loadPreset() {
+    const sel = document.getElementById('sparql-presets');
+    if (sel.value && PRESETS[sel.value]) {
+        document.getElementById('sparql-query').value = PRESETS[sel.value];
+    }
+}
+
+function renderTable(rows, container) {
+    if (!rows || rows.length === 0) {
+        container.innerHTML = '<p style="color:#999;">No results returned.</p>';
+        return;
+    }
+    const keys = Object.keys(rows[0]);
+    let html = '<table><thead><tr>';
+    keys.forEach(k => { html += `<th>${escHtml(k)}</th>`; });
+    html += '</tr></thead><tbody>';
+    rows.forEach(row => {
+        html += '<tr>';
+        keys.forEach(k => {
+            let val = row[k];
+            if (val === null || val === undefined) val = '';
+            // Shorten URIs for display
+            val = String(val).replace(/https:\/\/cim\.medical\/[^#]*#/g, 'cim:')
+                             .replace(/http:\/\/cim\.medical\/instance\/[^/]*\//g, 'inst:');
+            html += `<td>${escHtml(val)}</td>`;
+        });
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function escHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
+async function checkHealth() {
+    const el = document.getElementById('api-health');
+    const detail = document.getElementById('status-detail');
+    el.textContent = 'checking...';
+    el.className = 'status-pending';
+    try {
+        const resp = await fetch(API_BASE + '/health', { signal: AbortSignal.timeout(5000) });
+        if (resp.ok) {
+            const data = await resp.json();
+            el.textContent = 'Online';
+            el.className = 'status-ok';
+            document.getElementById('query-count').textContent = data.queries || '-';
+            document.getElementById('api-version').textContent = data.version || '-';
+            detail.textContent = 'API responding normally. Data source: Fuseki / rdflib fallback.';
+        } else {
+            throw new Error('HTTP ' + resp.status);
+        }
+    } catch (e) {
+        el.textContent = 'API unavailable';
+        el.className = 'status-err';
+        detail.textContent = 'Cannot reach API at ' + API_BASE + '/health. Start server: uvicorn platform.api.main:app --reload';
+        document.getElementById('query-count').textContent = '-';
+        document.getElementById('api-version').textContent = '-';
+    }
+}
+
+async function fetchFloorDashboard() {
+    const floorId = document.getElementById('floor-input').value.trim();
+    if (!floorId) return;
+    const container = document.getElementById('floor-results');
+    const meta = document.getElementById('floor-meta');
+    const btn = document.getElementById('btn-floor');
+    btn.disabled = true;
+    container.innerHTML = '<p>Loading...</p>';
+    try {
+        const resp = await fetch(API_BASE + `/api/v1/floor/${encodeURIComponent(floorId)}/dashboard`,
+            { signal: AbortSignal.timeout(30000) });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        renderTable(data.results, container);
+        meta.textContent = `${data.resultCount} rows returned.`;
+    } catch (e) {
+        container.innerHTML = `<p class="status-err">Error: ${escHtml(e.message)}</p>`;
+        meta.textContent = 'API may not be running. Start server first.';
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function executeSparql() {
+    const query = document.getElementById('sparql-query').value.trim();
+    if (!query) return;
+    const container = document.getElementById('sparql-results');
+    const meta = document.getElementById('sparql-meta');
+    const btn = document.getElementById('btn-sparql');
+    btn.disabled = true;
+    container.innerHTML = '<p>Executing...</p>';
+    try {
+        const resp = await fetch(API_BASE + '/api/v1/sparql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query }),
+            signal: AbortSignal.timeout(30000)
+        });
+        if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.detail || 'HTTP ' + resp.status);
+        }
+        const data = await resp.json();
+        renderTable(data.results, container);
+        meta.textContent = `${data.resultCount} rows returned.`;
+    } catch (e) {
+        container.innerHTML = `<p class="status-err">Error: ${escHtml(e.message)}</p>`;
+        meta.textContent = 'API may not be running. Start server first.';
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+// Check health on load
+window.addEventListener('DOMContentLoaded', checkHealth);
+</script>
+</body>
+</html>
