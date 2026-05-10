@@ -257,7 +257,7 @@ inst:LOX_out a cim-c:OutletConnectionPoint ;
 
 inst:VacuumPump_Station a cim-equip:VacuumPumpUnit ;
     rdfs:label "真空泵机组"@zh-CN ;
-    cim-d:ratedCapacity "200.0"^^xsd:decimal ;
+    cim-d:ratedCapacity "400.0"^^xsd:decimal ;
     cim-d:redundancyStrategy "2N" ;
     cim-c:hasConnectionPoint inst:VAC_out .
 
@@ -267,7 +267,7 @@ inst:VAC_out a cim-c:OutletConnectionPoint ;
 
 inst:MedAir_Station a cim-equip:MedGasCompressor ;
     rdfs:label "医用空气压缩机组"@zh-CN ;
-    cim-d:ratedCapacity "150.0"^^xsd:decimal ;
+    cim-d:ratedCapacity "1000.0"^^xsd:decimal ;
     cim-d:redundancyStrategy "N+1" ;
     cim-c:hasConnectionPoint inst:CAIR_out .
 

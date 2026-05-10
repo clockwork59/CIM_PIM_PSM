@@ -1,0 +1,767 @@
+# =============================================================================
+# CIM Layer 4 — DDC 控制策略本体 (DDC Control Strategies Ontology)
+# 医疗建筑直接数字控制（DDC）策略建模，提升 LOD 350 覆盖率至 ≥80%
+#
+# 覆盖范围:
+#   - 控制回路框架 (ControlLoop / PID / OnOff / Sequence)
+#   - 控制器分类 (PIDController / DDCController / InterlockController)
+#   - 手术室洁净空调控制回路 (温度/湿度/压差/换气次数/联锁)
+#   - ICU 隔离病房控制 (负压/排送风平衡)
+#   - 冷站群控策略 (主机台数/温差/冷却塔变频)
+#   - AHU 送风控制 (送风温度/静压/新风比)
+#   - VAV 末端控制 (风量/再热)
+#   - 告警限值与安全等级属性
+#
+# 设计原则:
+#   - 与 layer4_operational.ttl (告警/资产) 和 layer1_conceptual.ttl (点/介质) 协同
+#   - 控制回路是 BFO 发生体 (Process) 的控制维度表达
+#   - 每个回路关联: 传感器(Sensor) → 控制器(Controller) → 执行器(Actuator)
+#   - 医疗等级标注: LIFE_SAFETY / CRITICAL / NORMAL
+#
+# Version : 4.0.0  |  2026-05-10
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+# ── CIM 命名空间 ──────────────────────────────────────────────────────────────
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-ctrl:  <https://cim.medical/ontology/v3.4/control#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-o:     <https://cim.medical/ontology/v4.0/operational#> .
+@prefix cim-cs:    <https://cim.medical/ontology/v4.0/control_strategy#> .
+@prefix cim-f:     <https://cim.medical/ontology/v4.0/foundational#> .
+@prefix cim-pt:    <https://cim.medical/ontology/v4.0/point#> .
+
+<https://cim.medical/ontology/v4.0/control_strategy>
+    a owl:Ontology ;
+    rdfs:label "CIM DDC Control Strategies Ontology"@en ;
+    rdfs:label "CIM DDC控制策略本体"@zh-CN ;
+    rdfs:comment """
+        医疗建筑直接数字控制（DDC）策略本体。
+        定义控制回路、控制器、PID参数、联锁逻辑等控制工程概念，
+        覆盖手术室洁净空调、ICU隔离、冷站群控、AHU/VAV末端等
+        典型 HVAC 控制策略，将 LOD 350 覆盖率从 40% 提升至 ≥80%。
+        与 Brick Schema ControlLoop / ASHRAE Guideline 36 语义对齐。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    dcterms:created "2026-05-10"^^xsd:date ;
+    owl:imports <https://cim.medical/ontology/v4.0/operational> ;
+    owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# SECTION A — 控制回路框架 (Control Loop Framework)
+# 基于 Brick Schema ControlLoop + ASHRAE Guideline 36 控制模式
+# =============================================================================
+
+# ── A.1 控制回路基类 ─────────────────────────────────────────────────────────
+cim-cs:ControlLoop
+    a owl:Class ;
+    rdfs:label "Control Loop"@en ; rdfs:label "控制回路"@zh-CN ;
+    rdfs:comment """
+        [抽象基类] DDC 控制回路 — 由传感器、控制器、执行器组成的闭环或开环
+        控制结构。每个回路控制一个被控变量（如温度、压力），通过操纵变量
+        （如阀门开度、风机转速）实现设定值跟踪。
+        对齐: Brick brick:Control_Loop
+    """@zh-CN ;
+    skos:note "Brick: brick:Control_Loop; ASHRAE G36 典型回路结构"@en .
+
+cim-cs:PIDControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "PID Control Loop"@en ; rdfs:label "PID控制回路"@zh-CN ;
+    rdfs:comment "比例-积分-微分闭环控制，最常见的 HVAC 连续调节控制模式"@zh-CN .
+
+cim-cs:OnOffControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "On/Off Control Loop"@en ; rdfs:label "启停控制回路"@zh-CN ;
+    rdfs:comment "两位式控制（带死区），用于设备启停、联锁等离散控制场景"@zh-CN .
+
+cim-cs:SequenceControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Sequence Control Loop"@en ; rdfs:label "顺序控制回路"@zh-CN ;
+    rdfs:comment """
+        多设备顺序启停控制，根据负荷变化按预设顺序台数调节。
+        典型应用: 冷站主机台数控制、多台水泵群组控制。
+    """@zh-CN .
+
+cim-cs:CascadeControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Cascade Control Loop"@en ; rdfs:label "串级控制回路"@zh-CN ;
+    rdfs:comment """
+        双闭环串级控制，外环设定内环目标值。
+        典型应用: 外环为房间温度，内环为送风温度。
+    """@zh-CN .
+
+# ── A.2 控制回路安全等级 ─────────────────────────────────────────────────────
+cim-cs:ControlSafetyLevel
+    a owl:Class ;
+    rdfs:label "Control Safety Level"@en ; rdfs:label "控制安全等级"@zh-CN ;
+    rdfs:comment "控制回路的医疗安全等级分类"@zh-CN .
+
+cim-cs:LifeSafety
+    a cim-cs:ControlSafetyLevel ;
+    rdfs:label "LIFE_SAFETY"@en ; rdfs:label "生命安全级"@zh-CN ;
+    rdfs:comment "直接影响患者生命安全的控制（手术室压差、医用气体压力等）"@zh-CN .
+
+cim-cs:Critical
+    a cim-cs:ControlSafetyLevel ;
+    rdfs:label "CRITICAL"@en ; rdfs:label "关键级"@zh-CN ;
+    rdfs:comment "影响医疗环境质量的关键控制（温湿度、洁净度）"@zh-CN .
+
+cim-cs:Normal
+    a cim-cs:ControlSafetyLevel ;
+    rdfs:label "NORMAL"@en ; rdfs:label "普通级"@zh-CN ;
+    rdfs:comment "一般舒适性控制（普通区域温湿度、照明等）"@zh-CN .
+
+# =============================================================================
+# SECTION B — 控制器分类 (Controller Classes)
+# =============================================================================
+
+cim-cs:Controller
+    a owl:Class ;
+    rdfs:label "Controller"@en ; rdfs:label "控制器"@zh-CN ;
+    rdfs:comment "执行控制算法的逻辑或物理单元基类"@zh-CN .
+
+cim-cs:PIDController
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:Controller ;
+    rdfs:label "PID Controller"@en ; rdfs:label "PID控制器"@zh-CN ;
+    rdfs:comment """
+        比例-积分-微分控制器，具有 Kp/Ki/Kd 三个可调参数。
+        DDC 系统中最基本的连续调节算法模块。
+    """@zh-CN .
+
+cim-cs:DDCController
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:Controller ;
+    rdfs:label "DDC Controller"@en ; rdfs:label "直接数字控制器"@zh-CN ;
+    rdfs:comment """
+        Direct Digital Control 控制器硬件/软件实体。
+        运行多个控制回路程序，通过 BACnet/Modbus 与 BAS 通信。
+        对应 Brick: brick:Controller
+    """@zh-CN ;
+    skos:note "Brick: brick:Controller; 典型品牌: Honeywell/Johnson Controls/Siemens"@en .
+
+cim-cs:InterlockController
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:Controller ;
+    rdfs:label "Interlock Controller"@en ; rdfs:label "联锁控制器"@zh-CN ;
+    rdfs:comment """
+        安全联锁逻辑控制器，执行布尔逻辑判断和设备间联锁关系。
+        典型应用: AHU故障联锁、防火阀联锁、医用气体切换联锁。
+    """@zh-CN .
+
+cim-cs:SequenceController
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:Controller ;
+    rdfs:label "Sequence Controller"@en ; rdfs:label "顺序控制器"@zh-CN ;
+    rdfs:comment "执行多设备台数控制和启停顺序逻辑的控制器"@zh-CN .
+
+cim-cs:OptimalStartController
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:Controller ;
+    rdfs:label "Optimal Start Controller"@en ; rdfs:label "最优启动控制器"@zh-CN ;
+    rdfs:comment """
+        根据室外温度和建筑热惯性计算最晚启动时间，
+        确保在占用时间前达到设定温度，同时减少能耗。
+        ASHRAE Guideline 36 推荐策略。
+    """@zh-CN .
+
+# =============================================================================
+# SECTION C — 手术室（OR）洁净空调控制回路
+# 安全等级: CRITICAL / LIFE_SAFETY
+# 标准依据: GB 50333-2013 医院洁净手术部建筑技术规范
+# =============================================================================
+
+cim-cs:TemperatureControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Temperature Control Loop"@en ; rdfs:label "温度控制回路"@zh-CN ;
+    rdfs:comment """
+        手术室温度 PID 控制回路。
+        设定值范围: 21~25°C，精度 ±1°C。
+        被控变量: 室内温度（ZoneAirTemperaturePoint）
+        操纵变量: 冷/热水阀开度 或 送风温度设定值
+        安全等级: CRITICAL
+        标准: GB 50333-2013 第4.0.1条
+    """@zh-CN ;
+    cim:reliabilityLevel "CRITICAL"^^xsd:string ;
+    skos:note "setpoint: 21~25°C, tolerance: ±1°C, PID control"@en .
+
+cim-cs:HumidityControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Humidity Control Loop"@en ; rdfs:label "湿度控制回路"@zh-CN ;
+    rdfs:comment """
+        手术室相对湿度 PID 控制回路。
+        设定值范围: 45~55%RH，精度 ±5%RH。
+        被控变量: 室内相对湿度（ZoneAirHumidityPoint）
+        操纵变量: 加湿阀/除湿冷盘管
+        安全等级: CRITICAL
+        标准: GB 50333-2013 第4.0.1条
+    """@zh-CN ;
+    cim:reliabilityLevel "CRITICAL"^^xsd:string ;
+    skos:note "setpoint: 45~55%RH, tolerance: ±5%RH, PID control"@en .
+
+cim-cs:PressureDifferentialControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Pressure Differential Control Loop"@en ;
+    rdfs:label "压差控制回路"@zh-CN ;
+    rdfs:comment """
+        手术室正压差 PID 控制回路 — 生命安全级。
+        设定值: +8Pa（相对于走廊）。
+        告警: 偏差 ±2Pa 触发 LIFE_SAFETY 告警。
+        被控变量: 房间压差（RoomPressureDifferentialPoint）
+        操纵变量: 回/排风阀开度 或 送风量调节
+        安全等级: LIFE_SAFETY
+        标准: GB 50333-2013 第4.0.2条
+    """@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "setpoint: +8Pa (vs corridor), alarm: ±2Pa, LIFE_SAFETY"@en .
+
+cim-cs:AirChangeRateControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Air Change Rate Control Loop"@en ;
+    rdfs:label "换气次数控制回路"@zh-CN ;
+    rdfs:comment """
+        手术室换气次数控制回路。
+        洁净运行模式: ≥20 ACH（I级手术室）。
+        空闲（非占用）模式: ≥6 ACH。
+        被控变量: 送风量（AirFlowPoint）
+        操纵变量: AHU 送风频率 / VAV 风量
+        安全等级: CRITICAL
+        标准: GB 50333-2013 第4.0.3条
+    """@zh-CN ;
+    cim:reliabilityLevel "CRITICAL"^^xsd:string ;
+    skos:note "clean mode: ≥20 ACH, unoccupied: ≥6 ACH"@en .
+
+cim-cs:CleanroomInterlockLogic
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:OnOffControlLoop ;
+    rdfs:label "Cleanroom Interlock Logic"@en ;
+    rdfs:label "洁净室联锁逻辑"@zh-CN ;
+    rdfs:comment """
+        手术室 AHU 联锁控制逻辑 — 生命安全级。
+        逻辑: AHU 故障 → 自动启动备用 AHU → 发出 LIFE_SAFETY 告警。
+        关联联锁: 压差持续低于 +5Pa 超过 30s → 联锁告警。
+        安全等级: LIFE_SAFETY
+    """@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "AHU fault → standby start → LIFE_SAFETY alarm"@en .
+
+# =============================================================================
+# SECTION D — ICU 隔离病房控制 (ICU Isolation Control)
+# =============================================================================
+
+cim-cs:NegativePressureControlLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Negative Pressure Control Loop"@en ;
+    rdfs:label "负压控制回路"@zh-CN ;
+    rdfs:comment """
+        ICU 隔离病房负压 PID 控制回路。
+        设定值: −8Pa（相对于走廊），连续监测。
+        排风量 > 送风量，保持负压防止空气外泄。
+        安全等级: LIFE_SAFETY（传染病隔离）
+        标准: GB 50333-2013 / CDC 隔离指南
+    """@zh-CN ;
+    cim:reliabilityLevel "LIFE_SAFETY"^^xsd:string ;
+    skos:note "setpoint: −8Pa, continuous monitoring, LIFE_SAFETY"@en .
+
+cim-cs:ExhaustSupplyBalanceControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Exhaust-Supply Balance Control"@en ;
+    rdfs:label "排送风平衡控制"@zh-CN ;
+    rdfs:comment """
+        ICU 隔离病房排风与送风量平衡控制。
+        要求: 排风量 > 送风量 10~15%，以维持负压。
+        被控变量: 排风量/送风量比值
+        操纵变量: 排风机变频 / 送风阀调节
+    """@zh-CN ;
+    skos:note "exhaust > supply by 10~15% to maintain negative pressure"@en .
+
+# =============================================================================
+# SECTION E — 冷站群控策略 (Chiller Plant Group Control)
+# =============================================================================
+
+cim-cs:ChillerPlantControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Chiller Plant Control"@en ; rdfs:label "冷站群控"@zh-CN ;
+    rdfs:comment "冷冻站整体优化控制策略的抽象基类"@zh-CN .
+
+cim-cs:ChillerStagingControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:SequenceControlLoop ;
+    rdfs:label "Chiller Staging Control"@en ; rdfs:label "主机台数控制"@zh-CN ;
+    rdfs:comment """
+        冷水机组台数顺序控制。
+        减机规则: 总负荷率 < 40% → 停一台。
+        加机规则: 总负荷率 > 85% → 开一台。
+        防短循环: 启停间隔 ≥15min。
+        被控变量: 系统冷负荷率
+        操纵变量: 主机启停命令
+    """@zh-CN ;
+    skos:note "load < 40% stop one, load > 85% start one, min interval 15min"@en .
+
+cim-cs:ChilledWaterDeltaTControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Chilled Water Delta-T Control"@en ;
+    rdfs:label "冷冻水温差控制"@zh-CN ;
+    rdfs:comment """
+        冷冻水供回水温差 PID 控制回路。
+        目标 ΔT: 5~6°C（典型 7/12°C 供回水）。
+        被控变量: 供回水温差（ChilledWaterSupplyTemperaturePoint − ReturnTemp）
+        操纵变量: 冷冻水泵变频 / 二通阀调节
+        低 ΔT 综合征（low-ΔT syndrome）诊断与优化。
+    """@zh-CN ;
+    skos:note "target ΔT=6°C (7/12°C supply/return)"@en .
+
+cim-cs:CoolingTowerFanVFDControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Cooling Tower Fan VFD Control"@en ;
+    rdfs:label "冷却塔风机变频控制"@zh-CN ;
+    rdfs:comment """
+        冷却塔出水温度 PID 控制回路。
+        被控变量: 冷却水出塔温度
+        操纵变量: 冷却塔风机变频器频率
+        设定值: 根据湿球温度自动调整（approach 3~5°C）
+    """@zh-CN ;
+    skos:note "leaving water temp PID, setpoint = wet-bulb + 3~5°C approach"@en .
+
+cim-cs:CondenserWaterResetControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Condenser Water Reset Control"@en ;
+    rdfs:label "冷却水温度重设控制"@zh-CN ;
+    rdfs:comment """
+        根据室外湿球温度动态调整冷却水供水温度设定值。
+        目标: 在保证冷机 COP 的前提下降低冷却塔能耗。
+    """@zh-CN .
+
+cim-cs:ChilledWaterPumpVFDControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Chilled Water Pump VFD Control"@en ;
+    rdfs:label "冷冻水泵变频控制"@zh-CN ;
+    rdfs:comment """
+        冷冻水管网末端压差 PID 控制回路。
+        被控变量: 最不利环路末端压差
+        操纵变量: 冷冻水泵变频器频率
+    """@zh-CN .
+
+# =============================================================================
+# SECTION F — AHU 空气处理机组控制 (Air Handling Unit Control)
+# =============================================================================
+
+cim-cs:SupplyAirTemperatureControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Supply Air Temperature Control"@en ;
+    rdfs:label "送风温度控制"@zh-CN ;
+    rdfs:comment """
+        AHU 送风温度 PID 控制回路。
+        被控变量: 送风温度（SupplyAirTemperaturePoint）
+        操纵变量: 冷/热水阀开度
+        设定值: 典型 14~18°C，可根据负荷重置（supply air reset）
+    """@zh-CN .
+
+cim-cs:DuctStaticPressureControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Duct Static Pressure Control"@en ;
+    rdfs:label "风管静压控制"@zh-CN ;
+    rdfs:comment """
+        AHU 送风管静压 PID 控制回路。
+        被控变量: 送风管静压（StaticPressurePoint）
+        操纵变量: 送风机变频器频率
+        设定值: 典型 250~500Pa，可根据 VAV 开度重置
+    """@zh-CN .
+
+cim-cs:OutdoorAirDamperControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "Outdoor Air Damper Control"@en ;
+    rdfs:label "新风阀控制"@zh-CN ;
+    rdfs:comment """
+        AHU 最小新风比/CO₂ 需求控制回路。
+        被控变量: 室内 CO₂ 浓度（CO2Point）或新风比
+        操纵变量: 新风阀开度
+        标准: ASHRAE 62.1 通风标准
+    """@zh-CN .
+
+cim-cs:EconomizerControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Economizer Control"@en ; rdfs:label "经济器（全新风）控制"@zh-CN ;
+    rdfs:comment """
+        室外工况适宜时切换至全新风运行，减少机械制冷能耗。
+        判断条件: 室外焓值 < 回风焓值（或干球温度比较）。
+        ASHRAE Guideline 36 推荐策略。
+    """@zh-CN .
+
+# =============================================================================
+# SECTION G — VAV 末端控制 (VAV Terminal Unit Control)
+# =============================================================================
+
+cim-cs:VAVBoxControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "VAV Box Control"@en ; rdfs:label "VAV末端控制"@zh-CN ;
+    rdfs:comment """
+        变风量末端箱控制回路。
+        被控变量: 区域温度
+        操纵变量: VAV 风阀开度（风量 Vmin~Vmax）
+        模式: 制冷 → 调节风量 / 制热 → 再热盘管启动
+    """@zh-CN .
+
+cim-cs:VAVReheatControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PIDControlLoop ;
+    rdfs:label "VAV Reheat Control"@en ; rdfs:label "VAV再热控制"@zh-CN ;
+    rdfs:comment """
+        VAV 末端再热盘管控制。
+        当风量已降至最小值 Vmin 且区域温度仍低于设定值时，
+        启动再热盘管（热水阀或电加热）。
+    """@zh-CN .
+
+# =============================================================================
+# SECTION H — 控制回路对象属性 (Control Loop Object Properties)
+# =============================================================================
+
+cim-cs:hasControlledVariable
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-pt:SensorPoint ;
+    rdfs:label "has controlled variable"@en ; rdfs:label "被控变量"@zh-CN ;
+    rdfs:comment "控制回路所监测/控制的过程变量（通过传感器测量）"@zh-CN .
+
+cim-cs:hasManipulatedVariable
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-pt:CommandPoint ;
+    rdfs:label "has manipulated variable"@en ; rdfs:label "操纵变量"@zh-CN ;
+    rdfs:comment "控制回路的输出变量（通过执行器实现，如阀门开度、频率指令）"@zh-CN .
+
+cim-cs:hasSensor
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-ctrl:Sensor ;
+    rdfs:label "has sensor"@en ; rdfs:label "关联传感器"@zh-CN ;
+    rdfs:comment "为控制回路提供测量值的传感器"@zh-CN .
+
+cim-cs:hasActuator
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-ctrl:Actuator ;
+    rdfs:label "has actuator"@en ; rdfs:label "关联执行器"@zh-CN ;
+    rdfs:comment "控制回路输出驱动的执行机构（阀门、风阀、变频器等）"@zh-CN .
+
+cim-cs:hasSetpoint
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-pt:SetpointPoint ;
+    rdfs:label "has setpoint"@en ; rdfs:label "关联设定值"@zh-CN ;
+    rdfs:comment "控制回路的目标设定值数据点"@zh-CN .
+
+cim-cs:hasController
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-cs:Controller ;
+    rdfs:label "has controller"@en ; rdfs:label "关联控制器"@zh-CN ;
+    rdfs:comment "执行该控制回路算法的控制器实体"@zh-CN .
+
+cim-cs:controlsEquipment
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "controls equipment"@en ; rdfs:label "控制设备"@zh-CN ;
+    rdfs:comment "控制回路所作用的目标设备（AHU、冷机、水泵等）"@zh-CN .
+
+cim-cs:controlsSpace
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "controls space"@en ; rdfs:label "控制空间"@zh-CN ;
+    rdfs:comment "控制回路服务的目标空间（手术室、ICU、病房等）"@zh-CN .
+
+cim-cs:hasSafetyLevel
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-cs:ControlSafetyLevel ;
+    rdfs:label "has safety level"@en ; rdfs:label "安全等级"@zh-CN .
+
+cim-cs:hasInterlockWith
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-cs:ControlLoop ;
+    rdfs:label "has interlock with"@en ; rdfs:label "联锁关联"@zh-CN ;
+    rdfs:comment "两个控制回路之间的安全联锁关系"@zh-CN .
+
+cim-cs:hasPrimaryLoop
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:CascadeControlLoop ;
+    rdfs:range cim-cs:ControlLoop ;
+    rdfs:label "has primary (outer) loop"@en ; rdfs:label "主（外）环"@zh-CN ;
+    rdfs:comment "串级控制的外环（主环），其输出作为内环的设定值"@zh-CN .
+
+cim-cs:hasSecondaryLoop
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:CascadeControlLoop ;
+    rdfs:range cim-cs:ControlLoop ;
+    rdfs:label "has secondary (inner) loop"@en ; rdfs:label "副（内）环"@zh-CN ;
+    rdfs:comment "串级控制的内环（副环），接受外环输出作为设定值"@zh-CN .
+
+# ── 控制器关联属性 ─────────────────────────────────────────────────────────────
+cim-cs:executesLoop
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range cim-cs:ControlLoop ;
+    rdfs:label "executes loop"@en ; rdfs:label "执行控制回路"@zh-CN ;
+    owl:inverseOf cim-cs:hasController .
+
+cim-cs:hostedOn
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range cim-cs:DDCController ;
+    rdfs:label "hosted on"@en ; rdfs:label "运行于"@zh-CN ;
+    rdfs:comment "逻辑控制器运行在物理 DDC 控制器硬件上"@zh-CN .
+
+# =============================================================================
+# SECTION I — 控制参数数据属性 (Control Parameter Datatype Properties)
+# =============================================================================
+
+# ── PID 参数 ─────────────────────────────────────────────────────────────────
+cim-cs:proportionalGain
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:PIDController ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "proportional gain (Kp)"@en ; rdfs:label "比例增益Kp"@zh-CN ;
+    rdfs:comment "PID 控制器比例增益，决定输出对偏差的线性响应灵敏度"@zh-CN .
+
+cim-cs:integralTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:PIDController ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "integral time Ti (seconds)"@en ; rdfs:label "积分时间Ti（秒）"@zh-CN ;
+    rdfs:comment "PID 控制器积分时间常数，消除稳态偏差。Ti=0 表示无积分作用"@zh-CN .
+
+cim-cs:derivativeTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:PIDController ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "derivative time Td (seconds)"@en ; rdfs:label "微分时间Td（秒）"@zh-CN ;
+    rdfs:comment "PID 控制器微分时间常数，抑制超调。Td=0 表示无微分作用（PI控制）"@zh-CN .
+
+cim-cs:deadband
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "deadband"@en ; rdfs:label "死区"@zh-CN ;
+    rdfs:comment "控制器不响应的偏差范围（防止频繁动作）"@zh-CN .
+
+cim-cs:controlAction
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range xsd:string ;
+    rdfs:label "control action"@en ; rdfs:label "控制方向"@zh-CN ;
+    rdfs:comment "控制器的作用方向"@zh-CN ;
+    skos:note "取值: direct（正作用）/ reverse（反作用）"@en .
+
+cim-cs:samplingInterval
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range xsd:integer ;
+    rdfs:label "sampling interval (seconds)"@en ; rdfs:label "采样周期（秒）"@zh-CN ;
+    rdfs:comment "DDC 控制器执行控制算法的周期间隔"@zh-CN .
+
+cim-cs:outputMin
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "output minimum (%)"@en ; rdfs:label "输出下限（%）"@zh-CN .
+
+cim-cs:outputMax
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:Controller ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "output maximum (%)"@en ; rdfs:label "输出上限（%）"@zh-CN .
+
+# ── 告警限值属性 ──────────────────────────────────────────────────────────────
+cim-cs:alarmHighLimit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "alarm high limit"@en ; rdfs:label "告警上限"@zh-CN ;
+    rdfs:comment "被控变量超过此值时触发高报警"@zh-CN .
+
+cim-cs:alarmLowLimit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "alarm low limit"@en ; rdfs:label "告警下限"@zh-CN ;
+    rdfs:comment "被控变量低于此值时触发低报警"@zh-CN .
+
+cim-cs:alarmDeadband
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "alarm deadband"@en ; rdfs:label "告警死区"@zh-CN ;
+    rdfs:comment "告警恢复的迟滞值，防止告警在限值附近反复切换"@zh-CN .
+
+cim-cs:alarmDelay
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:integer ;
+    rdfs:label "alarm delay (seconds)"@en ; rdfs:label "告警延迟（秒）"@zh-CN ;
+    rdfs:comment "被控变量持续超限多少秒后才触发告警（滤波）"@zh-CN .
+
+# ── 控制回路参数属性 ──────────────────────────────────────────────────────────
+cim-cs:setpointValue
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "setpoint value"@en ; rdfs:label "设定值"@zh-CN ;
+    rdfs:comment "控制回路默认设定值（可被 BAS 运行时覆盖）"@zh-CN .
+
+cim-cs:setpointUnit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:string ;
+    rdfs:label "setpoint unit"@en ; rdfs:label "设定值单位"@zh-CN ;
+    skos:note "取值: °C / %RH / Pa / ACH / m³/h / Hz"@en .
+
+cim-cs:setpointRangeMin
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "setpoint range minimum"@en ; rdfs:label "设定值范围下限"@zh-CN .
+
+cim-cs:setpointRangeMax
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "setpoint range maximum"@en ; rdfs:label "设定值范围上限"@zh-CN .
+
+cim-cs:toleranceBand
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "tolerance band"@en ; rdfs:label "控制精度（允许偏差）"@zh-CN ;
+    rdfs:comment "被控变量相对于设定值的允许偏差范围"@zh-CN .
+
+# ── 台数控制参数 ──────────────────────────────────────────────────────────────
+cim-cs:loadThresholdStart
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:SequenceControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "load threshold for starting (%)"@en ;
+    rdfs:label "加机负荷阈值（%）"@zh-CN ;
+    rdfs:comment "负荷率超过此值时启动下一台设备"@zh-CN .
+
+cim-cs:loadThresholdStop
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:SequenceControlLoop ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "load threshold for stopping (%)"@en ;
+    rdfs:label "减机负荷阈值（%）"@zh-CN ;
+    rdfs:comment "负荷率低于此值时停止一台设备"@zh-CN .
+
+cim-cs:minRunTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:SequenceControlLoop ;
+    rdfs:range xsd:integer ;
+    rdfs:label "minimum run time (minutes)"@en ;
+    rdfs:label "最短运行时间（分钟）"@zh-CN ;
+    rdfs:comment "设备启动后的最短运行时间，防止短循环"@zh-CN .
+
+cim-cs:minStopTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:SequenceControlLoop ;
+    rdfs:range xsd:integer ;
+    rdfs:label "minimum stop time (minutes)"@en ;
+    rdfs:label "最短停机时间（分钟）"@zh-CN ;
+    rdfs:comment "设备停止后的最短停机时间，防止频繁启停"@zh-CN .
+
+# ── DDC 控制器属性 ─────────────────────────────────────────────────────────────
+cim-cs:ddcProtocol
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:DDCController ;
+    rdfs:range xsd:string ;
+    rdfs:label "DDC communication protocol"@en ;
+    rdfs:label "DDC通信协议"@zh-CN ;
+    skos:note "取值: BACnet/IP / BACnet MSTP / Modbus RTU / Modbus TCP / LonWorks"@en .
+
+cim-cs:ddcPointCapacity
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:DDCController ;
+    rdfs:range xsd:integer ;
+    rdfs:label "DDC point capacity"@en ; rdfs:label "DDC点位容量"@zh-CN ;
+    rdfs:comment "单台 DDC 控制器可管理的最大 I/O 点数"@zh-CN .
+
+cim-cs:controlLoopDescription
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range xsd:string ;
+    rdfs:label "control loop description"@en ; rdfs:label "回路描述"@zh-CN ;
+    rdfs:comment "控制回路的文字描述，用于 DDC 编程文档和调试"@zh-CN .
+
+# =============================================================================
+# SECTION J — 与其他层的对齐关系 (Cross-Layer Alignment)
+# =============================================================================
+
+# 控制回路与运营告警的关联
+cim-cs:triggersAlarmType
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-o:AlarmRecord ;
+    rdfs:label "triggers alarm type"@en ; rdfs:label "触发告警类型"@zh-CN ;
+    rdfs:comment "控制回路超限时触发的告警记录类型"@zh-CN .
+
+# 控制回路与 BFO 过程的关联
+cim-cs:controlsProcess
+    a owl:ObjectProperty ;
+    rdfs:domain cim-cs:ControlLoop ;
+    rdfs:range cim-f:FlowProcess ;
+    rdfs:label "controls process"@en ; rdfs:label "控制流动过程"@zh-CN ;
+    rdfs:comment "控制回路所调节的物理流动过程（BFO 发生体）"@zh-CN .
+
+# =============================================================================
+# 统计摘要 (Statistics)
+# =============================================================================
+# 类 (owl:Class):
+#   控制回路框架:    5 (ControlLoop, PID, OnOff, Sequence, Cascade)
+#   安全等级:        1 class + 3 individuals
+#   控制器:          6 (Controller, PID, DDC, Interlock, Sequence, OptimalStart)
+#   OR 洁净控制:     5 (Temperature, Humidity, Pressure, AirChange, Interlock)
+#   ICU 隔离控制:    2 (NegativePressure, ExhaustSupplyBalance)
+#   冷站群控:        6 (PlantControl, Staging, DeltaT, CTFan, CondenserReset, PumpVFD)
+#   AHU 控制:        4 (SupplyAirTemp, DuctPressure, OADamper, Economizer)
+#   VAV 末端控制:    2 (VAVBox, VAVReheat)
+#   ─────────────────────────────────────────
+#   合计:           ~34 classes + 3 individuals = ~37 types
+#
+# 属性 (Properties):
+#   对象属性:       15 (hasControlledVariable, hasManipulatedVariable, ...)
+#   数据属性:       22 (proportionalGain, integralTime, deadband, ...)
+#   ─────────────────────────────────────────
+#   合计:           ~37 properties
+#
+# =============================================================================
+# END OF DDC CONTROL STRATEGIES ONTOLOGY
+# =============================================================================

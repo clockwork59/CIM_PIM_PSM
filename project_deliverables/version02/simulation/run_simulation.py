@@ -19,6 +19,7 @@ from project_deliverables.version02.simulation.validators.lod_loi_checker import
 from project_deliverables.version02.simulation.validators.flow_topology import check_flow_topology
 from project_deliverables.version02.simulation.validators.bfo_prereq import check_bfo_prereqs
 from project_deliverables.version02.simulation.validators.shacl_compliance import check_shacl_compliance
+from project_deliverables.version02.simulation.validators.conservation_engine import check_conservation
 from project_deliverables.version02.simulation.report.pim_plan_generator import (
     generate_json, generate_markdown
 )
@@ -64,6 +65,7 @@ def main():
         "flow_topology": check_flow_topology,
         "bfo_prereq":    check_bfo_prereqs,
         "shacl":         check_shacl_compliance,
+        "conservation":  check_conservation,
     }
 
     results = run_simulation(

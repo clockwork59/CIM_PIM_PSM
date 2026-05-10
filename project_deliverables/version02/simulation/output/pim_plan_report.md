@@ -1,6 +1,6 @@
 # PIM 规划报告 — 手术部仿真场景
 
-**生成时间**: 2026-05-10 01:30  
+**生成时间**: 2026-05-10 04:29  
 **CIM 本体版本**: v4.0.0  
 **场景**: 医院手术部（I级 OR×1 + III级 OR×2 + ICU×1）
 
@@ -10,7 +10,7 @@
 |---------|------|------|------|
 | 数量 | 3 | 3 | 0 |
 
-**总缺口数**: 36  |  **紧急(CRITICAL)**: 0  |  **主要(MAJOR)**: 0  |  **次要(MINOR)**: 36
+**总缺口数**: 3  |  **紧急(CRITICAL)**: 0  |  **主要(MAJOR)**: 0  |  **次要(MINOR)**: 3
 
 ## 各阶段详情
 
@@ -20,83 +20,39 @@
 
 > 该阶段无缺口，门控通过。
 
-### 阶段 2 — Schematic Design / 初步设计  ✅ PASS
+### 阶段 2 — Schematic Design / 初步设计  ⚠️ WARN
+
+缺口统计: 紧急 **0** | 主要 **0** | 次要 **1**
+
+#### conservation
+
+| ID | 等级 | 实体 | 描述 | 规范依据 |
+|----|------|------|------|---------|
+| CONS-AIR-001 | **MINOR** | AHU_WARD_5F | 5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
+
+#### 修复建议
+
+- ⚪ `CONS-AIR-001` — 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+
+### 阶段 3 — Detailed Design / 施工图  ⚠️ WARN
+
+缺口统计: 紧急 **0** | 主要 **0** | 次要 **1**
+
+#### conservation
+
+| ID | 等级 | 实体 | 描述 | 规范依据 |
+|----|------|------|------|---------|
+| CONS-AIR-001 | **MINOR** | AHU_WARD_5F | 5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
+
+#### 修复建议
+
+- ⚪ `CONS-AIR-001` — 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+
+### 阶段 4 — Procurement / 招投标  ✅ PASS
 
 缺口统计: 紧急 **0** | 主要 **0** | 次要 **0**
 
 > 该阶段无缺口，门控通过。
-
-### 阶段 3 — Detailed Design / 施工图  ⚠️ WARN
-
-缺口统计: 紧急 **0** | 主要 **0** | 次要 **12**
-
-#### 规范合规 (SHACL/Standards)
-
-| ID | 等级 | 实体 | 描述 | 规范依据 |
-|----|------|------|------|---------|
-| SHACL-001 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: I级手术室洁净等级必须为 ISO-5 (属性: cleanliness… |  |
-| SHACL-002 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: I级手术室洁净等级必须为 ISO-5 (属性: cleanliness… |  |
-| SHACL-003 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessCl… |  |
-| SHACL-004 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: II级手术室洁净等级必须为 ISO-6 (属性: cleanlines… |  |
-| SHACL-005 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: II级手术室洁净等级必须为 ISO-6 (属性: cleanlines… |  |
-| SHACL-006 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessC… |  |
-| SHACL-007 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/s… |  |
-| SHACL-008 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/s… |  |
-| SHACL-009 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/sur… |  |
-| SHACL-010 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/s… |  |
-| SHACL-011 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/s… |  |
-| SHACL-012 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/sur… |  |
-
-#### 修复建议
-
-- ⚪ `SHACL-001` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-002` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-003` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-004` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-005` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-006` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-007` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-008` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-009` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-010` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-011` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-012` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-
-### 阶段 4 — Procurement / 招投标  ⚠️ WARN
-
-缺口统计: 紧急 **0** | 主要 **0** | 次要 **12**
-
-#### 规范合规 (SHACL/Standards)
-
-| ID | 等级 | 实体 | 描述 | 规范依据 |
-|----|------|------|------|---------|
-| SHACL-001 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: I级手术室洁净等级必须为 ISO-5 (属性: cleanliness… |  |
-| SHACL-002 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: I级手术室洁净等级必须为 ISO-5 (属性: cleanliness… |  |
-| SHACL-003 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessCl… |  |
-| SHACL-004 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: II级手术室洁净等级必须为 ISO-6 (属性: cleanlines… |  |
-| SHACL-005 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: II级手术室洁净等级必须为 ISO-6 (属性: cleanlines… |  |
-| SHACL-006 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessC… |  |
-| SHACL-007 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/s… |  |
-| SHACL-008 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/s… |  |
-| SHACL-009 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/sur… |  |
-| SHACL-010 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/s… |  |
-| SHACL-011 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/s… |  |
-| SHACL-012 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/sur… |  |
-
-#### 修复建议
-
-- ⚪ `SHACL-001` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-002` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-003` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-004` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-005` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-006` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-007` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-008` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-009` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-010` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-011` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-012` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
 
 ### 阶段 5 — Construction / 施工安装  ✅ PASS
 
@@ -106,85 +62,30 @@
 
 ### 阶段 6 — Commissioning / 调试验收  ⚠️ WARN
 
-缺口统计: 紧急 **0** | 主要 **0** | 次要 **12**
+缺口统计: 紧急 **0** | 主要 **0** | 次要 **1**
 
-#### 规范合规 (SHACL/Standards)
+#### conservation
 
 | ID | 等级 | 实体 | 描述 | 规范依据 |
 |----|------|------|------|---------|
-| SHACL-001 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: I级手术室洁净等级必须为 ISO-5 (属性: cleanliness… |  |
-| SHACL-002 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: I级手术室洁净等级必须为 ISO-5 (属性: cleanliness… |  |
-| SHACL-003 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: I级手术室洁净等级必须为 ISO-5 (属性: cleanlinessCl… |  |
-| SHACL-004 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: II级手术室洁净等级必须为 ISO-6 (属性: cleanlines… |  |
-| SHACL-005 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: II级手术室洁净等级必须为 ISO-6 (属性: cleanlines… |  |
-| SHACL-006 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: II级手术室洁净等级必须为 ISO-6 (属性: cleanlinessC… |  |
-| SHACL-007 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/s… |  |
-| SHACL-008 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/s… |  |
-| SHACL-009 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/sur… |  |
-| SHACL-010 | **MINOR** | OR_02 | [SHACL] III级洁净手术室 OR-02: Node <http://cim.medical/instance/s… |  |
-| SHACL-011 | **MINOR** | OR_03 | [SHACL] III级洁净手术室 OR-03: Node <http://cim.medical/instance/s… |  |
-| SHACL-012 | **MINOR** | OR_01 | [SHACL] I级洁净手术室 OR-01: Node <http://cim.medical/instance/sur… |  |
+| CONS-AIR-001 | **MINOR** | AHU_WARD_5F | 5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
 
 #### 修复建议
 
-- ⚪ `SHACL-001` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-002` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-003` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-004` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-005` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-006` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-007` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-008` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-009` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-010` — 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-011` — 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- ⚪ `SHACL-012` — 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
+- ⚪ `CONS-AIR-001` — 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 ## PIM 行动计划
 
-### 空间信息 (Space Info)
+### 暖通空调系统 (HVAC)
+
+**阶段 2 待办:**
+- [ ] [CONS-AIR-001] 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 **阶段 3 待办:**
-- [ ] [SHACL-001] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-002] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-003] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-004] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-005] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-006] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-007] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-008] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-009] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-010] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-011] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-012] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-
-**阶段 4 待办:**
-- [ ] [SHACL-001] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-002] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-003] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-004] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-005] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-006] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-007] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-008] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-009] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-010] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-011] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-012] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
+- [ ] [CONS-AIR-001] 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 **阶段 6 待办:**
-- [ ] [SHACL-001] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-002] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-003] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-004] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-005] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-006] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-007] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-008] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-009] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-010] 修复 III级洁净手术室 OR-02 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-011] 修复 III级洁净手术室 OR-03 的 cleanlinessClass 属性以满足 SHACL 约束
-- [ ] [SHACL-012] 修复 I级洁净手术室 OR-01 的 cleanlinessClass 属性以满足 SHACL 约束
+- [ ] [CONS-AIR-001] 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 ## 规范合规清单
 

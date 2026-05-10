@@ -11,6 +11,7 @@
 @prefix cim-equip:  <https://cim.medical/ontology/v3.4/equipment#> .
 @prefix cim-ctrl:   <https://cim.medical/ontology/v3.4/control#> .
 @prefix cim-topo:   <https://cim.medical/ontology/v3.4/topology#> .
+@prefix cim-d:      <https://cim.medical/ontology/v4.0/design#> .
 
 # ============================================================================
 # 手术室 I 级 (Class_I) Shape - GB 50333-2013
@@ -18,15 +19,26 @@
 
 cim:OperatingRoom_ClassI_Shape
     a sh:NodeShape ;
-    sh:targetClass cim-space:OperatingRoom ;
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "cim-space" ;
+                sh:namespace "https://cim.medical/ontology/v3.4/space#"^^xsd:anyURI
+            ] , [
+                sh:prefix "cim-d" ;
+                sh:namespace "https://cim.medical/ontology/v4.0/design#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT ?this WHERE {
+                ?this a cim-space:OperatingRoom .
+                ?this cim-d:cleanroomClass "ISO Class 5 / 100级" .
+            }
+        """
+    ] ;
     rdfs:label "I级洁净手术室约束"@zh-CN ;
     sh:message "I级洁净手术室不满足 GB 50333-2013 要求" ;
-
-    sh:property [
-        sh:path cim-space:cleanlinessClass ;
-        sh:hasValue "ISO-5" ;
-        sh:message "I级手术室洁净等级必须为 ISO-5"
-    ] ;
     sh:property [
         sh:path cim-space:temperature ;
         sh:minInclusive 21 ;
@@ -67,14 +79,25 @@ cim:OperatingRoom_ClassI_Shape
 
 cim:OperatingRoom_ClassII_Shape
     a sh:NodeShape ;
-    sh:targetClass cim-space:OperatingRoom ;
-    rdfs:label "II级洁净手术室约束"@zh-CN ;
-
-    sh:property [
-        sh:path cim-space:cleanlinessClass ;
-        sh:hasValue "ISO-6" ;
-        sh:message "II级手术室洁净等级必须为 ISO-6"
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "cim-space" ;
+                sh:namespace "https://cim.medical/ontology/v3.4/space#"^^xsd:anyURI
+            ] , [
+                sh:prefix "cim-d" ;
+                sh:namespace "https://cim.medical/ontology/v4.0/design#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT ?this WHERE {
+                ?this a cim-space:OperatingRoom .
+                ?this cim-d:cleanroomClass "ISO Class 6 / 1000级" .
+            }
+        """
     ] ;
+    rdfs:label "II级洁净手术室约束"@zh-CN ;
     sh:property [
         sh:path cim-space:pressureDifferential ;
         sh:minInclusive 12 ;
@@ -92,13 +115,25 @@ cim:OperatingRoom_ClassII_Shape
 
 cim:OperatingRoom_ClassIII_Shape
     a sh:NodeShape ;
-    sh:targetClass cim-space:OperatingRoom ;
-    rdfs:label "III级洁净手术室约束"@zh-CN ;
-
-    sh:property [
-        sh:path cim-space:cleanlinessClass ;
-        sh:hasValue "ISO-7"
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "cim-space" ;
+                sh:namespace "https://cim.medical/ontology/v3.4/space#"^^xsd:anyURI
+            ] , [
+                sh:prefix "cim-d" ;
+                sh:namespace "https://cim.medical/ontology/v4.0/design#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT ?this WHERE {
+                ?this a cim-space:OperatingRoom .
+                ?this cim-d:cleanroomClass "ISO Class 7 / 10000级" .
+            }
+        """
     ] ;
+    rdfs:label "III级洁净手术室约束"@zh-CN ;
     sh:property [
         sh:path cim-space:pressureDifferential ;
         sh:minInclusive 10
@@ -115,13 +150,25 @@ cim:OperatingRoom_ClassIII_Shape
 
 cim:OperatingRoom_ClassIV_Shape
     a sh:NodeShape ;
-    sh:targetClass cim-space:OperatingRoom ;
-    rdfs:label "准洁净手术室约束"@zh-CN ;
-
-    sh:property [
-        sh:path cim-space:cleanlinessClass ;
-        sh:hasValue "ISO-8"
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "cim-space" ;
+                sh:namespace "https://cim.medical/ontology/v3.4/space#"^^xsd:anyURI
+            ] , [
+                sh:prefix "cim-d" ;
+                sh:namespace "https://cim.medical/ontology/v4.0/design#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT ?this WHERE {
+                ?this a cim-space:OperatingRoom .
+                ?this cim-d:cleanroomClass "ISO Class 8 / 100000级" .
+            }
+        """
     ] ;
+    rdfs:label "准洁净手术室约束"@zh-CN ;
     sh:property [
         sh:path cim-space:pressureDifferential ;
         sh:minInclusive 8
