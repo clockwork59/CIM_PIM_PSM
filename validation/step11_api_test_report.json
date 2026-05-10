@@ -2,14 +2,14 @@
   "milestone": "M5",
   "test_suite": "step11_api_test",
   "total": 28,
-  "passed": 27,
-  "failed": 1,
+  "passed": 28,
+  "failed": 0,
   "results": [
     {
       "test": "T01_named_graph_loading",
       "status": "PASS",
       "rows": 37974,
-      "detail": "37974 quads in 3.7s"
+      "detail": "37974 quads in 3.3s"
     },
     {
       "test": "T02_sparql_files_found",
@@ -20,7 +20,7 @@
     {
       "test": "T02_bas_trend_24h",
       "status": "PASS",
-      "rows": 0,
+      "rows": 3168,
       "detail": ""
     },
     {
@@ -86,14 +86,14 @@
     {
       "test": "T05_bas_trend_query_runs",
       "status": "PASS",
-      "rows": 0,
-      "detail": "0 trend rows"
+      "rows": 3168,
+      "detail": "3168 trend rows"
     },
     {
       "test": "T05_trend_multi_timestamp",
-      "status": "FAIL",
-      "rows": -1,
-      "detail": "no trend data"
+      "status": "PASS",
+      "rows": 6,
+      "detail": "max 6 snapshots per point"
     },
     {
       "test": "T06_fastapi_importable",
