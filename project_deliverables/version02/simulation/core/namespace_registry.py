@@ -13,6 +13,7 @@ CIM_D     = Namespace("https://cim.medical/ontology/v4.0/design#")
 CIM_F     = Namespace("https://cim.medical/ontology/v4.0/foundational#")
 CIM_REF   = Namespace("https://cim.medical/ontology/v4.0/reference#")
 CIM_O     = Namespace("https://cim.medical/ontology/v4.0/operational#")
+CIM_SE    = Namespace("https://cim.medical/ontology/v4.0/security_event#")
 BFO       = Namespace("http://purl.obolibrary.org/obo/BFO_")
 RO        = Namespace("http://purl.obolibrary.org/obo/RO_")
 FSO       = Namespace("https://w3id.org/fso#")
@@ -34,6 +35,7 @@ ALL_NS = {
     "cim-f":     CIM_F,
     "cim-ref":   CIM_REF,
     "cim-o":     CIM_O,
+    "cim-se":    CIM_SE,
     "bfo":       BFO,
     "ro":        RO,
     "fso":       FSO,

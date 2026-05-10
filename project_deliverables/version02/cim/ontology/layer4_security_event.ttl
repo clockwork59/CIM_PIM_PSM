@@ -1,0 +1,549 @@
+# =============================================================================
+# CIM Layer 4 — 安全事件处置本体 (Security Event & Emergency Response Ontology)
+# 医疗建筑智慧安防系统的领域本体基座
+#
+# 核心建模对象（社会技术系统全要素）:
+#   技术要素: SecurityEvent（安全事件）+ AlarmAggregation（报警聚合）
+#   决策要素: EmergencyPlan（应急预案）+ ActionNode（动作节点）+ ActionChain（动作链）
+#   社会要素: ResponderRole（响应角色）+ DispatchTask（调度任务）
+#   执行要素: ActionExecution（动作执行）+ 状态机（5态）
+#   反馈要素: SituationAwareness（态势感知）+ EventClosureReport（闭环报告）
+#
+# 设计依据:
+#   宣武-安防 MVP 技术方案 + 全要素处置逻辑
+#   GB 50116-2013 自动火灾报警系统设计规范
+#   GB 51251-2017 建筑防烟排烟系统技术标准
+#   GB/T 38315-2019 社会安全 应急管理术语
+#
+# Version : 4.0.0  |  2026-05-11
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-o:     <https://cim.medical/ontology/v4.0/operational#> .
+@prefix cim-f:     <https://cim.medical/ontology/v4.0/foundational#> .
+@prefix cim-cs:    <https://cim.medical/ontology/v4.0/control_strategy#> .
+@prefix cim-se:    <https://cim.medical/ontology/v4.0/security_event#> .
+
+<https://cim.medical/ontology/v4.0/security_event>
+    a owl:Ontology ;
+    rdfs:label "CIM Security Event & Emergency Response Ontology"@en ;
+    rdfs:label "CIM安全事件与应急处置本体"@zh-CN ;
+    rdfs:comment """
+        医疗建筑智慧安防系统的领域本体基座。
+        建模社会技术系统（Socio-Technical System）全要素处置逻辑：
+        感知→认知→决策→执行→反馈→闭环。
+        与 layer4_operational.ttl (告警/工单) 和 layer4_control_strategies.ttl (DDC控制) 协同。
+    """@zh-CN ;
+    owl:versionInfo "4.0.0" ;
+    dcterms:created "2026-05-11"^^xsd:date ;
+    owl:imports <https://cim.medical/ontology/v4.0/operational> .
+
+# =============================================================================
+# SECTION A — 安全事件 (Security Event)
+# 从 cim-o:AlarmRecord 扩展为带状态机的安全事件
+# =============================================================================
+
+cim-se:SecurityEvent
+    a owl:Class ;
+    rdfs:label "Security Event"@en ; rdfs:label "安全事件"@zh-CN ;
+    rdfs:comment """
+        安全事件是一个或多个报警信号经过聚合、判误后生成的处置对象。
+        区别于 cim-o:AlarmRecord（单条报警记录），SecurityEvent 是需要人员响应的事件实体。
+        具有完整的5态状态机: 待确认→已确认→处理中→已闭环→已关闭。
+        BFO 对齐: SecurityEvent 是 Occurrent (发生体)，在时间中展开。
+    """@zh-CN ;
+    rdfs:subClassOf cim-f:FlowProcess .
+
+# ── 事件类型 ──────────────────────────────────────────────────────────────────
+cim-se:FireEvent
+    a owl:Class ;
+    rdfs:subClassOf cim-se:SecurityEvent ;
+    rdfs:label "Fire Event"@en ; rdfs:label "火灾事件"@zh-CN ;
+    rdfs:comment "烟感/温感/手报触发的火灾类安全事件"@zh-CN .
+
+cim-se:IntrusionEvent
+    a owl:Class ;
+    rdfs:subClassOf cim-se:SecurityEvent ;
+    rdfs:label "Intrusion Event"@en ; rdfs:label "入侵事件"@zh-CN .
+
+cim-se:EquipmentFailureEvent
+    a owl:Class ;
+    rdfs:subClassOf cim-se:SecurityEvent ;
+    rdfs:label "Equipment Failure Event"@en ; rdfs:label "设备故障事件"@zh-CN .
+
+cim-se:MedicalEmergencyEvent
+    a owl:Class ;
+    rdfs:subClassOf cim-se:SecurityEvent ;
+    rdfs:label "Medical Emergency Event"@en ; rdfs:label "医疗应急事件"@zh-CN .
+
+# ── 事件严重等级 ──────────────────────────────────────────────────────────────
+cim-se:EventSeverityLevel
+    a owl:Class ;
+    rdfs:label "Event Severity Level"@en ; rdfs:label "事件严重等级"@zh-CN .
+
+cim-se:SeverityL1
+    a cim-se:EventSeverityLevel ;
+    rdfs:label "L1 — 一般"@zh-CN ;
+    cim-se:responseTimeLimit "1800"^^xsd:integer ;
+    rdfs:comment "单点报警/无明显异常，现场确认排除隐患，时限30分钟"@zh-CN .
+
+cim-se:SeverityL2
+    a cim-se:EventSeverityLevel ;
+    rdfs:label "L2 — 较大"@zh-CN ;
+    cim-se:responseTimeLimit "900"^^xsd:integer ;
+    rdfs:comment "持续报警/视频确认烟雾，控制火情准备疏散，时限15分钟"@zh-CN .
+
+cim-se:SeverityL3
+    a cim-se:EventSeverityLevel ;
+    rdfs:label "L3 — 重大"@zh-CN ;
+    cim-se:responseTimeLimit "300"^^xsd:integer ;
+    rdfs:comment "确认明火/火势扩大，全面应急疏散全场，时限5分钟"@zh-CN .
+
+# ── 事件状态（5态状态机）──────────────────────────────────────────────────────
+cim-se:EventStatus
+    a owl:Class ;
+    rdfs:label "Event Status"@en ; rdfs:label "事件状态"@zh-CN .
+
+cim-se:StatusPendingConfirmation
+    a cim-se:EventStatus ;
+    rdfs:label "待确认"@zh-CN ; rdfs:label "Pending Confirmation"@en .
+
+cim-se:StatusConfirmed
+    a cim-se:EventStatus ;
+    rdfs:label "已确认"@zh-CN ; rdfs:label "Confirmed"@en .
+
+cim-se:StatusInProgress
+    a cim-se:EventStatus ;
+    rdfs:label "处理中"@zh-CN ; rdfs:label "In Progress"@en .
+
+cim-se:StatusClosed
+    a cim-se:EventStatus ;
+    rdfs:label "已闭环"@zh-CN ; rdfs:label "Closed"@en .
+
+cim-se:StatusArchived
+    a cim-se:EventStatus ;
+    rdfs:label "已归档"@zh-CN ; rdfs:label "Archived"@en .
+
+# =============================================================================
+# SECTION B — 报警聚合 (Alarm Aggregation)
+# =============================================================================
+
+cim-se:AlarmAggregation
+    a owl:Class ;
+    rdfs:label "Alarm Aggregation"@en ; rdfs:label "报警聚合"@zh-CN ;
+    rdfs:comment """
+        同一区域、同一时间窗口内的多条 AlarmRecord 聚合为一个事件包。
+        聚合规则: 空间半径30m + 时间窗口5min 内的同类报警自动合并。
+    """@zh-CN .
+
+# =============================================================================
+# SECTION C — 应急预案 (Emergency Plan)
+# 可配置、可执行、可优化的数字化预案模型
+# =============================================================================
+
+cim-se:EmergencyPlan
+    a owl:Class ;
+    rdfs:label "Emergency Plan"@en ; rdfs:label "应急预案"@zh-CN ;
+    rdfs:comment """
+        结构化的应急处置预案，包含触发条件、动作链、资源需求。
+        预案是 TBox 层的"模板"，事件触发后实例化为具体的处置执行。
+        对齐 GB/T 38315-2019 应急预案定义。
+    """@zh-CN .
+
+cim-se:FireResponsePlan
+    a owl:Class ;
+    rdfs:subClassOf cim-se:EmergencyPlan ;
+    rdfs:label "Fire Response Plan"@en ; rdfs:label "火灾处置预案"@zh-CN .
+
+cim-se:EvacuationPlan
+    a owl:Class ;
+    rdfs:subClassOf cim-se:EmergencyPlan ;
+    rdfs:label "Evacuation Plan"@en ; rdfs:label "疏散预案"@zh-CN .
+
+# ── 预案触发条件 ──────────────────────────────────────────────────────────────
+cim-se:TriggerCondition
+    a owl:Class ;
+    rdfs:label "Trigger Condition"@en ; rdfs:label "触发条件"@zh-CN ;
+    rdfs:comment "预案的启动条件，由事件类型+事件等级+位置类型组合"@zh-CN .
+
+# =============================================================================
+# SECTION D — 动作链与动作节点 (Action Chain & Action Node)
+# 预案执行的核心引擎模型
+# =============================================================================
+
+cim-se:ActionChain
+    a owl:Class ;
+    rdfs:label "Action Chain"@en ; rdfs:label "动作链"@zh-CN ;
+    rdfs:comment """
+        预案中的有序动作序列，支持：
+        - 顺序执行（依赖关系）
+        - 并行执行（无依赖的动作可同时进行）
+        - 条件分支（如：确认火情→真/误报分支）
+    """@zh-CN .
+
+cim-se:ActionNode
+    a owl:Class ;
+    rdfs:label "Action Node"@en ; rdfs:label "动作节点"@zh-CN ;
+    rdfs:comment """
+        动作链中的单个可执行原子动作。
+        每个节点包含: 动作名称、执行人角色、执行方式（自动/人工）、时限、依赖。
+        这是"社会技术系统"中人机协同的最小单元。
+    """@zh-CN .
+
+# ── 动作执行方式 ──────────────────────────────────────────────────────────────
+cim-se:ExecutionMode
+    a owl:Class ;
+    rdfs:label "Execution Mode"@en ; rdfs:label "执行方式"@zh-CN .
+
+cim-se:AutomaticExecution
+    a cim-se:ExecutionMode ;
+    rdfs:label "系统自动执行"@zh-CN ; rdfs:label "Automatic"@en ;
+    rdfs:comment "系统通过 BAS/API 自动完成（如切断电源、开启广播、电梯迫降）"@zh-CN .
+
+cim-se:ManualExecution
+    a cim-se:ExecutionMode ;
+    rdfs:label "人工现场执行"@zh-CN ; rdfs:label "Manual"@en ;
+    rdfs:comment "需要人员到场操作（如启动灭火系统、组织疏散）"@zh-CN .
+
+cim-se:ManualConfirmation
+    a cim-se:ExecutionMode ;
+    rdfs:label "人工确认执行"@zh-CN ; rdfs:label "Manual Confirmation"@en ;
+    rdfs:comment "系统准备好，但需人工确认后执行（如确认火情、确认拨打119）"@zh-CN .
+
+# ── 动作执行状态 ──────────────────────────────────────────────────────────────
+cim-se:ActionStatus
+    a owl:Class ;
+    rdfs:label "Action Status"@en ; rdfs:label "动作状态"@zh-CN .
+
+cim-se:ActionPending     a cim-se:ActionStatus ; rdfs:label "⏳ 等待中"@zh-CN .
+cim-se:ActionInProgress  a cim-se:ActionStatus ; rdfs:label "🔥 进行中"@zh-CN .
+cim-se:ActionCompleted   a cim-se:ActionStatus ; rdfs:label "✅ 已完成"@zh-CN .
+cim-se:ActionTimedOut    a cim-se:ActionStatus ; rdfs:label "⏰ 已超时"@zh-CN .
+cim-se:ActionSkipped     a cim-se:ActionStatus ; rdfs:label "⏭ 已跳过"@zh-CN .
+
+# =============================================================================
+# SECTION E — 响应角色与调度 (Responder Roles & Dispatch)
+# 社会技术系统的"社会要素"建模
+# =============================================================================
+
+cim-se:ResponderRole
+    a owl:Class ;
+    rdfs:label "Responder Role"@en ; rdfs:label "响应角色"@zh-CN ;
+    rdfs:comment "安全事件处置中的人员角色（不是具体个人，是角色类型）"@zh-CN .
+
+cim-se:ControlRoomOperator
+    a cim-se:ResponderRole ;
+    rdfs:label "中控值班员"@zh-CN ; rdfs:label "Control Room Operator"@en ;
+    cim-se:permissionLevel "R2" ;
+    rdfs:comment "核心角色：报警确认、预案启动、态势监控、催办协调"@zh-CN .
+
+cim-se:SecurityTeamLeader
+    a cim-se:ResponderRole ;
+    rdfs:label "保安队长"@zh-CN ; rdfs:label "Security Team Leader"@en ;
+    cim-se:permissionLevel "R2" ;
+    rdfs:comment "现场指挥：到场评估、任务分配、态势汇报"@zh-CN .
+
+cim-se:SecurityGuard
+    a cim-se:ResponderRole ;
+    rdfs:label "保安"@zh-CN ; rdfs:label "Security Guard"@en ;
+    cim-se:permissionLevel "R1" ;
+    rdfs:comment "现场执行：疏散引导、物资搬运、秩序维持"@zh-CN .
+
+cim-se:ElectricalTechnician
+    a cim-se:ResponderRole ;
+    rdfs:label "电工班"@zh-CN ; rdfs:label "Electrical Technician"@en ;
+    cim-se:permissionLevel "R1" ;
+    rdfs:comment "设备保障：电源操作、灭火系统启动、隐患排查"@zh-CN .
+
+cim-se:DutyNurse
+    a cim-se:ResponderRole ;
+    rdfs:label "值班医护"@zh-CN ; rdfs:label "Duty Nurse"@en ;
+    cim-se:permissionLevel "R1" ;
+    rdfs:comment "医疗保障：准备转运、伤员救治"@zh-CN .
+
+cim-se:DutySupervisor
+    a cim-se:ResponderRole ;
+    rdfs:label "值班长"@zh-CN ; rdfs:label "Duty Supervisor"@en ;
+    cim-se:permissionLevel "R3" ;
+    rdfs:comment "现场指挥者：升级决策、调度协调"@zh-CN .
+
+cim-se:HospitalLeader
+    a cim-se:ResponderRole ;
+    rdfs:label "院领导"@zh-CN ; rdfs:label "Hospital Leader"@en ;
+    cim-se:permissionLevel "R5" ;
+    rdfs:comment "战略决策：重大事件决策、资源调配"@zh-CN .
+
+# ── 调度任务 ──────────────────────────────────────────────────────────────────
+cim-se:DispatchTask
+    a owl:Class ;
+    rdfs:label "Dispatch Task"@en ; rdfs:label "调度任务"@zh-CN ;
+    rdfs:comment """
+        将动作节点分派给具体角色/人员的任务实体。
+        包含: 任务内容、执行人、时限、位置、当前状态。
+        通过 APP 推送 + 短信通知到达执行人。
+    """@zh-CN .
+
+# =============================================================================
+# SECTION F — 态势感知与闭环 (Situation Awareness & Closure)
+# =============================================================================
+
+cim-se:SituationAwareness
+    a owl:Class ;
+    rdfs:label "Situation Awareness"@en ; rdfs:label "态势感知"@zh-CN ;
+    rdfs:comment """
+        单事件处置态势的聚合视图。
+        核心价值: 从"监设备"转向"处置态势"——不看设备参数，只看处置进行到什么程度。
+        聚合内容: 事件信息 + 动作进度 + 执行人状态 + 时效统计。
+    """@zh-CN .
+
+cim-se:EventClosureReport
+    a owl:Class ;
+    rdfs:label "Event Closure Report"@en ; rdfs:label "事件闭环报告"@zh-CN ;
+    rdfs:comment "事件处置完成后自动生成的归档报告，含时效统计、动作执行记录、改进建议"@zh-CN .
+
+# =============================================================================
+# SECTION G — BAS 联动指令 (BAS Interlock Commands)
+# =============================================================================
+
+cim-se:BASCommand
+    a owl:Class ;
+    rdfs:label "BAS Command"@en ; rdfs:label "BAS联动指令"@zh-CN ;
+    rdfs:comment "通过 BAS/API 下发的自动联动控制指令"@zh-CN .
+
+cim-se:PowerCutoffCommand
+    a owl:Class ; rdfs:subClassOf cim-se:BASCommand ;
+    rdfs:label "切断电源指令"@zh-CN ; rdfs:label "Power Cutoff Command"@en .
+
+cim-se:BroadcastCommand
+    a owl:Class ; rdfs:subClassOf cim-se:BASCommand ;
+    rdfs:label "区域广播指令"@zh-CN ; rdfs:label "Broadcast Command"@en .
+
+cim-se:DoorReleaseCommand
+    a owl:Class ; rdfs:subClassOf cim-se:BASCommand ;
+    rdfs:label "门禁释放指令"@zh-CN ; rdfs:label "Door Release Command"@en .
+
+cim-se:ElevatorRecallCommand
+    a owl:Class ; rdfs:subClassOf cim-se:BASCommand ;
+    rdfs:label "电梯迫降指令"@zh-CN ; rdfs:label "Elevator Recall Command"@en .
+
+cim-se:SmokeExhaustActivateCommand
+    a owl:Class ; rdfs:subClassOf cim-se:BASCommand ;
+    rdfs:label "排烟启动指令"@zh-CN ; rdfs:label "Smoke Exhaust Activate Command"@en .
+
+# =============================================================================
+# SECTION H — 对象属性 (Object Properties)
+# =============================================================================
+
+# ── 事件相关 ──────────────────────────────────────────────────────────────────
+cim-se:hasEventStatus
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-se:EventStatus ;
+    rdfs:label "has event status"@en ; rdfs:label "事件状态"@zh-CN .
+
+cim-se:hasSeverityLevel
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-se:EventSeverityLevel ;
+    rdfs:label "has severity level"@en ; rdfs:label "事件等级"@zh-CN .
+
+cim-se:triggeredByAlarm
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-o:AlarmRecord ;
+    rdfs:label "triggered by alarm"@en ; rdfs:label "由报警触发"@zh-CN .
+
+cim-se:occursInSpace
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-space:Space ;
+    rdfs:label "occurs in space"@en ; rdfs:label "发生位置"@zh-CN .
+
+cim-se:involvesEquipment
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-equip:Equipment ;
+    rdfs:label "involves equipment"@en ; rdfs:label "涉及设备"@zh-CN .
+
+# ── 预案相关 ──────────────────────────────────────────────────────────────────
+cim-se:matchesPlan
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-se:EmergencyPlan ;
+    rdfs:label "matches plan"@en ; rdfs:label "匹配预案"@zh-CN .
+
+cim-se:hasActionChain
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:EmergencyPlan ;
+    rdfs:range cim-se:ActionChain ;
+    rdfs:label "has action chain"@en ; rdfs:label "包含动作链"@zh-CN .
+
+cim-se:hasActionNode
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:ActionChain ;
+    rdfs:range cim-se:ActionNode ;
+    rdfs:label "has action node"@en ; rdfs:label "包含动作节点"@zh-CN .
+
+cim-se:hasTriggerCondition
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:EmergencyPlan ;
+    rdfs:range cim-se:TriggerCondition ;
+    rdfs:label "has trigger condition"@en ; rdfs:label "触发条件"@zh-CN .
+
+# ── 动作节点相关 ──────────────────────────────────────────────────────────────
+cim-se:hasExecutionMode
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range cim-se:ExecutionMode ;
+    rdfs:label "has execution mode"@en ; rdfs:label "执行方式"@zh-CN .
+
+cim-se:assignedToRole
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range cim-se:ResponderRole ;
+    rdfs:label "assigned to role"@en ; rdfs:label "分配给角色"@zh-CN .
+
+cim-se:dependsOnAction
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range cim-se:ActionNode ;
+    rdfs:label "depends on action"@en ; rdfs:label "依赖于"@zh-CN ;
+    rdfs:comment "前置依赖关系: 本动作需在被依赖动作完成后才能启动"@zh-CN .
+
+cim-se:hasActionStatus
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range cim-se:ActionStatus ;
+    rdfs:label "has action status"@en ; rdfs:label "动作状态"@zh-CN .
+
+cim-se:issuesBASCommand
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range cim-se:BASCommand ;
+    rdfs:label "issues BAS command"@en ; rdfs:label "下发BAS指令"@zh-CN .
+
+# ── 调度相关 ──────────────────────────────────────────────────────────────────
+cim-se:dispatchedFromAction
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:DispatchTask ;
+    rdfs:range cim-se:ActionNode ;
+    rdfs:label "dispatched from action"@en ; rdfs:label "来源动作"@zh-CN .
+
+cim-se:dispatchedToRole
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:DispatchTask ;
+    rdfs:range cim-se:ResponderRole ;
+    rdfs:label "dispatched to role"@en ; rdfs:label "派发给角色"@zh-CN .
+
+# ── 态势相关 ──────────────────────────────────────────────────────────────────
+cim-se:hasSituationOf
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SituationAwareness ;
+    rdfs:range cim-se:SecurityEvent ;
+    rdfs:label "situation of event"@en ; rdfs:label "态势关联事件"@zh-CN .
+
+cim-se:hasClosureReport
+    a owl:ObjectProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range cim-se:EventClosureReport ;
+    rdfs:label "has closure report"@en ; rdfs:label "闭环报告"@zh-CN .
+
+# =============================================================================
+# SECTION I — 数据类型属性 (Datatype Properties)
+# =============================================================================
+
+cim-se:eventID
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "event ID"@en ; rdfs:label "事件ID"@zh-CN ;
+    rdfs:comment "格式: EVT-YYYYMMDD-NNN (如 EVT-20240115-001)"@zh-CN .
+
+cim-se:eventTimestamp
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:SecurityEvent ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "event timestamp"@en ; rdfs:label "事件发生时间"@zh-CN .
+
+cim-se:responseTimeLimit
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:integer ;
+    rdfs:label "response time limit (seconds)"@en ; rdfs:label "处置时限（秒）"@zh-CN .
+
+cim-se:actionSequence
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range xsd:integer ;
+    rdfs:label "action sequence number"@en ; rdfs:label "动作序号"@zh-CN .
+
+cim-se:actionTimeLimit
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range xsd:integer ;
+    rdfs:label "action time limit (seconds)"@en ; rdfs:label "动作时限（秒）"@zh-CN .
+
+cim-se:actionStartTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "action start time"@en .
+
+cim-se:actionEndTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:ActionNode ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "action end time"@en .
+
+cim-se:permissionLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:ResponderRole ;
+    rdfs:range xsd:string ;
+    rdfs:label "permission level"@en ; rdfs:label "权限等级"@zh-CN ;
+    rdfs:comment "R1(执行)/R2(执行+确认)/R3(指挥)/R4(管理)/R5(决策)"@zh-CN .
+
+cim-se:planVersion
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:EmergencyPlan ;
+    rdfs:range xsd:string ;
+    rdfs:label "plan version"@en ; rdfs:label "预案版本"@zh-CN .
+
+cim-se:totalResponseTime
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:EventClosureReport ;
+    rdfs:range xsd:integer ;
+    rdfs:label "total response time (seconds)"@en ; rdfs:label "总处置时长（秒）"@zh-CN .
+
+cim-se:actionsCompleted
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:EventClosureReport ;
+    rdfs:range xsd:integer ;
+    rdfs:label "actions completed"@en ; rdfs:label "已完成动作数"@zh-CN .
+
+cim-se:actionsTimedOut
+    a owl:DatatypeProperty ;
+    rdfs:domain cim-se:EventClosureReport ;
+    rdfs:range xsd:integer ;
+    rdfs:label "actions timed out"@en ; rdfs:label "超时动作数"@zh-CN .
+
+# =============================================================================
+# 命名空间对齐 — cim: 基命名空间可达
+# =============================================================================
+
+cim:SecurityEvent     owl:equivalentClass cim-se:SecurityEvent .
+cim:EmergencyPlan     owl:equivalentClass cim-se:EmergencyPlan .
+cim:ActionNode        owl:equivalentClass cim-se:ActionNode .
+cim:DispatchTask      owl:equivalentClass cim-se:DispatchTask .
+cim:ResponderRole     owl:equivalentClass cim-se:ResponderRole .
+
+# =============================================================================
+# END OF SECURITY EVENT ONTOLOGY
+# =============================================================================

@@ -20,6 +20,7 @@ from project_deliverables.version02.simulation.validators.flow_topology import c
 from project_deliverables.version02.simulation.validators.bfo_prereq import check_bfo_prereqs
 from project_deliverables.version02.simulation.validators.shacl_compliance import check_shacl_compliance
 from project_deliverables.version02.simulation.validators.conservation_engine import check_conservation
+from project_deliverables.version02.simulation.validators.event_response_validator import check_event_response
 from project_deliverables.version02.simulation.report.pim_plan_generator import (
     generate_json, generate_markdown
 )
@@ -66,6 +67,7 @@ def main():
         "bfo_prereq":    check_bfo_prereqs,
         "shacl":         check_shacl_compliance,
         "conservation":  check_conservation,
+        "event_response": check_event_response,
     }
 
     results = run_simulation(

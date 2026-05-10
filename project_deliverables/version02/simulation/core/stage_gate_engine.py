@@ -69,7 +69,7 @@ STAGE_CONFIGS = [
                 ["lod_loi", "flow_topology", "conservation", "bfo_prereq"],
                 "系统方案设计，管网拓扑建立，LOD200"),
     StageConfig(3, "Detailed Design / 施工图", 300,
-                ["lod_loi", "flow_topology", "shacl", "conservation", "bfo_prereq"],
+                ["lod_loi", "flow_topology", "shacl", "conservation", "bfo_prereq", "event_response"],
                 "施工图设计，设备选型，LOD300"),
     StageConfig(4, "Procurement / 招投标", 300,
                 ["lod_loi", "shacl"],
@@ -78,7 +78,7 @@ STAGE_CONFIGS = [
                 ["lod_loi", "flow_topology"],
                 "机电安装，竣工信息更新，LOD400"),
     StageConfig(6, "Commissioning / 调试验收", 500,
-                ["lod_loi", "flow_topology", "shacl", "conservation", "bfo_prereq"],
+                ["lod_loi", "flow_topology", "shacl", "conservation", "bfo_prereq", "event_response"],
                 "调试验收，洁净度检测，移交AIM，LOD500"),
 ]
 

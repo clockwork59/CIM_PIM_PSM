@@ -9,6 +9,8 @@ ONTOLOGY_FILES = [
     "layer2_reference.ttl",
     "layer3_design.ttl",
     "layer4_operational.ttl",
+    "layer4_control_strategies.ttl",
+    "layer4_security_event.ttl",
     "bridge/bridge_brick.ttl",
     "bridge/bridge_ashrae223p.ttl",
     "bridge/bridge_fso.ttl",

@@ -89,6 +89,13 @@
     owl:imports <https://cim.medical/ontology/v4.0/control_strategy> ;
 
     # =========================================================================
+    # Layer 4 — 安全事件处置本体 (Security Event & Emergency Response)
+    # 安全事件 · 应急预案 · 动作链 · 响应角色 · 调度任务 · 态势感知
+    # 社会技术系统（Socio-Technical System）全要素处置逻辑建模
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/security_event> ;
+
+    # =========================================================================
     # Bridge Ontologies — 外部标准桥接
     # =========================================================================
     # Brick Schema 1.3 对齐（设备/空间/传感点 ~50个 owl:equivalentClass）

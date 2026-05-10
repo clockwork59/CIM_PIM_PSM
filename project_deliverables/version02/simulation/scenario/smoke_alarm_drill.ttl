@@ -1,0 +1,392 @@
+# =============================================================================
+# 仿真场景实例数据 — L2级电气火灾处置预案 (烟感报警演练)
+# Simulation Scenario: L2 Electrical Fire Emergency Response
+#
+# 包含:
+#   - 空间上下文: 内科楼5F配电室
+#   - 烟感探测器触发报警
+#   - L2级安全事件 (SecurityEvent → FireEvent)
+#   - 火灾处置预案 (FireResponsePlan) + 10个动作节点
+#   - BAS联动指令 (PowerCutoff, Broadcast, DoorRelease, ElevatorRecall)
+#   - 调度任务 (DispatchTask × 4)
+#   - 态势感知 + 事件闭环报告
+#   - BFO 生命周期过程声明（6阶段 + temporallyPrecedes 链）
+#
+# 设计依据:
+#   宣武-安防 MVP 技术方案 — L2电气火灾处置预案
+#   GB 50116-2013 自动火灾报警系统设计规范
+#   GB 51251-2017 建筑防烟排烟系统技术标准
+#
+# Version: 1.0 | 2026-05-10
+# =============================================================================
+
+@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cim:       <https://cim.medical/ontology/v3.4#> .
+@prefix cim-equip: <https://cim.medical/ontology/v3.4/equipment#> .
+@prefix cim-space: <https://cim.medical/ontology/v3.4/space#> .
+@prefix cim-flow:  <https://cim.medical/ontology/v3.4/flow#> .
+@prefix cim-c:     <https://cim.medical/ontology/v4.0/conceptual#> .
+@prefix cim-d:     <https://cim.medical/ontology/v4.0/design#> .
+@prefix cim-f:     <https://cim.medical/ontology/v4.0/foundational#> .
+@prefix cim-o:     <https://cim.medical/ontology/v4.0/operational#> .
+@prefix cim-se:    <https://cim.medical/ontology/v4.0/security_event#> .
+
+@prefix inst: <http://cim.medical/instance/smoke_alarm_drill#> .
+
+# =============================================================================
+# 1. 空间上下文 (Space Context)
+# =============================================================================
+
+inst:Hospital_Building a cim-space:Building ;
+    rdfs:label "某三甲医院"@zh-CN .
+
+inst:Floor_5F a cim-space:Floor ;
+    rdfs:label "内科楼5层"@zh-CN ;
+    cim-space:isPartOf inst:Hospital_Building .
+
+inst:5F-ELECTRICAL-ROOM a cim-space:MechanicalRoom ;
+    rdfs:label "内科楼5F配电室"@zh-CN ;
+    cim-space:isPartOf inst:Floor_5F .
+
+# =============================================================================
+# 2. 源设备 — 烟感探测器 (Source Device)
+# =============================================================================
+
+inst:SMOKE-DET-5F-ER-001 a cim-equip:SmokeDetector ;
+    rdfs:label "内科楼5F配电室烟感探测器"@zh-CN ;
+    cim-d:designTag "SD-5F-ER-001" ;
+    cim-space:locatedIn inst:5F-ELECTRICAL-ROOM .
+
+# =============================================================================
+# 3. 告警记录 — BAS 原始报警 (Alarm Record)
+# =============================================================================
+
+inst:ALARM-20240115-001 a cim-o:AlarmRecord ;
+    rdfs:label "内科楼5F配电室烟感报警"@zh-CN ;
+    cim-o:alarmTimestamp "2024-01-15T10:05:30"^^xsd:dateTime ;
+    cim-o:alarmCode "SMOKE-ALARM-5F-ER" ;
+    cim-o:alarmDescription "内科楼5F配电室烟感探测器SD-5F-ER-001触发报警"@zh-CN ;
+    cim-o:hasSeverity cim-o:High .
+
+inst:SMOKE-DET-5F-ER-001 cim-o:triggeredAlarm inst:ALARM-20240115-001 .
+
+# =============================================================================
+# 4. 安全事件 (Security Event — FireEvent)
+# =============================================================================
+
+inst:EVT-20240115-001 a cim-se:FireEvent ;
+    rdfs:label "内科楼5F配电室火灾事件"@zh-CN ;
+    cim-se:eventID "EVT-20240115-001" ;
+    cim-se:eventTimestamp "2024-01-15T10:05:31"^^xsd:dateTime ;
+    cim-se:hasSeverityLevel cim-se:SeverityL2 ;
+    cim-se:hasEventStatus cim-se:StatusInProgress ;
+    cim-se:triggeredByAlarm inst:ALARM-20240115-001 ;
+    cim-se:occursInSpace inst:5F-ELECTRICAL-ROOM ;
+    cim-se:involvesEquipment inst:SMOKE-DET-5F-ER-001 ;
+    cim-se:matchesPlan inst:PLAN-FIRE-L2-001 .
+
+# =============================================================================
+# 5. 应急预案 (Emergency Plan)
+# =============================================================================
+
+inst:PLAN-FIRE-L2-001 a cim-se:FireResponsePlan ;
+    rdfs:label "L2级电气火灾处置预案"@zh-CN ;
+    cim-se:planVersion "V2.1" ;
+    cim-se:hasActionChain inst:AC-FIRE-L2-001 ;
+    cim-se:hasTriggerCondition inst:TC-FIRE-L2 .
+
+# =============================================================================
+# 6. 触发条件 (Trigger Condition)
+# =============================================================================
+
+inst:TC-FIRE-L2 a cim-se:TriggerCondition ;
+    rdfs:label "L2火灾预案触发条件"@zh-CN ;
+    rdfs:comment "事件类型=火灾 AND 事件等级>=L2 AND 位置类型 IN (配电室,设备间)"@zh-CN .
+
+# =============================================================================
+# 7. 动作链与10个动作节点 (Action Chain & Action Nodes)
+# =============================================================================
+
+# ── 动作链容器 ──────────────────────────────────────────────────────────────────
+
+inst:AC-FIRE-L2-001 a cim-se:ActionChain ;
+    rdfs:label "L2电气火灾处置动作链"@zh-CN ;
+    cim-se:hasActionNode inst:ACTION-001 ;
+    cim-se:hasActionNode inst:ACTION-002 ;
+    cim-se:hasActionNode inst:ACTION-003 ;
+    cim-se:hasActionNode inst:ACTION-004 ;
+    cim-se:hasActionNode inst:ACTION-005 ;
+    cim-se:hasActionNode inst:ACTION-006 ;
+    cim-se:hasActionNode inst:ACTION-007 ;
+    cim-se:hasActionNode inst:ACTION-008 ;
+    cim-se:hasActionNode inst:ACTION-009 ;
+    cim-se:hasActionNode inst:ACTION-010 .
+
+# ── ACTION-001: 确认火情 ────────────────────────────────────────────────────────
+
+inst:ACTION-001 a cim-se:ActionNode ;
+    rdfs:label "确认火情"@zh-CN ;
+    cim-se:actionSequence "1"^^xsd:integer ;
+    cim-se:actionTimeLimit "120"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:ManualConfirmation ;
+    cim-se:assignedToRole cim-se:ControlRoomOperator ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:05:31"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:00"^^xsd:dateTime .
+
+# ── ACTION-002: 切断电源 ────────────────────────────────────────────────────────
+
+inst:ACTION-002 a cim-se:ActionNode ;
+    rdfs:label "切断电源"@zh-CN ;
+    cim-se:actionSequence "2"^^xsd:integer ;
+    cim-se:actionTimeLimit "30"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:AutomaticExecution ;
+    cim-se:dependsOnAction inst:ACTION-001 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:01"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:08"^^xsd:dateTime ;
+    cim-se:issuesBASCommand inst:CMD-POWER-CUT-001 .
+
+inst:CMD-POWER-CUT-001 a cim-se:PowerCutoffCommand ;
+    rdfs:label "切断内科楼5F配电室非消防电源"@zh-CN .
+
+# ── ACTION-003: 启动灭火 ────────────────────────────────────────────────────────
+
+inst:ACTION-003 a cim-se:ActionNode ;
+    rdfs:label "启动灭火"@zh-CN ;
+    cim-se:actionSequence "3"^^xsd:integer ;
+    cim-se:actionTimeLimit "300"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:ManualExecution ;
+    cim-se:assignedToRole cim-se:ElectricalTechnician ;
+    cim-se:dependsOnAction inst:ACTION-002 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:09"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:10:30"^^xsd:dateTime .
+
+# ── ACTION-004: 区域广播 ────────────────────────────────────────────────────────
+
+inst:ACTION-004 a cim-se:ActionNode ;
+    rdfs:label "区域广播"@zh-CN ;
+    cim-se:actionSequence "4"^^xsd:integer ;
+    cim-se:actionTimeLimit "10"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:AutomaticExecution ;
+    cim-se:dependsOnAction inst:ACTION-001 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:01"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:05"^^xsd:dateTime ;
+    cim-se:issuesBASCommand inst:CMD-BROADCAST-001 .
+
+inst:CMD-BROADCAST-001 a cim-se:BroadcastCommand ;
+    rdfs:label "内科楼5F火灾疏散广播"@zh-CN .
+
+# ── ACTION-005: 启动疏散 ────────────────────────────────────────────────────────
+
+inst:ACTION-005 a cim-se:ActionNode ;
+    rdfs:label "启动疏散"@zh-CN ;
+    cim-se:actionSequence "5"^^xsd:integer ;
+    cim-se:actionTimeLimit "600"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:ManualExecution ;
+    cim-se:assignedToRole cim-se:SecurityTeamLeader ;
+    cim-se:dependsOnAction inst:ACTION-004 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:06"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:14:00"^^xsd:dateTime .
+
+# ── ACTION-006: 打开门禁 ────────────────────────────────────────────────────────
+
+inst:ACTION-006 a cim-se:ActionNode ;
+    rdfs:label "打开门禁"@zh-CN ;
+    cim-se:actionSequence "6"^^xsd:integer ;
+    cim-se:actionTimeLimit "10"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:AutomaticExecution ;
+    cim-se:dependsOnAction inst:ACTION-004 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:06"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:09"^^xsd:dateTime ;
+    cim-se:issuesBASCommand inst:CMD-DOOR-RELEASE-001 .
+
+inst:CMD-DOOR-RELEASE-001 a cim-se:DoorReleaseCommand ;
+    rdfs:label "内科楼5F疏散通道门禁释放"@zh-CN .
+
+# ── ACTION-007: 电梯迫降 ────────────────────────────────────────────────────────
+
+inst:ACTION-007 a cim-se:ActionNode ;
+    rdfs:label "电梯迫降"@zh-CN ;
+    cim-se:actionSequence "7"^^xsd:integer ;
+    cim-se:actionTimeLimit "30"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:AutomaticExecution ;
+    cim-se:dependsOnAction inst:ACTION-001 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:01"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:20"^^xsd:dateTime ;
+    cim-se:issuesBASCommand inst:CMD-ELEVATOR-RECALL-001 .
+
+inst:CMD-ELEVATOR-RECALL-001 a cim-se:ElevatorRecallCommand ;
+    rdfs:label "内科楼全部电梯迫降至首层"@zh-CN .
+
+# ── ACTION-008: 通知医护 ────────────────────────────────────────────────────────
+
+inst:ACTION-008 a cim-se:ActionNode ;
+    rdfs:label "通知医护"@zh-CN ;
+    cim-se:actionSequence "8"^^xsd:integer ;
+    cim-se:actionTimeLimit "30"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:AutomaticExecution ;
+    cim-se:dependsOnAction inst:ACTION-001 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:01"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:15"^^xsd:dateTime .
+
+# ── ACTION-009: 拨打119 ─────────────────────────────────────────────────────────
+
+inst:ACTION-009 a cim-se:ActionNode ;
+    rdfs:label "拨打119"@zh-CN ;
+    cim-se:actionSequence "9"^^xsd:integer ;
+    cim-se:actionTimeLimit "120"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:ManualConfirmation ;
+    cim-se:assignedToRole cim-se:ControlRoomOperator ;
+    cim-se:dependsOnAction inst:ACTION-003 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:10:31"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:11:00"^^xsd:dateTime .
+
+# ── ACTION-010: 通知领导 ────────────────────────────────────────────────────────
+
+inst:ACTION-010 a cim-se:ActionNode ;
+    rdfs:label "通知领导"@zh-CN ;
+    cim-se:actionSequence "10"^^xsd:integer ;
+    cim-se:actionTimeLimit "30"^^xsd:integer ;
+    cim-se:hasExecutionMode cim-se:AutomaticExecution ;
+    cim-se:dependsOnAction inst:ACTION-001 ;
+    cim-se:hasActionStatus cim-se:ActionCompleted ;
+    cim-se:actionStartTime "2024-01-15T10:07:01"^^xsd:dateTime ;
+    cim-se:actionEndTime "2024-01-15T10:07:10"^^xsd:dateTime .
+
+# =============================================================================
+# 9. 调度任务 (Dispatch Tasks — 人工动作: 1, 3, 5, 9)
+# =============================================================================
+
+inst:TASK-001 a cim-se:DispatchTask ;
+    rdfs:label "确认火情任务派发"@zh-CN ;
+    cim-se:dispatchedFromAction inst:ACTION-001 ;
+    cim-se:dispatchedToRole cim-se:ControlRoomOperator .
+
+inst:TASK-003 a cim-se:DispatchTask ;
+    rdfs:label "启动灭火任务派发"@zh-CN ;
+    cim-se:dispatchedFromAction inst:ACTION-003 ;
+    cim-se:dispatchedToRole cim-se:ElectricalTechnician .
+
+inst:TASK-005 a cim-se:DispatchTask ;
+    rdfs:label "启动疏散任务派发"@zh-CN ;
+    cim-se:dispatchedFromAction inst:ACTION-005 ;
+    cim-se:dispatchedToRole cim-se:SecurityTeamLeader .
+
+inst:TASK-009 a cim-se:DispatchTask ;
+    rdfs:label "拨打119任务派发"@zh-CN ;
+    cim-se:dispatchedFromAction inst:ACTION-009 ;
+    cim-se:dispatchedToRole cim-se:ControlRoomOperator .
+
+# =============================================================================
+# 10. 态势感知与闭环 (Situation Awareness & Closure)
+# =============================================================================
+
+inst:SIT-EVT-001 a cim-se:SituationAwareness ;
+    rdfs:label "EVT-20240115-001 处置态势"@zh-CN ;
+    cim-se:hasSituationOf inst:EVT-20240115-001 .
+
+inst:REPORT-EVT-001 a cim-se:EventClosureReport ;
+    rdfs:label "EVT-20240115-001 闭环报告"@zh-CN ;
+    cim-se:totalResponseTime "600"^^xsd:integer ;
+    cim-se:actionsCompleted "10"^^xsd:integer ;
+    cim-se:actionsTimedOut "0"^^xsd:integer .
+
+inst:EVT-20240115-001 cim-se:hasClosureReport inst:REPORT-EVT-001 .
+
+# =============================================================================
+# 11. BFO 生命周期过程声明 (BFO Lifecycle Process Instances)
+# — 6 阶段 + temporallyPrecedes 链
+# =============================================================================
+
+# ── 阶段 1：方案设计 (ConceptualDesign) ────────────────────────────────────────
+inst:Project_ConceptualDesign a cim-f:ConceptualDesignProcess ;
+    rdfs:label "内科楼配电室消防方案设计"@zh-CN ;
+    cim-f:processStageCode "CONCEPT" ;
+    cim-f:processStartDate "2023-03-01"^^xsd:date ;
+    cim-f:processEndDate   "2023-05-31"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Concept_Approval .
+
+inst:Milestone_Concept_Approval a cim-f:DesignApprovalMilestone ;
+    rdfs:label "消防方案设计审批通过"@zh-CN .
+
+# ── 阶段 2：初步设计 (SchematicDesign) ─────────────────────────────────────────
+inst:Project_SchematicDesign a cim-f:SchematicDesignProcess ;
+    rdfs:label "内科楼配电室消防初步设计"@zh-CN ;
+    cim-f:processStageCode "SD" ;
+    cim-f:processStartDate "2023-06-01"^^xsd:date ;
+    cim-f:processEndDate   "2023-08-31"^^xsd:date .
+
+# ── 阶段 3：施工图设计 (DetailedDesign) ────────────────────────────────────────
+inst:Project_DetailedDesign a cim-f:DetailedDesignProcess ;
+    rdfs:label "内科楼配电室消防施工图设计"@zh-CN ;
+    cim-f:processStageCode "DD" ;
+    cim-f:processStartDate "2023-09-01"^^xsd:date ;
+    cim-f:processEndDate   "2023-11-30"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_IDM_DD .
+
+inst:Milestone_IDM_DD a cim-f:InformationDeliveryMilestone ;
+    rdfs:label "施工图信息交付里程碑"@zh-CN .
+
+# ── 阶段 4：招投标 (Tendering) ─────────────────────────────────────────────────
+inst:Project_Tendering a cim-f:TenderingProcess ;
+    rdfs:label "内科楼配电室消防招投标"@zh-CN ;
+    cim-f:processStageCode "TENDER" ;
+    cim-f:processStartDate "2023-12-01"^^xsd:date ;
+    cim-f:processEndDate   "2024-01-31"^^xsd:date .
+
+# ── 阶段 5：施工安装 (Construction) ────────────────────────────────────────────
+inst:Project_Construction a cim-f:ConstructionProcess ;
+    rdfs:label "内科楼配电室消防施工安装"@zh-CN ;
+    cim-f:processStageCode "CONST" ;
+    cim-f:processStartDate "2024-02-01"^^xsd:date ;
+    cim-f:processEndDate   "2024-06-30"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_ConstructionComplete .
+
+inst:Milestone_ConstructionComplete a cim-f:ConstructionCompletionMilestone ;
+    rdfs:label "竣工验收里程碑"@zh-CN .
+
+# ── 阶段 6：调试验收 (Commissioning) ───────────────────────────────────────────
+inst:Project_Commissioning a cim-f:CommissioningProcess ;
+    rdfs:label "内科楼配电室消防调试验收"@zh-CN ;
+    cim-f:processStageCode "COMM" ;
+    cim-f:processStartDate "2024-07-01"^^xsd:date ;
+    cim-f:processEndDate   "2024-09-30"^^xsd:date ;
+    cim-f:hasMilestone inst:Milestone_Handover .
+
+inst:Milestone_Handover a cim-f:HandoverMilestone ;
+    rdfs:label "PIM->AIM 移交里程碑"@zh-CN .
+
+# ── 时序链 (temporallyPrecedes) ────────────────────────────────────────────────
+inst:Project_ConceptualDesign cim-f:temporallyPrecedes inst:Project_SchematicDesign .
+inst:Project_SchematicDesign  cim-f:temporallyPrecedes inst:Project_DetailedDesign .
+inst:Project_DetailedDesign   cim-f:temporallyPrecedes inst:Project_Tendering .
+inst:Project_Tendering        cim-f:temporallyPrecedes inst:Project_Construction .
+inst:Project_Construction     cim-f:temporallyPrecedes inst:Project_Commissioning .
+inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_MedGasValidation .
+inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_CleanroomQual .
+
+inst:Project_MedGasValidation a cim-f:MedicalGasValidationProcess ;
+    rdfs:label "消防系统医气联动验证"@zh-CN ;
+    cim-f:processStageCode "MEDGAS-VAL" ;
+    cim-f:processStartDate "2024-08-01"^^xsd:date .
+
+inst:Project_CleanroomQual a cim-f:CleanroomQualificationProcess ;
+    rdfs:label "配电室环境验收"@zh-CN ;
+    cim-f:processStageCode "CR-QUAL" ;
+    cim-f:processStartDate "2024-08-15"^^xsd:date .
+
+# =============================================================================
+# END OF SCENARIO — L2 电气火灾处置预案
+# =============================================================================
