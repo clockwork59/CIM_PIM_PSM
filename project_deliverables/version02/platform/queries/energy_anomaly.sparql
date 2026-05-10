@@ -1,0 +1,38 @@
+# =============================================================================
+# energy_anomaly.sparql
+# Energy Anomaly Detection — Equipment where BAS power exceeds design rating
+#
+# Flags equipment whose current BACnet power reading (FANKW, KW, POWER)
+# exceeds a threshold multiplier (default 1.2 = 120%) of the design ratedPower.
+# Useful for identifying overloaded or degraded equipment.
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-d:     <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:       <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?equipID ?label ?ratedPower ?pointName ?currentPower ?units ?ratio
+WHERE {
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label ;
+           cim-d:ratedPower ?ratedPower .
+
+    ?pt cim-bacnet:bacnetPointOf ?equip ;
+        cim-bacnet:hasObjectName ?pointName ;
+        cim-bacnet:hasPresentValue ?currentPower .
+    OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+
+    # Filter for power-related points
+    FILTER(
+        CONTAINS(UCASE(?pointName), "KW") ||
+        CONTAINS(UCASE(?pointName), "POWER")
+    )
+
+    # Calculate ratio and filter for anomalies (> 120% of rated)
+    BIND(?currentPower / ?ratedPower AS ?ratio)
+    FILTER(?ratedPower > 0 && ?ratio > 1.2)
+}
+ORDER BY DESC(?ratio)

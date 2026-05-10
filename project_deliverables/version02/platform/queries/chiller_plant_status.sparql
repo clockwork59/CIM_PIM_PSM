@@ -1,0 +1,31 @@
+# =============================================================================
+# chiller_plant_status.sparql
+# Chiller Plant Status — All chiller BACnet points (COP, temps, power, mode)
+#
+# Returns the full BACnet point set for all Chiller instances, including
+# supply/return temperatures, power consumption, COP, and operating mode.
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-d:     <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?equipID ?label ?designTag ?pointName ?objectType ?presentValue ?units ?timestamp
+WHERE {
+    ?equip a cim-equip:Chiller ;
+           cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label .
+
+    OPTIONAL { ?equip cim-d:designTag ?designTag }
+
+    ?pt cim-bacnet:bacnetPointOf ?equip ;
+        cim-bacnet:hasObjectName ?pointName ;
+        cim-bacnet:hasPresentValue ?presentValue .
+
+    OPTIONAL { ?pt cim-bacnet:hasObjectType ?objectType }
+    OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+    OPTIONAL { ?pt cim-bacnet:hasTimestamp ?timestamp }
+}
+ORDER BY ?equipID ?pointName

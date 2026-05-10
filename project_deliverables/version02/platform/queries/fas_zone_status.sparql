@@ -1,0 +1,46 @@
+# =============================================================================
+# fas_zone_status.sparql
+# FAS Zone Status — Fire detector alarm states per zone
+#
+# Returns all FAS devices grouped by alarm zone, with current detection state
+# and coverage area (space). Used for fire safety dashboard.
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-fas:   <https://cim.medical/ontology/v4.0/fas#>
+PREFIX cim-space: <https://cim.medical/ontology/v3.4/space#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?zoneID ?zoneLabel ?deviceID ?deviceLabel ?deviceType
+       ?detectionState ?spaceLabel ?pointName ?presentValue
+WHERE {
+    {
+        # Path 1: Devices with FAS zone assignment
+        ?device a ?deviceType ;
+                rdfs:label ?deviceLabel .
+        FILTER(STRSTARTS(STR(?deviceType), "https://cim.medical/ontology/v4.0/fas#"))
+
+        OPTIONAL { ?device cim:hasEquipmentID ?deviceID }
+        OPTIONAL { ?device cim-fas:hasDetectionState ?detectionState }
+        OPTIONAL { ?device cim-fas:hasFASZoneID ?zoneID }
+
+        OPTIONAL {
+            ?device cim-fas:hasAlarmZone ?zone .
+            ?zone rdfs:label ?zoneLabel .
+        }
+
+        OPTIONAL {
+            ?device cim-fas:coverageArea ?space .
+            ?space rdfs:label ?spaceLabel .
+        }
+
+        # BACnet binding for this FAS device
+        OPTIONAL {
+            ?pt cim-bacnet:bacnetPointOf ?device ;
+                cim-bacnet:hasObjectName ?pointName ;
+                cim-bacnet:hasPresentValue ?presentValue .
+        }
+    }
+}
+ORDER BY ?zoneID ?deviceLabel

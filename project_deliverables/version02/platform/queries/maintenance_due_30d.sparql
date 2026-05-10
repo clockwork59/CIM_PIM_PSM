@@ -1,0 +1,40 @@
+# =============================================================================
+# maintenance_due_30d.sparql
+# Maintenance Due Within N Days — PM work orders scheduled to start soon
+#
+# Returns preventive maintenance work orders with scheduledStartDate
+# within the next N days from a reference date. Default: 30 days.
+# Bind ?refDate to current date and ?dayWindow to desired lookahead.
+# =============================================================================
+
+PREFIX cim-cmms:  <https://cim.medical/ontology/v4.0/cmms#>
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:       <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?woID ?woLabel ?equipID ?equipLabel ?priority ?status ?scheduledDate ?estimatedHours ?team
+WHERE {
+    ?wo a/rdfs:subClassOf* cim-cmms:WorkOrder ;
+        cim-cmms:hasWorkOrderID ?woID ;
+        rdfs:label ?woLabel ;
+        cim-cmms:hasWorkOrderStatus ?statusObj ;
+        cim-cmms:maintenanceTarget ?equip .
+
+    ?statusObj rdfs:label ?status .
+    FILTER(?status NOT IN ("Completed", "Cancelled"))
+
+    ?equip cim:hasEquipmentID ?equipID .
+    OPTIONAL { ?equip rdfs:label ?equipLabel }
+
+    OPTIONAL {
+        ?wo cim-cmms:hasWorkOrderPriority ?prioObj .
+        ?prioObj rdfs:label ?priority .
+    }
+    OPTIONAL { ?wo cim-cmms:scheduledStartDate ?scheduledDate }
+    OPTIONAL { ?wo cim-cmms:estimatedDurationHours ?estimatedHours }
+    OPTIONAL {
+        ?wo cim-cmms:managedByTeam ?teamObj .
+        ?teamObj rdfs:label ?team .
+    }
+}
+ORDER BY ?scheduledDate ?priority

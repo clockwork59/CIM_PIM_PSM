@@ -545,5 +545,24 @@ cim:DispatchTask      owl:equivalentClass cim-se:DispatchTask .
 cim:ResponderRole     owl:equivalentClass cim-se:ResponderRole .
 
 # =============================================================================
+# SECTION J -- FAS 设备层对齐 (M4-E)
+# 消除 SecurityEvent 与 FAS 的 SmokeDetector/FireDamper 类重叠
+# =============================================================================
+# 经审查，security_event.ttl 不声明 SmokeDetector / FireDamper 类，
+# 这些设备类仅在 layer4_fas_security.ttl (cim-fas: 命名空间) 中定义。
+# SecurityEvent 通过 cim-se:involvesEquipment 属性引用 cim-equip:Equipment
+# (FAS 设备类继承自 cim-equip:SafetyEquipment)，无需 owl:equivalentClass。
+#
+# 对齐路径:
+#   cim-se:SecurityEvent --[involvesEquipment]--> cim-equip:Equipment
+#                                                    ^
+#   cim-fas:SmokeDetector --[subClassOf*]--> cim-equip:SafetyEquipment
+#   cim-fas:FireDamper    --[subClassOf*]--> cim-equip:SafetyEquipment
+#
+# 如未来 security_event.ttl 需要直接引用 FAS 设备子类型，
+# 应在 bridge 层新建对齐文件，不在此处重复声明类。
+# =============================================================================
+
+# =============================================================================
 # END OF SECURITY EVENT ONTOLOGY
 # =============================================================================

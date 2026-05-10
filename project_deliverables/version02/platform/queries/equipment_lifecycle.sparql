@@ -1,0 +1,61 @@
+# =============================================================================
+# equipment_lifecycle.sparql
+# Equipment Lifecycle — Design params + current BAS + maintenance history
+#
+# Full lifecycle view of an equipment asset: from IFC design specification,
+# through operational BAS telemetry, to CMMS maintenance history.
+# Bind ?targetEquipID to filter for a specific piece of equipment.
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-cmms:  <https://cim.medical/ontology/v4.0/cmms#>
+PREFIX cim-d:     <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:       <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?equipID ?label ?equipType ?ifcGlobalId ?designTag
+       ?ratedCapacity ?ratedPower
+       ?pointName ?presentValue ?units ?basTimestamp
+       ?woID ?woType ?woStatus ?woPriority ?scheduledDate ?failureMode
+WHERE {
+    # --- Identity ---
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label ;
+           a ?equipType .
+    FILTER(STRSTARTS(STR(?equipType), "https://cim.medical/ontology/"))
+
+    OPTIONAL { ?equip cim:ifcGlobalId ?ifcGlobalId }
+    OPTIONAL { ?equip cim-d:designTag ?designTag }
+
+    # --- Design parameters ---
+    OPTIONAL { ?equip cim-d:ratedCapacity ?ratedCapacity }
+    OPTIONAL { ?equip cim-d:ratedPower ?ratedPower }
+
+    # --- BAS current state ---
+    OPTIONAL {
+        ?pt cim-bacnet:bacnetPointOf ?equip ;
+            cim-bacnet:hasObjectName ?pointName ;
+            cim-bacnet:hasPresentValue ?presentValue .
+        OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+        OPTIONAL { ?pt cim-bacnet:hasTimestamp ?basTimestamp }
+    }
+
+    # --- Maintenance history (all work orders, including completed) ---
+    OPTIONAL {
+        ?wo cim-cmms:maintenanceTarget ?equip ;
+            cim-cmms:hasWorkOrderID ?woID ;
+            cim-cmms:hasWorkOrderStatus ?woStatusObj ;
+            a ?woType .
+        FILTER(STRSTARTS(STR(?woType), "https://cim.medical/ontology/v4.0/cmms#"))
+        ?woStatusObj rdfs:label ?woStatus .
+        OPTIONAL {
+            ?wo cim-cmms:hasWorkOrderPriority ?woPrioObj .
+            ?woPrioObj rdfs:label ?woPriority .
+        }
+        OPTIONAL { ?wo cim-cmms:scheduledStartDate ?scheduledDate }
+        OPTIONAL { ?wo cim-cmms:hasFailureMode ?failureMode }
+    }
+}
+ORDER BY ?equipID ?pointName ?scheduledDate

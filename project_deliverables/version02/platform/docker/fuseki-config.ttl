@@ -1,0 +1,35 @@
+@prefix :      <#> .
+@prefix fuseki: <http://jena.apache.org/fuseki#> .
+@prefix ja:    <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix tdb2:  <http://jena.apache.org/2016/tdb#> .
+
+# =============================================================================
+# CIM Medical Building Knowledge Graph — Fuseki Dataset Configuration
+# =============================================================================
+# Service endpoint: http://localhost:3030/cim
+#   SPARQL query:   /cim/sparql
+#   SPARQL update:  /cim/update
+#   Graph Store:    /cim/data
+#
+# Reasoning: OWL Micro (rdfs:subClassOf + owl:equivalentClass + owl:sameAs)
+# Storage:   TDB2 persistent store at /fuseki/databases/cim
+# =============================================================================
+
+:service a fuseki:Service ;
+    fuseki:name "cim" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ; fuseki:name "update" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data"   ] ;
+    fuseki:dataset :dataset .
+
+:dataset a ja:RDFDataset ;
+    ja:defaultGraph :model .
+
+:model a ja:InfModel ;
+    ja:baseModel :tdb_graph ;
+    ja:reasoner [
+        ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLMicroReasonerFactory>
+    ] .
+
+:tdb_graph a tdb2:GraphTDB2 ;
+    tdb2:location "/fuseki/databases/cim" .

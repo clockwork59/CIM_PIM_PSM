@@ -1,0 +1,26 @@
+{
+    "@context": {
+        "cim": "https://cim.medical/ontology/v3.4#",
+        "cim-equip": "https://cim.medical/ontology/v3.4/equipment#",
+        "cim-space": "https://cim.medical/ontology/v3.4/space#",
+        "cim-d": "https://cim.medical/ontology/v4.0/design#",
+        "cim-bacnet": "https://cim.medical/ontology/v4.0/bacnet#",
+        "cim-cmms": "https://cim.medical/ontology/v4.0/cmms#",
+        "cim-fas": "https://cim.medical/ontology/v4.0/fas#",
+        "cim-se": "https://cim.medical/ontology/v4.0/security_event#",
+        "cim-o": "https://cim.medical/ontology/v4.0/operational#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "inst": "https://cim.medical/instance/nbu_medical_clinic/",
+        "label": "rdfs:label",
+        "equipmentID": "cim:hasEquipmentID",
+        "ifcGlobalId": "cim:ifcGlobalId",
+        "designTag": "cim-d:designTag",
+        "ratedCapacity": "cim-d:ratedCapacity",
+        "ratedPower": "cim-d:ratedPower",
+        "bacnetPointOf": "cim-bacnet:bacnetPointOf",
+        "presentValue": "cim-bacnet:hasPresentValue",
+        "workOrderID": "cim-cmms:hasWorkOrderID",
+        "maintenanceTarget": "cim-cmms:maintenanceTarget"
+    }
+}

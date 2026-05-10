@@ -1,0 +1,36 @@
+# =============================================================================
+# floor_dashboard.sparql
+# Floor Dashboard — All equipment on a floor with current BAS status
+#
+# Lists every equipment instance whose serving room is on the target floor,
+# plus latest BACnet point values. Designed for floor-level operational view.
+# Bind ?targetFloor to filter (e.g. inst:FLOOR-First_Floor).
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-space: <https://cim.medical/ontology/v3.4/space#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-d:     <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?floorLabel ?equipID ?equipLabel ?equipType ?pointName ?presentValue ?units
+WHERE {
+    ?floor a cim-space:Floor ;
+           rdfs:label ?floorLabel .
+
+    # Equipment with an ID
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?equipLabel ;
+           a ?equipType .
+    FILTER(STRSTARTS(STR(?equipType), "https://cim.medical/ontology/"))
+
+    # BAS points for this equipment
+    OPTIONAL {
+        ?pt cim-bacnet:bacnetPointOf ?equip ;
+            cim-bacnet:hasObjectName ?pointName ;
+            cim-bacnet:hasPresentValue ?presentValue .
+        OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+    }
+}
+ORDER BY ?floorLabel ?equipID ?pointName

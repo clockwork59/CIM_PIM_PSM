@@ -1,0 +1,42 @@
+# =============================================================================
+# ifc_bas_cmms_triangle.sparql
+# IFC-BAS-CMMS Triangle — The M3 Q3 query preserved as regression test
+#
+# Validates the three-source federation: an equipment instance that has
+#   1) IFC-derived identity (hasEquipmentID, ifcGlobalId)
+#   2) BAS BACnet point readings (bacnetPointOf)
+#   3) CMMS work order linkage (maintenanceTarget)
+# This is the core proof that CIM unifies design, operations, and maintenance.
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-cmms:  <https://cim.medical/ontology/v4.0/cmms#>
+PREFIX cim-d:     <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?equipID ?label ?ifcGlobalId ?designTag
+       ?pointName ?presentValue ?units
+       ?woID ?woStatus ?failureMode
+WHERE {
+    # Core identity — equipment with IFC provenance
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label .
+    OPTIONAL { ?equip cim:ifcGlobalId ?ifcGlobalId }
+    OPTIONAL { ?equip cim-d:designTag ?designTag }
+
+    # BAS federation — at least one BACnet point
+    ?pt cim-bacnet:bacnetPointOf ?equip ;
+        cim-bacnet:hasObjectName ?pointName ;
+        cim-bacnet:hasPresentValue ?presentValue .
+    OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+
+    # CMMS federation — at least one work order
+    ?wo cim-cmms:maintenanceTarget ?equip ;
+        cim-cmms:hasWorkOrderID ?woID ;
+        cim-cmms:hasWorkOrderStatus ?woStatusObj .
+    ?woStatusObj rdfs:label ?woStatus .
+    OPTIONAL { ?wo cim-cmms:hasFailureMode ?failureMode }
+}
+ORDER BY ?equipID ?pointName ?woID

@@ -1,0 +1,53 @@
+# =============================================================================
+# eq_full_status.sparql
+# Equipment Full Status — BIM attributes + latest BAS readings + open work orders
+#
+# Given an equipment ID (bind ?targetID), return the unified "digital twin" view:
+#   - IFC-derived design attributes (designTag, ratedCapacity, ratedPower)
+#   - Current BACnet present-values from the latest BAS snapshot
+#   - Open/In-Progress CMMS work orders
+# =============================================================================
+
+PREFIX cim:       <https://cim.medical/ontology/v3.4#>
+PREFIX cim-equip: <https://cim.medical/ontology/v3.4/equipment#>
+PREFIX cim-bacnet: <https://cim.medical/ontology/v4.0/bacnet#>
+PREFIX cim-cmms:  <https://cim.medical/ontology/v4.0/cmms#>
+PREFIX cim-d:     <https://cim.medical/ontology/v4.0/design#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:       <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?equipID ?label ?designTag ?ratedCapacity ?ratedPower
+       ?pointName ?presentValue ?units ?timestamp
+       ?woID ?woStatus ?woPriority
+WHERE {
+    ?equip cim:hasEquipmentID ?equipID ;
+           rdfs:label ?label .
+
+    # --- Design attributes (from IFC Pset enrichment) ---
+    OPTIONAL { ?equip cim-d:designTag ?designTag }
+    OPTIONAL { ?equip cim-d:ratedCapacity ?ratedCapacity }
+    OPTIONAL { ?equip cim-d:ratedPower ?ratedPower }
+
+    # --- BAS BACnet points ---
+    OPTIONAL {
+        ?pt cim-bacnet:bacnetPointOf ?equip ;
+            cim-bacnet:hasObjectName ?pointName ;
+            cim-bacnet:hasPresentValue ?presentValue .
+        OPTIONAL { ?pt cim-bacnet:hasUnitsID ?units }
+        OPTIONAL { ?pt cim-bacnet:hasTimestamp ?timestamp }
+    }
+
+    # --- Open CMMS work orders ---
+    OPTIONAL {
+        ?wo cim-cmms:maintenanceTarget ?equip ;
+            cim-cmms:hasWorkOrderID ?woID ;
+            cim-cmms:hasWorkOrderStatus ?woStatusObj .
+        ?woStatusObj rdfs:label ?woStatus .
+        FILTER(?woStatus NOT IN ("Completed", "Cancelled"))
+        OPTIONAL {
+            ?wo cim-cmms:hasWorkOrderPriority ?woPriorityObj .
+            ?woPriorityObj rdfs:label ?woPriority .
+        }
+    }
+}
+ORDER BY ?equipID ?pointName
