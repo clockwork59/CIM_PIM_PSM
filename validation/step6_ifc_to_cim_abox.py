@@ -63,31 +63,44 @@ BRICK_TO_CIM_CLASS = {
     "brk:Storage_Tank":               "WaterTank",
 }
 
-# ── CIM ID generation rules (three-segment: TYPE-LOCATION-SEQ) ──────────────
-#    Returns (prefix, location_code)
-BRICK_TO_ID_RULE: dict[str, tuple[str, str]] = {
-    "brk:Diffuser":               ("DIFF", "SD"),
-    "brk:Return_Air_Grille":      ("DIFF", "RR"),
-    "brk:Exhaust_Air_Grille":     ("DIFF", "ER"),
-    "brk:Fan":                    ("FAN",  "GN"),
-    "brk:Supply_Fan":             ("FAN",  "SF"),
-    "brk:Exhaust_Fan":            ("FAN",  "EF"),
-    "brk:VAV_Box":                ("VAV",  "BOX"),
-    "brk:Air_Handler_Unit":       ("AHU",  ""),
-    "brk:Chiller":                ("CH",   ""),
-    "brk:Cooling_Tower":          ("CT",   ""),
-    "brk:Boiler":                 ("BLR",  ""),
-    "brk:Heat_Exchanger":         ("HX",   ""),
-    "brk:Filter":                 ("FLT",  ""),
-    "brk:Pump":                   ("PMP",  ""),
-    "brk:Coil":                   ("COIL", ""),
-    "brk:Sensor":                 ("SEN",  ""),
-    "brk:Actuator":               ("ACT",  ""),
-    "brk:Alarm_Panel":            ("ALP",  ""),
-    "brk:Electrical_System":      ("ELEC", ""),
-    "brk:Fire_Control_Panel":     ("FCP",  ""),
-    "brk:Energy_Conversion_Device": ("ECD", ""),
-    "brk:Storage_Tank":           ("TK",   ""),
+# ── Brick → System reference mapping ────────────────────────────────────────
+BRICK_TO_SYSTEM = {
+    "brk:Diffuser":                 "cim:HVAC-AHU-MAIN",
+    "brk:Return_Air_Grille":        "cim:HVAC-AHU-MAIN",
+    "brk:Exhaust_Air_Grille":       "cim:HVAC-EXH",
+    "brk:Exhaust_Fan":              "cim:HVAC-EXH",
+    "brk:Supply_Fan":               "cim:HVAC-AHU-MAIN",
+    "brk:Fan":                      "cim:HVAC-AHU-MAIN",
+    "brk:Air_Handler_Unit":         "cim:HVAC-AHU-MAIN",
+    "brk:Chiller":                  "cim:HVAC-CHP",
+    "brk:VAV_Box":                  "cim:HVAC-FCU",
+    "brk:Energy_Conversion_Device": "cim:HVAC-CHP",
+}
+
+# ── CIM ID type prefixes ────────────────────────────────────────────────────
+BRICK_TO_TYPE_PREFIX: dict[str, str] = {
+    "brk:Diffuser":               "DIFF",
+    "brk:Return_Air_Grille":      "DIFF",
+    "brk:Exhaust_Air_Grille":     "DIFF",
+    "brk:Fan":                    "FAN",
+    "brk:Supply_Fan":             "FAN",
+    "brk:Exhaust_Fan":            "FAN",
+    "brk:VAV_Box":                "VAV",
+    "brk:Air_Handler_Unit":       "AHU",
+    "brk:Chiller":                "CHL",
+    "brk:Cooling_Tower":          "CT",
+    "brk:Boiler":                 "BLR",
+    "brk:Heat_Exchanger":         "HX",
+    "brk:Filter":                 "FLT",
+    "brk:Pump":                   "PMP",
+    "brk:Coil":                   "COIL",
+    "brk:Sensor":                 "SEN",
+    "brk:Actuator":               "ACT",
+    "brk:Alarm_Panel":            "ALP",
+    "brk:Electrical_System":      "ELEC",
+    "brk:Fire_Control_Panel":     "FCP",
+    "brk:Energy_Conversion_Device": "ECD",
+    "brk:Storage_Tank":           "TK",
 }
 
 # ── Space type mapping: cim_type → CIM ontology class ───────────────────────
@@ -147,26 +160,70 @@ def escape_turtle_string(s: str) -> str:
     return s.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
 
 
+def _extract_model(ifc_name: str, brick_class: str) -> str:
+    """
+    Extract MODEL token from ifc_name for governance-compliant ID generation.
+
+    Strategy: take first meaningful token, strip special chars, limit to 8 chars.
+    Examples:
+        "SD-600×600"     → "SD600"
+        "RR-600×600"     → "RR600"
+        "200 mm"         → "200"
+        "Centrifugal..." → "CENT"
+    """
+    if not ifc_name or not ifc_name.strip():
+        return ""
+
+    # Remove unicode special chars (×, etc.) and collapse
+    cleaned = re.sub(r"[×·]", "", ifc_name)
+    # Split on whitespace, dash, underscore
+    tokens = re.split(r"[\s\-_/]+", cleaned.strip())
+    # Filter out empty tokens
+    tokens = [t for t in tokens if t]
+
+    if not tokens:
+        return ""
+
+    # Take first meaningful token
+    model = tokens[0]
+    # Strip non-alphanumeric, uppercase, limit to 8 chars
+    model = re.sub(r"[^A-Za-z0-9]", "", model).upper()[:8]
+
+    # If there's a second token that looks like a size, append it
+    if len(tokens) > 1:
+        second = re.sub(r"[^A-Za-z0-9]", "", tokens[1]).upper()[:4]
+        if second and len(model) + len(second) <= 8:
+            model = model + second
+
+    return model if model else ""
+
+
 # ── ID Counters ─────────────────────────────────────────────────────────────
 _seq_counters: dict[str, int] = defaultdict(int)
 
 
-def generate_equipment_id(brick_class: str) -> str:
-    """Generate a three-segment CIM ID: TYPE-LOCATION-SEQ."""
-    rule = BRICK_TO_ID_RULE.get(brick_class)
-    if rule is None:
-        # Fallback: use brick class suffix
-        prefix = sanitize_id(brick_class.split(":")[-1][:4].upper())
-        loc = ""
-    else:
-        prefix, loc = rule
+def generate_equipment_id(brick_class: str, ifc_name: str = "") -> str:
+    """
+    Generate a governance-compliant CIM ID: {TYPE}-{MODEL}-{N}.
 
-    key = f"{prefix}-{loc}" if loc else prefix
+    MODEL is derived from ifc_name keywords.
+    """
+    prefix = BRICK_TO_TYPE_PREFIX.get(brick_class)
+    if prefix is None:
+        prefix = sanitize_id(brick_class.split(":")[-1][:4].upper())
+
+    model = _extract_model(ifc_name, brick_class)
+
+    if model:
+        key = f"{prefix}-{model}"
+    else:
+        key = prefix
+
     _seq_counters[key] += 1
     seq = _seq_counters[key]
 
-    if loc:
-        return f"{prefix}-{loc}-{seq:03d}"
+    if model:
+        return f"{prefix}-{model}-{seq:03d}"
     return f"{prefix}-{seq:03d}"
 
 
@@ -192,12 +249,12 @@ def equipment_triple(cim_id: str, cim_class: str, ifc_name: str,
     lines = [
         f'inst:{cim_id} a cim-equip:{cim_class} ;',
         f'    rdfs:label "{label}"@en ;',
-        f'    cim-d:designTag "{tag}" ;',
         f'    cim:hasEquipmentID "{cim_id}" ;',
-        f'    cim:ifcGlobalId "{escape_turtle_string(ifc_id)}" ;',
+        f'    cim-d:designTag "{tag}" ;',
     ]
     if system_ref:
         lines.append(f'    cim:hasSystemReference "{escape_turtle_string(system_ref)}" ;')
+    lines.append(f'    cim:ifcGlobalId "{escape_turtle_string(ifc_id)}" ;')
     # Close the block
     lines[-1] = lines[-1].rstrip(" ;") + " ."
     return "\n".join(lines)
@@ -365,11 +422,13 @@ def convert(data: dict) -> tuple[str, dict]:
             stats["skipped"] += 1
             continue
 
-        cim_id = generate_equipment_id(bc)
         ifc_name = inst.get("ifc_name", "")
         ifc_tag = inst.get("ifc_tag", "")
 
-        blocks.append(equipment_triple(cim_id, cim_class, ifc_name, ifc_tag, ifc_id))
+        cim_id = generate_equipment_id(bc, ifc_name)
+        system_ref = BRICK_TO_SYSTEM.get(bc, "")
+
+        blocks.append(equipment_triple(cim_id, cim_class, ifc_name, ifc_tag, ifc_id, system_ref))
         blocks.append("")
         stats["total_equipment"] += 1
         stats["equipment_by_class"][cim_class] += 1
@@ -521,17 +580,15 @@ def generate_report(stats: dict, ttl_path: Path, shacl_result: str | None) -> st
         "",
         "## CIM ID Generation Rules",
         "",
+        "ID format: `{TYPE}-{MODEL}-{N}` where MODEL is derived from ifc_name keywords.",
+        "",
         "| Brick Class | ID Pattern | Example |",
         "|-------------|-----------|---------|",
-        "| brk:Diffuser | DIFF-SD-{seq:03d} | DIFF-SD-001 |",
-        "| brk:Return_Air_Grille | DIFF-RR-{seq:03d} | DIFF-RR-001 |",
-        "| brk:Exhaust_Air_Grille | DIFF-ER-{seq:03d} | DIFF-ER-001 |",
-        "| brk:Fan | FAN-GN-{seq:03d} | FAN-GN-001 |",
-        "| brk:Supply_Fan | FAN-SF-{seq:03d} | FAN-SF-001 |",
-        "| brk:Exhaust_Fan | FAN-EF-{seq:03d} | FAN-EF-001 |",
-        "| brk:VAV_Box | VAV-BOX-{seq:03d} | VAV-BOX-001 |",
-        "| brk:Air_Handler_Unit | AHU-{seq:03d} | AHU-001 |",
-        "| brk:Chiller | CH-{seq:03d} | CH-001 |",
+        "| brk:Diffuser | DIFF-{MODEL}-{N} | DIFF-SD600-001 |",
+        "| brk:Return_Air_Grille | DIFF-{MODEL}-{N} | DIFF-RR600-001 |",
+        "| brk:VAV_Box | VAV-{MODEL}-{N} | VAV-200-001 |",
+        "| brk:Fan | FAN-{MODEL}-{N} | FAN-CENT-001 |",
+        "| brk:Chiller | CHL-{N} | CHL-001 |",
         "| cim:Floor | FLOOR-{name} | FLOOR-First_Floor |",
         "| cim:Room | ROOM-{name} | ROOM-2A03 |",
         "",
@@ -552,6 +609,7 @@ def generate_report(stats: dict, ttl_path: Path, shacl_result: str | None) -> st
         "- Room-to-floor linkage uses heuristic based on room name prefix",
         "- Space type classification uses `cim_type` from `space_mappings`",
         "- UNKNOWN spaces default to `cim-space:Room`",
+        "- Equipment instances include `cim:hasSystemReference` inferred from Brick class",
         "",
     ]
 

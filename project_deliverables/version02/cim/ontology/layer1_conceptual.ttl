@@ -487,6 +487,14 @@ cim-pt:sampleInterval_s
     rdfs:range xsd:integer ;
     rdfs:label "sample interval (seconds)"@en ; rdfs:label "采样间隔（秒）"@zh-CN .
 
+# ── 设备标识属性 ─────────────────────────────────────────────────────────────
+cim:hasEquipmentID a owl:DatatypeProperty ;
+    rdfs:domain cim-equip:Equipment ;
+    rdfs:range xsd:string ;
+    rdfs:label "Equipment ID"@en ;
+    rdfs:label "设备标识符"@zh-CN ;
+    rdfs:comment "三段式设备标识符，格式：{TYPE}-{MODEL}-{N}，参见 data_governance_standard.md"@zh-CN .
+
 # =============================================================================
 # PART D — 扩展设备分类 (Equipment Extensions)
 # 补充 M1 缺失的子类，与 Brick/ASHRAE 223P 对齐

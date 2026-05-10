@@ -18,7 +18,7 @@ space_properties:
   - {id: SP-002, label_cn: 相对湿度, label_en: relativeHumidity, type: decimal, unit: "%RH", range: "20-70", class: Room, agent: Agent-02, standard: "GB 50736"}
   - {id: SP-003, label_cn: 压差, label_en: pressureDifferential, type: decimal, unit: Pa, range: "-30~+30", class: Room, agent: Agent-02, standard: "GB 50333"}
   - {id: SP-004, label_cn: 换气次数, label_en: airChangesPerHour, type: decimal, unit: ACH, range: "2-44", class: Room, agent: Agent-02, standard: "GB 50333"}
-  - {id: SP-005, label_cn: 洁净等级, label_en: cleanlinessClass, type: string, values: [ISO-5, ISO-6, ISO-7, ISO-8, standard, minimal], class: CleanSpace, agent: Agent-02}
+  - {id: SP-005, label_cn: 洁净等级, label_en: cleanroomClass, type: string, values: ["ISO Class 5 / 100级", "ISO Class 6 / 1000级", "ISO Class 7 / 10000级", "ISO Class 8 / 100000级"], class: CleanSpace, agent: Agent-02, note: "v4.0统一为cim-d:cleanroomClass"}
   - {id: SP-006, label_cn: 噪声水平, label_en: noiseLevel, type: decimal, unit: "dB(A)", range: "30-55", class: Room, agent: Agent-02}
   - {id: SP-007, label_cn: 振动水平, label_en: vibrationLevel, type: decimal, unit: "mm/s", range: "0-0.1", class: Room, agent: Agent-02}
   - {id: SP-008, label_cn: 照度, label_en: illuminance, type: decimal, unit: lx, range: "100-2000", class: Room, agent: Agent-02, standard: "GB 50034"}

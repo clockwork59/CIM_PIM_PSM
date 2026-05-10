@@ -68,7 +68,8 @@ cim-space:cleanlinessClass
     rdfs:range xsd:string ;
     rdfs:label "cleanliness class"@en ;
     rdfs:label "洁净等级"@zh-CN ;
-    rdfs:comment "取值: ISO-1 至 ISO-9"@zh-CN .
+    rdfs:comment "取值: ISO-1 至 ISO-9。v4.0 统一使用 cim-d:cleanroomClass，本属性保留向后兼容"@zh-CN ;
+    owl:equivalentProperty <https://cim.medical/ontology/v4.0/design#cleanroomClass> .
 
 cim-space:temperature
     a owl:DatatypeProperty ;

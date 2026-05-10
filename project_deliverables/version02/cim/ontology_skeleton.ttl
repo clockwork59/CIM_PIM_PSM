@@ -203,7 +203,9 @@ cim-space:cleanlinessClass
     rdfs:domain cim-space:CleanSpace ;
     rdfs:range xsd:string ;
     rdfs:label "cleanliness class"@en ;
-    rdfs:label "洁净等级"@zh-CN .
+    rdfs:label "洁净等级"@zh-CN ;
+    rdfs:comment "v4.0 统一使用 cim-d:cleanroomClass，本属性保留向后兼容"@zh-CN ;
+    owl:equivalentProperty <https://cim.medical/ontology/v4.0/design#cleanroomClass> .
 
 # ============================================================================
 # EQUIPMENT DOMAIN (Agent-03)

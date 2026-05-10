@@ -18,6 +18,10 @@
 #   - 每个回路关联: 传感器(Sensor) → 控制器(Controller) → 执行器(Actuator)
 #   - 医疗等级标注: LIFE_SAFETY / CRITICAL / NORMAL
 #
+# MVP 范围说明:
+#   本 Sprint (2026-05-11) 交付手术室控制回路 MVP (T2-MVP)
+#   ICU/冷站/AHU/VAV 控制策略为预置类定义（P1+），待后续 Sprint 补充 ABox 实例
+#
 # Version : 4.0.0  |  2026-05-10
 # =============================================================================
 
@@ -54,6 +58,17 @@
     dcterms:created "2026-05-10"^^xsd:date ;
     owl:imports <https://cim.medical/ontology/v4.0/operational> ;
     owl:imports <https://cim.medical/ontology/v4.0/conceptual> .
+
+# =============================================================================
+# 命名空间对齐 — 裁决要求 cim: 基命名空间可访问核心控制类
+# =============================================================================
+cim:ControlLoop owl:equivalentClass cim-cs:ControlLoop .
+cim:PIDController owl:equivalentClass cim-cs:PIDController .
+cim:TemperatureControlLoop owl:equivalentClass cim-cs:TemperatureControlLoop .
+cim:HumidityControlLoop owl:equivalentClass cim-cs:HumidityControlLoop .
+cim:PressureDifferentialControlLoop owl:equivalentClass cim-cs:PressureDifferentialControlLoop .
+cim:AirChangesControlLoop owl:equivalentClass cim-cs:AirChangeRateControlLoop .
+cim:InterlockLogic owl:equivalentClass cim-cs:CleanroomInterlockLogic .
 
 # =============================================================================
 # SECTION A — 控制回路框架 (Control Loop Framework)
@@ -762,6 +777,48 @@ cim-cs:controlsProcess
 #   ─────────────────────────────────────────
 #   合计:           ~37 properties
 #
+# =============================================================================
+# ABox 实例 — 手术室控制回路样本 (裁决要求)
+# =============================================================================
+
+@prefix inst: <http://cim.medical/instance/control#> .
+
+inst:OR-TEMP-CTRL-01 a cim-cs:TemperatureControlLoop ;
+    rdfs:label "手术室温度控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "23.0"^^xsd:float ;
+    cim-cs:deadband "1.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "25.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "21.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "GB50333: 手术室温度 21~25°C，±1°C 精度"@zh-CN .
+
+inst:OR-HUMID-CTRL-01 a cim-cs:HumidityControlLoop ;
+    rdfs:label "手术室湿度控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "50.0"^^xsd:float ;
+    cim-cs:deadband "5.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "60.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "40.0"^^xsd:float ;
+    rdfs:comment "GB50333: 手术室湿度 40~60%RH"@zh-CN .
+
+inst:OR-PRESS-CTRL-01 a cim-cs:PressureDifferentialControlLoop ;
+    rdfs:label "手术室压差控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "8.0"^^xsd:float ;
+    cim-cs:deadband "2.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "5.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "GB50333: 手术室正压差 ≥8Pa，<5Pa 告警"@zh-CN .
+
+inst:OR-ACH-CTRL-01 a cim-cs:AirChangeRateControlLoop ;
+    rdfs:label "手术室换气次数控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "36.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "20.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "GB50333: I级手术室 ≥36 ACH"@zh-CN .
+
+inst:OR-PRESS-INTERLOCK-01 a cim-cs:CleanroomInterlockLogic ;
+    rdfs:label "OR压差失效联锁逻辑"@zh-CN ;
+    rdfs:comment "压差 < 5Pa → 启动备用AHU → 发送 LIFE_SAFETY 告警 → 记录事件"@zh-CN .
+
 # =============================================================================
 # END OF DDC CONTROL STRATEGIES ONTOLOGY
 # =============================================================================

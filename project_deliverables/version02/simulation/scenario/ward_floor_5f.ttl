@@ -1,20 +1,20 @@
 # =============================================================================
-# 仿真场景实例数据 — 5F 普通病房层
-# Simulation Scenario: 5F Ward Floor
+# 仿真场景实例数据 — 5F 普通病房层（简化版 MVP）
+# Simulation Scenario: 5F Ward Floor (Simplified)
 #
-# 包含:
-#   - 12 间单人病房 (SingleBedWard, 5F-WARD-01 ~ 5F-WARD-12)
+# 包含（按裁决要求简化为3间代表性病房）:
+#   - 3 间单人病房 (SingleBedWard, 5F-WARD-01/06/12)
 #   - 1 个护士站 (NurseStation, 5F-NS-01)
 #   - 1 条走廊 (Corridor, 5F-CORRIDOR)
 #   - 1 间机房 (MechanicalRoom, 5F-MECH)
-#   - 1× AHU + 12× FCU 暖通空调系统
+#   - 1× AHU + 3× FCU (FCU-ZONE-049~051, 避免与现有实例冲突)
 #   - 温湿度/CO2 传感器
 #   - DDC 控制器 + 送风温控回路
 #   - 配电箱 + UPS 应急电源
 #   - 护理呼叫面板
-#   - BFO 生命周期过程声明（概念→初步→施工图→招标→施工→调试）
+#   - BFO 生命周期过程声明（6阶段完整链）
 #
-# Version: 1.0 | 2026-05-10
+# Version: 2.0 | 2026-05-10 (风险裁决修订版)
 # =============================================================================
 
 @prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -39,7 +39,7 @@
 @prefix inst: <http://cim.medical/instance/ward_floor_5f#> .
 
 # =============================================================================
-# 建筑层级 (Building & Space Hierarchy)
+# 建筑层级
 # =============================================================================
 
 inst:Hospital_Building a cim-space:Building ;
@@ -50,43 +50,11 @@ inst:Floor_5F a cim-space:Floor ;
     cim-space:isPartOf inst:Hospital_Building .
 
 # =============================================================================
-# 空间实例 — 12 间单人病房 (SingleBedWard)
+# 空间实例 — 3间代表性病房（裁决简化版）
 # =============================================================================
 
 inst:5F-WARD-01 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 01"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-02 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 02"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-03 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 03"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-04 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 04"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-05 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 05"@zh-CN ;
+    rdfs:label "5F 单人病房 01（首端）"@zh-CN ;
     cim-space:isPartOf inst:Floor_5F ;
     cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
     cim-d:airChangesPerHour "6"^^xsd:integer ;
@@ -94,47 +62,7 @@ inst:5F-WARD-05 a cim-space:SingleBedWard ;
     cim-d:minValue "20.0"^^xsd:decimal .
 
 inst:5F-WARD-06 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 06"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-07 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 07"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-08 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 08"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-09 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 09"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-10 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 10"@zh-CN ;
-    cim-space:isPartOf inst:Floor_5F ;
-    cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
-    cim-d:airChangesPerHour "6"^^xsd:integer ;
-    cim-d:pressureClass "neutral" ;
-    cim-d:minValue "20.0"^^xsd:decimal .
-
-inst:5F-WARD-11 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 11"@zh-CN ;
+    rdfs:label "5F 单人病房 06（中段）"@zh-CN ;
     cim-space:isPartOf inst:Floor_5F ;
     cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
     cim-d:airChangesPerHour "6"^^xsd:integer ;
@@ -142,17 +70,14 @@ inst:5F-WARD-11 a cim-space:SingleBedWard ;
     cim-d:minValue "20.0"^^xsd:decimal .
 
 inst:5F-WARD-12 a cim-space:SingleBedWard ;
-    rdfs:label "5F 单人病房 12"@zh-CN ;
+    rdfs:label "5F 单人病房 12（末端）"@zh-CN ;
     cim-space:isPartOf inst:Floor_5F ;
     cim-d:requiredAreaSqm "18.0"^^xsd:decimal ;
     cim-d:airChangesPerHour "6"^^xsd:integer ;
     cim-d:pressureClass "neutral" ;
     cim-d:minValue "20.0"^^xsd:decimal .
 
-# =============================================================================
-# 辅助空间 (Auxiliary Spaces)
-# =============================================================================
-
+# ── 辅助空间 ──────────────────────────────────────────────────────────────────
 inst:5F-NS-01 a cim-space:NurseStation ;
     rdfs:label "5F 护士站"@zh-CN ;
     cim-space:isPartOf inst:Floor_5F .
@@ -166,14 +91,9 @@ inst:5F-MECH a cim-space:MechanicalRoom ;
     cim-space:isPartOf inst:Floor_5F .
 
 # =============================================================================
-# 暖通空调系统 (HVAC System)
+# 暖通空调系统 (HVAC)
 # =============================================================================
 
-inst:WardHVAC_System a cim:System ;
-    rdfs:label "5F病房层空调系统"@zh-CN ;
-    rdfs:type cim:HVACSystem .
-
-# ── AHU (空调箱) ──────────────────────────────────────────────────────────────
 inst:AHU_WARD_5F a cim-equip:AHU ;
     rdfs:label "5F病房层空调箱 AHU-WARD-5F-01"@zh-CN ;
     cim-d:designTag "AHU-WARD-5F-01" ;
@@ -185,358 +105,96 @@ inst:AHU_WARD_5F a cim-equip:AHU ;
     cim-c:hasConnectionPoint inst:AHU_5F_OAin .
 
 inst:AHU_5F_SAout a cim-c:OutletConnectionPoint ;
-    rdfs:label "AHU-WARD-5F 送风出口"@zh-CN ;
     cim-c:hasMedium cim-med:SupplyAir ;
     cim-c:connectsTo inst:FP_SA_MAIN_5F .
 
 inst:AHU_5F_RAin a cim-c:InletConnectionPoint ;
-    rdfs:label "AHU-WARD-5F 回风入口"@zh-CN ;
     cim-c:hasMedium cim-med:ReturnAir ;
     cim-c:connectsTo inst:FP_RA_MAIN_5F .
 
 inst:AHU_5F_OAin a cim-c:InletConnectionPoint ;
-    rdfs:label "AHU-WARD-5F 新风入口"@zh-CN ;
     cim-c:hasMedium cim-med:OutdoorAir .
 
-# ── 送风主干管 (Supply Air Main Duct) ─────────────────────────────────────────
+# ── 送风系统（3路支管）─────────────────────────────────────────────────────────
 inst:FP_SA_MAIN_5F a cim-flow:SupplyAirFlow ;
     rdfs:label "5F 主送风干管"@zh-CN ;
     cim-c:hasMedium cim-med:SupplyAir ;
     cim-c:connectsTo inst:FP_SA_5F_W01 ;
-    cim-c:connectsTo inst:FP_SA_5F_W02 ;
-    cim-c:connectsTo inst:FP_SA_5F_W03 ;
-    cim-c:connectsTo inst:FP_SA_5F_W04 ;
-    cim-c:connectsTo inst:FP_SA_5F_W05 ;
     cim-c:connectsTo inst:FP_SA_5F_W06 ;
-    cim-c:connectsTo inst:FP_SA_5F_W07 ;
-    cim-c:connectsTo inst:FP_SA_5F_W08 ;
-    cim-c:connectsTo inst:FP_SA_5F_W09 ;
-    cim-c:connectsTo inst:FP_SA_5F_W10 ;
-    cim-c:connectsTo inst:FP_SA_5F_W11 ;
     cim-c:connectsTo inst:FP_SA_5F_W12 .
 
-# ── 12 条送风支管 (Supply Air Branch Ducts) ───────────────────────────────────
 inst:FP_SA_5F_W01 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W01 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W01 .
-
-inst:FP_SA_5F_W02 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W02 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W02 .
-
-inst:FP_SA_5F_W03 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W03 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W03 .
-
-inst:FP_SA_5F_W04 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W04 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W04 .
-
-inst:FP_SA_5F_W05 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W05 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W05 .
-
+    cim-c:hasMedium cim-med:SupplyAir ; cim-c:connectsTo inst:DIFFUSER_5F_W01 .
 inst:FP_SA_5F_W06 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W06 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W06 .
-
-inst:FP_SA_5F_W07 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W07 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W07 .
-
-inst:FP_SA_5F_W08 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W08 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W08 .
-
-inst:FP_SA_5F_W09 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W09 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W09 .
-
-inst:FP_SA_5F_W10 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W10 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W10 .
-
-inst:FP_SA_5F_W11 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W11 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W11 .
-
+    cim-c:hasMedium cim-med:SupplyAir ; cim-c:connectsTo inst:DIFFUSER_5F_W06 .
 inst:FP_SA_5F_W12 a cim-flow:SupplyAirFlow ;
-    rdfs:label "W12 送风支管"@zh-CN ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:DIFFUSER_5F_W12 .
+    cim-c:hasMedium cim-med:SupplyAir ; cim-c:connectsTo inst:DIFFUSER_5F_W12 .
 
-# ── 12 个送风口 (Supply Air Diffusers) ────────────────────────────────────────
-inst:DIFFUSER_5F_W01 a cim-equip:AirDiffuser ;
+# ── 送风口 ─────────────────────────────────────────────────────────────────────
+inst:DIFFUSER_5F_W01 a cim-equip:SupplyAirDiffuser ;
     rdfs:label "W01 送风口"@zh-CN ;
     cim-space:locatedIn inst:5F-WARD-01 ;
     cim-c:hasConnectionPoint inst:DIFF_5F_W01_in .
 inst:DIFF_5F_W01_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W01 .
+    cim-c:hasMedium cim-med:SupplyAir ; cim-c:connectsTo inst:FP_SA_5F_W01 .
 
-inst:DIFFUSER_5F_W02 a cim-equip:AirDiffuser ;
-    rdfs:label "W02 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-02 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W02_in .
-inst:DIFF_5F_W02_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W02 .
-
-inst:DIFFUSER_5F_W03 a cim-equip:AirDiffuser ;
-    rdfs:label "W03 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-03 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W03_in .
-inst:DIFF_5F_W03_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W03 .
-
-inst:DIFFUSER_5F_W04 a cim-equip:AirDiffuser ;
-    rdfs:label "W04 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-04 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W04_in .
-inst:DIFF_5F_W04_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W04 .
-
-inst:DIFFUSER_5F_W05 a cim-equip:AirDiffuser ;
-    rdfs:label "W05 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-05 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W05_in .
-inst:DIFF_5F_W05_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W05 .
-
-inst:DIFFUSER_5F_W06 a cim-equip:AirDiffuser ;
+inst:DIFFUSER_5F_W06 a cim-equip:SupplyAirDiffuser ;
     rdfs:label "W06 送风口"@zh-CN ;
     cim-space:locatedIn inst:5F-WARD-06 ;
     cim-c:hasConnectionPoint inst:DIFF_5F_W06_in .
 inst:DIFF_5F_W06_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W06 .
+    cim-c:hasMedium cim-med:SupplyAir ; cim-c:connectsTo inst:FP_SA_5F_W06 .
 
-inst:DIFFUSER_5F_W07 a cim-equip:AirDiffuser ;
-    rdfs:label "W07 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-07 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W07_in .
-inst:DIFF_5F_W07_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W07 .
-
-inst:DIFFUSER_5F_W08 a cim-equip:AirDiffuser ;
-    rdfs:label "W08 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-08 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W08_in .
-inst:DIFF_5F_W08_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W08 .
-
-inst:DIFFUSER_5F_W09 a cim-equip:AirDiffuser ;
-    rdfs:label "W09 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-09 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W09_in .
-inst:DIFF_5F_W09_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W09 .
-
-inst:DIFFUSER_5F_W10 a cim-equip:AirDiffuser ;
-    rdfs:label "W10 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-10 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W10_in .
-inst:DIFF_5F_W10_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W10 .
-
-inst:DIFFUSER_5F_W11 a cim-equip:AirDiffuser ;
-    rdfs:label "W11 送风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-11 ;
-    cim-c:hasConnectionPoint inst:DIFF_5F_W11_in .
-inst:DIFF_5F_W11_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W11 .
-
-inst:DIFFUSER_5F_W12 a cim-equip:AirDiffuser ;
+inst:DIFFUSER_5F_W12 a cim-equip:SupplyAirDiffuser ;
     rdfs:label "W12 送风口"@zh-CN ;
     cim-space:locatedIn inst:5F-WARD-12 ;
     cim-c:hasConnectionPoint inst:DIFF_5F_W12_in .
 inst:DIFF_5F_W12_in a cim-c:InletConnectionPoint ;
-    cim-c:hasMedium cim-med:SupplyAir ;
-    cim-c:connectsTo inst:FP_SA_5F_W12 .
+    cim-c:hasMedium cim-med:SupplyAir ; cim-c:connectsTo inst:FP_SA_5F_W12 .
 
-# ── 回风系统 (Return Air) ────────────────────────────────────────────────────
+# ── 回风系统 ───────────────────────────────────────────────────────────────────
 inst:FP_RA_MAIN_5F a cim-flow:ReturnAirFlow ;
     rdfs:label "5F 回风总管"@zh-CN ;
-    cim-c:hasMedium cim-med:ReturnAir ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W01 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W02 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W03 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W04 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W05 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W06 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W07 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W08 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W09 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W10 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W11 ;
-    cim-c:connectsTo inst:RA_GRILLE_5F_W12 .
+    cim-c:hasMedium cim-med:ReturnAir .
 
-# ── 12 个回风口 (Return Air Grilles) ──────────────────────────────────────────
-inst:RA_GRILLE_5F_W01 a cim-equip:AirGrille ;
-    rdfs:label "W01 回风口"@zh-CN ;
+inst:RA_GRILLE_5F_W01 a cim-equip:ReturnAirGrille ;
+    rdfs:label "W01 回风口"@zh-CN ; cim-space:locatedIn inst:5F-WARD-01 .
+inst:RA_GRILLE_5F_W06 a cim-equip:ReturnAirGrille ;
+    rdfs:label "W06 回风口"@zh-CN ; cim-space:locatedIn inst:5F-WARD-06 .
+inst:RA_GRILLE_5F_W12 a cim-equip:ReturnAirGrille ;
+    rdfs:label "W12 回风口"@zh-CN ; cim-space:locatedIn inst:5F-WARD-12 .
+
+# ── 3× FCU（编号 FCU-ZONE-049~051，避免与现有实例冲突）─────────────────────────
+inst:FCU_ZONE_049 a cim-equip:FCU ;
+    rdfs:label "5F FCU-ZONE-049"@zh-CN ;
+    cim-d:designTag "FCU-ZONE-049" ;
     cim-space:locatedIn inst:5F-WARD-01 .
 
-inst:RA_GRILLE_5F_W02 a cim-equip:AirGrille ;
-    rdfs:label "W02 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-02 .
-
-inst:RA_GRILLE_5F_W03 a cim-equip:AirGrille ;
-    rdfs:label "W03 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-03 .
-
-inst:RA_GRILLE_5F_W04 a cim-equip:AirGrille ;
-    rdfs:label "W04 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-04 .
-
-inst:RA_GRILLE_5F_W05 a cim-equip:AirGrille ;
-    rdfs:label "W05 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-05 .
-
-inst:RA_GRILLE_5F_W06 a cim-equip:AirGrille ;
-    rdfs:label "W06 回风口"@zh-CN ;
+inst:FCU_ZONE_050 a cim-equip:FCU ;
+    rdfs:label "5F FCU-ZONE-050"@zh-CN ;
+    cim-d:designTag "FCU-ZONE-050" ;
     cim-space:locatedIn inst:5F-WARD-06 .
 
-inst:RA_GRILLE_5F_W07 a cim-equip:AirGrille ;
-    rdfs:label "W07 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-07 .
-
-inst:RA_GRILLE_5F_W08 a cim-equip:AirGrille ;
-    rdfs:label "W08 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-08 .
-
-inst:RA_GRILLE_5F_W09 a cim-equip:AirGrille ;
-    rdfs:label "W09 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-09 .
-
-inst:RA_GRILLE_5F_W10 a cim-equip:AirGrille ;
-    rdfs:label "W10 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-10 .
-
-inst:RA_GRILLE_5F_W11 a cim-equip:AirGrille ;
-    rdfs:label "W11 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-11 .
-
-inst:RA_GRILLE_5F_W12 a cim-equip:AirGrille ;
-    rdfs:label "W12 回风口"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-12 .
-
-# ── 12× FCU (风机盘管) ───────────────────────────────────────────────────────
-inst:FCU_5F_01 a cim-equip:FCU ;
-    rdfs:label "5F FCU-01"@zh-CN ;
-    cim-d:designTag "FCU-5F-01" ;
-    cim-space:locatedIn inst:5F-WARD-01 .
-
-inst:FCU_5F_02 a cim-equip:FCU ;
-    rdfs:label "5F FCU-02"@zh-CN ;
-    cim-d:designTag "FCU-5F-02" ;
-    cim-space:locatedIn inst:5F-WARD-02 .
-
-inst:FCU_5F_03 a cim-equip:FCU ;
-    rdfs:label "5F FCU-03"@zh-CN ;
-    cim-d:designTag "FCU-5F-03" ;
-    cim-space:locatedIn inst:5F-WARD-03 .
-
-inst:FCU_5F_04 a cim-equip:FCU ;
-    rdfs:label "5F FCU-04"@zh-CN ;
-    cim-d:designTag "FCU-5F-04" ;
-    cim-space:locatedIn inst:5F-WARD-04 .
-
-inst:FCU_5F_05 a cim-equip:FCU ;
-    rdfs:label "5F FCU-05"@zh-CN ;
-    cim-d:designTag "FCU-5F-05" ;
-    cim-space:locatedIn inst:5F-WARD-05 .
-
-inst:FCU_5F_06 a cim-equip:FCU ;
-    rdfs:label "5F FCU-06"@zh-CN ;
-    cim-d:designTag "FCU-5F-06" ;
-    cim-space:locatedIn inst:5F-WARD-06 .
-
-inst:FCU_5F_07 a cim-equip:FCU ;
-    rdfs:label "5F FCU-07"@zh-CN ;
-    cim-d:designTag "FCU-5F-07" ;
-    cim-space:locatedIn inst:5F-WARD-07 .
-
-inst:FCU_5F_08 a cim-equip:FCU ;
-    rdfs:label "5F FCU-08"@zh-CN ;
-    cim-d:designTag "FCU-5F-08" ;
-    cim-space:locatedIn inst:5F-WARD-08 .
-
-inst:FCU_5F_09 a cim-equip:FCU ;
-    rdfs:label "5F FCU-09"@zh-CN ;
-    cim-d:designTag "FCU-5F-09" ;
-    cim-space:locatedIn inst:5F-WARD-09 .
-
-inst:FCU_5F_10 a cim-equip:FCU ;
-    rdfs:label "5F FCU-10"@zh-CN ;
-    cim-d:designTag "FCU-5F-10" ;
-    cim-space:locatedIn inst:5F-WARD-10 .
-
-inst:FCU_5F_11 a cim-equip:FCU ;
-    rdfs:label "5F FCU-11"@zh-CN ;
-    cim-d:designTag "FCU-5F-11" ;
-    cim-space:locatedIn inst:5F-WARD-11 .
-
-inst:FCU_5F_12 a cim-equip:FCU ;
-    rdfs:label "5F FCU-12"@zh-CN ;
-    cim-d:designTag "FCU-5F-12" ;
+inst:FCU_ZONE_051 a cim-equip:FCU ;
+    rdfs:label "5F FCU-ZONE-051"@zh-CN ;
+    cim-d:designTag "FCU-ZONE-051" ;
     cim-space:locatedIn inst:5F-WARD-12 .
 
 # =============================================================================
-# 传感器 (Sensors)
+# 传感器
 # =============================================================================
 
-# ── 温度传感器 (Temperature Sensors) ──────────────────────────────────────────
 inst:TS_5F_CORR a cim-ctrl:TemperatureSensor ;
-    rdfs:label "5F 走廊温度传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-CORRIDOR .
-
+    rdfs:label "5F 走廊温度传感器"@zh-CN ; cim-space:locatedIn inst:5F-CORRIDOR .
 inst:TS_5F_W01 a cim-ctrl:TemperatureSensor ;
-    rdfs:label "5F W01 温度传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-01 .
-
-inst:TS_5F_W06 a cim-ctrl:TemperatureSensor ;
-    rdfs:label "5F W06 温度传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-06 .
-
-inst:TS_5F_W12 a cim-ctrl:TemperatureSensor ;
-    rdfs:label "5F W12 温度传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-12 .
-
-# ── 湿度传感器 (Humidity Sensors) ─────────────────────────────────────────────
+    rdfs:label "5F W01 温度传感器"@zh-CN ; cim-space:locatedIn inst:5F-WARD-01 .
 inst:HS_5F_CORR a cim-ctrl:HumiditySensor ;
-    rdfs:label "5F 走廊湿度传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-CORRIDOR .
-
-inst:HS_5F_W01 a cim-ctrl:HumiditySensor ;
-    rdfs:label "5F W01 湿度传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-WARD-01 .
-
-# ── CO2 传感器 (CO2 Sensor) ──────────────────────────────────────────────────
+    rdfs:label "5F 走廊湿度传感器"@zh-CN ; cim-space:locatedIn inst:5F-CORRIDOR .
 inst:CO2_5F_CORR a cim-ctrl:CO2Sensor ;
-    rdfs:label "5F 走廊 CO2 传感器"@zh-CN ;
-    cim-space:locatedIn inst:5F-CORRIDOR .
+    rdfs:label "5F 走廊 CO2 传感器"@zh-CN ; cim-space:locatedIn inst:5F-CORRIDOR .
 
 # =============================================================================
-# DDC 控制器与控制回路 (DDC Controller & Control Loop)
+# DDC 控制器与控制回路
 # =============================================================================
 
 inst:DDC_SUB_5F_01 a cim-cs:DDCController ;
@@ -550,7 +208,7 @@ inst:CL_SAT_5F a cim-cs:SupplyAirTemperatureControl ;
     cim-cs:controlsEquipment inst:AHU_WARD_5F .
 
 # =============================================================================
-# 电气系统 (Electrical System)
+# 电气系统
 # =============================================================================
 
 inst:DistPanel_5F a cim-equip:DistributionPanel ;
@@ -560,29 +218,25 @@ inst:DistPanel_5F a cim-equip:DistributionPanel ;
     cim-c:hasConnectionPoint inst:DP_5F_in .
 
 inst:DP_5F_in a cim-c:InletConnectionPoint ;
-    rdfs:label "DP-5F-01 进线"@zh-CN ;
     cim-c:hasMedium cim-med:EmergencyPower ;
     cim-c:connectsTo inst:FP_EPWR_UPS_DP5F .
 
 inst:FP_EPWR_UPS_DP5F a cim-flow:EmergencyPowerFlow ;
-    rdfs:label "UPS→5F配电箱 应急电源"@zh-CN ;
     cim-c:hasMedium cim-med:EmergencyPower .
 
 # =============================================================================
-# 护理呼叫系统 (Nurse Call System)
+# 护理呼叫
 # =============================================================================
 
-inst:NC_PANEL_5F_01 a cim-equip:NurseCallPanel ;
+inst:NC_PANEL_5F_01 a cim-equip:Equipment ;
     rdfs:label "5F 护理呼叫主面板 NC-5F-01"@zh-CN ;
     cim-d:designTag "NC-5F-01" ;
     cim-space:locatedIn inst:5F-NS-01 .
 
 # =============================================================================
-# 设施生命周期过程声明 (BFO Process Instances)
-# — 覆盖全部 6 个阶段门控所需的过程与里程碑
+# BFO 生命周期过程声明（6阶段完整链）
 # =============================================================================
 
-# ── 阶段 1：方案设计 (ConceptualDesign) ────────────────────────────────────────
 inst:Project_ConceptualDesign a cim-f:ConceptualDesignProcess ;
     rdfs:label "5F病房层方案设计过程"@zh-CN ;
     cim-f:processStageCode "CONCEPT" ;
@@ -593,14 +247,12 @@ inst:Project_ConceptualDesign a cim-f:ConceptualDesignProcess ;
 inst:Milestone_Concept_Approval a cim-f:DesignApprovalMilestone ;
     rdfs:label "方案设计审批通过"@zh-CN .
 
-# ── 阶段 2：初步设计 (SchematicDesign) ─────────────────────────────────────────
 inst:Project_SchematicDesign a cim-f:SchematicDesignProcess ;
     rdfs:label "5F病房层初步设计过程"@zh-CN ;
     cim-f:processStageCode "SD" ;
     cim-f:processStartDate "2025-12-01"^^xsd:date ;
     cim-f:processEndDate   "2026-02-28"^^xsd:date .
 
-# ── 阶段 3：施工图设计 (DetailedDesign) ────────────────────────────────────────
 inst:Project_DetailedDesign a cim-f:DetailedDesignProcess ;
     rdfs:label "5F病房层施工图设计过程"@zh-CN ;
     cim-f:processStageCode "DD" ;
@@ -611,14 +263,12 @@ inst:Project_DetailedDesign a cim-f:DetailedDesignProcess ;
 inst:Milestone_IDM_DD a cim-f:InformationDeliveryMilestone ;
     rdfs:label "施工图信息交付里程碑"@zh-CN .
 
-# ── 阶段 4：招投标 (Tendering) ─────────────────────────────────────────────────
 inst:Project_Tendering a cim-f:TenderingProcess ;
     rdfs:label "5F病房层招投标过程"@zh-CN ;
     cim-f:processStageCode "TENDER" ;
     cim-f:processStartDate "2026-06-01"^^xsd:date ;
     cim-f:processEndDate   "2026-07-31"^^xsd:date .
 
-# ── 阶段 5：施工安装 (Construction) ────────────────────────────────────────────
 inst:Project_Construction a cim-f:ConstructionProcess ;
     rdfs:label "5F病房层施工安装过程"@zh-CN ;
     cim-f:processStageCode "CONST" ;
@@ -629,7 +279,6 @@ inst:Project_Construction a cim-f:ConstructionProcess ;
 inst:Milestone_ConstructionComplete a cim-f:ConstructionCompletionMilestone ;
     rdfs:label "竣工验收里程碑"@zh-CN .
 
-# ── 阶段 6：调试验收 (Commissioning) ───────────────────────────────────────────
 inst:Project_Commissioning a cim-f:CommissioningProcess ;
     rdfs:label "5F病房层调试验收过程"@zh-CN ;
     cim-f:processStageCode "COMM" ;
@@ -650,7 +299,7 @@ inst:Project_CleanroomQual a cim-f:CleanroomQualificationProcess ;
     cim-f:processStageCode "CR-QUAL" ;
     cim-f:processStartDate "2027-05-01"^^xsd:date .
 
-# ── 时序链 (temporallyPrecedes) ─────────────────────────────────────────────────
+# ── 时序链 ─────────────────────────────────────────────────────────────────────
 inst:Project_ConceptualDesign cim-f:temporallyPrecedes inst:Project_SchematicDesign .
 inst:Project_SchematicDesign  cim-f:temporallyPrecedes inst:Project_DetailedDesign .
 inst:Project_DetailedDesign   cim-f:temporallyPrecedes inst:Project_Tendering .
@@ -659,7 +308,7 @@ inst:Project_Construction     cim-f:temporallyPrecedes inst:Project_Commissionin
 inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_MedGasValidation .
 inst:Project_Commissioning    cim-f:temporallyPrecedes inst:Project_CleanroomQual .
 
-# ── 信息制品 (Generically Dependent Continuants) ────────────────────────────────
+# ── 信息制品 ───────────────────────────────────────────────────────────────────
 inst:SchematicIFCModel a cim-f:DesignModel ;
     rdfs:label "5F病房层初步设计 IFC 模型"@zh-CN ;
     cim-f:isoLoD "LOD200" ;
@@ -671,5 +320,5 @@ inst:DetailedIFCModel a cim-f:DesignModel ;
     cim-f:producedBy inst:Project_DetailedDesign .
 
 # =============================================================================
-# END OF SCENARIO — 5F Ward Floor v1.0
+# END OF SCENARIO — 5F Ward Floor v2.0 (简化版)
 # =============================================================================

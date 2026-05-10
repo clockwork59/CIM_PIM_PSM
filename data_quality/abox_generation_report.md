@@ -1,6 +1,6 @@
 # ABox Generation Report — NBU Medical Clinic
 
-**Generated**: 2026-05-10 04:19:21
+**Generated**: 2026-05-10 05:56:26
 **Source**: `validation/ifc_to_cim_mapping.json`
 **Output**: `project_deliverables/version02/cim/abox/nbu_medical_clinic_instances.ttl`
 **IFC Sections processed**: hvac, arch
@@ -47,17 +47,15 @@
 
 ## CIM ID Generation Rules
 
+ID format: `{TYPE}-{MODEL}-{N}` where MODEL is derived from ifc_name keywords.
+
 | Brick Class | ID Pattern | Example |
 |-------------|-----------|---------|
-| brk:Diffuser | DIFF-SD-{seq:03d} | DIFF-SD-001 |
-| brk:Return_Air_Grille | DIFF-RR-{seq:03d} | DIFF-RR-001 |
-| brk:Exhaust_Air_Grille | DIFF-ER-{seq:03d} | DIFF-ER-001 |
-| brk:Fan | FAN-GN-{seq:03d} | FAN-GN-001 |
-| brk:Supply_Fan | FAN-SF-{seq:03d} | FAN-SF-001 |
-| brk:Exhaust_Fan | FAN-EF-{seq:03d} | FAN-EF-001 |
-| brk:VAV_Box | VAV-BOX-{seq:03d} | VAV-BOX-001 |
-| brk:Air_Handler_Unit | AHU-{seq:03d} | AHU-001 |
-| brk:Chiller | CH-{seq:03d} | CH-001 |
+| brk:Diffuser | DIFF-{MODEL}-{N} | DIFF-SD600-001 |
+| brk:Return_Air_Grille | DIFF-{MODEL}-{N} | DIFF-RR600-001 |
+| brk:VAV_Box | VAV-{MODEL}-{N} | VAV-200-001 |
+| brk:Fan | FAN-{MODEL}-{N} | FAN-CENT-001 |
+| brk:Chiller | CHL-{N} | CHL-001 |
 | cim:Floor | FLOOR-{name} | FLOOR-First_Floor |
 | cim:Room | ROOM-{name} | ROOM-2A03 |
 
@@ -67,3 +65,4 @@
 - Room-to-floor linkage uses heuristic based on room name prefix
 - Space type classification uses `cim_type` from `space_mappings`
 - UNKNOWN spaces default to `cim-space:Room`
+- Equipment instances include `cim:hasSystemReference` inferred from Brick class
