@@ -96,8 +96,23 @@
     owl:imports <https://cim.medical/ontology/v4.0/security_event> ;
 
     # =========================================================================
+    # Layer 4 — FAS 消防安全设备层 (Fire Alarm & Safety)
+    # 烟感/温感/火焰/气体探测器 · 喷淋/防火阀 · FACU · 报警区域
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/fas> ;
+
+    # =========================================================================
+    # Layer 4 — CMMS 工单层 (Computerized Maintenance Management)
+    # PM/CM/Inspection/Emergency工单 · 状态机 · 优先级 · 技术员
+    # =========================================================================
+    owl:imports <https://cim.medical/ontology/v4.0/cmms> ;
+
+    # =========================================================================
     # Bridge Ontologies — 外部标准桥接
     # =========================================================================
+    # BACnet 协议桥接（ASHRAE 135-2020，6种对象类型 + 设备绑定）
+    owl:imports <https://cim.medical/ontology/v4.0/bacnet> ;
+
     # Brick Schema 1.3 对齐（设备/空间/传感点 ~50个 owl:equivalentClass）
     owl:imports <https://cim.medical/ontology/v4.0/bridge/brick> ;
 
