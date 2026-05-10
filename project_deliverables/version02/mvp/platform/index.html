@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宣武医院智慧安防指挥中心</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg-dark:#1a1a2e;--bg-mid:#16213e;--accent:#0f3460;--accent-light:#1a5276;--green:#27ae60;--red:#e74c3c;--yellow:#f39c12;--gray:#95a5a6;--light-gray:#ecf0f1;--white:#fff;--shadow:0 2px 8px rgba(0,0,0,.12);--radius:8px}
+body{font-family:-apple-system,"Microsoft YaHei","Segoe UI",sans-serif;background:#f0f2f5;color:#333;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+/* Header */
+.header{background:linear-gradient(135deg,var(--bg-dark),var(--bg-mid));color:var(--white);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.header h1{font-size:18px;font-weight:600;letter-spacing:1px}
+.header-right{display:flex;align-items:center;gap:20px;font-size:13px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* Layout */
+.layout{display:flex;flex:1;overflow:hidden}
+/* Sidebar */
+.sidebar{width:200px;background:var(--bg-dark);color:var(--white);flex-shrink:0;display:flex;flex-direction:column;padding-top:12px}
+.sidebar-title{padding:12px 20px;font-size:14px;color:var(--gray);border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:4px}
+.nav-item{padding:12px 20px;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:10px;transition:background .2s,border-left .2s;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item.active{background:rgba(15,52,96,.6);border-left-color:var(--accent-light);color:var(--white)}
+.nav-item .icon{font-size:16px}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:11px;padding:1px 7px;border-radius:10px}
+/* Main content */
+.main{flex:1;overflow-y:auto;padding:20px}
+.section{display:none}
+.section.active{display:block}
+/* Cards */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+.card-title{font-size:16px;font-weight:600;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;gap:8px}
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f8f9fa;text-align:left;padding:10px 12px;font-weight:600;color:#555;border-bottom:2px solid var(--light-gray)}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0}
+tr:hover{background:#fafbfc}
+/* Buttons */
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-light)}
+.btn-success{background:var(--green);color:#fff}.btn-success:hover{opacity:.9}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{opacity:.9}
+.btn-warning{background:var(--yellow);color:#fff}
+.btn-outline{background:transparent;border:1px solid #ddd;color:#666}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+/* Status badges */
+.badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;white-space:nowrap}
+.badge-red{background:#fde8e8;color:var(--red)}.badge-green{background:#e8f8e8;color:var(--green)}
+.badge-yellow{background:#fef8e0;color:#b7791f}.badge-gray{background:#f0f0f0;color:#666}
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.kpi-item{text-align:center;padding:16px 8px;background:#f8f9fb;border-radius:var(--radius);border:1px solid #eee}
+.kpi-value{font-size:28px;font-weight:700;color:var(--accent)}
+.kpi-label{font-size:12px;color:#888;margin-top:4px}
+.kpi-item.warn .kpi-value{color:var(--yellow)}
+.kpi-item.ok .kpi-value{color:var(--green)}
+/* Progress bar */
+.progress-bar{height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.progress-fill.green{background:var(--green)}.progress-fill.red{background:var(--red)}.progress-fill.yellow{background:var(--yellow)}.progress-fill.blue{background:var(--accent)}
+/* BAS panel */
+.bas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bas-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#f8f9fb;border-radius:6px;border:1px solid #eee;font-size:13px;transition:all .3s}
+.bas-item.active{background:#e8f8e8;border-color:var(--green)}
+.bas-item .bas-icon{font-size:18px}
+.bas-status{margin-left:auto;font-size:12px}
+/* Personnel */
+.person-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
+.person-item:last-child{border:none}
+.person-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:#f0f2f5}
+.person-status{margin-left:auto}
+/* Situation layout */
+.situation-grid{display:grid;grid-template-columns:280px 1fr;gap:16px}
+@media(max-width:1200px){.situation-grid{grid-template-columns:1fr}}
+/* Drill controls */
+.drill-bar{display:flex;align-items:center;gap:12px;padding:16px 20px;background:#f8f9fb;border-radius:var(--radius);border:1px solid #eee;margin-top:16px}
+.drill-timer{margin-left:auto;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent)}
+/* Detail panel */
+.detail-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.detail-back{cursor:pointer;font-size:20px;color:var(--accent)}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;font-size:13px;margin-bottom:16px}
+.info-item{display:flex;gap:8px}.info-label{color:#888;white-space:nowrap}
+/* Action row animation */
+.action-row.executing{background:#fff8e6!important}
+.action-row.completed{background:#f0faf0!important}
+/* Placeholder */
+.placeholder{text-align:center;padding:60px 20px;color:#aaa}
+.placeholder .icon{font-size:48px;margin-bottom:12px;display:block}
+.placeholder p{font-size:14px}
+/* Flash animation */
+@keyframes flash-green{0%{background:#e8f8e8}50%{background:#b8e8b8}100%{background:#e8f8e8}}
+.flash-green{animation:flash-green .6s ease}
+@keyframes flash-row{0%{background:#fff8e6}50%{background:#fef0c7}100%{background:#fff8e6}}
+.flash-row{animation:flash-row 1s ease infinite}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>&#x1F3E5; 宣武医院智慧安防指挥中心</h1>
+  <div class="header-right">
+    <span id="clock">2024-01-15 10:05:00</span>
+    <span><span class="status-dot"></span>系统在线</span>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-title">&#x1F3E5; 智慧安防指挥中心</div>
+    <div class="nav-item active" data-section="events"><span class="icon">&#x1F4CB;</span>事件中心<span class="nav-badge" id="eventBadge">1</span></div>
+    <div class="nav-item" data-section="plans"><span class="icon">&#x1F4DD;</span>预案中心</div>
+    <div class="nav-item" data-section="situation"><span class="icon">&#x1F4CA;</span>态势中心</div>
+    <div class="nav-item" data-section="dispatch"><span class="icon">&#x1F4F1;</span>调度中心</div>
+    <div class="nav-item" data-section="settings"><span class="icon">&#x2699;&#xFE0F;</span>系统设置</div>
+  </div>
+
+  <div class="main">
+    <!-- ============ 事件中心 ============ -->
+    <div class="section active" id="sec-events">
+      <div id="eventListView">
+        <div class="card">
+          <div class="card-title">&#x1F4CB; 事件列表</div>
+          <table>
+            <thead><tr><th>事件编号</th><th>状态</th><th>类型</th><th>位置</th><th>时间</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr id="evtRow001" class="flash-row">
+                <td>EVT-20240115-001</td>
+                <td><span class="badge badge-red" id="evtStatus001">&#x1F525; 处理中</span></td>
+                <td>烟感报警</td><td>内科楼5F配电室</td><td>10:05</td>
+                <td><button class="btn btn-primary" onclick="showEventDetail()">查看</button></td>
+              </tr>
+              <tr>
+                <td>EVT-20240115-000</td>
+                <td><span class="badge badge-green">&#x2705; 已闭环</span></td>
+                <td>烟感报警</td><td>门诊2F候诊区</td><td>09:20</td>
+                <td><button class="btn btn-outline" onclick="alert('该事件已闭环，无需操作')">查看</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="eventDetailView" style="display:none">
+        <div class="card">
+          <div class="detail-header">
+            <span class="detail-back" onclick="hideEventDetail()">&#x2B05;</span>
+            <h3>事件详情 EVT-20240115-001</h3>
+            <span class="badge badge-red" id="detailStatus">&#x1F525; 处理中</span>
+          </div>
+          <div class="info-grid">
+            <div class="info-item"><span class="info-label">类型:</span>烟感报警（电气火灾）</div>
+            <div class="info-item"><span class="info-label">位置:</span>内科楼5F配电室</div>
+            <div class="info-item"><span class="info-label">触发设备:</span>SD-M05-501 烟感探测器</div>
+            <div class="info-item"><span class="info-label">发生时间:</span>2024-01-15 10:05:00</div>
+            <div class="info-item"><span class="info-label">匹配预案:</span>PLAN-FIRE-L2</div>
+            <div class="info-item"><span class="info-label">当前状态:</span><span id="detailStatusText">处理中</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">&#x1F4CB; 动作执行进度</div>
+          <table>
+            <thead><tr><th>#</th><th>动作</th><th>执行方</th><th>模式</th><th>时限</th><th>状态</th><th>耗时</th></tr></thead>
+            <tbody id="detailActionTable"></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="btn-group">
+            <button class="btn btn-success" onclick="alert('操作已确认')">&#x2705; 确认完成</button>
+            <button class="btn btn-warning" onclick="alert('已发送催办通知')">&#x1F4E2; 催办</button>
+            <button class="btn btn-danger" onclick="alert('已升级至L3处置')">&#x26A0;&#xFE0F; 升级处置</button>
+            <button class="btn btn-outline" onclick="alert('已标记为误报')">&#x274C; 标记误报</button>
+            <button class="btn btn-outline" onclick="alert('事件已关闭')">&#x1F512; 关闭事件</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 预案中心 ============ -->
+    <div class="section" id="sec-plans">
+      <div class="card">
+        <div class="card-title">&#x1F4DD; 预案列表</div>
+        <table>
+          <thead><tr><th>预案编号</th><th>名称</th><th>等级</th><th>版本</th><th>触发条件</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>PLAN-FIRE-L2</td><td>烟感报警处置预案</td><td><span class="badge badge-yellow">L2</span></td><td>v1.2</td><td>单点烟感 + 温度异常</td><td><span class="badge badge-green">已发布</span></td></tr>
+            <tr><td>PLAN-FIRE-L3</td><td>多点火灾处置预案</td><td><span class="badge badge-red">L3</span></td><td>v1.0</td><td>多点烟感 + 明火确认</td><td><span class="badge badge-gray">草稿</span></td></tr>
+            <tr><td>PLAN-INTRUSION-L1</td><td>入侵报警处置预案</td><td><span class="badge badge-gray">L1</span></td><td>v1.0</td><td>门禁异常 + 视频确认</td><td><span class="badge badge-gray">草稿</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4CB; 预案详情 — PLAN-FIRE-L2 烟感报警处置预案</div>
+        <div class="info-grid" style="margin-bottom:16px">
+          <div class="info-item"><span class="info-label">预案编号:</span>PLAN-FIRE-L2</div>
+          <div class="info-item"><span class="info-label">版本:</span>v1.2</div>
+          <div class="info-item"><span class="info-label">触发条件:</span>单点烟感 + 温度异常</div>
+          <div class="info-item"><span class="info-label">动作数:</span>10</div>
+        </div>
+        <table>
+          <thead><tr><th>#</th><th>动作名称</th><th>执行方</th><th>模式</th><th>时限(秒)</th><th>前置依赖</th><th>BAS联动</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>确认火情</td><td>中控值班员</td><td>人工</td><td>120</td><td>-</td><td>-</td></tr>
+            <tr><td>2</td><td>切断电源</td><td>系统</td><td>自动</td><td>30</td><td>#1</td><td>PowerCutoff</td></tr>
+            <tr><td>3</td><td>启动灭火</td><td>电工班</td><td>人工</td><td>300</td><td>#2</td><td>-</td></tr>
+            <tr><td>4</td><td>区域广播</td><td>系统</td><td>自动</td><td>10</td><td>#1</td><td>Broadcast</td></tr>
+            <tr><td>5</td><td>启动疏散</td><td>保安队</td><td>人工</td><td>600</td><td>#4</td><td>-</td></tr>
+            <tr><td>6</td><td>打开门禁</td><td>系统</td><td>自动</td><td>10</td><td>#4</td><td>DoorRelease</td></tr>
+            <tr><td>7</td><td>电梯迫降</td><td>系统</td><td>自动</td><td>30</td><td>#1</td><td>ElevatorRecall</td></tr>
+            <tr><td>8</td><td>通知医护</td><td>系统</td><td>自动</td><td>30</td><td>#1</td><td>-</td></tr>
+            <tr><td>9</td><td>拨打119</td><td>中控值班员</td><td>人工</td><td>120</td><td>#3</td><td>-</td></tr>
+            <tr><td>10</td><td>通知领导</td><td>系统</td><td>自动</td><td>30</td><td>#1</td><td>-</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px">
+          <button class="btn btn-outline" disabled title="配置模式 - 无法编辑">&#x270F;&#xFE0F; 编辑预案</button>
+          <span style="font-size:12px;color:#aaa;margin-left:8px">配置模式 - 无法编辑</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 态势中心 ============ -->
+    <div class="section" id="sec-situation">
+      <div class="card" style="background:linear-gradient(135deg,var(--bg-dark),var(--bg-mid));color:#fff;padding:16px 20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:18px;font-weight:700">L2级烟感报警处置态势</div>
+            <div style="font-size:13px;color:#aaa;margin-top:4px">EVT-20240115-001 | 内科楼5F配电室 | <span id="sitEventStatus" style="color:#f39c12">&#x1F525; 处理中</span></div>
+          </div>
+          <div id="sitTimer" style="font-size:28px;font-weight:700;font-variant-numeric:tabular-nums">00:00</div>
+        </div>
+      </div>
+
+      <div class="situation-grid">
+        <div>
+          <div class="card">
+            <div class="card-title">&#x1F4CA; KPI 面板</div>
+            <div class="kpi-grid">
+              <div class="kpi-item ok"><div class="kpi-value" id="kpiDone">0</div><div class="kpi-label">已完成</div></div>
+              <div class="kpi-item warn"><div class="kpi-value" id="kpiRunning">0</div><div class="kpi-label">进行中</div></div>
+              <div class="kpi-item"><div class="kpi-value" id="kpiWaiting">10</div><div class="kpi-label">等待中</div></div>
+            </div>
+            <div style="margin-top:16px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:4px">
+                <span>总进度</span><span id="kpiPercent">0%</span>
+              </div>
+              <div class="progress-bar" style="height:8px"><div class="progress-fill green" id="kpiProgressBar" style="width:0%"></div></div>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:#666">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>时限</span><span>15:00</span></div>
+              <div style="display:flex;justify-content:space-between"><span>状态</span><span id="kpiTimerStatus" style="color:var(--green)">正常</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">&#x1F50C; BAS 联动</div>
+            <div class="bas-grid">
+              <div class="bas-item" id="bas-PowerCutoff"><span class="bas-icon">&#x1F50C;</span>切断电源<span class="bas-status">&#x23F3;</span></div>
+              <div class="bas-item" id="bas-Broadcast"><span class="bas-icon">&#x1F4E2;</span>区域广播<span class="bas-status">&#x23F3;</span></div>
+              <div class="bas-item" id="bas-DoorRelease"><span class="bas-icon">&#x1F6AA;</span>门禁释放<span class="bas-status">&#x23F3;</span></div>
+              <div class="bas-item" id="bas-ElevatorRecall"><span class="bas-icon">&#x1F6D7;</span>电梯迫降<span class="bas-status">&#x23F3;</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title">&#x1F4CB; 动作执行进度</div>
+            <table>
+              <thead><tr><th style="width:30px">#</th><th>动作</th><th>执行方</th><th>模式</th><th>时限</th><th style="width:80px">状态</th><th style="width:90px">耗时</th></tr></thead>
+              <tbody id="sitActionTable"></tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-title">&#x1F465; 执行人状态</div>
+            <div id="personnelPanel">
+              <div class="person-item"><div class="person-avatar">&#x1F464;</div><div><div style="font-weight:600">中控值班员 - 小李</div><div style="font-size:12px;color:#888">值班编号: OP-001</div></div><span class="person-status badge badge-gray" id="ps-operator">空闲</span></div>
+              <div class="person-item"><div class="person-avatar">&#x1F477;</div><div><div style="font-weight:600">电工班 - 张师傅</div><div style="font-size:12px;color:#888">工号: EL-003</div></div><span class="person-status badge badge-gray" id="ps-electrician">空闲</span></div>
+              <div class="person-item"><div class="person-avatar">&#x1F6E1;</div><div><div style="font-weight:600">保安队 - 王队长</div><div style="font-size:12px;color:#888">岗位: 安保主管</div></div><span class="person-status badge badge-gray" id="ps-security">空闲</span></div>
+              <div class="person-item"><div class="person-avatar">&#x1F468;&#x200D;&#x1F4BC;</div><div><div style="font-weight:600">院领导 - 陈院长</div><div style="font-size:12px;color:#888">行政值班</div></div><span class="person-status badge badge-gray" id="ps-leader">空闲</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-bar">
+        <button class="btn btn-success" id="btnStart" onclick="startDrill()">&#x25B6; 开始演练</button>
+        <button class="btn btn-warning" id="btnPause" onclick="pauseDrill()" disabled>&#x23F8; 暂停</button>
+        <button class="btn btn-outline" id="btnReset" onclick="resetDrill()">&#x23F9; 重置</button>
+        <span id="drillStatusText" style="font-size:13px;color:#888;margin-left:12px">就绪 - 点击"开始演练"启动L2烟感报警处置模拟</span>
+      </div>
+    </div>
+
+    <!-- ============ 调度中心 ============ -->
+    <div class="section" id="sec-dispatch">
+      <div class="card">
+        <div class="card-title">&#x1F465; 人员花名册</div>
+        <table>
+          <thead><tr><th>姓名</th><th>角色</th><th>工号</th><th>联系方式</th><th>当前状态</th></tr></thead>
+          <tbody>
+            <tr><td>小李</td><td>中控值班员</td><td>OP-001</td><td>内线 8001</td><td><span class="badge badge-green">在岗</span></td></tr>
+            <tr><td>张师傅</td><td>电工班组长</td><td>EL-003</td><td>内线 8023</td><td><span class="badge badge-green">在岗</span></td></tr>
+            <tr><td>王队长</td><td>保安队长</td><td>SE-010</td><td>对讲机 Ch3</td><td><span class="badge badge-green">在岗</span></td></tr>
+            <tr><td>陈院长</td><td>行政值班领导</td><td>ADM-001</td><td>手机 139****</td><td><span class="badge badge-green">在岗</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4CB; 任务分配矩阵</div>
+        <table>
+          <thead><tr><th>角色</th><th>L2烟感报警</th><th>L3多点火灾</th><th>L1入侵报警</th></tr></thead>
+          <tbody>
+            <tr><td>中控值班员</td><td>确认火情、拨打119</td><td>全程协调</td><td>视频确认</td></tr>
+            <tr><td>电工班</td><td>启动灭火</td><td>现场操作</td><td>-</td></tr>
+            <tr><td>保安队</td><td>启动疏散</td><td>人员疏散</td><td>现场处置</td></tr>
+            <tr><td>系统(BAS)</td><td>切电/广播/门禁/电梯</td><td>全联动</td><td>门禁锁定</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px">
+          <button class="btn btn-outline" disabled title="配置模式 - 无法下发">&#x1F4E4; 任务下发</button>
+          <span style="font-size:12px;color:#aaa;margin-left:8px">配置模式 - 无法下发</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 系统设置 ============ -->
+    <div class="section" id="sec-settings">
+      <div class="card">
+        <div class="card-title">&#x2699;&#xFE0F; 系统信息</div>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">CIM版本:</span>v4.0</div>
+          <div class="info-item"><span class="info-label">owl:Class数:</span>545</div>
+          <div class="info-item"><span class="info-label">三元组总量:</span>61,941</div>
+          <div class="info-item"><span class="info-label">实例数:</span>1,244</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4E1; 数据源状态</div>
+        <table>
+          <thead><tr><th>数据源</th><th>类型</th><th>状态</th><th>最后同步</th></tr></thead>
+          <tbody>
+            <tr><td>IFC模型</td><td>BIM几何</td><td><span class="badge badge-green">&#x2705; 已连接</span></td><td>2024-01-15 09:00</td></tr>
+            <tr><td>BAS系统</td><td>楼宇自控</td><td><span class="badge badge-green">&#x2705; 已连接</span></td><td>2024-01-15 10:04</td></tr>
+            <tr><td>CMMS系统</td><td>运维管理</td><td><span class="badge badge-green">&#x2705; 已连接</span></td><td>2024-01-15 08:30</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F517; 集成状态</div>
+        <table>
+          <thead><tr><th>组件</th><th>状态</th><th>详情</th></tr></thead>
+          <tbody>
+            <tr><td>Apache Fuseki</td><td><span class="badge badge-green">&#x2705; 就绪</span></td><td>SPARQL端点配置完成</td></tr>
+            <tr><td>FastAPI</td><td><span class="badge badge-green">&#x2705; 就绪</span></td><td>6个REST端点已注册</td></tr>
+            <tr><td>Named Graph</td><td><span class="badge badge-green">&#x2705; 就绪</span></td><td>9个命名图已划分</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== Navigation ====================
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('sec-' + item.dataset.section).classList.add('active');
+  });
+});
+
+// ==================== Clock ====================
+function updateClock() {
+  const el = document.getElementById('clock');
+  const now = new Date();
+  el.textContent = now.getFullYear() + '-' +
+    String(now.getMonth()+1).padStart(2,'0') + '-' +
+    String(now.getDate()).padStart(2,'0') + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0') + ':' +
+    String(now.getSeconds()).padStart(2,'0');
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ==================== L2 Plan Data ====================
+const L2_PLAN = [
+  {id:1,name:"确认火情",role:"中控值班员",mode:"manual",limit:120,depends:[],bas:null,roleKey:"operator"},
+  {id:2,name:"切断电源",role:"系统",mode:"auto",limit:30,depends:[1],bas:"PowerCutoff",roleKey:null},
+  {id:3,name:"启动灭火",role:"电工班",mode:"manual",limit:300,depends:[2],bas:null,roleKey:"electrician"},
+  {id:4,name:"区域广播",role:"系统",mode:"auto",limit:10,depends:[1],bas:"Broadcast",roleKey:null},
+  {id:5,name:"启动疏散",role:"保安队",mode:"manual",limit:600,depends:[4],bas:null,roleKey:"security"},
+  {id:6,name:"打开门禁",role:"系统",mode:"auto",limit:10,depends:[4],bas:"DoorRelease",roleKey:null},
+  {id:7,name:"电梯迫降",role:"系统",mode:"auto",limit:30,depends:[1],bas:"ElevatorRecall",roleKey:null},
+  {id:8,name:"通知医护",role:"系统",mode:"auto",limit:30,depends:[1],bas:null,roleKey:null},
+  {id:9,name:"拨打119",role:"中控值班员",mode:"manual",limit:120,depends:[3],bas:null,roleKey:"operator"},
+  {id:10,name:"通知领导",role:"系统",mode:"auto",limit:30,depends:[1],bas:null,roleKey:"leader"}
+];
+
+// ==================== Simulation State ====================
+let simState = null;
+let simInterval = null;
+let simPaused = false;
+
+function initState() {
+  return {
+    time: 0, // simulated seconds elapsed
+    phase: 'idle', // idle | confirming | running | done
+    actions: L2_PLAN.map(a => ({
+      ...a,
+      status: 'waiting', // waiting | ready | executing | completed
+      startTime: null,
+      endTime: null,
+      duration: a.mode === 'auto' ? Math.round(a.limit * 0.3 + Math.random() * a.limit * 0.2) : Math.round(a.limit * 0.5 + Math.random() * a.limit * 0.2)
+    }))
+  };
+}
+
+// ==================== Render Functions ====================
+function renderSitActionTable() {
+  const tbody = document.getElementById('sitActionTable');
+  tbody.innerHTML = simState.actions.map(a => {
+    let statusHtml, timeHtml, rowClass = '';
+    if (a.status === 'completed') {
+      statusHtml = '<span style="color:var(--green)">&#x2705; 完成</span>';
+      timeHtml = a.endTime !== null ? formatSec(a.endTime - a.startTime) : '-';
+      rowClass = 'completed';
+    } else if (a.status === 'executing') {
+      const elapsed = simState.time - a.startTime;
+      const pct = Math.min(100, (elapsed / a.duration) * 100);
+      statusHtml = '<span style="color:var(--red)">&#x1F525; 进行中</span>';
+      timeHtml = '<div class="progress-bar"><div class="progress-fill yellow" style="width:'+pct+'%"></div></div>';
+      rowClass = 'executing';
+    } else if (a.status === 'ready') {
+      statusHtml = '<span style="color:var(--yellow)">&#x1F7E1; 就绪</span>';
+      timeHtml = '-';
+    } else {
+      statusHtml = '<span style="color:var(--gray)">&#x23F3; 等待</span>';
+      timeHtml = '-';
+    }
+    return `<tr class="action-row ${rowClass}"><td>${a.id}</td><td>${a.name}</td><td>${a.role}</td><td>${a.mode==='auto'?'自动':'人工'}</td><td>${a.limit}s</td><td>${statusHtml}</td><td>${timeHtml}</td></tr>`;
+  }).join('');
+}
+
+function renderDetailActionTable() {
+  const tbody = document.getElementById('detailActionTable');
+  if (!simState) return;
+  tbody.innerHTML = simState.actions.map(a => {
+    let statusHtml, timeHtml;
+    if (a.status === 'completed') {
+      statusHtml = '<span style="color:var(--green)">&#x2705; 完成</span>';
+      timeHtml = formatSec(a.endTime - a.startTime);
+    } else if (a.status === 'executing') {
+      statusHtml = '<span style="color:var(--red)">&#x1F525; 进行中</span>';
+      timeHtml = formatSec(simState.time - a.startTime);
+    } else {
+      statusHtml = '<span style="color:var(--gray)">&#x23F3; 等待</span>';
+      timeHtml = '-';
+    }
+    return `<tr><td>${a.id}</td><td>${a.name}</td><td>${a.role}</td><td>${a.mode==='auto'?'自动':'人工'}</td><td>${a.limit}s</td><td>${statusHtml}</td><td>${timeHtml}</td></tr>`;
+  }).join('');
+}
+
+function renderKPI() {
+  const done = simState.actions.filter(a => a.status === 'completed').length;
+  const running = simState.actions.filter(a => a.status === 'executing').length;
+  const waiting = 10 - done - running;
+  document.getElementById('kpiDone').textContent = done;
+  document.getElementById('kpiRunning').textContent = running;
+  document.getElementById('kpiWaiting').textContent = waiting;
+  const pct = Math.round(done / 10 * 100);
+  document.getElementById('kpiPercent').textContent = pct + '%';
+  document.getElementById('kpiProgressBar').style.width = pct + '%';
+}
+
+function renderBAS() {
+  ['PowerCutoff','Broadcast','DoorRelease','ElevatorRecall'].forEach(key => {
+    const el = document.getElementById('bas-' + key);
+    const action = simState.actions.find(a => a.bas === key);
+    const statusEl = el.querySelector('.bas-status');
+    if (action && action.status === 'completed') {
+      el.classList.add('active');
+      statusEl.textContent = '✅';
+      if (!el.dataset.flashed) { el.classList.add('flash-green'); el.dataset.flashed = '1'; }
+    } else if (action && action.status === 'executing') {
+      statusEl.textContent = '🔄';
+    } else {
+      statusEl.textContent = '⏳';
+    }
+  });
+}
+
+function renderPersonnel() {
+  const roleMap = {operator:'ps-operator',electrician:'ps-electrician',security:'ps-security',leader:'ps-leader'};
+  // Reset
+  Object.values(roleMap).forEach(id => {
+    const el = document.getElementById(id);
+    el.textContent = '空闲';
+    el.className = 'person-status badge badge-gray';
+  });
+  simState.actions.forEach(a => {
+    if (a.roleKey && roleMap[a.roleKey]) {
+      const el = document.getElementById(roleMap[a.roleKey]);
+      if (a.status === 'executing') {
+        el.textContent = '🔥 现场操作';
+        el.className = 'person-status badge badge-red';
+      } else if (a.status === 'completed' && el.textContent === '空闲') {
+        el.textContent = '✅ 已完成';
+        el.className = 'person-status badge badge-green';
+      }
+    }
+  });
+}
+
+function renderTimer() {
+  document.getElementById('sitTimer').textContent = formatTime(simState.time);
+  const drillTimer = document.querySelector('.drill-timer');
+  if (simState.time > 900) {
+    document.getElementById('kpiTimerStatus').textContent = '超时';
+    document.getElementById('kpiTimerStatus').style.color = 'var(--red)';
+  }
+}
+
+function renderAll() {
+  renderSitActionTable();
+  renderDetailActionTable();
+  renderKPI();
+  renderBAS();
+  renderPersonnel();
+  renderTimer();
+}
+
+// ==================== Simulation Engine ====================
+function tick() {
+  if (!simState || simPaused) return;
+  simState.time += 1; // each tick = 1 simulated second (interval runs every 100ms = 10x speed)
+
+  if (simState.phase === 'confirming') {
+    if (simState.time >= 20) {
+      simState.phase = 'running';
+      // Start action 1
+      simState.actions[0].status = 'executing';
+      simState.actions[0].startTime = simState.time;
+      updateEventStatus('已确认', 'badge-yellow');
+      document.getElementById('drillStatusText').textContent = '事件已确认，预案执行中...';
+    }
+  }
+
+  if (simState.phase === 'running') {
+    // Check executing actions for completion
+    simState.actions.forEach(a => {
+      if (a.status === 'executing' && simState.time - a.startTime >= a.duration) {
+        a.status = 'completed';
+        a.endTime = simState.time;
+      }
+    });
+
+    // Check waiting actions whose deps are all completed => start them
+    simState.actions.forEach(a => {
+      if (a.status === 'waiting') {
+        const depsOk = a.depends.every(d => simState.actions.find(x => x.id === d).status === 'completed');
+        if (depsOk) {
+          a.status = 'executing';
+          a.startTime = simState.time;
+        }
+      }
+    });
+
+    // Check if all done
+    if (simState.actions.every(a => a.status === 'completed')) {
+      simState.phase = 'done';
+      clearInterval(simInterval);
+      simInterval = null;
+      updateEventStatus('已闭环', 'badge-green');
+      document.getElementById('sitEventStatus').innerHTML = '&#x2705; 已闭环';
+      document.getElementById('drillStatusText').textContent = '演练完成！所有动作已执行，事件已闭环。';
+      document.getElementById('btnStart').disabled = true;
+      document.getElementById('btnPause').disabled = true;
+      document.getElementById('evtRow001').classList.remove('flash-row');
+      document.getElementById('eventBadge').textContent = '0';
+    }
+  }
+
+  renderAll();
+}
+
+function updateEventStatus(text, badgeClass) {
+  const s1 = document.getElementById('evtStatus001');
+  const s2 = document.getElementById('detailStatus');
+  const s3 = document.getElementById('detailStatusText');
+  const icons = {
+    '待确认': '&#x1F7E1; 待确认',
+    '已确认': '&#x1F7E0; 已确认',
+    '已闭环': '&#x2705; 已闭环'
+  };
+  const html = icons[text] || text;
+  [s1, s2].forEach(el => { el.innerHTML = html; el.className = 'badge ' + badgeClass; });
+  if (s3) s3.textContent = text;
+}
+
+// ==================== Drill Controls ====================
+function startDrill() {
+  if (simInterval) return;
+  if (!simState || simState.phase === 'done') {
+    resetDrill();
+  }
+  simState.phase = 'confirming';
+  simPaused = false;
+  updateEventStatus('待确认', 'badge-yellow');
+  document.getElementById('sitEventStatus').innerHTML = '&#x1F7E1; 待确认';
+  document.getElementById('drillStatusText').textContent = '等待值班员确认火情...';
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('btnPause').disabled = false;
+  simInterval = setInterval(tick, 100); // 100ms = 1 sim second => 10x speed
+}
+
+function pauseDrill() {
+  simPaused = !simPaused;
+  document.getElementById('btnPause').innerHTML = simPaused ? '&#x25B6; 继续' : '&#x23F8; 暂停';
+  document.getElementById('drillStatusText').textContent = simPaused ? '演练已暂停' : '演练进行中...';
+  document.getElementById('btnStart').disabled = !simPaused;
+}
+
+function resetDrill() {
+  if (simInterval) { clearInterval(simInterval); simInterval = null; }
+  simPaused = false;
+  simState = initState();
+  // Reset UI
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('btnPause').disabled = true;
+  document.getElementById('btnPause').innerHTML = '&#x23F8; 暂停';
+  document.getElementById('sitEventStatus').innerHTML = '&#x1F525; 处理中';
+  document.getElementById('kpiTimerStatus').textContent = '正常';
+  document.getElementById('kpiTimerStatus').style.color = 'var(--green)';
+  document.getElementById('drillStatusText').textContent = '就绪 - 点击"开始演练"启动L2烟感报警处置模拟';
+  document.getElementById('eventBadge').textContent = '1';
+  document.getElementById('evtRow001').classList.add('flash-row');
+  updateEventStatus('处理中', 'badge-red');
+  // Reset BAS
+  ['PowerCutoff','Broadcast','DoorRelease','ElevatorRecall'].forEach(key => {
+    const el = document.getElementById('bas-' + key);
+    el.classList.remove('active','flash-green');
+    el.dataset.flashed = '';
+    el.querySelector('.bas-status').textContent = '⏳';
+  });
+  renderAll();
+}
+
+// ==================== Event Detail ====================
+function showEventDetail() {
+  document.getElementById('eventListView').style.display = 'none';
+  document.getElementById('eventDetailView').style.display = 'block';
+  renderDetailActionTable();
+}
+function hideEventDetail() {
+  document.getElementById('eventListView').style.display = 'block';
+  document.getElementById('eventDetailView').style.display = 'none';
+}
+
+// ==================== Helpers ====================
+function formatSec(s) { return s + 's'; }
+function formatTime(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+// ==================== Init ====================
+simState = initState();
+renderAll();
+</script>
+</body>
+</html>
