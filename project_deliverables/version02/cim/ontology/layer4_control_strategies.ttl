@@ -18,9 +18,14 @@
 #   - 每个回路关联: 传感器(Sensor) → 控制器(Controller) → 执行器(Actuator)
 #   - 医疗等级标注: LIFE_SAFETY / CRITICAL / NORMAL
 #
-# MVP 范围说明:
-#   本 Sprint (2026-05-11) 交付手术室控制回路 MVP (T2-MVP)
-#   ICU/冷站/AHU/VAV 控制策略为预置类定义（P1+），待后续 Sprint 补充 ABox 实例
+# 实例覆盖:
+#   手术室(OR): 5回路 + 1联锁 (温度/湿度/压差/换气/联锁) — LIFE_SAFETY
+#   ICU:        3回路 (负压/排送风平衡/温度) — LIFE_SAFETY/CRITICAL
+#   冷站:       5回路 (台数/温差/冷却塔VFD/冷却水重置/冷冻水泵VFD)
+#   AHU:        4回路 (送风温度/静压/新风阀/经济器)
+#   VAV:        2回路 (风量/再热)
+#   控制器:     3台DDC + 2台PID + 2台联锁 = 7台
+#   关联:       控制回路→设备/传感器跨层引用
 #
 # Version : 4.0.0  |  2026-05-10
 # =============================================================================
@@ -818,6 +823,226 @@ inst:OR-ACH-CTRL-01 a cim-cs:AirChangeRateControlLoop ;
 inst:OR-PRESS-INTERLOCK-01 a cim-cs:CleanroomInterlockLogic ;
     rdfs:label "OR压差失效联锁逻辑"@zh-CN ;
     rdfs:comment "压差 < 5Pa → 启动备用AHU → 发送 LIFE_SAFETY 告警 → 记录事件"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — ICU 隔离病房控制回路
+# =============================================================================
+
+inst:ICU-NEGPRESS-CTRL-01 a cim-cs:NegativePressureControlLoop ;
+    rdfs:label "ICU 负压隔离控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "-8.0"^^xsd:float ;
+    cim-cs:deadband "2.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "-5.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "WS/T 311-2009: 负压隔离病房压差 ≤-8Pa（相对走廊），>-5Pa 告警"@zh-CN .
+
+inst:ICU-EXHBAL-CTRL-01 a cim-cs:ExhaustSupplyBalanceControl ;
+    rdfs:label "ICU 排送风平衡控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "1.15"^^xsd:float ;
+    cim-cs:deadband "0.05"^^xsd:float ;
+    cim-cs:alarmLowLimit "1.05"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Critical ;
+    rdfs:comment "排风量/送风量比 = 1.10~1.15，确保负压维持，比值<1.05 告警"@zh-CN .
+
+inst:ICU-TEMP-CTRL-01 a cim-cs:TemperatureControlLoop ;
+    rdfs:label "ICU 温度控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "24.0"^^xsd:float ;
+    cim-cs:deadband "1.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "26.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "22.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Critical ;
+    rdfs:comment "WS/T 311: ICU温度 22~26°C"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — 冷站群控策略
+# =============================================================================
+
+inst:CHP-STAGING-CTRL-01 a cim-cs:ChillerStagingControl ;
+    rdfs:label "冷站冷机台数控制-01"@zh-CN ;
+    cim-cs:loadThresholdStart "85.0"^^xsd:float ;
+    cim-cs:loadThresholdStop "40.0"^^xsd:float ;
+    cim-cs:minRunTime "1800"^^xsd:integer ;
+    cim-cs:minStopTime "1800"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "冷机加减机策略: 负荷率>85%加机，<40%减机，最小运行/停机间隔30min"@zh-CN .
+
+inst:CHP-DELTAT-CTRL-01 a cim-cs:ChilledWaterDeltaTControl ;
+    rdfs:label "冷冻水温差控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "6.0"^^xsd:float ;
+    cim-cs:deadband "0.5"^^xsd:float ;
+    cim-cs:alarmLowLimit "3.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "8.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "冷冻水供回水温差目标 ΔT=6°C (7/13°C)，<3°C 小温差告警"@zh-CN .
+
+inst:CHP-CTWFAN-CTRL-01 a cim-cs:CoolingTowerFanVFDControl ;
+    rdfs:label "冷却塔风机变频控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "32.0"^^xsd:float ;
+    cim-cs:deadband "1.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "37.0"^^xsd:float ;
+    cim-cs:proportionalGain "2.0"^^xsd:float ;
+    cim-cs:integralTime "120"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "冷却水出塔温度 PID 控制，设计出水 32°C，>37°C 告警"@zh-CN .
+
+inst:CHP-CWRESET-CTRL-01 a cim-cs:CondenserWaterResetControl ;
+    rdfs:label "冷却水温度重置策略-01"@zh-CN ;
+    cim-cs:setpointValue "30.0"^^xsd:float ;
+    cim-cs:deadband "1.5"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "过渡季降低冷却水温度设定值至30°C，提升冷机COP约5%"@zh-CN .
+
+inst:CHP-CHWPUMP-CTRL-01 a cim-cs:ChilledWaterPumpVFDControl ;
+    rdfs:label "冷冻水泵变频控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "80.0"^^xsd:float ;
+    cim-cs:deadband "5.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "50.0"^^xsd:float ;
+    cim-cs:proportionalGain "1.5"^^xsd:float ;
+    cim-cs:integralTime "90"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "末端压差控制，最不利环路压差 80kPa，泵最低频率 25Hz"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — AHU 送风控制
+# =============================================================================
+
+inst:AHU-SAT-CTRL-01 a cim-cs:SupplyAirTemperatureControl ;
+    rdfs:label "AHU 送风温度控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "14.0"^^xsd:float ;
+    cim-cs:deadband "1.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "18.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "10.0"^^xsd:float ;
+    cim-cs:proportionalGain "3.0"^^xsd:float ;
+    cim-cs:integralTime "180"^^xsd:integer ;
+    cim-cs:derivativeTime "30"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:Critical ;
+    rdfs:comment "AHU 送风温度 PID 控制，夏季送风 14°C，冬季可重置至 16~18°C"@zh-CN .
+
+inst:AHU-DSP-CTRL-01 a cim-cs:DuctStaticPressureControl ;
+    rdfs:label "AHU 风管静压控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "250.0"^^xsd:float ;
+    cim-cs:deadband "20.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "400.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "100.0"^^xsd:float ;
+    cim-cs:proportionalGain "2.5"^^xsd:float ;
+    cim-cs:integralTime "60"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "送风干管静压 250Pa，通过 VFD 调节送风机转速"@zh-CN .
+
+inst:AHU-OAD-CTRL-01 a cim-cs:OutdoorAirDamperControl ;
+    rdfs:label "AHU 新风阀控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "20.0"^^xsd:float ;
+    cim-cs:deadband "5.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "10.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Critical ;
+    rdfs:comment "最小新风比 20%，低于 10% 触发 IAQ 告警（ASHRAE 62.1）"@zh-CN .
+
+inst:AHU-ECON-CTRL-01 a cim-cs:EconomizerControl ;
+    rdfs:label "AHU 经济器/全新风控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "18.0"^^xsd:float ;
+    cim-cs:deadband "2.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "室外温度 < 18°C 时启用全新风模式，节省冷机能耗"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — VAV 末端控制
+# =============================================================================
+
+inst:VAV-BOX-CTRL-01 a cim-cs:VAVBoxControl ;
+    rdfs:label "VAV 末端风量控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "24.0"^^xsd:float ;
+    cim-cs:deadband "0.5"^^xsd:float ;
+    cim-cs:alarmHighLimit "26.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "20.0"^^xsd:float ;
+    cim-cs:proportionalGain "4.0"^^xsd:float ;
+    cim-cs:integralTime "120"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "VAV 区域温度 PID 控制，调节风阀开度 30%~100%"@zh-CN .
+
+inst:VAV-REHEAT-CTRL-01 a cim-cs:VAVReheatControl ;
+    rdfs:label "VAV 再热控制回路-01"@zh-CN ;
+    cim-cs:setpointValue "22.0"^^xsd:float ;
+    cim-cs:deadband "1.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "18.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Normal ;
+    rdfs:comment "VAV 最小风量时启用再热盘管，防止过冷（冬季/内区负荷低时）"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — 控制器硬件
+# =============================================================================
+
+inst:DDC-MAIN-01 a cim-cs:DDCController ;
+    rdfs:label "中央 DDC 主站-01"@zh-CN ;
+    cim-cs:ddcProtocol "BACnet/IP" ;
+    cim-cs:ddcPointCapacity "2000"^^xsd:integer ;
+    rdfs:comment "楼宇自控主站，管理全院 HVAC/照明/计量系统"@zh-CN .
+
+inst:DDC-SUB-OR-01 a cim-cs:DDCController ;
+    rdfs:label "手术部 DDC 子站-01"@zh-CN ;
+    cim-cs:ddcProtocol "BACnet MS/TP" ;
+    cim-cs:ddcPointCapacity "500"^^xsd:integer ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "手术部独立子站，管理洁净空调+医气监测，LIFE_SAFETY 冗余"@zh-CN .
+
+inst:DDC-SUB-CHP-01 a cim-cs:DDCController ;
+    rdfs:label "冷站 DDC 子站-01"@zh-CN ;
+    cim-cs:ddcProtocol "BACnet/IP" ;
+    cim-cs:ddcPointCapacity "800"^^xsd:integer ;
+    rdfs:comment "冷站群控子站，管理冷机/冷却塔/水泵变频"@zh-CN .
+
+inst:PID-OR-TEMP-01 a cim-cs:PIDController ;
+    rdfs:label "手术室温度 PID 控制器-01"@zh-CN ;
+    cim-cs:proportionalGain "2.5"^^xsd:float ;
+    cim-cs:integralTime "180"^^xsd:integer ;
+    cim-cs:derivativeTime "30"^^xsd:integer ;
+    cim-cs:deadband "0.5"^^xsd:float ;
+    cim-cs:samplingInterval "10"^^xsd:integer ;
+    cim-cs:controlAction "reverse" ;
+    rdfs:comment "反作用 PID：温度升高→冷量增加（冷盘管阀开大）"@zh-CN .
+
+inst:PID-CHP-DELTAT-01 a cim-cs:PIDController ;
+    rdfs:label "冷冻水温差 PID 控制器-01"@zh-CN ;
+    cim-cs:proportionalGain "1.8"^^xsd:float ;
+    cim-cs:integralTime "240"^^xsd:integer ;
+    cim-cs:derivativeTime "0"^^xsd:integer ;
+    cim-cs:deadband "0.3"^^xsd:float ;
+    cim-cs:samplingInterval "30"^^xsd:integer ;
+    cim-cs:controlAction "direct" ;
+    rdfs:comment "正作用 PI：温差增大→泵频率提升（加大流量）"@zh-CN .
+
+inst:INTERLOCK-AHU-FIRE-01 a cim-cs:InterlockController ;
+    rdfs:label "AHU 消防联锁控制器-01"@zh-CN ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "火灾信号→关闭新风/回风阀→关闭送回风机→开启排烟阀/排烟风机"@zh-CN .
+
+inst:INTERLOCK-OR-PRESS-01 a cim-cs:InterlockController ;
+    rdfs:label "手术室压差联锁控制器-01"@zh-CN ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "压差 <5Pa 持续2min → 切换备用AHU → LIFE_SAFETY告警 → 通知手术室护士站"@zh-CN .
+
+# =============================================================================
+# 控制回路 → 设备/传感器关联（跨层引用）
+# =============================================================================
+
+inst:OR-TEMP-CTRL-01
+    cim-cs:controlsEquipment <http://cim.medical/instance/surgical_wing#AHU_OR_01> ;
+    cim-cs:hasController inst:PID-OR-TEMP-01 ;
+    cim-cs:hasController inst:DDC-SUB-OR-01 .
+
+inst:OR-PRESS-CTRL-01
+    cim-cs:controlsEquipment <http://cim.medical/instance/surgical_wing#AHU_OR_01> ;
+    cim-cs:hasController inst:INTERLOCK-OR-PRESS-01 ;
+    cim-cs:hasController inst:DDC-SUB-OR-01 .
+
+inst:CHP-STAGING-CTRL-01
+    cim-cs:hasController inst:DDC-SUB-CHP-01 .
+
+inst:CHP-DELTAT-CTRL-01
+    cim-cs:hasController inst:PID-CHP-DELTAT-01 ;
+    cim-cs:hasController inst:DDC-SUB-CHP-01 .
+
+inst:AHU-SAT-CTRL-01
+    cim-cs:hasController inst:DDC-MAIN-01 .
 
 # =============================================================================
 # END OF DDC CONTROL STRATEGIES ONTOLOGY
