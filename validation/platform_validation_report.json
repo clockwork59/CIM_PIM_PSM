@@ -20,7 +20,7 @@
         "units",
         "timestamp"
       ],
-      "elapsed_ms": 247.0,
+      "elapsed_ms": 201.1,
       "sample": {
         "equipID": "CHL-633703-001",
         "label": "633-703 kW",
@@ -45,7 +45,7 @@
         "units",
         "ratio"
       ],
-      "elapsed_ms": 228.4,
+      "elapsed_ms": 99.3,
       "sample": {}
     },
     {
@@ -66,7 +66,7 @@
         "woStatus",
         "woPriority"
       ],
-      "elapsed_ms": 4693.9,
+      "elapsed_ms": 5065.3,
       "sample": {
         "equipID": "AHU-63300000-001",
         "label": "63300000 J",
@@ -105,7 +105,7 @@
         "scheduledDate",
         "failureMode"
       ],
-      "elapsed_ms": 10418.2,
+      "elapsed_ms": 10991.5,
       "sample": {
         "equipID": "AHU-63300000-001",
         "label": "63300000 J",
@@ -141,7 +141,7 @@
         "pointName",
         "presentValue"
       ],
-      "elapsed_ms": 2061.5,
+      "elapsed_ms": 2167.0,
       "sample": {}
     },
     {
@@ -157,7 +157,7 @@
         "presentValue",
         "units"
       ],
-      "elapsed_ms": 3500.8,
+      "elapsed_ms": 3497.3,
       "sample": {
         "floorLabel": "First Floor",
         "equipID": "AHU-63300000-001",
@@ -184,7 +184,7 @@
         "woStatus",
         "failureMode"
       ],
-      "elapsed_ms": 4534.8,
+      "elapsed_ms": 4943.5,
       "sample": {
         "equipID": "AHU-63300000-001",
         "label": "63300000 J",
@@ -213,7 +213,7 @@
         "estimatedHours",
         "team"
       ],
-      "elapsed_ms": 2130.2,
+      "elapsed_ms": 2235.2,
       "sample": {
         "woID": "WO-CM-202605-0043",
         "woLabel": "CM: VAV-150MM-029 fault repair",
@@ -234,11 +234,11 @@
         "graph",
         "triples"
       ],
-      "elapsed_ms": 1843.2,
+      "elapsed_ms": 1911.4,
       "sample": {
+        "2026-05-11T00:00": 13710,
         "2026-05-10T08:00": 13710,
         "2026-05-10T16:00": 13710,
-        "2026-05-11T00:00": 13710,
         "2026-05": 8309,
         "ifc": 5488,
         "tbox": 4421,
@@ -255,7 +255,7 @@
         "pointName",
         "value"
       ],
-      "elapsed_ms": 5.9,
+      "elapsed_ms": 5.6,
       "sample": {
         "equipID": "AHU-63300000-001",
         "pointName": "AHU-63300000-001-FANKW",
