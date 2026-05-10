@@ -342,12 +342,13 @@ owl:imports <https://cim.medical/ontology/v4.0/control_strategy> ;
 | conservation_engine.py | 505 | 4类检查 | 505行, 4类 | ✅ 一致 |
 | ward_floor_5f.ttl | 324 | 3病房+FCU-ZONE-049 | 272行 | ⚠️ 实际324行(含完整BFO) |
 | nbu_medical_clinic_instances.ttl | 7,426 | 1,210实例 | 298KB | ✅ 一致 |
-| layer4_control_strategies.ttl | 1,049 | 31 Class + 31 inst | 报告称34类 | ⚠️ 实际31 owl:Class |
+| layer4_control_strategies.ttl | 1,049 | 31 Class + 31 inst | 31 owl:Class | ✅ 一致 |
 | _index_v4.ttl | ✅ | control_strategy 已import | — | ✅ 一致 |
 
 **偏差说明**:
 - ward_floor_5f.ttl: Sprint报告称 272 行是 v2.0 重写后的设计目标，实际文件含完整 BFO 生命周期链后为 324 行
-- layer4_control_strategies.ttl: Sprint报告称 34 类来自含 3 个 ControlSafetyLevel named individuals 的计数（31 owl:Class + 3 named individuals = 34 types），非纯 owl:Class 统计口径差异
+- layer4_control_strategies.ttl: 实测 31 owl:Class，Sprint报告已更正为实测值
+- owl:Class 全局计数: 口径A(显式a owl:Class)=479, 口径B(+rdfs:subClassOf主语)=482, Sprint报告已更正
 
 ---
 

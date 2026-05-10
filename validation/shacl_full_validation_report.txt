@@ -1,0 +1,38 @@
+SHACL Full Validation Report
+Date: 2026-05-11
+Total VIOLATION: 0
+Total WARNING: 0
+Overall: PASS
+
+
+============================================================
+surgical_wing.ttl
+conforms=True
+============================================================
+Validation Report
+Conforms: True
+
+
+============================================================
+ward_floor_5f.ttl
+conforms=True
+============================================================
+Validation Report
+Conforms: True
+
+
+============================================================
+chiller_plant.ttl
+conforms=True
+============================================================
+Validation Report
+Conforms: True
+
+
+============================================================
+nbu_medical_clinic_instances.ttl
+conforms=True
+============================================================
+Validation Report
+Conforms: True
+
