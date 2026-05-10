@@ -1,7 +1,7 @@
 {
-  "simulation_id": "surgical_wing_20260510T060215",
+  "simulation_id": "surgical_wing_20260510T073008",
   "scenario": "Hospital Surgical Suite Wing — 手术部",
-  "generated": "2026-05-10T06:02:15.899311",
+  "generated": "2026-05-10T07:30:08.212416",
   "stages": [
     {
       "stage_id": 1,
@@ -24,12 +24,12 @@
           "gap_id": "CONS-AIR-001",
           "severity": "MINOR",
           "category": "conservation",
-          "entity": "http://cim.medical/instance/ward_floor_5f#AHU_WARD_5F",
-          "entity_type": "AHU",
-          "description": "5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdoor air paths exist but lack flow rate data for mass balance check",
+          "entity": "http://cim.medical/instance/surgical_wing#AHU_OR_01",
+          "entity_type": "Clean_AHU",
+          "description": "手术部洁净空调箱 AHU-OR-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdoor air paths exist but lack flow rate data for mass balance check",
           "standard_reference": "GB50333-2013 §6.4 — 送风量=回风量+新风量",
           "bfo_context": "AirFlowProcess 质量守恒验证需要各路径流量数据",
-          "remediation": "为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性",
+          "remediation": "为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性",
           "blocking_next_stage": false
         }
       ]
@@ -46,12 +46,12 @@
           "gap_id": "CONS-AIR-001",
           "severity": "MINOR",
           "category": "conservation",
-          "entity": "http://cim.medical/instance/ward_floor_5f#AHU_WARD_5F",
-          "entity_type": "AHU",
-          "description": "5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdoor air paths exist but lack flow rate data for mass balance check",
+          "entity": "http://cim.medical/instance/surgical_wing#AHU_OR_01",
+          "entity_type": "Clean_AHU",
+          "description": "手术部洁净空调箱 AHU-OR-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdoor air paths exist but lack flow rate data for mass balance check",
           "standard_reference": "GB50333-2013 §6.4 — 送风量=回风量+新风量",
           "bfo_context": "AirFlowProcess 质量守恒验证需要各路径流量数据",
-          "remediation": "为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性",
+          "remediation": "为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性",
           "blocking_next_stage": false
         }
       ]
@@ -86,12 +86,12 @@
           "gap_id": "CONS-AIR-001",
           "severity": "MINOR",
           "category": "conservation",
-          "entity": "http://cim.medical/instance/ward_floor_5f#AHU_WARD_5F",
-          "entity_type": "AHU",
-          "description": "5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdoor air paths exist but lack flow rate data for mass balance check",
+          "entity": "http://cim.medical/instance/surgical_wing#AHU_OR_01",
+          "entity_type": "Clean_AHU",
+          "description": "手术部洁净空调箱 AHU-OR-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdoor air paths exist but lack flow rate data for mass balance check",
           "standard_reference": "GB50333-2013 §6.4 — 送风量=回风量+新风量",
           "bfo_context": "AirFlowProcess 质量守恒验证需要各路径流量数据",
-          "remediation": "为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性",
+          "remediation": "为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性",
           "blocking_next_stage": false
         }
       ]

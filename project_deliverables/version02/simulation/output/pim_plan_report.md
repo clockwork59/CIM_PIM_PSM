@@ -1,6 +1,6 @@
 # PIM 规划报告 — 手术部仿真场景
 
-**生成时间**: 2026-05-10 06:02  
+**生成时间**: 2026-05-10 07:30  
 **CIM 本体版本**: v4.0.0  
 **场景**: 医院手术部（I级 OR×1 + III级 OR×2 + ICU×1）
 
@@ -28,11 +28,11 @@
 
 | ID | 等级 | 实体 | 描述 | 规范依据 |
 |----|------|------|------|---------|
-| CONS-AIR-001 | **MINOR** | AHU_WARD_5F | 5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
+| CONS-AIR-001 | **MINOR** | AHU_OR_01 | 手术部洁净空调箱 AHU-OR-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdo… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
 
 #### 修复建议
 
-- ⚪ `CONS-AIR-001` — 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+- ⚪ `CONS-AIR-001` — 为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 ### 阶段 3 — Detailed Design / 施工图  ⚠️ WARN
 
@@ -42,11 +42,11 @@
 
 | ID | 等级 | 实体 | 描述 | 规范依据 |
 |----|------|------|------|---------|
-| CONS-AIR-001 | **MINOR** | AHU_WARD_5F | 5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
+| CONS-AIR-001 | **MINOR** | AHU_OR_01 | 手术部洁净空调箱 AHU-OR-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdo… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
 
 #### 修复建议
 
-- ⚪ `CONS-AIR-001` — 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+- ⚪ `CONS-AIR-001` — 为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 ### 阶段 4 — Procurement / 招投标  ✅ PASS
 
@@ -68,24 +68,24 @@
 
 | ID | 等级 | 实体 | 描述 | 规范依据 |
 |----|------|------|------|---------|
-| CONS-AIR-001 | **MINOR** | AHU_WARD_5F | 5F病房层空调箱 AHU-WARD-5F-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
+| CONS-AIR-001 | **MINOR** | AHU_OR_01 | 手术部洁净空调箱 AHU-OR-01: 回风/新风管路存在但缺少流量数据，无法验证风量平衡 / Return/outdo… | GB50333-2013 §6.4 — 送风量=回风量+新风量 |
 
 #### 修复建议
 
-- ⚪ `CONS-AIR-001` — 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+- ⚪ `CONS-AIR-001` — 为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 ## PIM 行动计划
 
 ### 暖通空调系统 (HVAC)
 
 **阶段 2 待办:**
-- [ ] [CONS-AIR-001] 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+- [ ] [CONS-AIR-001] 为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 **阶段 3 待办:**
-- [ ] [CONS-AIR-001] 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+- [ ] [CONS-AIR-001] 为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 **阶段 6 待办:**
-- [ ] [CONS-AIR-001] 为 5F病房层空调箱 AHU-WARD-5F-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
+- [ ] [CONS-AIR-001] 为 手术部洁净空调箱 AHU-OR-01 的回风/新风路径添加 cim-d:ratedCapacity 属性
 
 ## 规范合规清单
 

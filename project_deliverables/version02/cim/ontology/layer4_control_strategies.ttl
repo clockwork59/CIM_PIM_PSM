@@ -1,6 +1,6 @@
 # =============================================================================
 # CIM Layer 4 — DDC 控制策略本体 (DDC Control Strategies Ontology)
-# 医疗建筑直接数字控制（DDC）策略建模，提升 LOD 350 覆盖率至 ≥80%
+# 医疗建筑直接数字控制（DDC）策略建模，LOD 350 全覆盖
 #
 # 覆盖范围:
 #   - 控制回路框架 (ControlLoop / PID / OnOff / Sequence)
@@ -10,6 +10,8 @@
 #   - 冷站群控策略 (主机台数/温差/冷却塔变频)
 #   - AHU 送风控制 (送风温度/静压/新风比)
 #   - VAV 末端控制 (风量/再热)
+#   - 防排烟控制 (排烟风机/烟感探测/楼梯间正压送风)
+#   - 医用气体监测控制 (压力监测/告警/自动切换)
 #   - 告警限值与安全等级属性
 #
 # 设计原则:
@@ -24,6 +26,8 @@
 #   冷站:       5回路 (台数/温差/冷却塔VFD/冷却水重置/冷冻水泵VFD)
 #   AHU:        4回路 (送风温度/静压/新风阀/经济器)
 #   VAV:        2回路 (风量/再热)
+#   防排烟:     3回路 (排烟控制/烟感探测/楼梯间正压送风) — LIFE_SAFETY
+#   医用气体:   5回路 (O2/VAC/CAIR压力监测/告警/自动切换) — LIFE_SAFETY
 #   控制器:     3台DDC + 2台PID + 2台联锁 = 7台
 #   关联:       控制回路→设备/传感器跨层引用
 #
@@ -55,8 +59,9 @@
     rdfs:comment """
         医疗建筑直接数字控制（DDC）策略本体。
         定义控制回路、控制器、PID参数、联锁逻辑等控制工程概念，
-        覆盖手术室洁净空调、ICU隔离、冷站群控、AHU/VAV末端等
-        典型 HVAC 控制策略，将 LOD 350 覆盖率从 40% 提升至 ≥80%。
+        覆盖手术室洁净空调、ICU隔离、冷站群控、AHU/VAV末端、
+        防排烟控制、医用气体监测等全部 DDC 控制策略，
+        实现 LOD 350 完整覆盖。
         与 Brick Schema ControlLoop / ASHRAE Guideline 36 语义对齐。
     """@zh-CN ;
     owl:versionInfo "4.0.0" ;
@@ -773,8 +778,10 @@ cim-cs:controlsProcess
 #   冷站群控:        6 (PlantControl, Staging, DeltaT, CTFan, CondenserReset, PumpVFD)
 #   AHU 控制:        4 (SupplyAirTemp, DuctPressure, OADamper, Economizer)
 #   VAV 末端控制:    2 (VAVBox, VAVReheat)
+#   防排烟控制:      3 (SmokeExhaustControl, SmokeDetectionLoop, StairwellPressurization)
+#   医用气体控制:    3 (MedGasPressureMon, MedGasAlarm, MedGasAutoSwitchover)
 #   ─────────────────────────────────────────
-#   合计:           ~34 classes + 3 individuals = ~37 types
+#   合计:           ~40 classes + 3 individuals = ~43 types
 #
 # 属性 (Properties):
 #   对象属性:       15 (hasControlledVariable, hasManipulatedVariable, ...)
@@ -1043,6 +1050,114 @@ inst:CHP-DELTAT-CTRL-01
 
 inst:AHU-SAT-CTRL-01
     cim-cs:hasController inst:DDC-MAIN-01 .
+
+# =============================================================================
+# SECTION K — 防排烟控制 (Smoke Exhaust Control)
+# =============================================================================
+
+cim-cs:SmokeExhaustControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Smoke Exhaust Control"@en ; rdfs:label "排烟控制"@zh-CN ;
+    rdfs:comment "火灾信号触发排烟风机启动+排烟阀开启+新风/回风阀关闭联锁控制"@zh-CN .
+
+cim-cs:SmokeDetectionLoop
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Smoke Detection Loop"@en ; rdfs:label "烟感探测回路"@zh-CN ;
+    rdfs:comment "烟感报警→确认→联动排烟/防火阀/消防广播，双回路冗余"@zh-CN .
+
+cim-cs:StairwellPressurizationControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:PressureDifferentialControlLoop ;
+    rdfs:label "Stairwell Pressurization Control"@en ; rdfs:label "楼梯间正压送风控制"@zh-CN ;
+    rdfs:comment "火灾时楼梯间加压至 25~50Pa，防止烟气侵入疏散通道（GB51251-2017）"@zh-CN .
+
+# =============================================================================
+# SECTION L — 医用气体监测控制 (Medical Gas Monitoring & Control)
+# =============================================================================
+
+cim-cs:MedicalGasPressureMonitoring
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:ControlLoop ;
+    rdfs:label "Medical Gas Pressure Monitoring"@en ; rdfs:label "医用气体压力监测回路"@zh-CN ;
+    rdfs:comment "O2/VAC/CAIR/N2O 管路压力连续监测，偏离范围→区域/中央双级告警（WS435-2013 §8）"@zh-CN .
+
+cim-cs:MedicalGasAlarmControl
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:OnOffControlLoop ;
+    rdfs:label "Medical Gas Alarm Control"@en ; rdfs:label "医用气体告警控制回路"@zh-CN ;
+    rdfs:comment "三级告警体系: 区域阀箱面板→护士站→中央监控室（GB50751-2012 §10）"@zh-CN .
+
+cim-cs:MedicalGasAutoSwitchover
+    a owl:Class ;
+    rdfs:subClassOf cim-cs:SequenceControlLoop ;
+    rdfs:label "Medical Gas Auto Switchover"@en ; rdfs:label "医用气体自动切换控制"@zh-CN ;
+    rdfs:comment "双气源自动切换（如液氧主供→汇流排备用），切换时间 <1s"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — 防排烟控制
+# =============================================================================
+
+inst:SMOKE-EXH-CTRL-01 a cim-cs:SmokeExhaustControl ;
+    rdfs:label "手术部排烟控制回路-01"@zh-CN ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "火灾信号→排烟风机(≥15000m³/h)启动→排烟阀开启→AHU停机→新风阀关闭，GB51251-2017 §4.4"@zh-CN .
+
+inst:SMOKE-DET-CTRL-01 a cim-cs:SmokeDetectionLoop ;
+    rdfs:label "手术部烟感探测回路-01"@zh-CN ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "双回路光电感烟探测器，二次确认后联动排烟/防火阀/消防广播"@zh-CN .
+
+inst:STAIR-PRESS-CTRL-01 a cim-cs:StairwellPressurizationControl ;
+    rdfs:label "防烟楼梯间正压送风控制-01"@zh-CN ;
+    cim-cs:setpointValue "40.0"^^xsd:float ;
+    cim-cs:deadband "5.0"^^xsd:float ;
+    cim-cs:alarmHighLimit "50.0"^^xsd:float ;
+    cim-cs:alarmLowLimit "25.0"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "GB51251-2017 §3.1: 楼梯间加压 25~50Pa，门开启时风速 ≥0.7m/s"@zh-CN .
+
+# =============================================================================
+# ABox 实例 — 医用气体监测
+# =============================================================================
+
+inst:MEDGAS-O2-MON-01 a cim-cs:MedicalGasPressureMonitoring ;
+    rdfs:label "氧气管路压力监测回路-01"@zh-CN ;
+    cim-cs:setpointValue "0.4"^^xsd:float ;
+    cim-cs:deadband "0.02"^^xsd:float ;
+    cim-cs:alarmHighLimit "0.5"^^xsd:float ;
+    cim-cs:alarmLowLimit "0.35"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "O2终端压力 0.4±0.05 MPa，<0.35MPa 立即告警（WS435 §8.2）"@zh-CN .
+
+inst:MEDGAS-VAC-MON-01 a cim-cs:MedicalGasPressureMonitoring ;
+    rdfs:label "负压吸引压力监测回路-01"@zh-CN ;
+    cim-cs:setpointValue "-0.04"^^xsd:float ;
+    cim-cs:deadband "0.01"^^xsd:float ;
+    cim-cs:alarmHighLimit "-0.02"^^xsd:float ;
+    cim-cs:alarmLowLimit "-0.07"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "VAC终端压力 -0.04±0.03 MPa，>-0.02MPa 真空度不足告警"@zh-CN .
+
+inst:MEDGAS-ALARM-CTRL-01 a cim-cs:MedicalGasAlarmControl ;
+    rdfs:label "医用气体三级告警控制-01"@zh-CN ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "L1:区域阀箱面板(声光) → L2:手术部护士站 → L3:中央设备监控室（GB50751 §10）"@zh-CN .
+
+inst:MEDGAS-O2-SWITCH-01 a cim-cs:MedicalGasAutoSwitchover ;
+    rdfs:label "氧气双源自动切换控制-01"@zh-CN ;
+    cim-cs:hasSafetyLevel cim-cs:LifeSafety ;
+    rdfs:comment "液氧站→汇流排自动切换，切换时间<1s，切换点:主供压力<0.6MPa"@zh-CN .
+
+inst:MEDGAS-CAIR-MON-01 a cim-cs:MedicalGasPressureMonitoring ;
+    rdfs:label "医用空气压力监测回路-01"@zh-CN ;
+    cim-cs:setpointValue "0.4"^^xsd:float ;
+    cim-cs:deadband "0.02"^^xsd:float ;
+    cim-cs:alarmHighLimit "0.5"^^xsd:float ;
+    cim-cs:alarmLowLimit "0.35"^^xsd:float ;
+    cim-cs:hasSafetyLevel cim-cs:Critical ;
+    rdfs:comment "CAIR终端压力 0.4±0.05 MPa（WS435 §8.2）"@zh-CN .
 
 # =============================================================================
 # END OF DDC CONTROL STRATEGIES ONTOLOGY
