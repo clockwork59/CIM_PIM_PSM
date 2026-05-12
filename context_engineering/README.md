@@ -41,6 +41,8 @@ Two identical models with different context produce radically different ontologi
 
 ## Directory Structure
 
+### AI 系统设计 (00-40): 上下文工程框架
+
 | Dir | Purpose | Analogy |
 |-----|---------|---------|
 | `00_foundations/` | Context theory + mathematical model | Atoms and Molecules |
@@ -48,10 +50,27 @@ Two identical models with different context produce radically different ontologi
 | `20_agent_protocols/` | 9-Agent context contracts + handoff protocols | Neural Pathways |
 | `30_memory_retrieval/` | Named Graph RAG + SPARQL as retrieval | Memory Systems |
 | `40_evaluation/` | Context quality metrics + validation pipeline | Measurement |
-| `50_templates/` | Reusable context templates for CIM tasks | Building Blocks |
-| `60_field_integration/` | Multi-agent field theory + MVP integration | Emergent Systems |
+
+### 领域上下文 (50-90): 医疗建筑领域知识
+
+| Dir | Purpose | Key Question |
+|-----|---------|-------------|
+| `50_domain_context/` | 领域问题定义 + CIM 解决方案 | CIM 解决什么问题? |
+| `60_data_architecture/` | TBox/ABox 分离 + Named Graph + ID 治理 | CIM 如何组织数据? |
+| `70_application_support/` | 8 个 SPARQL 查询模式 + MVP 事件处置 | CIM 如何支撑应用? |
+| `80_case_validation/` | 12 步验证流水线 + 全部实测结果 | CIM 如何证明有效? |
+| `90_evolution/` | M6-M7 近期 + 中长期演进路线 | CIM 下一步去哪? |
+
+### 已归档 (旧目录, 内容已迁移至 50-90)
+
+| Dir | Status | Migrated To |
+|-----|--------|-------------|
+| `50_templates_old/` | 已迁移 | 上下文契约模板 → `70_application_support/` |
+| `60_field_integration_old/` | 已迁移 | MVP 场栈 → `70_application_support/` + `80_case_validation/` |
 
 ## Quick Reference
+
+### AI 系统设计
 
 | File | What It Answers |
 |------|-----------------|
@@ -60,8 +79,16 @@ Two identical models with different context produce radically different ontologi
 | [nine_agent_context_contracts.md](20_agent_protocols/nine_agent_context_contracts.md) | What context does each Agent consume and produce? |
 | [rag_strategy.md](30_memory_retrieval/rag_strategy.md) | When to SPARQL-retrieve vs full-load TTL? |
 | [context_quality_metrics.md](40_evaluation/context_quality_metrics.md) | How do we measure context quality (beyond SHACL)? |
-| [agent_context_template.md](50_templates/agent_context_template.md) | How to define a new Agent's context contract? |
-| [multi_agent_context_field.md](60_field_integration/multi_agent_context_field.md) | How does context flow across the 9-Agent system? |
+
+### 领域上下文
+
+| File | What It Answers |
+|------|-----------------|
+| [medical_building_domain.md](50_domain_context/medical_building_domain.md) | What domain problem does CIM solve? (5 MEP systems, 3 data silos, standards gaps) |
+| [data_organization.md](60_data_architecture/data_organization.md) | How does CIM organize data? (TBox/ABox, Named Graphs, ID governance) |
+| [application_patterns.md](70_application_support/application_patterns.md) | How does CIM support applications? (8 SPARQL patterns, MVP event machine) |
+| [validation_evidence.md](80_case_validation/validation_evidence.md) | How do we prove CIM works? (12-step pipeline, all test results) |
+| [roadmap.md](90_evolution/roadmap.md) | Where does CIM go next? (M6-M7, real BAS, multi-site, AI) |
 
 ## Relationship to Existing Assets
 

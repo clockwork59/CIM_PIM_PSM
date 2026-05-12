@@ -1,3 +1,7 @@
+> **已迁移**: 本文件的上下文契约模板格式已整合到
+> `context_engineering/70_application_support/application_patterns.md` (应用查询模式的上下文契约部分)。
+> 本文件保留作为原始参考。
+
 # Agent 上下文契约模板
 
 ## 使用说明

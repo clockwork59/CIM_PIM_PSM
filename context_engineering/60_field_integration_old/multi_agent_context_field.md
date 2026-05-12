@@ -1,3 +1,8 @@
+> **已迁移**: 本文件的 MVP 安全事件场栈 (Layer 1-5) 已整合到:
+> - `context_engineering/70_application_support/application_patterns.md` (模式 #7: 安全事件处置)
+> - `context_engineering/80_case_validation/validation_evidence.md` (MVP 端到端验证)
+> 本文件保留作为原始参考。
+
 # 多 Agent 上下文场
 
 ## 从离散上下文到上下文场
