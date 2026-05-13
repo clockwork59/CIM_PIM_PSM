@@ -2,7 +2,7 @@
 
 **文档体系 ID**: `CIMU-CENG-DOMAIN-V2`
 **面向受众**: 医疗建筑模型专家、BIM工程师、数据工程师、架构师、系统运维专家
-**最后更新**: 2026-05-11
+**最后更新**: 2026-05-13
 
 **项目状态**: M1 ✅ M2 ✅ M3 ✅ M4 ✅ M5 ✅ MVP ✅
 **核心指标**: 545 owl:Class | 61,941 triples | 3 data sources | 12-step validation
@@ -21,6 +21,11 @@
 | MVP | ✅ | 安防可视化平台 | L2 fire, 10/10 actions |
 
 详见 [50_deliverables/milestone_summary.md](./50_deliverables/milestone_summary.md)
+
+> **MBSE 说明**: CIM-PIM-PSM 是 MBSE（基于模型的系统工程）的三个抽象层级，不是三个独立产出物。
+> CIM = 领域知识（本体/图谱），PIM = 系统工程（方法/逻辑），PSM = 项目实例（技术/数据）。
+> 上表的里程碑按时间线划分，每个里程碑可能同时贡献多个 MBSE 层级。
+> 详见 [04_cim_pim_psm_architecture.md](./00_foundations/04_cim_pim_psm_architecture.md)
 
 ---
 
@@ -111,7 +116,7 @@
 - **案例研究**: 5 篇 (30_examples/)
 - **参考资料**: 4 篇 (40_reference/)
 - **交付成果**: 3 篇 (50_deliverables/)
-- **最后更新**: 2026-05-11
+- **最后更新**: 2026-05-13
 
 ---
 

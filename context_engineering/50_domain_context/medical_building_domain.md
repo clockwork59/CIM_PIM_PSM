@@ -54,23 +54,35 @@
 
 ## 2. CIM 的解决方案
 
-### 2.1 三层架构 (CIM-PIM-PSM)
+### 2.1 MBSE 三层架构: CIM-PIM-PSM
+
+CIM-PIM-PSM 不是三个独立的交付物，而是 MBSE（基于模型的系统工程）中的三个抽象层级，
+形成分层依赖关系：
 
 ```
-CIM (Common Information Model)     -- 领域语义层
-  "什么是什么" -- 545 owl:Class, 定义医疗建筑的所有概念和关系
-  例: AirHandlingUnit rdfs:subClassOf HVACEquipment
+CIM（计算无关模型）= 领域知识和惯例认知
+  医疗建筑有哪些系统？手术室需要什么条件？火灾时谁做什么？
+  以本体(Ontology)和知识图谱(Knowledge Graph)表达
+  不涉及任何技术实现 — 纯粹的领域语义
 
-PIM (Platform Independent Model)   -- 平台服务层
-  "怎么查询" -- SPARQL 端点 + Named Graph + 联邦查询
-  例: SELECT ?device ?value WHERE { GRAPH <graph/bas/t0> { ... } }
+PIM（平台无关模型）= CIM 的工程化
+  如何验证本体完整性？如何组织多源数据？如何执行预案逻辑？
+  面向领域的系统方法、逻辑、组件、模块
+  与用什么数据库、什么编程语言无关
 
-PSM (Platform Specific Model)      -- 应用实例层
-  "解决什么业务" -- 安防 MVP, L2 电气火灾响应
-  例: 烟感报警 → 预案匹配 → 风阀关闭 → 广播疏散
+PSM（平台特定模型）= PIM 的实例化
+  用 Fuseki 还是 GraphDB？用 Python 还是 Java？NBU 医院的具体数据是什么？
+  具体的技术选型、技术实现和数据装载
+  面向现实约束的工程决策
 ```
 
-CIM 是语义中间件: 不替代 IFC/BAS/CMMS, 而是在三者之上建立统一的语义层。
+分层依赖: CIM 约束 PIM（领域知识决定系统需要什么功能）
+          PIM 约束 PSM（系统逻辑决定技术如何实现）
+          PSM 可替换（同一 PIM 可用不同技术栈实现）
+
+这种分层使得"敏捷"和"分阶段"互补——CIM 层稳定后，PIM 和 PSM 可以独立快速迭代。
+
+CIM 作为语义中间件: 不替代 IFC/BAS/CMMS, 而是在三者之上建立统一的语义层。
 
 ### 2.2 ISO 19650 四层本体
 

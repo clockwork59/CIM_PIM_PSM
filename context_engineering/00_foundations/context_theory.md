@@ -43,42 +43,47 @@ Q(C) = Relevance(C) * Completeness(C) * Efficiency(C)
 | 上下文过时 | Agent 基于旧数据决策 | 使用 t0 时刻的 BAS 读数, 但系统已进入 t2 告警状态 |
 | 上下文冲突 | Agent 输出自相矛盾 | TBox 定义 cim:Chiller 但 ABox 使用 cim:ColdWaterUnit |
 
-## 3. CIM 项目的上下文层级
+## 3. MBSE 视角下的上下文层级
+
+CIM-PIM-PSM 的三层抽象对应三种不同性质的上下文：
+
+| MBSE 层 | 上下文性质 | 内容 | 稳定性 |
+|---------|----------|------|--------|
+| CIM | 领域知识上下文 | 本体类层次、标准规范、行业惯例、故障模式 | 最稳定（年级别变化） |
+| PIM | 系统工程上下文 | 验证方法、状态机逻辑、查询模板、数据架构 | 中等（月级别迭代） |
+| PSM | 项目实例上下文 | 具体设备数据、BAS读数、工单记录、技术配置 | 最易变（日/小时级别） |
+
+关键洞察:
+- CIM 层上下文是所有 Agent 的共享知识基底，变化最慢
+- PIM 层上下文定义了系统"怎么做"，可以独立于 PSM 迭代
+- PSM 层上下文是面向特定医院/项目的实例，可以替换而不影响 PIM
+- 这种分层使得同一个 CIM+PIM 可以映射到多个 PSM（多医院复用）
+
+### 上下文文件映射
 
 ```
-Level 0: 项目元数据
-  ├── CLAUDE.md (项目规范)
-  ├── memory/MEMORY.md (会话状态: M1-M5✅ MVP✅)
-  └── plans/项目总控计划.md (里程碑)
+CIM 层（领域知识上下文）:
+  ├── layer0_bfo.ttl ~ layer4_*.ttl (545 owl:Class 本体定义)
+  ├── bridge_*.ttl (6 桥接本体 — 行业惯例对齐)
+  ├── FMEA 故障模式库 (运维领域经验)
+  └── GB50333/WS435/IEC60364 准则 (行业规范)
 
-Level 1: 本体框架
-  ├── _index_v4.ttl (导入链, 17 命名空间)
-  ├── layer0_foundational.ttl (基础概念)
-  └── layer1_conceptual.ttl (介质/连接点)
+PIM 层（系统工程上下文）:
+  ├── shacl_constraints.ttl (SHACL 验证规则)
+  ├── cross_agent_validation.sparql (5 个验证查询)
+  ├── Named Graph 9图架构设计
+  ├── 12-step validation pipeline
+  ├── 事件状态机 (5态转换逻辑)
+  └── 动作链执行器 (依赖拓扑)
 
-Level 2: 领域子图 (按任务裁剪的 TBox 子集)
-  ├── layer2_reference.ttl (设备参考类)
-  ├── layer3_design.ttl (设计态属性)
-  ├── layer4_operational.ttl (运行态属性)
-  ├── layer4_fas_security.ttl (FAS 安防)
-  ├── layer4_cmms.ttl (维保)
-  └── layer4_control_strategies.ttl (控制策略)
-
-Level 3: 实例数据 (SPARQL 查询结果)
+PSM 层（项目实例上下文）:
   ├── nbu_medical_clinic_instances.ttl (诊所设备实例)
   ├── nbu_fas_instances.ttl (62 个 FAS 探测器)
   ├── nbu_bas_readings_t0/t1/t2.ttl (BAS 快照)
   ├── nbu_cmms_workorders.ttl (维保工单)
-  └── nbu_security_events.ttl (安全事件)
-
-Level 4: 验证反馈
-  ├── shacl_constraints.ttl (SHACL 形状)
-  ├── cross_agent_validation.sparql (5 个验证查询)
-  └── 12-step validation pipeline 结果
-
-Level 5: 历史经验
-  ├── memory/ 审计修复模式
-  └── H-001 等修复报告 (先原型后全量原则)
+  ├── nbu_security_events.ttl (安全事件)
+  ├── Fuseki + Docker 技术配置
+  └── memory/ 项目特定状态
 ```
 
 ## 4. 上下文 vs 微调 vs RAG

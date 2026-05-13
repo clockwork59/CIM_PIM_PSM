@@ -2,6 +2,18 @@
 
 > 本文档回答: CIM 如何支撑具体的业务应用 -- 8 个查询模式, 每个 = 业务场景 + SPARQL 模式 + CIM 支撑方式。
 
+## MBSE 视角: 应用模式的三层分解
+
+每个应用模式都体现 CIM→PIM→PSM 的分层：
+
+以"设备全状态查询"为例:
+- CIM 层: 定义了 Equipment 有 hasEquipmentID、locatedIn、designTag 等属性（领域知识）
+- PIM 层: 设计了 eq_full_status.sparql 的查询逻辑——跨 IFC+BAS+CMMS 三源 JOIN（系统方法）
+- PSM 层: 在 Fuseki 上执行，返回 AHU-001 的具体温度读数和工单状态（技术实现）
+
+同一个 PIM 查询模板，换一家医院（不同 PSM），查询逻辑不变，数据结果不同。
+这就是 MBSE 分层的复用价值。
+
 ## 模式总览
 
 | # | 模式名 | 业务问题 | 跨源 | Named Graph |

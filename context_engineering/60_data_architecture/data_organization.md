@@ -2,6 +2,20 @@
 
 > 本文档回答: CIM 如何组织数据 -- TBox/ABox 分离、Named Graph 隔离、ID 治理。
 
+## 0. MBSE 视角下的数据架构
+
+数据组织遵循 CIM-PIM-PSM 分层原则：
+
+| 数据类型 | MBSE 层 | 示例 | 更新频率 |
+|---------|--------|------|---------|
+| 本体定义 (TBox) | CIM | 545 owl:Class, 属性定义, SHACL约束 | 版本发布 |
+| 系统逻辑 | PIM | Named Graph 架构, SPARQL 模板, 验证规则 | 系统迭代 |
+| 实例数据 (ABox) | PSM | NBU设备1,210条, BAS 1,055点, CMMS 735工单 | 项目/运行时 |
+
+TBox 属于 CIM 层 — 定义"什么是什么"（领域知识）
+Named Graph 架构属于 PIM 层 — 定义"数据怎么组织"（系统设计）
+ABox 实例属于 PSM 层 — 装载"具体项目的具体数据"（实例化）
+
 ## 1. TBox/ABox 分离原则
 
 本体工程的基本分离:

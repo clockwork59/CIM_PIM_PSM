@@ -1,7 +1,7 @@
 # 里程碑总结 (Milestone Summary)
 
 **文档 ID**: `CIMU-DLVR-01-里程碑总结`
-**最后更新**: 2026-05-11
+**最后更新**: 2026-05-13
 
 ---
 
@@ -99,6 +99,26 @@
 - 烟感报警场景 (`mvp/scenario/smoke_alarm_scenario.py`)
 
 **验证**: L2 fire, 10/10 actions completed, 840s < 900s time limit (Step 12 PASS)
+
+---
+
+## 里程碑与 MBSE 层级的关系
+
+里程碑是按时间线划分的交付节点，MBSE 层级是按抽象程度划分的。
+同一个里程碑可能同时贡献多个层级：
+
+| 里程碑 | CIM 层贡献 | PIM 层贡献 | PSM 层贡献 |
+|--------|-----------|-----------|-----------|
+| M1 | 545类本体+6桥接 | — | — |
+| M2 | DDC控制+Pset属性定义 | 12步验证管线+守恒引擎 | IFC→ABox 1,210实例 |
+| M3 | FAS/BACnet/CMMS本体 | 联邦SPARQL逻辑 | BAS 1,055点+CMMS 735工单 |
+| M4 | — | Named Graph架构+9SPARQL | Fuseki+FastAPI+Docker |
+| M5 | — | 异常检测逻辑 | FAS 62实例+前端+时序 |
+| MVP | 安全事件26类+预案 | 状态机+动作链执行器 | HTML可视化+SimClock |
+
+> **说明**: CIM = 领域知识（本体/图谱），PIM = 系统工程（方法/逻辑），PSM = 项目实例（技术/数据）。
+> 里程碑按时间线推进，每个里程碑可能同时贡献多个 MBSE 抽象层级。
+> 详见 [04_cim_pim_psm_architecture.md](../00_foundations/04_cim_pim_psm_architecture.md)
 
 ---
 

@@ -5,6 +5,43 @@
 > provided to an AI agent at inference time.
 > -- davidkimai/Context-Engineering
 
+## MBSE 架构基准: CIM-PIM-PSM
+
+CIM-PIM-PSM 是 OMG 模型驱动架构 (MDA) 在 MBSE 中的实现逻辑，不是三个产出物，而是三个抽象层级：
+
+| 层级 | 定义 | 本项目实现 | 关键特征 |
+|------|------|-----------|---------|
+| **CIM** | 领域知识 + 惯例认知，以本体和图谱表达 | 545类本体 + 6桥接 + FMEA + 标准准则 + 安全事件模型 | 不依赖任何支持系统 |
+| **PIM** | 面向领域的系统方法/逻辑/组件/模块，CIM的工程化 | 仿真引擎 + 状态机 + 动作链 + Named Graph架构 + SPARQL模板 + 12步验证管线 | 与平台技术无关 |
+| **PSM** | 具体落地项目的技术选型/实现/数据装载，PIM的实例化 | Fuseki + FastAPI + Docker + NBU 1,210实例 + BAS 1,055点 + HTML前端 | 面向现实的技术选择 |
+
+### 资产归类
+
+CIM 层（领域知识）:
+- layer0-4 本体 (545 owl:Class) — 医疗建筑领域的形式化知识
+- 6 桥接本体 — 行业标准间的惯例认知对齐
+- GB50333/WS435/IEC60364 准则实例 — 行业规范=领域惯例
+- FMEA 200+ 故障模式 — 运维领域经验知识
+- BFO 生命周期过程链 — 设施演化的领域认知
+- 安全事件26类 + 预案模型 — 安防领域的处置知识
+
+PIM 层（系统工程）:
+- 仿真引擎 (stage_gate_engine) — 验证方法的系统化
+- 事件状态机 (5态转换) — 事件处置的系统方法
+- 动作链执行器 (依赖拓扑) — 预案执行的系统逻辑
+- Named Graph 9图架构 — 数据组织的系统设计
+- SPARQL 查询模板 9条 — 系统功能的逻辑表达
+- 12步验证管线 — 质量保证的系统方法
+- 守恒方程引擎 — 物理验证的工程逻辑
+
+PSM 层（项目实例）:
+- Fuseki 4.10 + Docker — 具体技术选型
+- FastAPI 6端点 — 具体技术实现
+- NBU IFC→ABox 1,210实例 — 具体项目数据装载
+- BAS 1,055 BACnet点位 — 具体仿真数据
+- CMMS 735工单 — 具体工单数据
+- HTML 可视化平台 — 具体前端实现
+
 ## Core Premise
 
 Context Engineering is NOT documentation management. The `Context Engineering/` directory

@@ -1,15 +1,24 @@
 # 架构图 (Architecture Diagrams)
 
 **文档 ID**: `CIMU-DLVR-03-架构图`
-**最后更新**: 2026-05-11
+**最后更新**: 2026-05-13
 
 ---
 
-## 1. CIM-PIM-PSM 三层架构
+> **MBSE 说明**: CIM-PIM-PSM 是 MBSE（基于模型的系统工程）的三个抽象层级，
+> 不是三个独立产出物。CIM 约束 PIM，PIM 约束 PSM，PSM 可替换。
+> 详见 [04_cim_pim_psm_architecture.md](../00_foundations/04_cim_pim_psm_architecture.md)
+
+---
+
+## 1. CIM-PIM-PSM 三层架构 (MBSE 视角)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    CIM (Common Information Model)        │
+│  CIM (领域知识层) — 不依赖任何支持系统                     │
+│  "医疗建筑的世界是什么样的"                                │
+│  545 owl:Class · 本体 · 标准 · 惯例 · FMEA · 预案知识     │
+│  ← 最稳定，年级变化                                       │
 │                                                         │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────┐ │
 │  │ Layer 0  │  │ Layer 1  │  │ Layer 2  │  │Layer3-4│ │
@@ -24,42 +33,56 @@
 │                                                         │
 │  545 owl:Class  |  5,395 TBox triples                   │
 └─────────────────────────┬───────────────────────────────┘
-                          │ owl:imports + SHACL
+                          │ CIM 约束 PIM (owl:imports + SHACL)
                           v
 ┌─────────────────────────────────────────────────────────┐
-│                    PIM (Platform-Independent Model)       │
+│  PIM (系统工程层) — CIM 的工程化，与技术无关               │
+│  "系统需要什么功能、怎么验证"                              │
+│  仿真引擎 · 状态机 · Named Graph · SPARQL · 验证管线      │
+│  ← 中等稳定，月级迭代                                     │
 │                                                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  IFC ABox    │  │  BAS ABox    │  │  CMMS ABox   │  │
-│  │ 1210 instances│  │ 时序读数     │  │ 工单实例     │  │
+│  │ 12步验证管线  │  │ 守恒引擎    │  │ 联邦SPARQL   │  │
+│  │ validation   │  │ conservation │  │ federation   │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 │                                                         │
-│  ┌──────────────┐  ┌──────────────┐                     │
-│  │  FAS ABox    │  │ Security ABox│                     │
-│  │ 消防实例     │  │ 安全事件     │                     │
-│  └──────────────┘  └──────────────┘                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │ Named Graph  │  │ 状态机      │  │ 异常检测逻辑  │  │
+│  │ 架构设计     │  │ 5态模型     │  │ anomaly det. │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
 │                                                         │
-│  61,941 triples  |  3 data sources                      │
+│  9 SPARQL queries  |  5 named graphs  |  state machine  │
 └─────────────────────────┬───────────────────────────────┘
-                          │ Named Graphs + SPARQL
+                          │ PIM 约束 PSM (Named Graphs + 技术选型)
                           v
 ┌─────────────────────────────────────────────────────────┐
-│                    PSM (Platform-Specific Model)          │
+│  PSM (项目实例层) — PIM 的实例化，面向现实约束              │
+│  "用什么技术、装什么数据"                                  │
+│  Fuseki · FastAPI · NBU 1210实例 · BAS · CMMS · HTML     │
+│  ← 最易变，日/时级更新                                     │
 │                                                         │
 │  ┌──────────────────────────────────────────────────┐   │
 │  │  Apache Jena Fuseki (Docker)                      │   │
 │  │  ┌────────────────────────────────────────────┐   │   │
-│  │  │ Named Graphs:                              │   │   │
-│  │  │  <graph:ifc>  <graph:bas>  <graph:cmms>    │   │   │
-│  │  │  <graph:fas>  <graph:security>             │   │   │
+│  │  │ Named Graphs (ABox 数据装载):              │   │   │
+│  │  │  <graph:ifc>  1210 instances               │   │   │
+│  │  │  <graph:bas>  1055 BAS points              │   │   │
+│  │  │  <graph:cmms> 735 work orders              │   │   │
+│  │  │  <graph:fas>  62 FAS instances             │   │   │
+│  │  │  <graph:security> 安全事件                  │   │   │
 │  │  └────────────────────────────────────────────┘   │   │
 │  └──────────────────────────────────────────────────┘   │
 │                                                         │
 │  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐   │
-│  │ FastAPI     │  │ 9 SPARQL     │  │ HTML前端     │   │
-│  │ REST API    │  │ 查询模板     │  │ Dashboard    │   │
+│  │ FastAPI     │  │ SimClock +   │  │ HTML前端     │   │
+│  │ REST API    │  │ EventEngine  │  │ Dashboard    │   │
 │  └─────────────┘  └──────────────┘  └──────────────┘   │
+│                                                         │
+│  61,941 triples  |  3 data sources  |  PSM 可替换       │
 └─────────────────────────────────────────────────────────┘
+
+分层依赖: CIM 约束 PIM → PIM 约束 PSM → PSM 可替换
+复用价值: 同一 CIM+PIM 映射到不同医院的 PSM
 ```
 
 ---
