@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L2火灾处置仿真 — CIM安防MVP</title>
+<style>
+/* ──────── Reset & Variables ──────── */
+:root {
+  --bg:       #0d1117;
+  --bg2:      #161b22;
+  --bg3:      #21262d;
+  --border:   #30363d;
+  --text:     #e6edf3;
+  --muted:    #8b949e;
+  --red:      #f85149;
+  --orange:   #d29922;
+  --yellow:   #e3b341;
+  --green:    #3fb950;
+  --blue:     #58a6ff;
+  --purple:   #bc8cff;
+  --radius:   8px;
+  --shadow:   0 4px 16px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ──────── Layout ──────── */
+.header {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 12px 20px; display: flex; align-items: center; gap: 16px;
+}
+.header h1 { font-size: 18px; font-weight: 600; }
+.header .badge {
+  background: var(--red); color: #fff; padding: 2px 10px;
+  border-radius: 20px; font-size: 12px; font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.header .status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+}
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.clock { font-family: monospace; color: var(--muted); font-size: 13px; }
+
+.main { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 16px; padding-bottom: 48px; }
+@media (max-width: 1024px) { .main { grid-template-columns: 1fr; } }
+
+/* ──────── Cards ──────── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.card-header {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg3);
+}
+.card-header h2 { font-size: 14px; font-weight: 600; }
+.card-body { padding: 16px; }
+
+/* ──────── Panel 1: Alarm Board ──────── */
+.alarm-card {
+  border-color: var(--red);
+  box-shadow: 0 0 20px rgba(248, 81, 73, 0.15);
+}
+.alarm-card .card-header { background: rgba(248,81,73,0.1); }
+
+.event-item {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px; margin-bottom: 10px; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.event-item:hover { border-color: var(--blue); }
+.event-item.selected { border-color: var(--orange); background: rgba(210,153,34,0.05); }
+.event-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.event-id { font-family: monospace; font-size: 13px; font-weight: 600; }
+.state-badge {
+  padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+}
+.state-PENDING    { background: rgba(227,179,65,0.2);  color: var(--yellow); border: 1px solid var(--yellow); }
+.state-CONFIRMED  { background: rgba(248,81,73,0.2);   color: var(--red);    border: 1px solid var(--red); }
+.state-IN_PROGRESS{ background: rgba(88,166,255,0.2);  color: var(--blue);   border: 1px solid var(--blue); }
+.state-CLOSED_LOOP{ background: rgba(63,185,80,0.2);   color: var(--green);  border: 1px solid var(--green); }
+
+.event-detail { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+
+.btn {
+  padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-danger   { background: var(--red);    color: #fff; }
+.btn-primary  { background: var(--blue);   color: #fff; }
+.btn-success  { background: var(--green);  color: #000; }
+.btn-warning  { background: var(--orange); color: #fff; }
+.btn-ghost    { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+
+.inject-form { margin-top: 12px; padding: 12px; background: var(--bg3); border-radius: var(--radius); }
+.inject-form label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.inject-form select, .inject-form input[type="text"] {
+  width: 100%; padding: 6px 8px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 4px; color: var(--text);
+  font-size: 13px; margin-bottom: 8px;
+}
+
+/* ──────── Panel 2: Action Execution ──────── */
+.step-list { list-style: none; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.step-item:last-child { border-bottom: none; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 12px;
+  font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.step-PENDING   { background: var(--bg3); color: var(--muted); border: 2px solid var(--border); }
+.step-EXECUTING { background: rgba(88,166,255,0.2); color: var(--blue);  border: 2px solid var(--blue);  animation: pulse 2s infinite; }
+.step-COMPLETED { background: rgba(63,185,80,0.2);  color: var(--green); border: 2px solid var(--green); }
+.step-TIMEOUT   { background: rgba(248,81,73,0.2);  color: var(--red);   border: 2px solid var(--red); }
+
+.step-content { flex: 1; }
+.step-label { font-size: 13px; font-weight: 500; }
+.step-meta  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.step-role-SYS  { color: var(--purple); }
+.step-role-CTRL { color: var(--blue); }
+.step-role-ELEC { color: var(--yellow); }
+.step-role-SEC  { color: var(--orange); }
+
+.step-btn { margin-left: auto; flex-shrink: 0; }
+
+.progress-bar-wrap {
+  background: var(--bg3); border-radius: 4px; height: 6px; margin: 12px 0 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; background: linear-gradient(90deg, var(--green), var(--blue));
+  border-radius: 4px; transition: width 0.5s ease;
+}
+.progress-label { font-size: 12px; color: var(--muted); text-align: right; }
+
+/* ──────── Panel 3: Timeline ──────── */
+.timeline-list { position: relative; padding-left: 20px; max-height: 70vh; overflow-y: auto; }
+.timeline-list::before {
+  content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tl-item {
+  position: relative; padding: 0 0 16px 16px;
+}
+.tl-dot {
+  position: absolute; left: -13px; top: 4px;
+  width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--bg);
+}
+.tl-dot-ALARM     { background: var(--yellow); }
+.tl-dot-CONFIRMED { background: var(--red); }
+.tl-dot-ACTIVATED { background: var(--blue); }
+.tl-dot-COMPLETED { background: var(--green); }
+.tl-dot-CLOSED    { background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+.tl-time  { font-family: monospace; font-size: 11px; color: var(--muted); }
+.tl-label { font-size: 13px; margin-top: 2px; }
+.tl-actor { font-size: 11px; color: var(--muted); }
+.tl-auto-tag {
+  display: inline-block; padding: 0 5px; background: rgba(188,140,255,0.2);
+  color: var(--purple); border-radius: 3px; font-size: 10px; margin-left: 4px;
+}
+.tl-manual-tag {
+  display: inline-block; padding: 0 5px; background: rgba(88,166,255,0.2);
+  color: var(--blue); border-radius: 3px; font-size: 10px; margin-left: 4px;
+}
+
+/* ──────── Notifications ──────── */
+.toast-container {
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 10px 16px; border-radius: 6px; font-size: 13px;
+  box-shadow: var(--shadow); max-width: 320px; animation: slide-in 0.3s ease;
+}
+@keyframes slide-in { from{transform:translateX(100%);opacity:0} to{transform:none;opacity:1} }
+.toast-success { background: rgba(63,185,80,0.15); border: 1px solid var(--green); color: var(--green); }
+.toast-error   { background: rgba(248,81,73,0.15); border: 1px solid var(--red);   color: var(--red); }
+.toast-info    { background: rgba(88,166,255,0.15); border: 1px solid var(--blue);  color: var(--blue); }
+.toast-warning { background: rgba(227,179,65,0.15); border: 1px solid var(--yellow); color: var(--yellow); }
+
+/* ──────── Empty state ──────── */
+.empty-state {
+  text-align: center; padding: 40px 20px; color: var(--muted);
+}
+.empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+
+/* ──────── Status bar ──────── */
+.statusbar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 6px 20px; font-size: 12px; color: var(--muted);
+  display: flex; gap: 20px; align-items: center;
+}
+.statusbar .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+
+/* ──────── Summary overlay ──────── */
+.summary-overlay {
+  margin-top: 16px; padding: 16px; background: rgba(63,185,80,0.08);
+  border: 1px solid var(--green); border-radius: var(--radius);
+}
+.summary-overlay h3 { font-size: 14px; color: var(--green); margin-bottom: 10px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+.summary-row .label { color: var(--muted); }
+.summary-row .value { font-weight: 600; font-family: monospace; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="status-dot"></div>
+  <h1>L2火灾处置仿真 — CIM安防MVP</h1>
+  <div id="alarm-badge" class="badge" style="display:none">&#x26A0; 活跃报警</div>
+  <div class="header-right">
+    <span id="sim-speed" style="font-size:12px;color:var(--purple)">10x 加速</span>
+    <span class="clock" id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- Main Grid -->
+<div class="main">
+
+  <!-- Panel 1: Alarm Board -->
+  <div class="card alarm-card">
+    <div class="card-header">
+      <h2>&#x1F6A8; 告警看板</h2>
+      <span style="font-size:11px;color:var(--muted)">本地仿真</span>
+    </div>
+    <div class="card-body">
+      <div id="event-list">
+        <div class="empty-state"><div class="icon">&#x1F7E2;</div>当前无活跃报警<br><span style="font-size:12px">使用下方表单注入仿真报警</span></div>
+      </div>
+
+      <!-- Inject Alarm Form -->
+      <div class="inject-form">
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--muted)">&#x25B8; 仿真注入报警</div>
+        <label>触发设备</label>
+        <select id="inj-device">
+          <option value="SD-F5-001">SD-F5-001 (5楼西区烟感)</option>
+          <option value="SD-F5-003">SD-F5-003 (5楼西区烟感2)</option>
+          <option value="SD-F3-007">SD-F3-007 (3楼ICU烟感)</option>
+        </select>
+        <label>FAS区域</label>
+        <select id="inj-zone">
+          <option value="FAS-ZONE-05">FAS-ZONE-05 (5楼西翼)</option>
+          <option value="FAS-ZONE-03">FAS-ZONE-03 (3楼ICU)</option>
+          <option value="FAS-ZONE-01">FAS-ZONE-01 (1楼大厅)</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="inj-dual" checked style="width:auto;margin-bottom:0">
+          双点联动（自动升级已确认）
+        </label>
+        <br>
+        <button class="btn btn-danger" id="btn-inject" style="width:100%" onclick="injectAlarm()">&#x26A1; 注入烟感报警</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 2: Action Execution -->
+  <div class="card">
+    <div class="card-header">
+      <h2>&#x1F4CB; L2预案执行</h2>
+      <span id="action-event-id" style="font-size:11px;color:var(--muted);font-family:monospace">未激活</span>
+    </div>
+    <div class="card-body">
+      <div id="action-no-event" class="empty-state">
+        <div class="icon">&#x1F4ED;</div>点击左侧"注入烟感报警"启动仿真
+      </div>
+      <div id="action-content" style="display:none">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0/10</div>
+        <ul class="step-list" id="step-list"></ul>
+        <div id="summary-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 3: Event Timeline -->
+  <div class="card">
+    <div class="card-header">
+      <h2>&#x1F4C5; 处置时序</h2>
+      <span id="timeline-count" style="font-size:11px;color:var(--muted)">0 条记录</span>
+    </div>
+    <div class="card-body">
+      <div id="timeline-no-event" class="empty-state">
+        <div class="icon">&#x1F4CA;</div>仿真启动后显示时序
+      </div>
+      <div id="timeline-content" style="display:none">
+        <div class="timeline-list" id="timeline-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Status Bar -->
+<div class="statusbar">
+  <span><span class="dot" style="background:var(--green)"></span>就绪</span>
+  <span id="sb-state">状态: 空闲</span>
+  <span id="sb-progress">进度: 0/10</span>
+  <span id="sb-simtime">仿真时间: 00:00</span>
+  <span style="margin-left:auto">CIM-PIM-PSM 安防MVP &middot; 本地仿真模式 &middot; 10x加速</span>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// L2 PLAN DATA (embedded, no API)
+// ─────────────────────────────────────────────────────────────────────────────
+const L2_PLAN = [
+  {id:1,  name:"确认火情", role:"CTRL", roleLabel:"中控值班员", auto:false, limit:120, depends:[], bas:null},
+  {id:2,  name:"切断电源", role:"SYS",  roleLabel:"系统",       auto:true,  limit:30,  depends:[1], bas:"PowerCutoff"},
+  {id:3,  name:"启动灭火", role:"ELEC", roleLabel:"电工班",     auto:false, limit:300, depends:[2], bas:null},
+  {id:4,  name:"区域广播", role:"SYS",  roleLabel:"系统",       auto:true,  limit:10,  depends:[1], bas:"Broadcast"},
+  {id:5,  name:"启动疏散", role:"SEC",  roleLabel:"保安队",     auto:false, limit:600, depends:[4], bas:null},
+  {id:6,  name:"打开门禁", role:"SYS",  roleLabel:"系统",       auto:true,  limit:10,  depends:[4], bas:"DoorRelease"},
+  {id:7,  name:"电梯迫降", role:"SYS",  roleLabel:"系统",       auto:true,  limit:30,  depends:[1], bas:"ElevatorRecall"},
+  {id:8,  name:"通知医护", role:"SYS",  roleLabel:"系统",       auto:true,  limit:30,  depends:[1], bas:null},
+  {id:9,  name:"拨打119",  role:"CTRL", roleLabel:"中控值班员", auto:false, limit:120, depends:[3], bas:null},
+  {id:10, name:"通知领导", role:"SYS",  roleLabel:"系统",       auto:true,  limit:30,  depends:[1], bas:null}
+];
+
+const SPEED_FACTOR = 10; // 1 real second = 10 simulated seconds
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SIMULATION STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let simEvent = null;       // current event object
+let simActions = [];       // action states
+let simTimeline = [];      // timeline entries
+let simInterval = null;    // tick interval
+let simStartReal = null;   // real Date when sim started
+let simTimeElapsed = 0;    // simulated seconds elapsed
+let manualCompleted = {};  // track which manual actions user has clicked
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLOCK
+// ─────────────────────────────────────────────────────────────────────────────
+function updateClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('zh-CN', {hour12: false});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────────────────────
+function toast(msg, type) {
+  type = type || 'info';
+  var el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(function() { el.remove(); }, 4000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function formatSimTime(totalSec) {
+  var m = Math.floor(totalSec / 60);
+  var s = totalSec % 60;
+  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function simTimestamp() {
+  // Return a display timestamp based on simulated time
+  var base = simStartReal ? new Date(simStartReal.getTime()) : new Date();
+  base.setSeconds(base.getSeconds() + simTimeElapsed);
+  return base.toLocaleTimeString('zh-CN', {hour12: false});
+}
+
+function stateLabel(s) {
+  return {
+    PENDING: '待确认',
+    CONFIRMED: '已确认',
+    IN_PROGRESS: '处理中',
+    CLOSED_LOOP: '已闭环'
+  }[s] || s;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INJECT ALARM (local, no API)
+// ─────────────────────────────────────────────────────────────────────────────
+function injectAlarm() {
+  if (simEvent && simEvent.state !== 'CLOSED_LOOP') {
+    toast('当前仍有活跃事件，请等待闭环后再注入', 'error');
+    return;
+  }
+
+  var device = document.getElementById('inj-device').value;
+  var zone   = document.getElementById('inj-zone').value;
+  var dual   = document.getElementById('inj-dual').checked;
+
+  // Reset state
+  simTimeElapsed = 0;
+  simStartReal = new Date();
+  manualCompleted = {};
+  simTimeline = [];
+
+  // Generate event ID
+  var now = new Date();
+  var dateStr = now.getFullYear() +
+    String(now.getMonth()+1).padStart(2,'0') +
+    String(now.getDate()).padStart(2,'0');
+  var evtId = 'EVT-' + dateStr + '-' + String(Math.floor(Math.random()*900)+100);
+
+  simEvent = {
+    event_id: evtId,
+    state: 'PENDING',
+    trigger_device: device,
+    zone: zone,
+    dual_zone: dual,
+    created_at: now.toISOString()
+  };
+
+  // Initialize actions
+  simActions = L2_PLAN.map(function(a) {
+    return {
+      id: a.id,
+      name: a.name,
+      role: a.role,
+      roleLabel: a.roleLabel,
+      auto: a.auto,
+      limit: a.limit,
+      depends: a.depends.slice(),
+      bas: a.bas,
+      state: 'PENDING',       // PENDING | EXECUTING | COMPLETED
+      startedAt: null,         // simulated second when started
+      completedAt: null        // simulated second when completed
+    };
+  });
+
+  // Show alarm badge
+  document.getElementById('alarm-badge').style.display = '';
+
+  // Add timeline entry
+  addTimelineEntry('ALARM', '烟感报警触发 -- ' + device + ' (' + zone + ')', 'FAS系统', true);
+
+  // Show event in panel 1
+  renderEventCard();
+
+  // Show action panel
+  document.getElementById('action-no-event').style.display = 'none';
+  document.getElementById('action-content').style.display = '';
+  document.getElementById('action-event-id').textContent = evtId;
+  document.getElementById('summary-container').innerHTML = '';
+
+  // Show timeline panel
+  document.getElementById('timeline-no-event').style.display = 'none';
+  document.getElementById('timeline-content').style.display = '';
+
+  // Render initial states
+  renderStepList();
+  renderTimeline();
+  updateProgress();
+  updateStatusBar();
+
+  // Toast
+  toast('&#x26A0; 烟感报警触发: ' + device, 'warning');
+
+  // Disable inject button during simulation
+  document.getElementById('btn-inject').disabled = true;
+
+  // Start the simulation tick
+  if (simInterval) clearInterval(simInterval);
+
+  if (dual) {
+    // Dual-zone: auto-confirm after 1.5 real seconds (15 sim seconds)
+    setTimeout(function() {
+      if (simEvent && simEvent.state === 'PENDING') {
+        transitionToConfirmed();
+      }
+    }, 1500);
+  }
+
+  // Start tick: 100ms interval, each tick = 1 simulated second (10x speed)
+  simInterval = setInterval(simTick, 100);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE TRANSITIONS
+// ─────────────────────────────────────────────────────────────────────────────
+function transitionToConfirmed() {
+  if (!simEvent || simEvent.state !== 'PENDING') return;
+  simEvent.state = 'CONFIRMED';
+  addTimelineEntry('CONFIRMED', '中控确认火情', '值班员', false);
+  toast('已确认，L2预案激活', 'success');
+  renderEventCard();
+  updateStatusBar();
+
+  // After 0.5 real seconds (5 sim seconds), transition to IN_PROGRESS
+  setTimeout(function() {
+    if (simEvent && simEvent.state === 'CONFIRMED') {
+      transitionToInProgress();
+    }
+  }, 500);
+}
+
+function transitionToInProgress() {
+  if (!simEvent || simEvent.state !== 'CONFIRMED') return;
+  simEvent.state = 'IN_PROGRESS';
+  addTimelineEntry('ACTIVATED', 'L2预案启动，开始执行动作链', '系统', true);
+  renderEventCard();
+  updateStatusBar();
+
+  // Start action 1 (confirm fire) immediately as EXECUTING
+  startAction(simActions[0]);
+}
+
+function transitionToClosedLoop() {
+  if (!simEvent || simEvent.state !== 'IN_PROGRESS') return;
+  simEvent.state = 'CLOSED_LOOP';
+
+  addTimelineEntry('CLOSED', '处置闭环 -- 全部 ' + simActions.length + ' 项动作完成', '系统', true);
+  toast('处置闭环！', 'success');
+
+  // Stop simulation
+  if (simInterval) {
+    clearInterval(simInterval);
+    simInterval = null;
+  }
+
+  renderEventCard();
+  renderStepList();
+  renderTimeline();
+  updateProgress();
+  updateStatusBar();
+
+  // Show summary
+  showSummary();
+
+  // Re-enable inject button
+  document.getElementById('btn-inject').disabled = false;
+  document.getElementById('alarm-badge').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ACTION MANAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+function startAction(action) {
+  if (action.state !== 'PENDING') return;
+  action.state = 'EXECUTING';
+  action.startedAt = simTimeElapsed;
+}
+
+function completeAction(action) {
+  if (action.state !== 'EXECUTING') return;
+  action.state = 'COMPLETED';
+  action.completedAt = simTimeElapsed;
+
+  var actorLabel = action.auto ? '系统自动' : action.roleLabel;
+  addTimelineEntry('COMPLETED',
+    '步骤' + action.id + ' ' + action.name,
+    actorLabel,
+    action.auto);
+
+  // Check & start dependent actions
+  simActions.forEach(function(a) {
+    if (a.state === 'PENDING') {
+      var depsOk = a.depends.every(function(depId) {
+        return simActions.find(function(x) { return x.id === depId; }).state === 'COMPLETED';
+      });
+      if (depsOk) {
+        startAction(a);
+      }
+    }
+  });
+
+  // Check if all complete
+  if (simActions.every(function(a) { return a.state === 'COMPLETED'; })) {
+    transitionToClosedLoop();
+  }
+}
+
+function manualComplete(actionId) {
+  var action = simActions.find(function(a) { return a.id === actionId; });
+  if (action && action.state === 'EXECUTING' && !action.auto) {
+    manualCompleted[actionId] = true;
+    completeAction(action);
+    renderStepList();
+    renderTimeline();
+    updateProgress();
+    updateStatusBar();
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SIMULATION TICK (100ms real = 1 sim second at 10x)
+// ─────────────────────────────────────────────────────────────────────────────
+function simTick() {
+  if (!simEvent) return;
+  simTimeElapsed += 1;
+
+  if (simEvent.state === 'IN_PROGRESS') {
+    // Process executing actions
+    simActions.forEach(function(a) {
+      if (a.state === 'EXECUTING') {
+        var elapsed = simTimeElapsed - a.startedAt;
+
+        if (a.auto) {
+          // Auto actions: complete after 30% of limit
+          var autoDelay = Math.round(a.limit * 0.3);
+          if (elapsed >= autoDelay) {
+            completeAction(a);
+          }
+        } else {
+          // Manual actions: auto-complete after 70% of limit if user hasn't clicked
+          var manualTimeout = Math.round(a.limit * 0.7);
+          if (!manualCompleted[a.id] && elapsed >= manualTimeout) {
+            completeAction(a);
+          }
+        }
+      }
+    });
+  }
+
+  // Render updates (throttle to every 3 ticks for performance)
+  if (simTimeElapsed % 3 === 0 || simEvent.state === 'CLOSED_LOOP') {
+    renderStepList();
+    renderTimeline();
+    updateProgress();
+  }
+  updateStatusBar();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER: Event Card (Panel 1)
+// ─────────────────────────────────────────────────────────────────────────────
+function renderEventCard() {
+  if (!simEvent) return;
+  var el = document.getElementById('event-list');
+  el.innerHTML =
+    '<div class="event-item selected">' +
+      '<div class="event-meta">' +
+        '<span class="event-id">' + simEvent.event_id + '</span>' +
+        '<span class="state-badge state-' + simEvent.state + '">' + stateLabel(simEvent.state) + '</span>' +
+        '<span style="font-size:11px;color:var(--red)">L2</span>' +
+      '</div>' +
+      '<div class="event-detail">' +
+        '&#x1F4CD; ' + simEvent.zone + ' &nbsp;|&nbsp; &#x1F534; ' + simEvent.trigger_device +
+        ' &nbsp;|&nbsp; ' + (simEvent.dual_zone ? '双点联动' : '单点报警') +
+      '</div>' +
+    '</div>';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER: Step List (Panel 2)
+// ─────────────────────────────────────────────────────────────────────────────
+function renderStepList() {
+  var list = document.getElementById('step-list');
+  var roleMap = {SYS:'系统自动', CTRL:'中控', ELEC:'电工班', SEC:'保安队'};
+
+  list.innerHTML = simActions.map(function(a) {
+    var roleColor = 'step-role-' + a.role;
+    var canComplete = a.state === 'EXECUTING' && !a.auto;
+
+    var elapsedInfo = '';
+    if (a.state === 'EXECUTING' && a.startedAt !== null) {
+      elapsedInfo = ' &middot; 已 ' + formatSimTime(simTimeElapsed - a.startedAt);
+    } else if (a.state === 'COMPLETED' && a.startedAt !== null && a.completedAt !== null) {
+      elapsedInfo = ' &middot; 耗时 ' + formatSimTime(a.completedAt - a.startedAt);
+    }
+
+    return '<li class="step-item">' +
+      '<div class="step-num step-' + a.state + '">' + a.id + '</div>' +
+      '<div class="step-content">' +
+        '<div class="step-label">' + a.name + '</div>' +
+        '<div class="step-meta">' +
+          '<span class="' + roleColor + '">' + (roleMap[a.role] || a.role) + '</span>' +
+          ' &middot; 时限: ' + a.limit + 's' +
+          (a.auto ? ' &middot; <span style="color:var(--purple)">自动</span>' : '') +
+          elapsedInfo +
+        '</div>' +
+      '</div>' +
+      (canComplete
+        ? '<button class="btn btn-success step-btn" style="font-size:12px;padding:4px 10px" onclick="manualComplete(' + a.id + ')">完成</button>'
+        : a.state === 'PENDING'
+          ? '<span style="font-size:11px;color:var(--muted);margin-left:auto">等待前置</span>'
+          : a.state === 'COMPLETED'
+            ? '<span style="font-size:11px;color:var(--green);margin-left:auto">&#x2713;</span>'
+            : ''
+      ) +
+    '</li>';
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER: Timeline (Panel 3)
+// ─────────────────────────────────────────────────────────────────────────────
+function addTimelineEntry(type, label, actor, isAuto) {
+  simTimeline.push({
+    type: type,
+    label: label,
+    actor: actor,
+    auto: isAuto,
+    timestamp: simTimestamp(),
+    simTime: simTimeElapsed
+  });
+}
+
+function renderTimeline() {
+  var list = document.getElementById('timeline-list');
+  document.getElementById('timeline-count').textContent = simTimeline.length + ' 条记录';
+
+  if (simTimeline.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:12px">暂无时序记录</div>';
+    return;
+  }
+
+  list.innerHTML = simTimeline.map(function(item) {
+    var dotClass = 'tl-dot-' + item.type;
+    var tag = item.auto
+      ? '<span class="tl-auto-tag">自动</span>'
+      : '<span class="tl-manual-tag">人工</span>';
+
+    return '<div class="tl-item">' +
+      '<div class="tl-dot ' + dotClass + '"></div>' +
+      '<div class="tl-time">' + item.timestamp + ' [T+' + formatSimTime(item.simTime) + ']</div>' +
+      '<div class="tl-label">' + item.label + ' ' + tag + '</div>' +
+      '<div class="tl-actor">' + item.actor + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Auto-scroll to latest
+  list.scrollTop = list.scrollHeight;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER: Progress
+// ─────────────────────────────────────────────────────────────────────────────
+function updateProgress() {
+  var completed = simActions.filter(function(a) { return a.state === 'COMPLETED'; }).length;
+  var total = simActions.length;
+  var pct = total ? Math.round((completed / total) * 100) : 0;
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent =
+    completed + '/' + total + ' 步骤已完成 (' + pct + '%)';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER: Status Bar
+// ─────────────────────────────────────────────────────────────────────────────
+function updateStatusBar() {
+  var stateMap = {
+    PENDING: '待确认',
+    CONFIRMED: '已确认',
+    IN_PROGRESS: '处理中',
+    CLOSED_LOOP: '已闭环'
+  };
+  var stateText = simEvent ? (stateMap[simEvent.state] || '空闲') : '空闲';
+  var completed = simActions.filter(function(a) { return a.state === 'COMPLETED'; }).length;
+
+  document.getElementById('sb-state').textContent = '状态: ' + stateText;
+  document.getElementById('sb-progress').textContent = '进度: ' + completed + '/' + simActions.length;
+  document.getElementById('sb-simtime').textContent = '仿真时间: ' + formatSimTime(simTimeElapsed);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUMMARY
+// ─────────────────────────────────────────────────────────────────────────────
+function showSummary() {
+  var container = document.getElementById('summary-container');
+  var completed = simActions.filter(function(a) { return a.state === 'COMPLETED'; }).length;
+  var autoCount = simActions.filter(function(a) { return a.auto && a.state === 'COMPLETED'; }).length;
+  var manualCount = completed - autoCount;
+
+  // Find the longest action
+  var longestAction = simActions.reduce(function(prev, curr) {
+    var prevDur = (prev.completedAt || 0) - (prev.startedAt || 0);
+    var currDur = (curr.completedAt || 0) - (curr.startedAt || 0);
+    return currDur > prevDur ? curr : prev;
+  });
+  var longestDur = (longestAction.completedAt || 0) - (longestAction.startedAt || 0);
+
+  container.innerHTML =
+    '<div class="summary-overlay">' +
+      '<h3>&#x1F389; 处置闭环 — 仿真完成</h3>' +
+      '<div class="summary-row"><span class="label">总仿真耗时</span><span class="value">' + formatSimTime(simTimeElapsed) + '</span></div>' +
+      '<div class="summary-row"><span class="label">完成动作数</span><span class="value">' + completed + '/' + simActions.length + '</span></div>' +
+      '<div class="summary-row"><span class="label">系统自动</span><span class="value">' + autoCount + ' 项</span></div>' +
+      '<div class="summary-row"><span class="label">人工操作</span><span class="value">' + manualCount + ' 项</span></div>' +
+      '<div class="summary-row"><span class="label">最长动作</span><span class="value">' + longestAction.name + ' (' + formatSimTime(longestDur) + ')</span></div>' +
+    '</div>';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  updateStatusBar();
+});
+</script>
+</body>
+</html>
