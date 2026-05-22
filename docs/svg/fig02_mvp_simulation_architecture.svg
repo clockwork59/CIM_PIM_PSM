@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" font-family="'Segoe UI','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="realGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8eaf6"/>
+      <stop offset="100%" stop-color="#c5cae9"/>
+    </linearGradient>
+    <linearGradient id="simGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3e0"/>
+      <stop offset="100%" stop-color="#ffe0b2"/>
+    </linearGradient>
+    <linearGradient id="coreGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e3f2fd"/>
+      <stop offset="100%" stop-color="#bbdefb"/>
+    </linearGradient>
+    <linearGradient id="uiGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8f5e9"/>
+      <stop offset="100%" stop-color="#c8e6c9"/>
+    </linearGradient>
+    <filter id="shd" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#546e7a"/>
+    </marker>
+    <marker id="arrOrange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#e65100"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="700" rx="16" fill="#fafafa"/>
+
+  <!-- Title -->
+  <text x="480" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#212121">MVP 仿真替代架构 — Simulation-First Architecture</text>
+  <text x="480" y="58" text-anchor="middle" font-size="13" fill="#757575">"用仿真数据跑通全链路, 接口不变, 上线时替换数据源即可"</text>
+
+  <!-- ═══ Left: Real Environment (grayed / future) ═══ -->
+  <rect x="30" y="80" width="280" height="580" rx="12" fill="url(#realGrad)" filter="url(#shd)" stroke="#9fa8da" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="170" y="108" text-anchor="middle" font-size="16" font-weight="700" fill="#3949ab">真实环境 (未来)</text>
+  <text x="170" y="126" text-anchor="middle" font-size="11" fill="#5c6bc0">Real Environment — Phase 2</text>
+
+  <!-- Real: BAS -->
+  <rect x="55" y="145" width="230" height="70" rx="8" fill="#fff" filter="url(#shd)" opacity="0.7"/>
+  <text x="170" y="170" text-anchor="middle" font-size="13" font-weight="600" fill="#3949ab">BAS / BACnet 控制器</text>
+  <text x="170" y="188" text-anchor="middle" font-size="10" fill="#7986cb">1,055 BACnet 点位 · 实时采集</text>
+
+  <!-- Real: FAS -->
+  <rect x="55" y="230" width="230" height="70" rx="8" fill="#fff" filter="url(#shd)" opacity="0.7"/>
+  <text x="170" y="255" text-anchor="middle" font-size="13" font-weight="600" fill="#3949ab">FAS 火灾报警系统</text>
+  <text x="170" y="273" text-anchor="middle" font-size="10" fill="#7986cb">62 烟感探头 · 硬件信号</text>
+
+  <!-- Real: CMMS -->
+  <rect x="55" y="315" width="230" height="70" rx="8" fill="#fff" filter="url(#shd)" opacity="0.7"/>
+  <text x="170" y="340" text-anchor="middle" font-size="13" font-weight="600" fill="#3949ab">CMMS 运维管理</text>
+  <text x="170" y="358" text-anchor="middle" font-size="10" fill="#7986cb">735 工单 · 预防性维保</text>
+
+  <!-- Real: BIM/IFC -->
+  <rect x="55" y="400" width="230" height="70" rx="8" fill="#fff" filter="url(#shd)" opacity="0.7"/>
+  <text x="170" y="425" text-anchor="middle" font-size="13" font-weight="600" fill="#3949ab">BIM / IFC 模型</text>
+  <text x="170" y="443" text-anchor="middle" font-size="10" fill="#7986cb">1,210 建筑构件实例</text>
+
+  <!-- Phase 2 badge -->
+  <rect x="100" y="500" width="140" height="36" rx="18" fill="#9fa8da" opacity="0.6"/>
+  <text x="170" y="523" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Phase 2: 接入真实设备</text>
+
+  <!-- ═══ Center: Simulation Layer (MVP) ═══ -->
+  <rect x="340" y="80" width="290" height="580" rx="12" fill="url(#simGrad)" filter="url(#shd)" stroke="#ff8f00" stroke-width="1.5"/>
+  <text x="485" y="108" text-anchor="middle" font-size="16" font-weight="700" fill="#e65100">仿真层 (MVP 当前)</text>
+  <text x="485" y="126" text-anchor="middle" font-size="11" fill="#f57c00">Simulation Layer — Phase 1</text>
+
+  <!-- Sim: SimClock -->
+  <rect x="360" y="145" width="250" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="485" y="168" text-anchor="middle" font-size="13" font-weight="600" fill="#e65100">SimClock 时间步进器</text>
+  <text x="485" y="186" text-anchor="middle" font-size="10" fill="#bf360c">t0 (基线) → t1 (+60s 报警) → t2 (+120s 恢复)</text>
+  <text x="485" y="202" text-anchor="middle" font-size="10" fill="#bf360c">双区注入: SD-F5-001 + SD-F5-003 (间隔30s)</text>
+
+  <!-- Sim: RDF Snapshots -->
+  <rect x="360" y="235" width="250" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="485" y="258" text-anchor="middle" font-size="13" font-weight="600" fill="#e65100">RDF 快照文件 (ABox)</text>
+  <text x="485" y="276" text-anchor="middle" font-size="10" fill="#bf360c">nbu_bas_readings_t0/t1/t2.ttl</text>
+  <text x="485" y="292" text-anchor="middle" font-size="10" fill="#bf360c">nbu_fas_instances.ttl · 62 探头实例</text>
+
+  <!-- Sim: EventEngine -->
+  <rect x="360" y="325" width="250" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="485" y="348" text-anchor="middle" font-size="13" font-weight="600" fill="#e65100">EventEngine 事件引擎</text>
+  <text x="485" y="366" text-anchor="middle" font-size="10" fill="#bf360c">SPARQL 扫描 BACnet BI 报警点</text>
+  <text x="485" y="382" text-anchor="middle" font-size="10" fill="#bf360c">双区确认逻辑 → 自动生成 SecurityEvent</text>
+
+  <!-- Sim: ActionChainExecutor -->
+  <rect x="360" y="415" width="250" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="485" y="438" text-anchor="middle" font-size="13" font-weight="600" fill="#e65100">ActionChainExecutor</text>
+  <text x="485" y="456" text-anchor="middle" font-size="10" fill="#bf360c">拓扑排序 → 并行执行 → 依赖解锁</text>
+  <text x="485" y="472" text-anchor="middle" font-size="10" fill="#bf360c">10 动作节点 · 200x 加速因子</text>
+
+  <!-- Sim: SituationReport -->
+  <rect x="360" y="505" width="250" height="60" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="485" y="528" text-anchor="middle" font-size="13" font-weight="600" fill="#e65100">SituationReport 态势生成</text>
+  <text x="485" y="548" text-anchor="middle" font-size="10" fill="#bf360c">KPI + Gantt + 事件日志 → MD/JSON</text>
+
+  <!-- MVP badge -->
+  <rect x="420" y="580" width="130" height="36" rx="18" fill="#e65100"/>
+  <text x="485" y="603" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">MVP: 仿真驱动验证</text>
+
+  <!-- ═══ Right: API + UI Layer ═══ -->
+  <rect x="660" y="80" width="270" height="580" rx="12" fill="url(#uiGrad)" filter="url(#shd)" stroke="#2e7d32" stroke-width="1"/>
+  <text x="795" y="108" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">接口 + 展示层</text>
+  <text x="795" y="126" text-anchor="middle" font-size="11" fill="#388e3c">API + Presentation (Stable)</text>
+
+  <!-- API -->
+  <rect x="680" y="145" width="230" height="130" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="795" y="168" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">FastAPI REST Endpoints</text>
+  <text x="700" y="190" font-size="10" fill="#2e7d32" font-family="monospace">POST /mvp/events</text>
+  <text x="700" y="205" font-size="10" fill="#2e7d32" font-family="monospace">GET  /mvp/events</text>
+  <text x="700" y="220" font-size="10" fill="#2e7d32" font-family="monospace">POST /mvp/events/{id}/confirm</text>
+  <text x="700" y="235" font-size="10" fill="#2e7d32" font-family="monospace">POST /mvp/actions/{id}/complete</text>
+  <text x="700" y="250" font-size="10" fill="#2e7d32" font-family="monospace">GET  /mvp/events/{id}/timeline</text>
+
+  <!-- UI: Dashboard -->
+  <rect x="680" y="295" width="230" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="795" y="318" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">指挥中心仪表盘</text>
+  <text x="795" y="338" text-anchor="middle" font-size="10" fill="#388e3c">index.html — 5 功能面板</text>
+  <text x="795" y="354" text-anchor="middle" font-size="10" fill="#388e3c">KPI / BAS 状态 / 人员调度</text>
+
+  <!-- UI: Simulation -->
+  <rect x="680" y="385" width="230" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="795" y="408" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">L2 仿真交互界面</text>
+  <text x="795" y="428" text-anchor="middle" font-size="10" fill="#388e3c">simulate.html — 3 面板布局</text>
+  <text x="795" y="444" text-anchor="middle" font-size="10" fill="#388e3c">报警板 / 动作链 / 事件时序</text>
+
+  <!-- UI: Reports -->
+  <rect x="680" y="475" width="230" height="75" rx="8" fill="#fff" filter="url(#shd)"/>
+  <text x="795" y="498" text-anchor="middle" font-size="13" font-weight="600" fill="#1b5e20">输出产物</text>
+  <text x="795" y="518" text-anchor="middle" font-size="10" fill="#388e3c">simulation_result.json — 执行轨迹</text>
+  <text x="795" y="534" text-anchor="middle" font-size="10" fill="#388e3c">situation_report.md — 态势报告</text>
+
+  <!-- Stable badge -->
+  <rect x="730" y="580" width="130" height="36" rx="18" fill="#2e7d32"/>
+  <text x="795" y="603" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">接口稳定, 不变</text>
+
+  <!-- ═══ Arrows: Real → Sim (future replacement) ═══ -->
+  <line x1="290" y1="180" x2="355" y2="180" stroke="#9fa8da" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <line x1="290" y1="265" x2="355" y2="272" stroke="#9fa8da" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <line x1="290" y1="350" x2="355" y2="362" stroke="#9fa8da" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+
+  <!-- ═══ Arrows: Sim → API ═══ -->
+  <line x1="615" y1="362" x2="675" y2="210" stroke="#e65100" stroke-width="2" marker-end="url(#arrOrange)"/>
+  <line x1="615" y1="450" x2="675" y2="340" stroke="#e65100" stroke-width="2" marker-end="url(#arrOrange)"/>
+  <line x1="615" y1="535" x2="675" y2="510" stroke="#e65100" stroke-width="2" marker-end="url(#arrOrange)"/>
+
+  <!-- ═══ Key Insight Box ═══ -->
+  <rect x="30" y="670" width="900" height="24" rx="6" fill="#e0e0e0"/>
+  <text x="480" y="686" text-anchor="middle" font-size="11" fill="#424242" font-weight="600">核心设计: 仿真层与接口层解耦 — 仿真数据通过相同 API 契约供给 UI, 上线时仅替换数据源, 接口 + UI 零改动</text>
+</svg>

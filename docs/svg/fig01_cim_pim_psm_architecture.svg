@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="'Segoe UI','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="cimGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a237e"/>
+      <stop offset="100%" stop-color="#283593"/>
+    </linearGradient>
+    <linearGradient id="pimGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d47a1"/>
+      <stop offset="100%" stop-color="#1565c0"/>
+    </linearGradient>
+    <linearGradient id="psmGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00695c"/>
+      <stop offset="100%" stop-color="#00897b"/>
+    </linearGradient>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.18"/>
+    </filter>
+    <marker id="arrowDown" markerWidth="10" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#546e7a"/>
+    </marker>
+    <marker id="arrowUp" markerWidth="10" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#e65100"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="620" rx="16" fill="#f5f5f5"/>
+
+  <!-- Title -->
+  <text x="450" y="42" text-anchor="middle" font-size="22" font-weight="700" fill="#212121">CIM → PIM → PSM  三层约束-实例化架构</text>
+  <text x="450" y="64" text-anchor="middle" font-size="13" fill="#757575">Three-Layer Constraint-Instantiation Architecture (MBSE / MDA)</text>
+
+  <!-- ═══ CIM Layer ═══ -->
+  <rect x="60" y="90" width="780" height="130" rx="12" fill="url(#cimGrad)" filter="url(#shadow)"/>
+  <text x="80" y="118" font-size="18" font-weight="700" fill="#fff">CIM — 领域知识层  Domain Knowledge Layer</text>
+  <text x="80" y="140" font-size="12" fill="#bbdefb">稳定性: 最高 (年级变化)  |  技术无关  |  回答: "医疗建筑世界长什么样?"</text>
+
+  <!-- CIM boxes -->
+  <rect x="80" y="152" width="145" height="52" rx="6" fill="#e8eaf6" opacity="0.92"/>
+  <text x="152" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="#1a237e">OWL 本体</text>
+  <text x="152" y="192" text-anchor="middle" font-size="10" fill="#3949ab">545 Classes / 17 NS</text>
+
+  <rect x="240" y="152" width="145" height="52" rx="6" fill="#e8eaf6" opacity="0.92"/>
+  <text x="312" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="#1a237e">行业规范</text>
+  <text x="312" y="192" text-anchor="middle" font-size="10" fill="#3949ab">GB50333 / IEC 60364</text>
+
+  <rect x="400" y="152" width="145" height="52" rx="6" fill="#e8eaf6" opacity="0.92"/>
+  <text x="472" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="#1a237e">应急预案 SOP</text>
+  <text x="472" y="192" text-anchor="middle" font-size="10" fill="#3949ab">26 事件类型 / L1-L3</text>
+
+  <rect x="560" y="152" width="145" height="52" rx="6" fill="#e8eaf6" opacity="0.92"/>
+  <text x="632" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="#1a237e">6 桥接本体</text>
+  <text x="632" y="192" text-anchor="middle" font-size="10" fill="#3949ab">IFC/Brick/BACnet/…</text>
+
+  <rect x="720" y="152" width="105" height="52" rx="6" fill="#e8eaf6" opacity="0.92"/>
+  <text x="772" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="#1a237e">FMEA</text>
+  <text x="772" y="192" text-anchor="middle" font-size="10" fill="#3949ab">失效模式</text>
+
+  <!-- ═══ Constraint Arrow CIM→PIM ═══ -->
+  <line x1="450" y1="222" x2="450" y2="262" stroke="#546e7a" stroke-width="2.5" marker-end="url(#arrowDown)"/>
+  <text x="465" y="246" font-size="11" fill="#546e7a" font-weight="600">constrains 约束</text>
+
+  <!-- ═══ PIM Layer ═══ -->
+  <rect x="60" y="268" width="780" height="130" rx="12" fill="url(#pimGrad)" filter="url(#shadow)"/>
+  <text x="80" y="296" font-size="18" font-weight="700" fill="#fff">PIM — 系统工程层  Systems Engineering Layer</text>
+  <text x="80" y="318" font-size="12" fill="#bbdefb">稳定性: 中等 (月级迭代)  |  技术无关  |  回答: "系统需要什么功能? 怎么验证?"</text>
+
+  <rect x="80" y="330" width="120" height="52" rx="6" fill="#e3f2fd" opacity="0.92"/>
+  <text x="140" y="351" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">12 步验证</text>
+  <text x="140" y="370" text-anchor="middle" font-size="10" fill="#1565c0">Pipeline</text>
+
+  <rect x="215" y="330" width="120" height="52" rx="6" fill="#e3f2fd" opacity="0.92"/>
+  <text x="275" y="351" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">状态机</text>
+  <text x="275" y="370" text-anchor="middle" font-size="10" fill="#1565c0">5 状态有限自动机</text>
+
+  <rect x="350" y="330" width="120" height="52" rx="6" fill="#e3f2fd" opacity="0.92"/>
+  <text x="410" y="351" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">API 契约</text>
+  <text x="410" y="370" text-anchor="middle" font-size="10" fill="#1565c0">OpenAPI / REST</text>
+
+  <rect x="485" y="330" width="120" height="52" rx="6" fill="#e3f2fd" opacity="0.92"/>
+  <text x="545" y="351" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">Named Graphs</text>
+  <text x="545" y="370" text-anchor="middle" font-size="10" fill="#1565c0">9 语义分区</text>
+
+  <rect x="620" y="330" width="105" height="52" rx="6" fill="#e3f2fd" opacity="0.92"/>
+  <text x="672" y="351" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">SPARQL</text>
+  <text x="672" y="370" text-anchor="middle" font-size="10" fill="#1565c0">验证查询</text>
+
+  <rect x="740" y="330" width="85" height="52" rx="6" fill="#e3f2fd" opacity="0.92"/>
+  <text x="782" y="351" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">SHACL</text>
+  <text x="782" y="370" text-anchor="middle" font-size="10" fill="#1565c0">形状约束</text>
+
+  <!-- ═══ Constraint Arrow PIM→PSM ═══ -->
+  <line x1="450" y1="400" x2="450" y2="440" stroke="#546e7a" stroke-width="2.5" marker-end="url(#arrowDown)"/>
+  <text x="465" y="424" font-size="11" fill="#546e7a" font-weight="600">constrains 约束</text>
+
+  <!-- ═══ PSM Layer ═══ -->
+  <rect x="60" y="446" width="780" height="130" rx="12" fill="url(#psmGrad)" filter="url(#shadow)"/>
+  <text x="80" y="474" font-size="18" font-weight="700" fill="#fff">PSM — 项目实例层  Project Instance Layer</text>
+  <text x="80" y="496" font-size="12" fill="#b2dfdb">稳定性: 最低 (日/时级更新)  |  技术绑定  |  回答: "用什么技术? 跑什么数据?"</text>
+
+  <rect x="80" y="508" width="120" height="52" rx="6" fill="#e0f2f1" opacity="0.92"/>
+  <text x="140" y="529" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">FastAPI</text>
+  <text x="140" y="548" text-anchor="middle" font-size="10" fill="#00897b">REST 端点 / CORS</text>
+
+  <rect x="215" y="508" width="120" height="52" rx="6" fill="#e0f2f1" opacity="0.92"/>
+  <text x="275" y="529" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">rdflib</text>
+  <text x="275" y="548" text-anchor="middle" font-size="10" fill="#00897b">RDF 图 / SPARQL</text>
+
+  <rect x="350" y="508" width="130" height="52" rx="6" fill="#e0f2f1" opacity="0.92"/>
+  <text x="415" y="529" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">NBU 医院实例</text>
+  <text x="415" y="548" text-anchor="middle" font-size="10" fill="#00897b">1,210 实体 / 62 FAS</text>
+
+  <rect x="495" y="508" width="120" height="52" rx="6" fill="#e0f2f1" opacity="0.92"/>
+  <text x="555" y="529" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">SimClock</text>
+  <text x="555" y="548" text-anchor="middle" font-size="10" fill="#00897b">BAS 时间步进</text>
+
+  <rect x="630" y="508" width="100" height="52" rx="6" fill="#e0f2f1" opacity="0.92"/>
+  <text x="680" y="529" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">HTML5 UI</text>
+  <text x="680" y="548" text-anchor="middle" font-size="10" fill="#00897b">指挥中心仪表盘</text>
+
+  <rect x="745" y="508" width="80" height="52" rx="6" fill="#fff3e0" opacity="0.92" stroke="#e65100" stroke-width="1.5"/>
+  <text x="785" y="529" text-anchor="middle" font-size="11" font-weight="600" fill="#e65100">可替换</text>
+  <text x="785" y="548" text-anchor="middle" font-size="10" fill="#bf360c">Fuseki / GDB</text>
+
+  <!-- ═══ Feedback Arrow PSM→CIM ═══ -->
+  <path d="M 855 530 Q 880 300 855 118" stroke="#e65100" stroke-width="1.8" fill="none" stroke-dasharray="6,4" marker-end="url(#arrowUp)"/>
+  <text x="865" y="320" font-size="10" fill="#e65100" transform="rotate(-90 865 320)">feedback 反馈验证</text>
+
+  <!-- ═══ Bottom legend ═══ -->
+  <rect x="60" y="588" width="780" height="26" rx="6" fill="#eeeeee"/>
+  <circle cx="90" cy="601" r="6" fill="#1a237e"/><text x="102" y="605" font-size="11" fill="#424242">CIM 领域知识 (年级)</text>
+  <circle cx="260" cy="601" r="6" fill="#0d47a1"/><text x="272" y="605" font-size="11" fill="#424242">PIM 系统工程 (月级)</text>
+  <circle cx="430" cy="601" r="6" fill="#00695c"/><text x="442" y="605" font-size="11" fill="#424242">PSM 项目实例 (日级)</text>
+  <line x1="600" y1="601" x2="630" y2="601" stroke="#546e7a" stroke-width="2" marker-end="url(#arrowDown)"/><text x="638" y="605" font-size="11" fill="#424242">约束</text>
+  <line x1="680" y1="601" x2="710" y2="601" stroke="#e65100" stroke-width="1.5" stroke-dasharray="6,4"/><text x="718" y="605" font-size="11" fill="#424242">反馈</text>
+</svg>

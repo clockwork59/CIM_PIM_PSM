@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="'Segoe UI','Microsoft YaHei',sans-serif">
+  <defs>
+    <filter id="s4" x="-3%" y="-6%" width="106%" height="116%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-opacity="0.15"/>
+    </filter>
+    <marker id="a4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#546e7a"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" rx="14" fill="#fafafa"/>
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#212121">L2 电气火灾处置预案 — 动作链依赖图 (DAG)</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12" fill="#757575">PLAN-FIRE-L2-001 v2.1 — 10 Action Nodes with Topological Dependency</text>
+
+  <!-- ═══ Layer 0: Trigger ═══ -->
+  <rect x="370" y="75" width="160" height="50" rx="25" fill="#ffcdd2" filter="url(#s4)" stroke="#c62828" stroke-width="2"/>
+  <text x="450" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">ALARM TRIGGER</text>
+  <text x="450" y="115" text-anchor="middle" font-size="9" fill="#c62828">烟感双区确认 → L2 激活</text>
+
+  <!-- ═══ Layer 1: Step 1 (confirm fire) ═══ -->
+  <rect x="360" y="155" width="180" height="56" rx="8" fill="#fff3e0" filter="url(#s4)" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="380" y="176" font-size="12" font-weight="700" fill="#e65100">1. 确认火情</text>
+  <text x="380" y="194" font-size="10" fill="#f57c00">Manual · 中控值班员 · 120s</text>
+
+  <!-- Arrow: Trigger → Step 1 -->
+  <line x1="450" y1="127" x2="450" y2="152" stroke="#546e7a" stroke-width="2" marker-end="url(#a4)"/>
+
+  <!-- ═══ Layer 2: Steps 2,4,7,8,10 (all depend on 1) ═══ -->
+  <!-- Step 2: Cut Power -->
+  <rect x="40" y="255" width="150" height="56" rx="8" fill="#e3f2fd" filter="url(#s4)" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="58" y="276" font-size="12" font-weight="700" fill="#0d47a1">2. 切断电源</text>
+  <text x="58" y="294" font-size="10" fill="#1976d2">Auto · SYSTEM · 30s</text>
+  <rect x="158" y="262" width="22" height="14" rx="3" fill="#1565c0"/><text x="169" y="273" text-anchor="middle" font-size="8" fill="#fff">BAS</text>
+
+  <!-- Step 4: Broadcast -->
+  <rect x="220" y="255" width="150" height="56" rx="8" fill="#e3f2fd" filter="url(#s4)" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="238" y="276" font-size="12" font-weight="700" fill="#0d47a1">4. 区域广播</text>
+  <text x="238" y="294" font-size="10" fill="#1976d2">Auto · SYSTEM · 10s</text>
+  <rect x="338" y="262" width="22" height="14" rx="3" fill="#1565c0"/><text x="349" y="273" text-anchor="middle" font-size="8" fill="#fff">BAS</text>
+
+  <!-- Step 7: Elevator Recall -->
+  <rect x="400" y="255" width="150" height="56" rx="8" fill="#e3f2fd" filter="url(#s4)" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="418" y="276" font-size="12" font-weight="700" fill="#0d47a1">7. 电梯迫降</text>
+  <text x="418" y="294" font-size="10" fill="#1976d2">Auto · SYSTEM · 30s</text>
+  <rect x="518" y="262" width="22" height="14" rx="3" fill="#1565c0"/><text x="529" y="273" text-anchor="middle" font-size="8" fill="#fff">BAS</text>
+
+  <!-- Step 8: Notify Medical -->
+  <rect x="580" y="255" width="150" height="56" rx="8" fill="#e3f2fd" filter="url(#s4)" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="598" y="276" font-size="12" font-weight="700" fill="#0d47a1">8. 通知医护</text>
+  <text x="598" y="294" font-size="10" fill="#1976d2">Auto · SYSTEM · 30s</text>
+
+  <!-- Step 10: Notify Leaders -->
+  <rect x="760" y="255" width="120" height="56" rx="8" fill="#e3f2fd" filter="url(#s4)" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="778" y="276" font-size="12" font-weight="700" fill="#0d47a1">10. 通知领导</text>
+  <text x="778" y="294" font-size="10" fill="#1976d2">Auto · 30s</text>
+
+  <!-- Arrows: Step 1 → Steps 2,4,7,8,10 -->
+  <line x1="400" y1="213" x2="115" y2="252" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <line x1="420" y1="213" x2="295" y2="252" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <line x1="450" y1="213" x2="475" y2="252" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <line x1="480" y1="213" x2="655" y2="252" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <line x1="500" y1="213" x2="820" y2="252" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+
+  <!-- ═══ Layer 3: Steps 3,5,6 (depend on 2 or 4) ═══ -->
+  <!-- Step 3: Fire Suppression (depends on 2) -->
+  <rect x="40" y="365" width="170" height="56" rx="8" fill="#fff3e0" filter="url(#s4)" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="58" y="386" font-size="12" font-weight="700" fill="#e65100">3. 启动灭火</text>
+  <text x="58" y="404" font-size="10" fill="#f57c00">Manual · 电工班 · 300s</text>
+
+  <!-- Step 5: Evacuation (depends on 4) -->
+  <rect x="260" y="365" width="170" height="56" rx="8" fill="#fff3e0" filter="url(#s4)" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="278" y="386" font-size="12" font-weight="700" fill="#e65100">5. 启动疏散</text>
+  <text x="278" y="404" font-size="10" fill="#f57c00">Manual · 保安队长 · 600s</text>
+
+  <!-- Step 6: Door Release (depends on 4) -->
+  <rect x="470" y="365" width="150" height="56" rx="8" fill="#e3f2fd" filter="url(#s4)" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="488" y="386" font-size="12" font-weight="700" fill="#0d47a1">6. 打开门禁</text>
+  <text x="488" y="404" font-size="10" fill="#1976d2">Auto · SYSTEM · 10s</text>
+  <rect x="588" y="372" width="22" height="14" rx="3" fill="#1565c0"/><text x="599" y="383" text-anchor="middle" font-size="8" fill="#fff">BAS</text>
+
+  <!-- Arrows: 2→3, 4→5, 4→6 -->
+  <line x1="115" y1="313" x2="125" y2="362" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <line x1="295" y1="313" x2="345" y2="362" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <line x1="295" y1="313" x2="545" y2="362" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+
+  <!-- ═══ Layer 4: Step 9 (depends on 3) ═══ -->
+  <rect x="40" y="465" width="170" height="56" rx="8" fill="#fff3e0" filter="url(#s4)" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="58" y="486" font-size="12" font-weight="700" fill="#e65100">9. 拨打119</text>
+  <text x="58" y="504" font-size="10" fill="#f57c00">Manual · 中控值班员 · 120s</text>
+
+  <!-- Arrow: 3→9 -->
+  <line x1="125" y1="423" x2="125" y2="462" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+
+  <!-- ═══ Legend ═══ -->
+  <rect x="640" y="380" width="240" height="140" rx="8" fill="#fff" filter="url(#s4)" stroke="#bdbdbd"/>
+  <text x="660" y="402" font-size="12" font-weight="700" fill="#424242">图例</text>
+  <rect x="660" y="412" width="40" height="18" rx="4" fill="#fff3e0" stroke="#ef6c00" stroke-width="1"/>
+  <text x="710" y="426" font-size="10" fill="#424242">Manual — 人工操作 (4个)</text>
+  <rect x="660" y="438" width="40" height="18" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="1"/>
+  <text x="710" y="452" font-size="10" fill="#424242">Auto — 系统自动 (6个)</text>
+  <rect x="660" y="464" width="22" height="14" rx="3" fill="#1565c0"/>
+  <text x="690" y="476" font-size="10" fill="#424242">BAS 联动指令 (4条)</text>
+  <line x1="660" y1="494" x2="690" y2="494" stroke="#546e7a" stroke-width="1.8" marker-end="url(#a4)"/>
+  <text x="700" y="498" font-size="10" fill="#424242">依赖关系 (depends_on)</text>
+
+  <!-- ═══ KPI bar ═══ -->
+  <rect x="30" y="535" width="840" height="20" rx="4" fill="#e8f5e9"/>
+  <text x="450" y="549" text-anchor="middle" font-size="11" fill="#1b5e20" font-weight="600">仿真结果: 10/10 完成 · 总耗时 840s / 900s 限值 = PASS · 4 条 BAS 指令 · 3 角色调度</text>
+</svg>
