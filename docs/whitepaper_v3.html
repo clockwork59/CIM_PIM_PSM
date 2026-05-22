@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIM-PIM-PSM | 医疗建筑数字孪生统一领域模型</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-dark: #0a0a1a;
+  --bg-mid: #1a1a2e;
+  --bg-card: #16213e;
+  --bg-card-hover: #1a2744;
+  --text-primary: #e8e8f0;
+  --text-secondary: #8892b0;
+  --text-dim: #5a6380;
+  --accent-blue: #4fc3f7;
+  --accent-green: #66bb6a;
+  --accent-orange: #ffa726;
+  --accent-red: #ef5350;
+  --accent-purple: #ab47bc;
+  --accent-yellow: #ffee58;
+  --accent-cyan: #26c6da;
+  --glow-blue: rgba(79, 195, 247, 0.15);
+  --glow-green: rgba(102, 187, 106, 0.15);
+  --glow-orange: rgba(255, 167, 38, 0.15);
+  --glow-red: rgba(239, 83, 80, 0.15);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-mono: "SF Mono", "Cascadia Code", "Consolas", "Liberation Mono", monospace;
+  --section-padding: 100px 40px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 20% 30%, rgba(79,195,247,0.03), transparent),
+    radial-gradient(ellipse 600px 400px at 80% 70%, rgba(171,71,188,0.03), transparent),
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--section-padding);
+}
+
+/* ========== SECTION TITLES ========== */
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 600px;
+}
+
+/* ========== HERO ========== */
+#hero {
+  background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-mid) 50%, #0f1b3d 100%);
+  text-align: center;
+  padding-top: 0;
+}
+
+.hero-label {
+  font-size: clamp(5rem, 12vw, 9rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan), var(--accent-blue));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease infinite;
+  line-height: 1.1;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-desc {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+}
+
+.hero-stats {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: 3.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-stat-num {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #fff;
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 0.35rem;
+}
+
+.hero-scroll {
+  margin-top: 4rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  animation: bounce 2s ease infinite;
+  cursor: pointer;
+}
+
+.hero-scroll span {
+  display: block;
+  font-size: 1.4rem;
+  margin-top: 0.3rem;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+  60% { transform: translateY(-4px); }
+}
+
+/* ========== PROBLEM ========== */
+#problem {
+  background: linear-gradient(180deg, var(--bg-dark) 0%, #0d0d24 100%);
+}
+
+.silos {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.silo-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 2rem 1.8rem;
+  width: 220px;
+  text-align: center;
+}
+
+.silo-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.silo-card .sub {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+}
+
+.silo-card .pain {
+  font-size: 0.8rem;
+  color: var(--accent-red);
+  opacity: 0.9;
+}
+
+.silo-x {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--accent-red);
+  padding: 0 1rem;
+  font-weight: 900;
+  opacity: 0.7;
+}
+
+.same-device {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.same-device strong {
+  color: var(--text-primary);
+}
+
+.code-examples {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.code-ex {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  min-width: 260px;
+}
+
+.code-ex .tag {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.code-ex.ifc .tag { color: var(--accent-blue); }
+.code-ex.bas .tag { color: var(--accent-green); }
+.code-ex.cmms .tag { color: var(--accent-orange); }
+
+.code-ex code {
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+/* ========== FOUR PATTERNS ========== */
+#patterns {
+  background: linear-gradient(180deg, #0d0d24 0%, var(--bg-dark) 100%);
+}
+
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.pattern-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2rem 2rem 1.8rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: default;
+}
+
+.pattern-card:hover {
+  transform: translateY(-4px);
+}
+
+.pattern-card.blue:hover  { box-shadow: 0 8px 40px var(--glow-blue);  border-color: rgba(79,195,247,0.3); }
+.pattern-card.green:hover { box-shadow: 0 8px 40px var(--glow-green); border-color: rgba(102,187,106,0.3); }
+.pattern-card.orange:hover{ box-shadow: 0 8px 40px var(--glow-orange);border-color: rgba(255,167,38,0.3); }
+.pattern-card.red:hover   { box-shadow: 0 8px 40px var(--glow-red);   border-color: rgba(239,83,80,0.3); }
+
+.pattern-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.6rem;
+}
+
+.pattern-card.blue .pattern-num  { color: var(--accent-blue); }
+.pattern-card.green .pattern-num { color: var(--accent-green); }
+.pattern-card.orange .pattern-num{ color: var(--accent-orange); }
+.pattern-card.red .pattern-num   { color: var(--accent-red); }
+
+.pattern-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.pattern-card .en {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+  font-family: var(--font-mono);
+}
+
+.pattern-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+.pattern-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pattern-tags span {
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 100px;
+  padding: 0.25rem 0.7rem;
+  color: var(--text-secondary);
+}
+
+/* ========== ARCHITECTURE ========== */
+#architecture {
+  background: linear-gradient(180deg, var(--bg-dark) 0%, #0d0d24 100%);
+}
+
+.arch-stack {
+  max-width: 780px;
+  width: 100%;
+}
+
+.arch-layer {
+  border-radius: 16px;
+  padding: 1.8rem 2rem;
+  margin-bottom: 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.arch-layer:not(:last-child) {
+  margin-bottom: -1px;
+}
+
+.arch-layer.cim {
+  background: linear-gradient(135deg, #0d2137, #142d4a);
+  border: 1px solid rgba(79,195,247,0.2);
+  border-radius: 16px 16px 4px 4px;
+  z-index: 3;
+}
+
+.arch-layer.pim {
+  background: linear-gradient(135deg, #1a1a30, #222244);
+  border: 1px solid rgba(171,71,188,0.2);
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.arch-layer.psm {
+  background: linear-gradient(135deg, #1a2218, #223322);
+  border: 1px solid rgba(102,187,106,0.2);
+  border-radius: 4px 4px 16px 16px;
+  z-index: 1;
+}
+
+.arch-layer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arch-layer-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.arch-layer.cim .arch-layer-title { color: var(--accent-blue); }
+.arch-layer.pim .arch-layer-title { color: var(--accent-purple); }
+.arch-layer.psm .arch-layer-title { color: var(--accent-green); }
+
+.arch-layer-badge {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  background: rgba(0,0,0,0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.arch-layer-brief {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.arch-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, margin-top 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.arch-layer.expanded .arch-detail {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 1rem;
+}
+
+.arch-detail-inner {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.arch-chip {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  min-width: 80px;
+}
+
+.arch-chip .num {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+}
+
+.arch-chip .lbl {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 0.15rem;
+}
+
+.arch-layer.cim .arch-chip .num { color: var(--accent-blue); }
+.arch-layer.pim .arch-chip .num { color: var(--accent-purple); }
+.arch-layer.psm .arch-chip .num { color: var(--accent-green); }
+
+.arch-arrow {
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--text-dim);
+  padding: 0.3rem 0;
+  letter-spacing: 0.3em;
+}
+
+.arch-arrow-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+  display: block;
+  margin-top: -0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+/* ========== DATA FEDERATION ========== */
+#federation {
+  background: linear-gradient(180deg, #0d0d24 0%, var(--bg-dark) 100%);
+}
+
+.fed-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.fed-source {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 1.2rem 1.6rem;
+  text-align: center;
+  min-width: 110px;
+}
+
+.fed-source .icon { font-size: 1.6rem; margin-bottom: 0.3rem; }
+.fed-source .name { font-size: 0.85rem; font-weight: 600; }
+
+.fed-arrow {
+  font-size: 1.5rem;
+  color: var(--text-dim);
+  animation: pulseArrow 2s ease infinite;
+}
+
+@keyframes pulseArrow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.fed-center {
+  background: linear-gradient(135deg, #142d4a, #1a3355);
+  border: 2px solid rgba(79,195,247,0.3);
+  border-radius: 16px;
+  padding: 1.5rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(79,195,247,0.1);
+}
+
+.fed-center .big {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+}
+
+.fed-center .sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.fed-result {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-green);
+}
+
+.bar-chart {
+  max-width: 700px;
+  width: 100%;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  gap: 0.8rem;
+}
+
+.bar-label {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  width: 90px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 28px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 0.6rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+  transition: width 1.2s ease;
+}
+
+.bar-fill.blue   { background: linear-gradient(90deg, var(--accent-blue), #0288d1); }
+.bar-fill.green  { background: linear-gradient(90deg, var(--accent-green), #388e3c); }
+.bar-fill.orange { background: linear-gradient(90deg, var(--accent-orange), #ef6c00); }
+.bar-fill.red    { background: linear-gradient(90deg, var(--accent-red), #c62828); }
+.bar-fill.yellow { background: linear-gradient(90deg, var(--accent-yellow), #f9a825); color: #333; }
+.bar-fill.purple { background: linear-gradient(90deg, var(--accent-purple), #7b1fa2); }
+
+/* ========== VALIDATION ========== */
+#validation {
+  background: linear-gradient(180deg, var(--bg-dark) 0%, #0d0d24 100%);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  max-width: 750px;
+  width: 100%;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 1.8rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 30px rgba(0,0,0,0.3);
+}
+
+.metric-value {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+.metric-card.pass .metric-value { color: var(--accent-green); }
+.metric-card.zero .metric-value { color: var(--accent-cyan); }
+.metric-card.time .metric-value { color: var(--accent-orange); }
+
+.metric-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.metric-detail {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 0.25rem;
+}
+
+/* ========== MVP ========== */
+#mvp {
+  background: linear-gradient(180deg, #0d0d24 0%, #1a0a0a 50%, var(--bg-dark) 100%);
+}
+
+.mvp-timeline {
+  max-width: 850px;
+  width: 100%;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.mvp-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mvp-node {
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 130px;
+  position: relative;
+  background: var(--bg-card);
+  transition: transform 0.2s ease;
+}
+
+.mvp-node:hover { transform: scale(1.05); }
+
+.mvp-node.auto {
+  border: 2px solid var(--accent-green);
+  box-shadow: 0 0 15px rgba(102,187,106,0.15);
+}
+
+.mvp-node.manual {
+  border: 2px solid var(--accent-orange);
+  box-shadow: 0 0 15px rgba(255,167,38,0.15);
+}
+
+.mvp-node.confirm {
+  border: 2px solid var(--accent-blue);
+  box-shadow: 0 0 15px rgba(79,195,247,0.15);
+}
+
+.mvp-node .step {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-bottom: 0.2rem;
+}
+
+.mvp-node.auto .step { color: var(--accent-green); }
+.mvp-node.manual .step { color: var(--accent-orange); }
+.mvp-node.confirm .step { color: var(--accent-blue); }
+
+.mvp-summary {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.mvp-summary-item {
+  text-align: center;
+}
+
+.mvp-summary-item .val {
+  font-size: 2rem;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--accent-red);
+}
+
+.mvp-summary-item .lbl {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.mvp-legend {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.mvp-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.mvp-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+.mvp-legend-dot.auto { border-color: var(--accent-green); }
+.mvp-legend-dot.manual { border-color: var(--accent-orange); }
+.mvp-legend-dot.confirm { border-color: var(--accent-blue); }
+
+/* ========== STANDARDS ========== */
+#standards {
+  background: linear-gradient(180deg, var(--bg-dark) 0%, #0d0d24 100%);
+}
+
+.standards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  max-width: 900px;
+}
+
+.std-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 1rem 1.4rem;
+  text-align: center;
+  min-width: 140px;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.std-card:hover {
+  border-color: rgba(79,195,247,0.3);
+  transform: translateY(-2px);
+}
+
+.std-card .name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.std-card .method {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+/* ========== FOOTER ========== */
+#footer {
+  min-height: auto;
+  padding: 3rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  scroll-snap-align: end;
+}
+
+.footer-brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.footer-stats {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+}
+
+.footer-milestones {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.footer-milestones .done { color: var(--accent-green); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  :root { --section-padding: 60px 20px; }
+  html { scroll-snap-type: none; }
+
+  .pattern-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .silos { flex-direction: column; align-items: center; }
+  .silo-x { transform: rotate(90deg); padding: 0.5rem 0; }
+  .code-examples { flex-direction: column; align-items: center; }
+  .fed-flow { flex-direction: column; }
+  .fed-arrow { transform: rotate(90deg); }
+
+  .hero-stats { gap: 1.5rem; }
+  .mvp-row { gap: 0.6rem; }
+  .mvp-node { min-width: 110px; font-size: 0.75rem; padding: 0.6rem 0.8rem; }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid { grid-template-columns: 1fr; max-width: 280px; }
+  .hero-label { font-size: 4rem; }
+}
+
+/* ========== SCROLL ANIMATION ========== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger children */
+.fade-in.visible .stagger { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+.fade-in.visible .stagger:nth-child(1) { animation-delay: 0.1s; }
+.fade-in.visible .stagger:nth-child(2) { animation-delay: 0.2s; }
+.fade-in.visible .stagger:nth-child(3) { animation-delay: 0.3s; }
+.fade-in.visible .stagger:nth-child(4) { animation-delay: 0.4s; }
+.fade-in.visible .stagger:nth-child(5) { animation-delay: 0.5s; }
+.fade-in.visible .stagger:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bar animation */
+.bar-fill { width: 0 !important; }
+.animate-bars .bar-fill { transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+</style>
+</head>
+<body>
+
+<!-- ============================== HERO ============================== -->
+<section id="hero">
+  <div class="hero-label">CIM</div>
+  <div class="hero-desc">医疗建筑数字孪生统一领域模型</div>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-num" data-target="545">0</div>
+      <div class="hero-stat-label">OWL:CLASS</div>
+    </div>
+    <div>
+      <div class="hero-stat-num" data-target="61941" data-format="comma">0</div>
+      <div class="hero-stat-label">TRIPLES</div>
+    </div>
+    <div>
+      <div class="hero-stat-num" data-target="3">0</div>
+      <div class="hero-stat-label">DATA SOURCES</div>
+    </div>
+    <div>
+      <div class="hero-stat-num" data-target="11">0</div>
+      <div class="hero-stat-label">STANDARDS</div>
+    </div>
+  </div>
+  <a href="#problem" class="hero-scroll">
+    向下探索
+    <span>&#9660;</span>
+  </a>
+</section>
+
+<!-- ============================== PROBLEM ============================== -->
+<section id="problem" class="fade-in">
+  <div class="section-title">三源数据孤岛</div>
+  <div class="section-subtitle">同一台 AHU-001，三个系统各说各话</div>
+
+  <div class="silos">
+    <div class="silo-card stagger">
+      <h3>BIM / IFC</h3>
+      <div class="sub">建筑几何模型</div>
+      <div class="pain">竣工即死</div>
+    </div>
+    <div class="silo-x stagger">&times;</div>
+    <div class="silo-card stagger">
+      <h3>BAS / BACnet</h3>
+      <div class="sub">实时传感数据</div>
+      <div class="pain">无语义标注</div>
+    </div>
+    <div class="silo-x stagger">&times;</div>
+    <div class="silo-card stagger">
+      <h3>CMMS</h3>
+      <div class="sub">维保工单系统</div>
+      <div class="pain">无模型关联</div>
+    </div>
+  </div>
+
+  <div class="code-examples">
+    <div class="code-ex ifc stagger">
+      <div class="tag">IFC</div>
+      <code>IfcAirTerminalBox #3zbrSnpg...</code>
+    </div>
+    <div class="code-ex bas stagger">
+      <div class="tag">BAS</div>
+      <code>analog-input:1 = 23.5</code>
+    </div>
+    <div class="code-ex cmms stagger">
+      <div class="tag">CMMS</div>
+      <code>WO-PM-202605-0001</code>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FOUR PATTERNS ============================== -->
+<section id="patterns" class="fade-in">
+  <div class="section-title">四模式驱动</div>
+  <div class="section-subtitle">从领域知识到运维落地的完整方法论</div>
+
+  <div class="pattern-grid">
+    <div class="pattern-card blue stagger">
+      <div class="pattern-num">Pattern 01</div>
+      <h3>MBSE 三层架构</h3>
+      <div class="en">CIM &rarr; PIM &rarr; PSM</div>
+      <p>领域知识 &rarr; 系统工程 &rarr; 项目实例。约束逐层传播，PSM 可替换不影响上层。</p>
+      <div class="pattern-tags">
+        <span>约束传播</span>
+        <span>可替换 PSM</span>
+        <span>MDA</span>
+      </div>
+    </div>
+    <div class="pattern-card green stagger">
+      <div class="pattern-num">Pattern 02</div>
+      <h3>BFO 动态本体</h3>
+      <div class="en">Continuant + Occurrent</div>
+      <p>静态拓扑与动态过程双轨并行。FlowPath 描述管网，FlowProcess 描述状态变化。</p>
+      <div class="pattern-tags">
+        <span>8 阶段生命周期</span>
+        <span>时间切片</span>
+        <span>BFO 2020</span>
+      </div>
+    </div>
+    <div class="pattern-card orange stagger">
+      <div class="pattern-num">Pattern 03</div>
+      <h3>ISO 19650 全域覆盖</h3>
+      <div class="en">5-Layer Ontology + 6 Bridges</div>
+      <p>L0 BFO &rarr; L4 运营，545 类定义 17 命名空间。6 桥接本体对齐 IFC/Brick/223P/FSO。</p>
+      <div class="pattern-tags">
+        <span>545 owl:Class</span>
+        <span>17 命名空间</span>
+        <span>6 桥接</span>
+      </div>
+    </div>
+    <div class="pattern-card red stagger">
+      <div class="pattern-num">Pattern 04</div>
+      <h3>社会技术系统</h3>
+      <div class="en">Socio-Technical System</div>
+      <p>7 角色 &times; 10 动作。技术子系统 + 社会子系统 + 环境上下文三维建模。</p>
+      <div class="pattern-tags">
+        <span>L2 火灾 840s</span>
+        <span>7 角色调度</span>
+        <span>10 动作链</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ARCHITECTURE ============================== -->
+<section id="architecture" class="fade-in">
+  <div class="section-title">CIM-PIM-PSM 三层架构</div>
+  <div class="section-subtitle">点击展开各层详情</div>
+
+  <div class="arch-stack">
+    <div class="arch-layer cim" onclick="toggleLayer(this)">
+      <div class="arch-layer-header">
+        <div class="arch-layer-title">CIM &mdash; 领域知识层</div>
+        <div class="arch-layer-badge">545 owl:Class</div>
+      </div>
+      <div class="arch-layer-brief">领域本体 &middot; 五层分级 &middot; 六桥接 &middot; 标准对齐</div>
+      <div class="arch-detail">
+        <div class="arch-detail-inner">
+          <div class="arch-chip"><div class="num">56</div><div class="lbl">L0 BFO</div></div>
+          <div class="arch-chip"><div class="num">150</div><div class="lbl">L1 概念</div></div>
+          <div class="arch-chip"><div class="num">25</div><div class="lbl">L2 参考</div></div>
+          <div class="arch-chip"><div class="num">41</div><div class="lbl">L3 设计</div></div>
+          <div class="arch-chip"><div class="num">130+</div><div class="lbl">L4 运营</div></div>
+          <div class="arch-chip"><div class="num">6</div><div class="lbl">桥接本体</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-arrow">&darr;</div>
+    <div class="arch-arrow-label">约束传播</div>
+
+    <div class="arch-layer pim" onclick="toggleLayer(this)">
+      <div class="arch-layer-header">
+        <div class="arch-layer-title">PIM &mdash; 系统工程层</div>
+        <div class="arch-layer-badge">9 Named Graphs</div>
+      </div>
+      <div class="arch-layer-brief">仿真引擎 &middot; 状态机 &middot; 动作链 &middot; SPARQL 模板 &middot; 12 步验证</div>
+      <div class="arch-detail">
+        <div class="arch-detail-inner">
+          <div class="arch-chip"><div class="num">9</div><div class="lbl">Named Graph</div></div>
+          <div class="arch-chip"><div class="num">9</div><div class="lbl">SPARQL 模板</div></div>
+          <div class="arch-chip"><div class="num">12</div><div class="lbl">验证步骤</div></div>
+          <div class="arch-chip"><div class="num">4</div><div class="lbl">仿真场景</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-arrow">&darr;</div>
+    <div class="arch-arrow-label">实例化</div>
+
+    <div class="arch-layer psm" onclick="toggleLayer(this)">
+      <div class="arch-layer-header">
+        <div class="arch-layer-title">PSM &mdash; 项目实例层</div>
+        <div class="arch-layer-badge">NBU 实例</div>
+      </div>
+      <div class="arch-layer-brief">Fuseki 端点 &middot; FastAPI &middot; BAS 1,055 点 &middot; CMMS 735 工单 &middot; HTML 平台</div>
+      <div class="arch-detail">
+        <div class="arch-detail-inner">
+          <div class="arch-chip"><div class="num">1,210</div><div class="lbl">实体实例</div></div>
+          <div class="arch-chip"><div class="num">1,055</div><div class="lbl">BAS 测点</div></div>
+          <div class="arch-chip"><div class="num">735</div><div class="lbl">CMMS 工单</div></div>
+          <div class="arch-chip"><div class="num">61,941</div><div class="lbl">三元组</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FEDERATION ============================== -->
+<section id="federation" class="fade-in">
+  <div class="section-title">三源联邦 &middot; 61,941 三元组</div>
+  <div class="section-subtitle">异构数据统一汇聚为知识图谱</div>
+
+  <div class="fed-flow">
+    <div class="fed-source stagger">
+      <div class="icon" style="color:var(--accent-blue)">&#9632;</div>
+      <div class="name">IFC</div>
+    </div>
+    <div class="fed-arrow stagger">&rarr;</div>
+    <div class="fed-source stagger">
+      <div class="icon" style="color:var(--accent-green)">&#9632;</div>
+      <div class="name">BAS</div>
+    </div>
+    <div class="fed-arrow stagger">&rarr;</div>
+    <div class="fed-center stagger">
+      <div class="big">CIM 知识图谱</div>
+      <div class="sub">61,941 triples &middot; 9 Named Graphs</div>
+    </div>
+    <div class="fed-arrow stagger">&rarr;</div>
+    <div class="fed-source stagger">
+      <div class="icon" style="color:var(--accent-orange)">&#9632;</div>
+      <div class="name">CMMS</div>
+    </div>
+    <div class="fed-arrow stagger">&rarr;</div>
+    <div class="fed-result stagger">SPARQL 5/5 &check;</div>
+  </div>
+
+  <div class="bar-chart" id="barChart">
+    <div class="bar-row">
+      <div class="bar-label">tbox</div>
+      <div class="bar-track"><div class="bar-fill blue" data-width="7.1%">4,421</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">ifc</div>
+      <div class="bar-track"><div class="bar-fill green" data-width="8.9%">5,489</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">bas_t0</div>
+      <div class="bar-track"><div class="bar-fill orange" data-width="22.1%">13,710</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">bas_t1</div>
+      <div class="bar-track"><div class="bar-fill orange" data-width="22.1%">13,710</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">bas_t2</div>
+      <div class="bar-track"><div class="bar-fill orange" data-width="22.1%">13,710</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">cmms</div>
+      <div class="bar-track"><div class="bar-fill red" data-width="13.4%">8,309</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">fas</div>
+      <div class="bar-track"><div class="bar-fill yellow" data-width="0.9%">554</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">event</div>
+      <div class="bar-track"><div class="bar-fill purple" data-width="0.4%">236</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VALIDATION ============================== -->
+<section id="validation" class="fade-in">
+  <div class="section-title">验证证据链</div>
+  <div class="section-subtitle">全链路零缺陷 &mdash; 数字必须实测</div>
+
+  <div class="metrics-grid">
+    <div class="metric-card pass stagger">
+      <div class="metric-value" data-count="100">0</div>
+      <div class="metric-label">BIM 覆盖率 %</div>
+      <div class="metric-detail">12/12 设备类型</div>
+    </div>
+    <div class="metric-card zero stagger">
+      <div class="metric-value" data-count="0" data-prefix="VIOLATION = ">0</div>
+      <div class="metric-label">SHACL 验证</div>
+      <div class="metric-detail">零违规通过</div>
+    </div>
+    <div class="metric-card pass stagger">
+      <div class="metric-value" data-count="5" data-suffix="/5">0</div>
+      <div class="metric-label">SPARQL 联邦</div>
+      <div class="metric-detail">三源全部通过</div>
+    </div>
+    <div class="metric-card zero stagger">
+      <div class="metric-value" data-count="0" data-prefix="CRITICAL = ">0</div>
+      <div class="metric-label">仿真异常</div>
+      <div class="metric-detail">4 场景验证</div>
+    </div>
+    <div class="metric-card pass stagger">
+      <div class="metric-value" data-count="28" data-suffix="/28">0</div>
+      <div class="metric-label">平台验证</div>
+      <div class="metric-detail">全部通过</div>
+    </div>
+    <div class="metric-card time stagger">
+      <div class="metric-value" data-count="840" data-suffix="s">0</div>
+      <div class="metric-label">L2 火灾 MVP</div>
+      <div class="metric-detail">&lt; 900s 合规</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== MVP ============================== -->
+<section id="mvp" class="fade-in">
+  <div class="section-title">安防 MVP &middot; L2 电气火灾处置</div>
+  <div class="section-subtitle">10 动作 &middot; 7 角色 &middot; 840 秒完成全链路响应</div>
+
+  <div class="mvp-timeline">
+    <div class="mvp-row">
+      <div class="mvp-node confirm stagger">
+        <div class="step">01</div>
+        确认火情
+      </div>
+      <div class="mvp-node auto stagger">
+        <div class="step">02</div>
+        切断电源 &#9889;
+      </div>
+      <div class="mvp-node auto stagger">
+        <div class="step">03</div>
+        启动灭火 &#128293;
+      </div>
+    </div>
+    <div class="mvp-row">
+      <div class="mvp-node auto stagger">
+        <div class="step">04</div>
+        区域广播 &#128226;
+      </div>
+      <div class="mvp-node auto stagger">
+        <div class="step">05</div>
+        启动疏散 &#128682;
+      </div>
+      <div class="mvp-node auto stagger">
+        <div class="step">06</div>
+        打开门禁
+      </div>
+    </div>
+    <div class="mvp-row">
+      <div class="mvp-node auto stagger">
+        <div class="step">07</div>
+        电梯迫降 &#127991;
+      </div>
+      <div class="mvp-node manual stagger">
+        <div class="step">08</div>
+        通知医护
+      </div>
+      <div class="mvp-node manual stagger">
+        <div class="step">09</div>
+        拨打 119 &#9742;
+      </div>
+      <div class="mvp-node manual stagger">
+        <div class="step">10</div>
+        通知领导
+      </div>
+    </div>
+  </div>
+
+  <div class="mvp-legend">
+    <div class="mvp-legend-item"><div class="mvp-legend-dot auto"></div> 自动 (BAS联动)</div>
+    <div class="mvp-legend-item"><div class="mvp-legend-dot manual"></div> 人工 (角色调度)</div>
+    <div class="mvp-legend-item"><div class="mvp-legend-dot confirm"></div> 确认 (人机协同)</div>
+  </div>
+
+  <div class="mvp-summary">
+    <div class="mvp-summary-item">
+      <div class="val">840s</div>
+      <div class="lbl">总响应时间</div>
+    </div>
+    <div class="mvp-summary-item">
+      <div class="val">10/10</div>
+      <div class="lbl">动作完成</div>
+    </div>
+    <div class="mvp-summary-item">
+      <div class="val">4</div>
+      <div class="lbl">BAS 联动</div>
+    </div>
+    <div class="mvp-summary-item">
+      <div class="val">7</div>
+      <div class="lbl">角色调度</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== STANDARDS ============================== -->
+<section id="standards" class="fade-in">
+  <div class="section-title">11 标准对齐</div>
+  <div class="section-subtitle">国际标准与行业规范全覆盖</div>
+
+  <div class="standards-grid">
+    <div class="std-card stagger">
+      <div class="name">ISO 19650</div>
+      <div class="method">信息管理框架</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">BFO 2020</div>
+      <div class="method">上层本体基础</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">IFC 4</div>
+      <div class="method">owl:equivalentClass</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">Brick 1.3</div>
+      <div class="method">桥接本体对齐</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">ASHRAE 223P</div>
+      <div class="method">桥接本体对齐</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">FSO</div>
+      <div class="method">流体系统本体</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">BACnet 135</div>
+      <div class="method">协议映射桥接</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">ISO 14224</div>
+      <div class="method">设备可靠性</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">GB 50333</div>
+      <div class="method">洁净室标准</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">WS 435</div>
+      <div class="method">医院建筑规范</div>
+    </div>
+    <div class="std-card stagger">
+      <div class="name">IEC 60364</div>
+      <div class="method">电气安全标准</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer id="footer">
+  <div class="footer-brand">CIM-PIM-PSM &middot; v4.0 &middot; 2026</div>
+  <div class="footer-stats">545 owl:Class &middot; 61,941 triples &middot; 3 data sources &middot; 11 standards</div>
+  <div class="footer-milestones">
+    <span class="done">M1&#10003;</span>
+    <span class="done">M2&#10003;</span>
+    <span class="done">M3&#10003;</span>
+    <span class="done">M4&#10003;</span>
+    <span class="done">M5&#10003;</span>
+    <span class="done">MVP&#10003;</span>
+  </div>
+</footer>
+
+<!-- ============================== JAVASCRIPT ============================== -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- Hero count-up animation ----
+  function animateCountUp(el, target, duration) {
+    var start = 0;
+    var startTime = null;
+    var format = el.getAttribute('data-format');
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      // ease out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
+      if (format === 'comma') {
+        el.textContent = current.toLocaleString();
+      } else {
+        el.textContent = current;
+      }
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        if (format === 'comma') {
+          el.textContent = target.toLocaleString();
+        } else {
+          el.textContent = target;
+        }
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Start hero counters on load
+  var heroNums = document.querySelectorAll('.hero-stat-num[data-target]');
+  heroNums.forEach(function(el) {
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    setTimeout(function() {
+      animateCountUp(el, target, 2000);
+    }, 400);
+  });
+
+  // ---- Intersection Observer for fade-in ----
+  var fadeEls = document.querySelectorAll('.fade-in');
+  var fadeObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  fadeEls.forEach(function(el) { fadeObserver.observe(el); });
+
+  // ---- Bar chart animation ----
+  var barChart = document.getElementById('barChart');
+  var barObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        barChart.classList.add('animate-bars');
+        var fills = barChart.querySelectorAll('.bar-fill');
+        fills.forEach(function(fill) {
+          fill.style.width = fill.getAttribute('data-width');
+        });
+        barObserver.unobserve(barChart);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  barObserver.observe(barChart);
+
+  // ---- Validation metric count-up ----
+  var metricCards = document.querySelectorAll('.metric-value[data-count]');
+  var metricObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        var target = parseInt(el.getAttribute('data-count'), 10);
+        var prefix = el.getAttribute('data-prefix') || '';
+        var suffix = el.getAttribute('data-suffix') || '';
+
+        if (target === 0) {
+          el.textContent = prefix + '0' + suffix;
+        } else {
+          var startTime = null;
+          var duration = 1500;
+          function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            var progress = Math.min((timestamp - startTime) / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            var current = Math.floor(eased * target);
+            el.textContent = prefix + current + suffix;
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              el.textContent = prefix + target + suffix;
+            }
+          }
+          requestAnimationFrame(step);
+        }
+        metricObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  metricCards.forEach(function(el) { metricObserver.observe(el); });
+
+  // ---- Architecture layer toggle ----
+  window.toggleLayer = function(el) {
+    el.classList.toggle('expanded');
+  };
+
+})();
+</script>
+
+</body>
+</html>
